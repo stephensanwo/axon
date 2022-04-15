@@ -56,7 +56,9 @@ const StyledHeader: React.FC<Props> = ({ isHeaderMenu }) => {
           OpenFlow Notes
         </HeaderName>
         <HeaderNavigation aria-label="OpenFlow Notes">
-          <HeaderMenuItem href="/notes">Notes</HeaderMenuItem>
+          <HeaderMenuItem href="/folders/3649fdfhdjcgdb">
+            Folders
+          </HeaderMenuItem>
         </HeaderNavigation>
         <HeaderGlobalBar>
           <HeaderGlobalAction aria-label="Settings" onClick={() => {}}>
@@ -68,15 +70,13 @@ const StyledHeader: React.FC<Props> = ({ isHeaderMenu }) => {
           <HeaderGlobalAction aria-label="Profile" onClick={() => {}}>
             <User20 />
           </HeaderGlobalAction>
-          <HeaderGlobalAction
+          {/* <HeaderGlobalAction
             aria-label="Command Pallete"
             isActive
             onClick={handleAppSwitcher}
           >
             <AppSwitcher20 />
-          </HeaderGlobalAction>
-
-          {/* <ControlPanel expanded={isExpanded} /> */}
+          </HeaderGlobalAction> */}
         </HeaderGlobalBar>
       </Header>
     </div>
