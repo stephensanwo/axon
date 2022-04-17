@@ -2,7 +2,8 @@ import styled from "styled-components";
 import { device } from "./media";
 
 export const PageContainer = styled.div`
-  min-height: 100vh;
+  min-height: 100%;
+  overflow: auto;
   width: 100%;
   padding-right: 3.5%;
   padding-left: 3.5%;

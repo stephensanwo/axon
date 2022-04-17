@@ -10,27 +10,159 @@
           {
               "id": "1",
               "name": "OpenFlow Frontend Architecture", 
+              "category": "flow",
               "description": "OpenFlow Frontend Architecture",
               "created_by": "Stephen Sanwo",
               "created_on": "2/2/2022, 2:22:22 PM",
               "last_edit": "2/2/2022, 2:22:22 PM",
-              "data": "",
-              "version": ""
+              "nodes": [
+                {
+                  "id": "1",
+                  "type": "input",
+                  "data": {
+                    "label": "Database",
+                    "title": "Core Database",
+                    "description": "Core PostgreSQL DB for production workload. Pricing of host is inclusive of core, RAM, Local SSD, and network speeds. Premium operating system (OS), storage area network (SAN) storage, and software add-ons will be priced per instance with existing pricing and licensing in an hourly or monthly model.",
+                    "node_category": "architecture",
+                    "node_type": "database"
+                  },
+                  "code": [],
+                  "note": "",
+                  "position": { "x": 100, "y": 50 },
+                  "className": "input-node"
+                },
+                {
+                  "id": "2",
+                  "type": "input",
+                  "category": "code-notes",
+                  "data": {
+                    "label": "Server",
+                    "title": "EC2 Instance Node 1",
+                    "description": "Main EC2 instance for core backend APIs",
+                    "node_category": "architecture",
+                    "node_type": "server"
+                  },
+                  "code": [],
+                  "note": "",
+                  "position": { "x": 600, "y": 350 },
+                  "className": "input-node"
+                },
+                {
+                  "id": "3",
+                  "type": "input",
+                  "data": {
+                    "label": "Note",
+                    "title": "Note",
+                    "description": "Core PostgreSQL DB for production workload. Pricing of host is inclusive of core, RAM, Local SSD, and network speeds. Premium operating system (OS), storage area network (SAN) storage, and software add-ons will be priced per instance with existing pricing and licensing in an hourly or monthly model.",
+                    "node_category": "note",
+                    "node_type": "note"
+                  },
+                  "code": [],
+                  "note": "",
+                  "position": { "x": 1500, "y": 500 },
+                  "className": "input-node"
+                },
+
+                {
+                  "id": "4",
+                  "type": "input",
+                  "data": {
+                    "label": "Note",
+                    "title": "Processing Queue",
+                    "description": "",
+                    "node_category": "simple-node",
+                    "node_type": "note"
+                  },
+                  "code": [],
+                  "note": "",
+                  "position": { "x": 1000, "y": 400 },
+                  "className": "simple-node"
+                }
+                
+                
+                
+                
+              ],
+              "edges": [
+                {
+                  "id": "e1-2",
+                  "source": "1",
+                  "target": "2",
+                  "animated": false,
+                  "label": "smoothstep edge",
+                  "type": "buttonedge",
+                  "sourceHandle": "b",
+                  "arrowHeadType": "arrowclosed",
+                  "labelBgStyle": { "fill": "#f4f4f4", "color": "#fff" }
+                }
+               
+              ],
+              "code": [],
+              "note": ""
         
 
           },
           {
             "id": "2",
-            "name": "OpenFlow Frontend Architecture 2", 
-            "description": "OpenFlow Frontend Architecture",
+            "name": "OpenFlow Frontend Code Snippets", 
+            "category": "code-snippet",
+            "description": "Transformer model to reconcile transactions from different data sources based on narration field using an NLP and cosine similarity approach",
             "created_by": "Stephen Sanwo",
             "created_on": "2/2/2022, 2:22:22 PM",
             "last_edit": "2/2/2022, 2:22:22 PM",
-            "data": "",
-            "version": ""
+            "nodes": [],
+            "edges": [],
+            "code": [{
+              "id": "1",
+              "code_text": "# Transformer model to reconcile transactions from different data sources based on narration field using an NLP and cosine similarity approach\n# Input -> Data (pandas df representation of the combine data source\n\ndef transformer_model(data):\n    model = SentenceTransformer('./sentence_transformers_model')\n    embeddings = model.encode(data)\n    cos_sim = util.cos_sim(embeddings, embeddings)\n\n    #Add all pairs to a list with their cosine similarity score\n    all_sentence_combinations = []\n    for i in range(len(cos_sim)-1):\n        for j in range(i+1, len(cos_sim)):\n        all_sentence_combinations.append([cos_sim[i][j], i, j])\n\n    #Sort list by the highest cosine similarity score\n    all_sentence_combinations = sorted(all_sentence_combinations, key=lambda x: x[0], reverse=True)\n    \n    res = []\n    for score, i, j in all_sentence_combinations:\n        res.append({\n        'data_i':data[i],\n        'data_j':data[j],\n        'cos_sim': '{:.4f}'.format(cos_sim[i][j])})\n    output = pd.DataFrame(res)\n\n    return output",
+              "language": "py",
+              "language_desc": "Python"
+            },{
+              "id": "2",
+              "code_text": "const noteData = useContext(NoteContext);",
+              "language": "js",
+              "language_desc": "JavaScript"
+            }],
+            "note": ""
+
       
 
+        },
+        {
+          "id": "3",
+          "name": "OpenFlow Backend Code Snippets", 
+          "category": "code-snippet",
+          "description": "OpenFlow Backend Snippets",
+          "created_by": "Stephen Sanwo",
+          "created_on": "2/2/2022, 2:22:22 PM",
+          "last_edit": "2/2/2022, 2:22:22 PM",
+          "nodes": [],
+          "edges": [],
+          "code": [{
+            "id": "1",
+            "code_text": "#Send file to email address\n#Note that this is just a demo\nimport smtplib\n\ndef main(sender_add, receiver_add, msg_to_be_sent):\n    #creating the SMTP server object by giving SMPT server address and port number\n    smtp_server=smtplib.SMTP('smtp.gmail.com',587)\n    smtp_server.sendmail(sender_add,receiver_add,msg_to_be_sent)\n    return 'Success'",
+            "language": "py",
+            "language_desc": "Python"
+          }],
+          "note": ""
+          
+        },
+        {
+          "id": "4",
+          "name": "OpenFlow Backend Notes", 
+          "category": "notes",
+          "description": "OpenFlow Backend Notes",
+          "created_by": "Stephen Sanwo",
+          "created_on": "2/2/2022, 2:22:22 PM",
+          "last_edit": "2/2/2022, 2:22:22 PM",
+          "nodes": [],
+          "edges": [],
+          "code": [],
+          "note": ""
+          
         }
+
+
 
       ]
     },
@@ -42,7 +174,7 @@
         "last_edit": "2/2/2022, 2:22:22 PM",
         "link": "/notes/1/openflow-project",
               "notes": [
-          {}
+        
       ]
       },
       {
@@ -53,7 +185,7 @@
         "last_edit": "2/2/2022, 2:22:22 PM",
         "link": "/notes/1/openflow-project",
               "notes": [
-          {}
+          
       ]
       },
       {
@@ -64,76 +196,10 @@
         "last_edit": "2/2/2022, 2:22:22 PM",
         "link": "/notes/1/openflow-project",
               "notes": [
-          {}
+          
       ]
-      },
-      {
-        "id": "5",
-        "name": "OpenFlow Project 5",
-        "created_by": "Stephen Sanwo",
-        "created_on": "2/2/2022, 2:22:22 PM",
-        "last_edit": "2/2/2022, 2:22:22 PM",
-        "link": "/notes/1/openflow-project",
-              "notes": [
-          {}
-      ]
-      },
-      {
-        "id": "6",
-        "name": "OpenFlow Project 6",
-        "created_by": "Stephen Sanwo",
-        "created_on": "2/2/2022, 2:22:22 PM",
-        "last_edit": "2/2/2022, 2:22:22 PM",
-        "link": "/notes/1/openflow-project",
-              "notes": [
-          {}
-      ]
-      },
-      {
-        "id": "7",
-        "name": "OpenFlow Project 7",
-        "created_by": "Stephen Sanwo",
-        "created_on": "2/2/2022, 2:22:22 PM",
-        "last_edit": "2/2/2022, 2:22:22 PM",
-        "link": "/notes/1/openflow-project",
-              "notes": [
-          {}
-      ]
-      },
-      {
-        "id": "8",
-        "name": "OpenFlow Project 8",
-        "created_by": "Stephen Sanwo",
-        "created_on": "2/2/2022, 2:22:22 PM",
-        "last_edit": "2/2/2022, 2:22:22 PM",
-        "link": "/notes/1/openflow-project",
-              "notes": [
-          {}
-      ]
-      },
-
-      {
-        "id": "9",
-        "name": "OpenFlow Project 9",
-        "created_by": "Stephen Sanwo",
-        "created_on": "2/2/2022, 2:22:22 PM",
-        "last_edit": "2/2/2022, 2:22:22 PM",
-        "link": "/notes/1/openflow-project",
-              "notes": [
-          {}
-      ]
-      },
-      {
-        "id": "10",
-        "name": "OpenFlow Project 10",
-        "created_by": "Stephen Sanwo",
-        "created_on": "2/2/2022, 2:22:22 PM",
-        "last_edit": "2/2/2022, 2:22:22 PM",
-        "link": "/notes/1/openflow-project",
-              "notes": [
-          {}
-      ]
-    }
+      }
+      
     
   
   ]

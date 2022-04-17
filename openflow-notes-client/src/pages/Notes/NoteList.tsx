@@ -6,6 +6,10 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import FileAdd from "../../assets/icons/file-add.svg";
+import FileCode from "../../assets/icons/file-code.svg";
+import FileNote from "../../assets/icons/file-note.svg";
+import FileFlow from "../../assets/icons/file-flow.svg";
 
 const NoteContainer = styled.div`
   display: flex;
@@ -26,13 +30,14 @@ const NoteList: React.FC = () => {
     <NoteContainer>
       <div
         style={{
-          width: "150px",
-          height: "150px",
+          width: "200px",
+          height: "200px",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
           cursor: "pointer",
+          gap: "20px",
         }}
       >
         <div
@@ -44,7 +49,11 @@ const NoteList: React.FC = () => {
             alignItems: "center",
           }}
         >
-          <Add32 fill="#1192e8" />
+          <img
+            src={FileAdd}
+            alt=""
+            style={{ width: "100px", height: "100px", fill: "#1192e8" }}
+          />
         </div>
         <div>
           <small
@@ -58,32 +67,69 @@ const NoteList: React.FC = () => {
           </small>
         </div>
       </div>
-      {folder.notes.map((note, index) => (
+      {folder.notes.length > 0 ? (
+        folder.notes.map((note, index) => (
+          <Link
+            key={index}
+            style={{
+              width: "200px",
+              height: "200px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "20px",
+              cursor: "pointer",
+            }}
+            to={`${pathname}/${note.id}`}
+          >
+            {note.category === "flow" ? (
+              <img
+                src={FileFlow}
+                alt=""
+                style={{ width: "100px", height: "100px", fill: "#1192e8" }}
+              />
+            ) : note.category === "code-snippet" ? (
+              <img
+                src={FileCode}
+                alt=""
+                style={{ width: "100px", height: "100px", fill: "#1192e8" }}
+              />
+            ) : note.category === "notes" ? (
+              <img
+                src={FileNote}
+                alt=""
+                style={{ width: "100px", height: "100px", fill: "#1192e8" }}
+              />
+            ) : (
+              <img
+                src={FileNote}
+                alt=""
+                style={{ width: "100px", height: "100px", fill: "#1192e8" }}
+              />
+            )}
+            <div title={note.name}>
+              <Link
+                to={`${pathname}/${note.id}`}
+                style={{ textAlign: "center", fontSize: "0.8rem" }}
+              >
+                {`${note.name}`.slice(0, 20)}
+                {note.name.length > 20 ? "..." : ""}
+              </Link>
+            </div>
+          </Link>
+        ))
+      ) : (
         <div
-          key={index}
           style={{
-            width: "150px",
-            height: "150px",
+            width: "100%",
             display: "flex",
-            flexDirection: "column",
             justifyContent: "center",
-            alignItems: "center",
-            gap: "20px",
           }}
         >
-          <Assets fill="#262626" style={{ width: "80px", height: "80px" }} />
-          <div>
-            <Link
-              to={`${pathname}/${note.id}`}
-              style={{ textAlign: "center", fontSize: "0.8rem" }}
-            >
-              {" "}
-              {`${note.name}`.slice(0, 20)}
-              {note.name.length > 20 ? "..." : ""}
-            </Link>
-          </div>
+          <h4 style={{ color: "#565656" }}>Empty folder, Add a new note</h4>
         </div>
-      ))}
+      )}
     </NoteContainer>
   );
 };

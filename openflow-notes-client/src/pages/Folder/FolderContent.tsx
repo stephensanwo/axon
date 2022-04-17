@@ -4,7 +4,9 @@ import { Add32 } from "@carbon/icons-react";
 import { NoteContext } from "../../context/notes";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import FolderIcon from "../../assets/icons/folder.svg";
+import FolderAddIcon from "../../assets/icons/folder-add.svg";
 
 const FolderContainer = styled.div`
   display: flex;
@@ -15,13 +17,14 @@ const FolderContainer = styled.div`
 
 const FolderContent: React.FC = () => {
   const noteData = useContext(NoteContext);
-  const { pathname } = useLocation();
+  const { userId } = useParams();
+
   return (
     <FolderContainer>
       <div
         style={{
-          width: "150px",
-          height: "150px",
+          width: "200px",
+          height: "200px",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
@@ -38,7 +41,11 @@ const FolderContent: React.FC = () => {
             alignItems: "center",
           }}
         >
-          <Add32 fill="#1192e8" />
+          <img
+            src={FolderAddIcon}
+            alt=""
+            style={{ width: "100px", height: "100px", fill: "#1192e8" }}
+          />
         </div>
         <div>
           <small
@@ -53,21 +60,27 @@ const FolderContent: React.FC = () => {
         </div>
       </div>
       {noteData.folders.map((folder, index) => (
-        <div
+        <Link
           key={index}
           style={{
-            width: "150px",
-            height: "150px",
+            width: "200px",
+            height: "200px",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
           }}
+          to={`/folders/${userId}/${folder.id}`}
         >
-          <Folder fill="#262626" style={{ width: "100px", height: "100px" }} />
+          <img
+            src={FolderIcon}
+            alt=""
+            style={{ width: "100px", height: "100px", fill: "#1192e8" }}
+          />
+
           <div>
             <Link
-              to={`${pathname}/${folder.id}`}
+              to={`/folders/${userId}/${folder.id}`}
               style={{ textAlign: "center", fontSize: "0.8rem" }}
             >
               {" "}
@@ -75,7 +88,7 @@ const FolderContent: React.FC = () => {
               {folder.name.length > 20 ? "..." : ""}
             </Link>
           </div>
-        </div>
+        </Link>
       ))}
     </FolderContainer>
   );

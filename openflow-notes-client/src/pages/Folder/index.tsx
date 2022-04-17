@@ -24,9 +24,9 @@ const SignedIn: React.FC = () => {
         <PageHeader
           breadcrumb={[
             { text: "Home", isCurrentPage: false, link: "/" },
-            { text: "Notes", isCurrentPage: true },
+            { text: "Folders", isCurrentPage: true },
           ]}
-          headerText={"Notes"}
+          headerText={"Folders"}
         />
       </MobileContainerDiv>
 
@@ -34,9 +34,9 @@ const SignedIn: React.FC = () => {
         <PageHeader
           breadcrumb={[
             { text: "Home", isCurrentPage: false, link: "/" },
-            { text: "Notes", isCurrentPage: true },
+            { text: "Folders", isCurrentPage: true },
           ]}
-          headerText={"Notes"}
+          headerText={"Folders"}
         />
 
         <FlowContainer>
