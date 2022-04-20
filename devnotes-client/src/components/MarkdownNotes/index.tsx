@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import MarkdownEditor, { ICommand } from "@uiw/react-markdown-editor";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkToc from "remark-toc";
@@ -73,13 +74,18 @@ const MarkdownNotes = () => {
             name={"title"}
             value={markdown}
             onChange={(e) => setMarkdown(e.target.value)}
+            autoCapitalize="off"
+            autoComplete="off"
+            autoCorrect="off"
+            spellCheck={false}
+            autoSave="off"
           />
         </div>
       </MarkdownInput>
       <MarkdownPreview>
         <ReactMarkdown
           children={markdown}
-          remarkPlugins={[remarkGfm, remarkToc, remarkExtendedTable]}
+          remarkPlugins={[remarkGfm, remarkToc]}
           className="react-markdown-overrides"
           components={{
             code({ node, inline, className, children, ...props }) {

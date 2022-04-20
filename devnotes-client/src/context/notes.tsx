@@ -40,6 +40,12 @@ export interface CodeSnippetProps {
   language_desc: string;
 }
 
+export interface MarkdownNoteProps {
+  id: string;
+  markdown_text: string;
+  published: boolean;
+}
+
 export interface NoteProps {
   id: string;
   name: string;
@@ -51,7 +57,7 @@ export interface NoteProps {
   nodes: Array<NodeProps>;
   edges: Array<EdgeProps>;
   code: Array<CodeSnippetProps>;
-  note: string;
+  note: MarkdownNoteProps;
 }
 interface FolderProps {
   id: string;
@@ -59,7 +65,6 @@ interface FolderProps {
   created_by: string;
   created_on: string;
   last_edit?: string;
-  link: string;
   notes: Array<NoteProps>;
 }
 
