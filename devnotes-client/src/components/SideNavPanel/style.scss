@@ -1,0 +1,58 @@
+.side-nav-menu-overrides button {
+  background-color: #262626 !important;
+}
+
+.side-nav-menu-overrides button:hover {
+  background-color: #393939 !important;
+}
+
+.side-nav-menu-overrides span {
+  color: #c6c6c6 !important;
+}
+
+.side-nav-menu-item-overrides a::before {
+  display: none;
+}
+
+.side-nav-menu-item-overrides a {
+  cursor: pointer;
+  background-color: #262626 !important;
+}
+
+.side-nav-menu-item-overrides a:hover {
+  background-color: #393939 !important;
+}
+
+.side-nav-menu-item-overrides [aria-current="page"] {
+  background-color: #393939 !important;
+}
+
+.side-nav-menu-overrides button::before {
+  display: none !important;
+}
+
+.new-folder-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+  padding-left: 35px;
+  padding-right: 20px;
+  cursor: pointer;
+}
+.new-folder-button:hover {
+  background-color: #393939;
+}
+
+.new-note-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+  padding-left: 53px;
+  padding-right: 12px;
+  cursor: pointer;
+}
+.new-note-button:hover {
+  background-color: #393939;
+}

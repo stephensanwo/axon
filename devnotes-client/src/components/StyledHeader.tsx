@@ -41,7 +41,7 @@ const StyledHeader: React.FC<Props> = ({ isHeaderMenu }) => {
 
   return (
     <div className="container">
-      <Header aria-label="OpenFlow">
+      <Header aria-label="DevNotes">
         {isHeaderMenu ? (
           <HeaderMenuButton
             aria-label="Open menu"
@@ -53,9 +53,9 @@ const StyledHeader: React.FC<Props> = ({ isHeaderMenu }) => {
           <> </>
         )}
         <HeaderName href="/" prefix="">
-          OpenFlow Notes
+          DevNotes
         </HeaderName>
-        <HeaderNavigation aria-label="OpenFlow Notes">
+        <HeaderNavigation aria-label="DevNotes">
           <HeaderMenuItem href="/folders/3649fdfhdjcgdb">
             Folders
           </HeaderMenuItem>

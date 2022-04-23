@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { PageContainer, MobileWarningDiv } from "../../shared/layout";
-import { NoteContextProvider } from "../../context/notes";
 import NoteItemContent from "./NoteItemContent";
 
 const FlowItem: React.FC = () => {
@@ -10,7 +9,7 @@ const FlowItem: React.FC = () => {
     if (window.innerWidth <= 800) setShowMobileWarning(true);
   }, []);
   return (
-    <NoteContextProvider>
+    <Fragment>
       {showMobileWarning ? (
         <MobileWarningDiv>
           <p>
@@ -23,7 +22,7 @@ const FlowItem: React.FC = () => {
           <NoteItemContent />
         </PageContainer>
       )}
-    </NoteContextProvider>
+    </Fragment>
   );
 };
 

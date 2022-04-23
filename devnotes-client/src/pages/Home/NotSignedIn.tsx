@@ -41,9 +41,9 @@ const NotSignedIn: React.FC = (props) => {
               marginBottom: "10px",
             }}
           >
-            OpenFlow Notes
+            DevNotes
           </h2>
-          <p>Visual brainstorming and mind mapping for developers</p>
+          <p>Note Taking and Mind Mapping for Techies</p>
         </div>
 
         <div

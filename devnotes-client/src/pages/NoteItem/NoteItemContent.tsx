@@ -41,7 +41,7 @@ const NoteItemContent = () => {
             link: `/folders/${userId}`,
           },
           {
-            text: "Notes",
+            text: `${folder.name}`,
             isCurrentPage: false,
             link: `/folders/${userId}/${folderId}`,
           },
