@@ -1,8 +1,7 @@
 import React from "react";
 import { PageHeaderContainer, HeaderAction } from "../../shared/layout";
-import { Button, BreadcrumbItem, Breadcrumb } from "carbon-components-react";
-import "./style.scss";
-
+import { Button } from "carbon-components-react";
+import styled from "styled-components";
 interface PageHeaderProps {
   action?: React.Dispatch<React.SetStateAction<any>>;
   breadcrumb: Array<{
@@ -16,6 +15,10 @@ interface PageHeaderProps {
   theme?: "dark" | "light";
 }
 
+const BreadCrumb = styled.div`
+  display: flex;
+`;
+
 const PageHeader: React.FC<PageHeaderProps> = (props) => {
   return (
     <PageHeaderContainer>
@@ -26,17 +29,13 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
           justifyContent: "space-between",
         }}
       >
-        <Breadcrumb noTrailingSlash={true}>
+        <BreadCrumb>
           {props.breadcrumb.map((item, index) => (
-            <BreadcrumbItem
-              key={index}
-              isCurrentPage={item.isCurrentPage}
-              href={item.link}
-            >
+            <small style={{ marginRight: "4px", color: "#1192e8" }}>
               {item.text}
-            </BreadcrumbItem>
+            </small>
           ))}
-        </Breadcrumb>
+        </BreadCrumb>
         <h2 style={{ color: props.theme === "dark" ? "#fff" : "" }}>
           {props.headerText}
         </h2>
