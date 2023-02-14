@@ -1,0 +1,199 @@
+.node-label {
+  font-size: 0.675rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.16px;
+  margin: 0;
+  font-family: "IBM Plex Sans";
+  text-align: left;
+  color: #1192e8;
+}
+
+
+.node-description {
+  width: 220px;
+  height: 50px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.16px;
+  margin: 0;
+  margin-top: 0.3rem;
+  text-align: left;
+  color: #f4f4f4;
+}
+
+.node-status {
+  font-size: 0.675rem;
+  font-weight: 400;
+  line-height: 1.29;
+  letter-spacing: 0.16px;
+  margin: 0;
+  margin-top: 0.3rem;
+  text-align: left;
+  color: #f4f4f4;
+}
+.node-content {
+  display: flex;
+  gap: 0.2rem;
+  justify-content: space-between;
+}
+
+.input-node {
+  background-color: #f4f4f4;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  width: 280px;
+  min-height: 60px;
+}
+
+.node-container {
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  width: 280px;
+  min-height: 60px;
+  padding: 1rem;
+}
+
+
+// Anchor Node
+
+.anchor-node {
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  min-width: 60px;
+  min-height: 40px;
+  border-radius: 20px;
+  outline: none;
+}
+
+.anchor-node-container {
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 40px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.anchor-node-label {
+  font-size: 0.675rem;
+  font-weight: 600;
+  line-height: 1.29;
+  letter-spacing: 0.16px;
+  margin: 0;
+  font-family: "IBM Plex Sans";
+  text-align: left;
+  color: #fff;
+}
+
+
+
+.react-flow__node.react-flow__node-input {
+  background-color: #393939;
+  opacity: 70%;
+}
+
+.react-flow__node.react-flow__node-input.selection {
+  background-color: hsl(0, 0%, 22%);
+  border: 2px solid #1192e8;
+}
+
+.input-node.react-flow__node-input .react-flow__handle {
+  background-color: #b5b5b5;
+  // width: 5px;
+  border: 0px;
+  height: 100%;
+  border-color: #b5b5b5;
+  cursor: crosshair;
+}
+
+.input-node.react-flow__node-input .react-flow__handle:hover {
+  background-color: #1192e8 !important;
+  border-color: #1192e8;
+  cursor: crosshair;
+}
+
+
+.anchor-node.react-flow__node-input .react-flow__handle {
+  background-color: #b5b5b5;
+  border: 0px;
+  height: 25%;
+
+  border-color: #b5b5b5;
+  cursor: crosshair;
+}
+
+.anchor-node.react-flow__node-input .react-flow__handle:hover {
+  background-color: #1192e8 !important;
+  border-color: #1192e8;
+  cursor: crosshair;
+}
+
+.react-flow__node-input.selected,
+.react-flow__node-input.selected:hover {
+  outline: none;
+  // -moz-box-shadow: 0 0 0 1px #1192e8;
+  // -webkit-box-shadow: 0 0 0 1px #1192e8;
+  // box-shadow: 0 0 0 1px #1192e8;
+  opacity: 100%;
+  cursor: pointer;
+}
+
+.react-flow__node-input.simple-node.selected,
+.react-flow__node-input.simple-node.selected:hover {
+  outline: none;
+  // -moz-box-shadow: 0 0 0 2px #1192e8;
+  // -webkit-box-shadow: 0 0 0 2px #1192e8;
+  // box-shadow: 0 0 0 2px #1192e8;
+}
+
+.react-flow__attribution {
+  display: none;
+}
+
+.react-flow__pane.react-flow__container {
+  display: none;
+}
+
+
+// Edge
+
+.edgebutton {
+  width: 20px;
+  padding: 2px;
+  height: 20px;
+  background: #393939;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.edgebutton:hover {
+  box-shadow: 0 0 0 1px #1192e8;
+}
+
+.edgebutton-foreignobject body {
+  background: transparent;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 40px;
+}
+
+
+.react-flow__edge-path {
+  stroke-width: 1.5px;
+
+}

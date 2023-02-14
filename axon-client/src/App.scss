@@ -1,0 +1,158 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  // border: 1px dashed #1192e8;
+}
+
+h1 {
+  font-family: "IBM Plex Sans";
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.4;
+  font-size: 38px;
+}
+
+h2 {
+  color: #fff;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+h3 {
+  color: #fff;
+  font-weight: 600;
+  line-height: 1.4;
+}
+h4 {
+  font-family: "IBM Plex Sans";
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.4;
+}
+
+h5 {
+  color: #fff;
+  line-height: 1.4;
+}
+h6 {
+  color: #fff;
+  line-height: 1.4;
+}
+
+small {
+  color: #c9d1d9;
+  line-height: 1.4;
+  font-size: 0.675rem;
+  font-weight: 400;
+  letter-spacing: 0.16px;
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+}
+
+p {
+  color: #fff;
+  line-height: 1.4;
+  font-size: 16px;
+}
+
+li {
+  color: #c9d1d9;
+  line-height: 1.4;
+  font-size: 16px;
+  list-style: disc;
+  padding: 0;
+}
+
+ol,
+ul {
+  margin: 0;
+}
+a {
+  color: #1192e8;
+  line-height: 1.4;
+  font-size: 16px;
+}
+
+a:hover:after {
+  text-decoration: underline;
+  color: #1192e8;
+}
+
+.styled-span {
+  display: flex;
+  align-items: center;
+}
+table {
+  color: #c9d1d9;
+}
+
+body {
+  // background-color: #161616;
+  // background-color: #1c1f23;
+  // background-color: #2f3337;
+  background-color: rgb(19, 19, 19);
+}
+
+code {
+  color: #c9d1d9;
+}
+
+hr {
+  border: 1px solid #262626;
+}
+// Carbon Overrides
+
+.bx--header {
+  background-color: rgb(19, 19, 19);
+}
+
+.bx--accordion__content {
+  padding-right: 16px;
+}
+
+.container {
+  margin-bottom: 47px;
+}
+
+
+.bx--btn--ghost {
+  color:#1192e8
+}
+
+.bx--btn--ghost:hover {
+  background-color: transparent;
+  color:#0b68a6
+}
+
+
+
+// Buttons
+
+.bx--btn--secondary {
+  background-color: #AEC948;
+  color: #000;
+  width: 350px;
+  height: 50px
+  
+}
+
+.bx--btn--secondary:hover {
+  background-color: #bac986;
+  color: #000;
+}
+
+
+.axon {
+  font-family: "IBM Plex Sans";
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.4;
+  font-size: 38px;
+  letter-spacing: 0.5rem;
+}
+
+
+
+
