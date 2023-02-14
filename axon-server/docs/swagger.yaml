@@ -1,0 +1,199 @@
+basePath: /
+definitions:
+  types.BaseResponse:
+    properties:
+      message: {}
+    type: object
+  types.Folder:
+    properties:
+      date_created:
+        type: string
+      folder_id:
+        type: string
+      last_edited:
+        type: string
+      name:
+        type: string
+      user_id:
+        type: string
+    type: object
+  types.MutateFolder:
+    properties:
+      folder_name:
+        type: string
+    type: object
+host: 127.0.0.1:8100
+info:
+  contact:
+    email: stephen.sanwo@icloud.com
+    name: Stephen Sanwo
+  description: Axon Core API
+  license:
+    name: MIT
+    url: https://mit-license.org
+  termsOfService: stephen.sanwo@icloud.com
+  title: Axon Core API
+  version: "1.0"
+paths:
+  /callback:
+    get:
+      consumes:
+      - application/json
+      description: AuthCallback
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.BaseResponse'
+      summary: AuthCallback
+      tags:
+      - Auth
+  /folder:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Folder
+      operationId: delete-folder
+      parameters:
+      - description: Folder ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Folder
+          schema:
+            $ref: '#/definitions/types.Folder'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Delete Folder
+      tags:
+      - Folder
+    get:
+      consumes:
+      - application/json
+      description: Query Folder
+      operationId: get-folder
+      parameters:
+      - description: Folder ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Folder
+          schema:
+            $ref: '#/definitions/types.Folder'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Query Folder
+      tags:
+      - Folder
+    patch:
+      consumes:
+      - application/json
+      description: Patch Folder
+      operationId: patch-folder
+      parameters:
+      - description: Folder ID
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: Folder Object
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/types.MutateFolder'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Folder Id
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Patch Folder
+      tags:
+      - Folder
+    post:
+      consumes:
+      - application/json
+      description: Create New Folder
+      operationId: post-folder
+      parameters:
+      - description: Folder Object
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/types.MutateFolder'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Folder Id
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Create New Folder
+      tags:
+      - Folder
+  /folders:
+    get:
+      consumes:
+      - application/json
+      description: FoldersHandler
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/types.Folder'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: FoldersHandler
+      tags:
+      - Folder
+  /ping:
+    get:
+      description: Ping the server
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/types.BaseResponse'
+      summary: Ping the server
+      tags:
+      - Ping
+swagger: "2.0"
