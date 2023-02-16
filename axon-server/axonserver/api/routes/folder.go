@@ -3,6 +3,8 @@ package routes
 import (
 	"axon-server/axonserver/core"
 	"axon-server/axonserver/types"
+	"axon-server/axonserver/utils"
+	"context"
 	"encoding/json"
 	"net/http"
 
@@ -85,6 +87,7 @@ func QueryFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonCon
 // @Produce      json
 // @Success      201  {string}  types.Folder.FolderID "Folder Id"
 // @Failure      401  {string}	string "Unauthorized"
+// @Failure      401  {object}	types.FieldErrors "Bad Request"
 // @Router  /folder [post]
 // @Param 		 data body types.MutateFolder true "Folder Object"
 func PostFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
@@ -99,6 +102,17 @@ func PostFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonCont
 		http.Error(w, "Folder data not provided in request body", http.StatusBadRequest)
 		return
 	}
+	validate := utils.NewValidator()
+	if err := validate.Struct(requestData); err != nil {
+		err := utils.CheckErrors(
+			context.TODO(), err, http.StatusBadRequest, "user",
+		)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(err)
+		return
+	}
+
 	folder := core.Folder{
 		Session: session,
 	}
@@ -140,6 +154,16 @@ func PatchFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonCon
 
 	if err != nil {
 		http.Error(w, "Folder data not provided in request body", http.StatusBadRequest)
+		return
+	}
+	validate := utils.NewValidator()
+	if err := validate.Struct(requestData); err != nil {
+		err := utils.CheckErrors(
+			context.TODO(), err, http.StatusBadRequest, "user",
+		)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(err)
 		return
 	}
 
