@@ -1,5 +1,5 @@
 package types
 
 type MutateFolder struct {
-	FolderName string `json:"folder_name"`
+	FolderName string `json:"folder_name" validate:"required"`
 }
