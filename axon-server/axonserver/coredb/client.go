@@ -23,10 +23,9 @@ func (c DB) GetCoreDBClient(a *types.AxonContext) (*mongo.Client, error) {
 	// Connect to MongoDB
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
-		log.Panicf("Error connecting to mongodb instance: %v ", err)
+		log.Fatal("Error connecting to mongodb instance: %v ", err)
 	} else {
 		log.Info("MongoDB instance online")
-
 	}
 
 	return client, err

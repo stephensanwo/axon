@@ -19,3 +19,10 @@ type GetFolderResponse struct {
 		Folder Folder
 	} `json:"message"`
 }
+
+type UpdateDataResponse struct {
+	MatchedCount  int    `json:"MatchedCount"`
+	ModifiedCount int    `json:"ModifiedCount"`
+	UpsertedCount int    `json:"UpsertedCount"`
+	UpsertedID    string `json:"UpsertedID"`
+}

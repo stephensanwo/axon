@@ -19,16 +19,14 @@ type Folder struct {
 	LastEdited  time.Time          `json:"last_edited" bson:"last_edited"`
 }
 
-type Notes struct {
+type Note struct {
 	UserId      primitive.ObjectID `json:"user_id" bson:"user_id"`
 	FolderID    primitive.ObjectID `json:"folder_id" bson:"folder_id"`
 	NoteID      primitive.ObjectID `json:"note_id" bson:"note_id"`
 	Name        string             `json:"name" bson:"name"`
 	Description string             `json:"description" bson:"description"`
-	DateCreated string             `json:"date_created" bson:"date_created"`
-	LastEdited  string             `json:"last_edited" bson:"last_edited"`
-	Nodes       []Node             `json:"nodes" bson:"nodes"`
-	Edges       []Edge             `json:"edges" bson:"edges"`
+	DateCreated time.Time          `json:"date_created" bson:"date_created"`
+	LastEdited  time.Time          `json:"last_edited" bson:"last_edited"`
 }
 
 type Node struct {

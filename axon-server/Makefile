@@ -20,10 +20,10 @@ test:
 	go test -v -cover ./...
 
 dev:
-	nodemon --watch './**/*.go' --signal SIGTERM --exec 'go' run main.go
+	nodemon --watch './**/*.go' --signal SIGTERM --exec 'go' run main.go -a server
 
 swagger:
-	export PATH=$PATH:$HOME/go/bin 
+	export PATH=$PATH:$HOME/go/bin
 	swag init
 
 .PHONY: postgres createdb dropdb migrateup migratedown sqlc

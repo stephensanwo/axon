@@ -120,6 +120,12 @@ const docTemplate = `{
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    "422": {
+                        "description": "Unprocessible Entity",
+                        "schema": {
+                            "$ref": "#/definitions/types.FieldErrors"
+                        }
                     }
                 }
             },
@@ -140,16 +146,22 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Folder ID",
-                        "name": "id",
+                        "name": "folder_id",
                         "in": "query",
                         "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Folder",
+                        "description": "Records Deleted",
                         "schema": {
-                            "$ref": "#/definitions/types.Folder"
+                            "type": "int"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
                         }
                     },
                     "401": {
@@ -177,7 +189,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "Folder ID",
-                        "name": "id",
+                        "name": "folder_id",
                         "in": "query",
                         "required": true
                     },
@@ -192,16 +204,22 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Folder Id",
+                    "200": {
+                        "description": "Folder Update Result",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/types.UpdateDataResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
                             "type": "string"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessible Entity",
+                        "schema": {
+                            "$ref": "#/definitions/types.FieldErrors"
                         }
                     }
                 }
@@ -228,6 +246,271 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/types.Folder"
                             }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/note": {
+            "get": {
+                "description": "Query Note",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Note"
+                ],
+                "summary": "Query Note",
+                "operationId": "get-note",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Folder ID",
+                        "name": "folder_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Note ID",
+                        "name": "note_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Note",
+                        "schema": {
+                            "$ref": "#/definitions/types.Note"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create New Note",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Note"
+                ],
+                "summary": "Create New Note",
+                "operationId": "post-note",
+                "parameters": [
+                    {
+                        "description": "Note Object",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.MutateNote"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Note Id",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessible Entity",
+                        "schema": {
+                            "$ref": "#/definitions/types.FieldErrors"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete Note",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Note"
+                ],
+                "summary": "Delete Note",
+                "operationId": "delete-note",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Folder ID",
+                        "name": "folder_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Note ID",
+                        "name": "note_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Records Deleted",
+                        "schema": {
+                            "type": "int"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Patch Note",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Note"
+                ],
+                "summary": "Patch Note",
+                "operationId": "patch-note",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Folder ID",
+                        "name": "folder_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Note ID",
+                        "name": "note_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Note Object",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.PatchNote"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Note Update Result",
+                        "schema": {
+                            "$ref": "#/definitions/types.UpdateDataResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessible Entity",
+                        "schema": {
+                            "$ref": "#/definitions/types.FieldErrors"
+                        }
+                    }
+                }
+            }
+        },
+        "/notes": {
+            "get": {
+                "description": "Query all notes",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Note"
+                ],
+                "summary": "Query all notes",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Folder ID",
+                        "name": "folder_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/types.Note"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
                         }
                     },
                     "401": {
@@ -273,6 +556,23 @@ const docTemplate = `{
                 "message": {}
             }
         },
+        "types.FieldErrors": {
+            "type": "object",
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "msg": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
         "types.Folder": {
             "type": "object",
             "properties": {
@@ -295,8 +595,88 @@ const docTemplate = `{
         },
         "types.MutateFolder": {
             "type": "object",
+            "required": [
+                "folder_name"
+            ],
             "properties": {
                 "folder_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.MutateNote": {
+            "type": "object",
+            "required": [
+                "folder_id",
+                "note_description",
+                "note_name"
+            ],
+            "properties": {
+                "folder_id": {
+                    "type": "string"
+                },
+                "note_description": {
+                    "type": "string"
+                },
+                "note_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.Note": {
+            "type": "object",
+            "properties": {
+                "date_created": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "folder_id": {
+                    "type": "string"
+                },
+                "last_edited": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "note_id": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.PatchNote": {
+            "type": "object",
+            "required": [
+                "note_description",
+                "note_name"
+            ],
+            "properties": {
+                "note_description": {
+                    "type": "string"
+                },
+                "note_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.UpdateDataResponse": {
+            "type": "object",
+            "properties": {
+                "MatchedCount": {
+                    "type": "integer"
+                },
+                "ModifiedCount": {
+                    "type": "integer"
+                },
+                "UpsertedCount": {
+                    "type": "integer"
+                },
+                "UpsertedID": {
                     "type": "string"
                 }
             }

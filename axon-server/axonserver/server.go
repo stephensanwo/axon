@@ -53,6 +53,36 @@ func Server(settings *types.Settings) {
 			Handler: handlers.DeleteFolderHandler,
 			Method:  http.MethodDelete,
 		},
+		{
+			Path:    "/notes",
+			Auth:    types.PrivateRoute,
+			Handler: handlers.QueryNotesHandler,
+			Method:  http.MethodGet,
+		},
+		{
+			Path:    "/note",
+			Auth:    types.PrivateRoute,
+			Handler: handlers.QueryNoteHandler,
+			Method:  http.MethodGet,
+		},
+		{
+			Path:    "/note",
+			Auth:    types.PrivateRoute,
+			Handler: handlers.PostNoteHandler,
+			Method:  http.MethodPost,
+		},
+		{
+			Path:    "/note",
+			Auth:    types.PrivateRoute,
+			Handler: handlers.PatchNoteHandler,
+			Method:  http.MethodPatch,
+		},
+		{
+			Path:    "/note",
+			Auth:    types.PrivateRoute,
+			Handler: handlers.DeleteNoteHandler,
+			Method:  http.MethodDelete,
+		},
 	}
 
 	axonContext := types.AxonContext{

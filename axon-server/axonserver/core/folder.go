@@ -5,7 +5,7 @@ import (
 	"axon-server/axonserver/coredb"
 	"axon-server/axonserver/types"
 	"context"
-	"fmt"
+	"errors"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -21,16 +21,16 @@ func (f *Folder) GetFolders(a *types.AxonContext) (*[]types.Folder, error) {
 	dbclient, _ := coredb.DB{}.GetCoreDBClient(a)
 	defer coredb.DB{}.DisconnectCoreDBClient(dbclient)
 
-	axon_collection := coredb.DB{}.GetCollection(dbclient, coredb.AXON_DATABASE, coredb.AXON_FOLDER_COLLECTION)
+	folder_collection := coredb.DB{}.GetCollection(dbclient, coredb.AXON_DATABASE, coredb.AXON_FOLDER_COLLECTION)
 
 	var res []types.Folder
 
 	filter := bson.M{"user_id": f.Session.SessionData.User.UserId}
-	cursor, err := axon_collection.Find(context.TODO(), filter)
+	cursor, _ := folder_collection.Find(context.TODO(), filter)
+	err := cursor.All(context.TODO(), &res)
 	if err != nil {
-		return &res, err
+		return nil, errors.New("could not fetch folders - " + err.Error())
 	}
-	err = cursor.All(context.TODO(), &res)
 	return &res, err
 
 }
@@ -48,8 +48,8 @@ func (f *Folder) CreateFolder(a *types.AxonContext, name string) (*primitive.Obj
 		LastEdited:  time.Now(),
 	}
 
-	axon_collection := coredb.DB{}.GetCollection(dbclient, coredb.AXON_DATABASE, coredb.AXON_FOLDER_COLLECTION)
-	_, err := axon_collection.InsertOne(
+	folder_collection := coredb.DB{}.GetCollection(dbclient, coredb.AXON_DATABASE, coredb.AXON_FOLDER_COLLECTION)
+	_, err := folder_collection.InsertOne(
 		context.TODO(),
 		folder,
 	)
@@ -61,20 +61,19 @@ func (f *Folder) FindFolder(a *types.AxonContext, folder_id *primitive.ObjectID)
 	dbclient, _ := coredb.DB{}.GetCoreDBClient(a)
 	defer coredb.DB{}.DisconnectCoreDBClient(dbclient)
 
-	axon_collection := coredb.DB{}.GetCollection(dbclient, coredb.AXON_DATABASE, coredb.AXON_FOLDER_COLLECTION)
+	folder_collection := coredb.DB{}.GetCollection(dbclient, coredb.AXON_DATABASE, coredb.AXON_FOLDER_COLLECTION)
 
 	filter := bson.M{"user_id": f.Session.SessionData.User.UserId, "folder_id": folder_id}
 
 	var folderData types.Folder
 
-	err := axon_collection.FindOne(context.TODO(), filter).Decode(&folderData)
+	err := folder_collection.FindOne(context.TODO(), filter).Decode(&folderData)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			fmt.Println(err)
-			return &types.Folder{}, err
+			return nil, errors.New("could not find folder - " + err.Error())
 		}
 
-		return &types.Folder{}, err
+		return nil, errors.New("could not find folder - " + err.Error())
 	}
 	return &folderData, err
 }
@@ -83,29 +82,36 @@ func (f *Folder) DeleteFolder(a *types.AxonContext, folder_id *primitive.ObjectI
 	dbclient, _ := coredb.DB{}.GetCoreDBClient(a)
 	defer coredb.DB{}.DisconnectCoreDBClient(dbclient)
 
-	axon_collection := coredb.DB{}.GetCollection(dbclient, coredb.AXON_DATABASE, coredb.AXON_FOLDER_COLLECTION)
+	folder_collection := coredb.DB{}.GetCollection(dbclient, coredb.AXON_DATABASE, coredb.AXON_FOLDER_COLLECTION)
 
 	filter := bson.M{"user_id": f.Session.SessionData.User.UserId, "folder_id": folder_id}
 
-	res, err := axon_collection.DeleteOne(
+	res, err := folder_collection.DeleteOne(
 		context.TODO(),
 		filter)
+
+	if err != nil {
+		return nil, errors.New("could not delete folder - " + err.Error())
+	}
 
 	return res, err
 
 }
 
-func (f *Folder) UpdateFolder(a *types.AxonContext, folder_id *primitive.ObjectID, name string) (*mongo.UpdateResult, error) {
+func (f *Folder) UpdateFolder(a *types.AxonContext, name string, folder_id *primitive.ObjectID) (*mongo.UpdateResult, error) {
 	dbclient, _ := coredb.DB{}.GetCoreDBClient(a)
 	defer coredb.DB{}.DisconnectCoreDBClient(dbclient)
 
-	axon_collection := coredb.DB{}.GetCollection(dbclient, coredb.AXON_DATABASE, coredb.AXON_FOLDER_COLLECTION)
+	folder_collection := coredb.DB{}.GetCollection(dbclient, coredb.AXON_DATABASE, coredb.AXON_FOLDER_COLLECTION)
 
 	filter := bson.M{"user_id": f.Session.SessionData.User.UserId, "folder_id": folder_id}
 	update := bson.M{"$set": bson.M{"name": name, "last_edited": time.Now()}}
 
-	result, err := axon_collection.UpdateOne(context.TODO(), filter, update)
-	fmt.Println(err)
+	result, err := folder_collection.UpdateOne(context.TODO(), filter, update)
+	if err != nil {
+		return nil, errors.New("could not update folder - " + err.Error())
+	}
+
 	return result, err
 
 }

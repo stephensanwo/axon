@@ -11,51 +11,19 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// FoldersHandler godoc
-// @Summary      Query all folders
-// @Description  Query all folders
-// @Tags         Folder
-// @ID get-folders
+// QueryNotesHandler godoc
+// @Summary      Query all notes
+// @Description  Query all notes
+// @Tags         Note
+// @ID get-notes
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  []types.Folder
+// @Success      200  {object}  []types.Note "Notes"
 // @Failure      400  {string}	string "Bad Request"
 // @Failure      401  {string}	string "Unauthorized"
-// @Router       /folders [get]
-func QueryFoldersHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
-	session, err := core.GetAuthenticatedUserData(a)
-	if err != nil {
-		http.Error(w, "unauthorized", http.StatusUnauthorized)
-		return
-	}
-	folder := core.Folder{
-		Session: session,
-	}
-
-	folders, err := folder.GetFolders(a)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(folders)
-
-}
-
-// QueryFolderHandler godoc
-// @Summary      Query Folder
-// @Description  Query Folder
-// @Tags         Folder
-// @ID get-folder
-// @Accept       json
-// @Produce      json
-// @Success      200  {object}  types.Folder "Folder"
-// @Failure      400  {string}	string "Bad Request"
-// @Failure      401  {string}	string "Unauthorized"
-// @Router /folder [get]
 // @Param 		 folder_id query string true "Folder ID"
-func QueryFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
+// @Router       /notes [get]
+func QueryNotesHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
 	session, err := core.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
@@ -67,12 +35,54 @@ func QueryFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonCon
 		http.Error(w, "field folder_id is required in query", http.StatusBadRequest)
 		return
 	}
-	folder := core.Folder{
+
+	note := core.Note{
 		Session: session,
 	}
-
 	folder_id, _ := primitive.ObjectIDFromHex(folderID)
-	res, err := folder.FindFolder(a, &folder_id)
+	notes, err := note.GetNotes(a, &folder_id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(notes)
+}
+
+// QueryNoteHandler godoc
+// @Summary      Query Note
+// @Description  Query Note
+// @Tags         Note
+// @ID get-note
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  types.Note "Note"
+// @Failure      400  {string}	string "Bad Request"
+// @Failure      401  {string}	string "Unauthorized"
+// @Router /note [get]
+// @Param 		 folder_id query string true "Folder ID"
+// @Param 		 note_id query string true "Note ID"
+func QueryNoteHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
+	session, err := core.GetAuthenticatedUserData(a)
+	if err != nil {
+		http.Error(w, "unauthorized", http.StatusUnauthorized)
+		return
+	}
+	query := r.URL.Query()
+	folderID := query.Get("folder_id")
+	noteID := query.Get("note_id")
+
+	if folderID == "" || noteID == "" {
+		http.Error(w, "fields note_id and folder_id are required in query", http.StatusBadRequest)
+		return
+	}
+	note := core.Note{
+		Session: session,
+	}
+	folder_id, _ := primitive.ObjectIDFromHex(folderID)
+	note_id, _ := primitive.ObjectIDFromHex(noteID)
+	res, err := note.FindNote(a, &folder_id, &note_id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -82,36 +92,36 @@ func QueryFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonCon
 	json.NewEncoder(w).Encode(res)
 }
 
-// PostFolderHandler godoc
-// @Summary      Create New Folder
-// @Description  Create New Folder
-// @ID post-folder
-// @Tags         Folder
+// PostNoteHandler godoc
+// @Summary      Create New Note
+// @Description  Create New Note
+// @ID post-note
+// @Tags         Note
 // @Accept       json
 // @Produce      json
-// @Success      201  {string}  types.Folder.FolderID "Folder Id"
+// @Success      201  {string}  types.Note.NoteID "Note Id"
 // @Failure      400  {string}	string "Bad Request"
 // @Failure      401  {string}	string "Unauthorized"
 // @Failure      422  {object}	types.FieldErrors "Unprocessible Entity"
-// @Router  /folder [post]
-// @Param 		 data body types.MutateFolder true "Folder Object"
-func PostFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
+// @Router  /note [post]
+// @Param 		 data body types.MutateNote true "Note Object"
+func PostNoteHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
 	session, err := core.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
 	}
 	decoder := json.NewDecoder(r.Body)
-	var requestData types.MutateFolder
+	var requestData types.MutateNote
 	err = decoder.Decode(&requestData)
 	if err != nil {
-		http.Error(w, "field folder_name required in request body", http.StatusBadRequest)
+		http.Error(w, "fields folder_id, note_name, and note_description are required in request body", http.StatusBadRequest)
 		return
 	}
 	validate := utils.NewValidator()
 	if err := validate.Struct(requestData); err != nil {
 		err := utils.CheckErrors(
-			context.TODO(), err, http.StatusUnprocessableEntity, "folder",
+			context.TODO(), err, http.StatusUnprocessableEntity, "note",
 		)
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusUnprocessableEntity)
@@ -119,59 +129,64 @@ func PostFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonCont
 		return
 	}
 
-	folder := core.Folder{
+	note := core.Note{
 		Session: session,
 	}
 
-	folderId, err := folder.CreateFolder(a, requestData.FolderName)
+	folder_id, _ := primitive.ObjectIDFromHex(requestData.FolderId)
+
+	noteId, err := note.CreateNote(a, requestData.NoteName, requestData.NoteDescription, &folder_id)
 	if err != nil {
-		http.Error(w, "could not create folder - "+err.Error(), http.StatusBadRequest)
+		http.Error(w, "could not create note - "+err.Error(), http.StatusBadRequest)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(folderId)
+	json.NewEncoder(w).Encode(noteId)
 
 }
 
-// PatchFolderHandler godoc
-// @Summary      Patch Folder
-// @Description  Patch Folder
-// @ID patch-folder
-// @Tags         Folder
+// PatchNoteHandler godoc
+// @Summary      Patch Note
+// @Description  Patch Note
+// @ID patch-note
+// @Tags         Note
 // @Accept       json
 // @Produce      json
 // @Success      200  {object}  types.UpdateDataResponse "Update Response"
 // @Failure      401  {string}	string "Unauthorized"
 // @Failure      422  {object}	types.FieldErrors "Unprocessible Entity"
-// @Router  /folder [patch]
+// @Router  /note [patch]
 // @Param 		 folder_id query string true "Folder ID"
-// @Param 		 data body types.MutateFolder true "Folder Object"
-func PatchFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
+// @Param 		 note_id query string true "Note ID"
+// @Param 		 data body types.PatchNote true "Note Object"
+func PatchNoteHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
 	session, err := core.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
 	}
 	query := r.URL.Query()
+	noteID := query.Get("note_id")
 	folderID := query.Get("folder_id")
-	if folderID == "" {
-		http.Error(w, "foeld folder_id required in query", http.StatusBadRequest)
+
+	if noteID == "" || folderID == "" {
+		http.Error(w, "fields folder_id and note_id required in query", http.StatusBadRequest)
 		return
 	}
 
 	decoder := json.NewDecoder(r.Body)
-	var requestData types.MutateFolder
+	var requestData types.PatchNote
 	err = decoder.Decode(&requestData)
 
 	if err != nil {
-		http.Error(w, "field folder_name required in request body", http.StatusBadRequest)
+		http.Error(w, "fields folder_id, note_name, and note_description are required in request body", http.StatusBadRequest)
 		return
 	}
 	validate := utils.NewValidator()
 	if err := validate.Struct(requestData); err != nil {
 		err := utils.CheckErrors(
-			context.TODO(), err, http.StatusUnprocessableEntity, "folder",
+			context.TODO(), err, http.StatusUnprocessableEntity, "note",
 		)
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusUnprocessableEntity)
@@ -179,13 +194,14 @@ func PatchFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonCon
 		return
 	}
 
-	folder := core.Folder{
+	note := core.Note{
 		Session: session,
 	}
 
 	folder_id, _ := primitive.ObjectIDFromHex(folderID)
+	note_id, _ := primitive.ObjectIDFromHex(noteID)
 
-	updatedData, err := folder.UpdateFolder(a, requestData.FolderName, &folder_id)
+	updatedData, err := note.UpdateNote(a, requestData.NoteName, requestData.NoteDescription, &folder_id, &note_id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -196,39 +212,42 @@ func PatchFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonCon
 
 }
 
-// DeleteFolderHandler godoc
-// @Summary      Delete Folder
-// @Description  Delete Folder
-// @ID delete-folder
-// @Tags         Folder
+// DeleteNoteHandler godoc
+// @Summary      Delete Note
+// @Description  Delete Note
+// @ID delete-note
+// @Tags         Note
 // @Accept       json
 // @Produce      json
 // @Success      200  {int}  int "Records Deleted"
 // @Failure      400  {string}	string "Bad Request"
 // @Failure      401  {string}	string "Unauthorized"
-// @Router /folder [delete]
+// @Router /note [delete]
 // @Param 		 folder_id query string true "Folder ID"
-func DeleteFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
+// @Param 		 note_id query string true "Note ID"
+func DeleteNoteHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
 	session, err := core.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
 	}
+
 	query := r.URL.Query()
 	folderID := query.Get("folder_id")
-
-	folder := core.Folder{
-		Session: session,
-	}
-
+	noteID := query.Get("note_id")
 	if folderID == "" {
-		http.Error(w, "field folder_id required in query", http.StatusBadRequest)
+		http.Error(w, "fields folder_id and note_id required in query", http.StatusBadRequest)
 		return
 	}
 
-	folder_id, _ := primitive.ObjectIDFromHex(folderID)
+	note := core.Note{
+		Session: session,
+	}
 
-	res, err := folder.DeleteFolder(a, &folder_id)
+	folder_id, _ := primitive.ObjectIDFromHex(folderID)
+	note_id, _ := primitive.ObjectIDFromHex(noteID)
+
+	res, err := note.DeleteNote(a, &folder_id, &note_id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
