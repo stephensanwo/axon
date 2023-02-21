@@ -2,7 +2,13 @@ package main
 
 import (
 	axonserver "axon-server/axonserver"
+	channel "axon-server/axonserver/channel"
 	types "axon-server/axonserver/types"
+	utils "axon-server/axonserver/utils"
+	"bytes"
+	"context"
+	"encoding/binary"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -22,8 +28,61 @@ import (
 // @host 127.0.0.1:8100
 // @BasePath /
 func main() {
-	settings := settings()
-	axonserver.Server(&settings)
+
+	var run string
+	flag.StringVar(&run, "a", "axonserver", "Specify the axonserver service to run")
+	flag.Parse()
+
+	switch run {
+	case "server":
+		{
+			settings := settings()
+			axonserver.Server(&settings)
+		}
+
+	case "channel":
+		{
+			settings := settings()
+			redisClient, err := utils.RedisClient(context.TODO(), &settings, 0)
+			if err != nil {
+				log.Fatal("Unable to start redis channel")
+
+			}
+			channel := channel.Channel{
+				Client: redisClient.Client,
+			}
+			channel.InitChannel()
+		}
+	case "publish":
+		{
+			settings := settings()
+			redisClient, _ := utils.RedisClient(context.TODO(), &settings, 0)
+			msg := types.Message{
+				Action: types.UPDATE_NODE_POSITION,
+				Payload: types.Position{
+					X: 250,
+					Y: 450,
+				},
+			}
+			buf := new(bytes.Buffer)
+			err := binary.Write(buf, binary.LittleEndian, msg)
+			if err != nil {
+				fmt.Println("binary.Write failed:", err)
+			}
+			fmt.Printf("% x", buf.Bytes())
+
+			// redisClient.Client.Publish(context.TODO(), "axon_channel", "test")
+			redisClient.Client.Publish(context.TODO(), "axon_channel", msg)
+
+		}
+
+	default:
+		{
+			log.Fatal("Unknown command provided")
+		}
+
+	}
+
 }
 
 func settings() types.Settings {

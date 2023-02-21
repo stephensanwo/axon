@@ -11,6 +11,15 @@ type AxonData struct {
 	Folders []Folder `json:"folders"`
 }
 
+type FolderList struct {
+	UserId      primitive.ObjectID `json:"user_id" bson:"user_id"`
+	FolderID    primitive.ObjectID `json:"folder_id" bson:"folder_id"`
+	Name        string             `json:"name" bson:"name"`
+	DateCreated time.Time          `json:"date_created" bson:"date_created"`
+	LastEdited  time.Time          `json:"last_edited" bson:"last_edited"`
+	Notes       []Note             `json:"notes" bson:"notes"`
+}
+
 type Folder struct {
 	UserId      primitive.ObjectID `json:"user_id" bson:"user_id"`
 	FolderID    primitive.ObjectID `json:"folder_id" bson:"folder_id"`

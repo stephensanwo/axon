@@ -1,6 +1,7 @@
 package channel
 
 import (
+	"axon-server/axonserver/types"
 	"context"
 	"fmt"
 
@@ -12,10 +13,11 @@ type Channel struct {
 }
 
 func (c *Channel) InitChannel() {
-	pubsub := c.Client.Subscribe(context.TODO(), "axon_channel")
+	pubsub := c.Client.Subscribe(context.TODO(), types.CHANNEL)
 	ch := pubsub.Channel()
 	for msg := range ch {
-		fmt.Println(msg.Channel, msg.Payload)
+		fmt.Println(msg)
+		// fmt.Println(msg.Channel, msg.Payload)
 	}
 
 }

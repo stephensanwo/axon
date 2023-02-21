@@ -4,6 +4,7 @@ import (
 	"axon-server/axonserver/api/session"
 	"axon-server/axonserver/core"
 	"axon-server/axonserver/types"
+	"encoding/json"
 	"net/http"
 )
 
@@ -48,4 +49,25 @@ func AuthCallbackHandler(w http.ResponseWriter, r *http.Request, a *types.AxonCo
 		http.Redirect(w, r, a.Settings.AxonClient.AuthRedirectUrl, http.StatusPermanentRedirect)
 
 	}
+}
+
+// QueryUserData godoc
+// @Summary      Query Authenticated User
+// @Description  Query Authenticated User
+// @Tags         User
+// @ID get-auth-user
+// @Success      200  {object}  types.Folder "User"
+// @Failure      400  {string}	string "Bad Request"
+// @Failure      401  {string}	string "Unauthorized"
+// @Router /auth-user [get]
+func QueryUserData(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
+	session, err := core.GetAuthenticatedUserData(a)
+	if err != nil {
+		http.Error(w, "unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(session.SessionData.User)
 }

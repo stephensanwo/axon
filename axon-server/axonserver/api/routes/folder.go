@@ -11,6 +11,38 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// QueryFolderListHandler godoc
+// @Summary      Query folder list from db or cache
+// @Description  Query folder list from db or cache
+// @Tags         Folder
+// @ID get-folder-list
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  []types.FolderList
+// @Failure      400  {string}	string "Bad Request"
+// @Failure      401  {string}	string "Unauthorized"
+// @Router       /folder-list [get]
+func QueryFolderListHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
+	session, err := core.GetAuthenticatedUserData(a)
+	if err != nil {
+		http.Error(w, "unauthorized", http.StatusUnauthorized)
+		return
+	}
+	folder := core.Folder{
+		Session: session,
+	}
+
+	folders, err := folder.GetFolderList(a)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(folders)
+
+}
+
 // FoldersHandler godoc
 // @Summary      Query all folders
 // @Description  Query all folders

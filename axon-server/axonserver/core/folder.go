@@ -6,6 +6,7 @@ import (
 	"axon-server/axonserver/types"
 	"context"
 	"errors"
+	"sync"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -15,6 +16,52 @@ import (
 
 type Folder struct {
 	Session session.Session
+}
+
+func (f *Folder) GetFolderList(a *types.AxonContext) (*[]types.FolderList, error) {
+	dbclient, _ := coredb.DB{}.GetCoreDBClient(a)
+	defer coredb.DB{}.DisconnectCoreDBClient(dbclient)
+
+	folder_collection := coredb.DB{}.GetCollection(dbclient, coredb.AXON_DATABASE, coredb.AXON_FOLDER_COLLECTION)
+
+	note_collection := coredb.DB{}.GetCollection(dbclient, coredb.AXON_DATABASE, coredb.AXON_NOTES_COLLECTION)
+
+	var res []types.FolderList
+	var folders []types.Folder
+
+	filter := bson.M{"user_id": f.Session.SessionData.User.UserId}
+	cursor, _ := folder_collection.Find(context.TODO(), filter)
+	err := cursor.All(context.TODO(), &folders)
+	if err != nil {
+		return nil, errors.New("could not fetch folders - " + err.Error())
+	}
+
+	wg := sync.WaitGroup{}
+
+	for _, item := range folders {
+		wg.Add(1)
+		go func(item types.Folder) {
+			var folderList types.FolderList
+			folderList.UserId = item.UserId
+			folderList.FolderID = item.FolderID
+			folderList.Name = item.Name
+			folderList.DateCreated = item.DateCreated
+			folderList.LastEdited = item.LastEdited
+
+			var note []types.Note
+			filter := bson.M{"user_id": f.Session.SessionData.User.UserId, "folder_id": item.FolderID}
+			cursor, _ := note_collection.Find(context.TODO(), filter)
+			err = cursor.All(context.TODO(), &note)
+			folderList.Notes = note
+			res = append(res, folderList)
+			wg.Done()
+		}(item)
+
+	}
+	wg.Wait()
+
+	return &res, err
+
 }
 
 func (f *Folder) GetFolders(a *types.AxonContext) (*[]types.Folder, error) {

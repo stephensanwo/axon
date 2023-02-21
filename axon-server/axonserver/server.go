@@ -24,6 +24,18 @@ func Server(settings *types.Settings) {
 			Method:  http.MethodGet,
 		},
 		{
+			Path:    "/auth-user",
+			Auth:    types.PublicRoute,
+			Handler: handlers.QueryUserData,
+			Method:  http.MethodGet,
+		},
+		{
+			Path:    "/folder-list",
+			Auth:    types.PrivateRoute,
+			Handler: handlers.QueryFolderListHandler,
+			Method:  http.MethodGet,
+		},
+		{
 			Path:    "/folders",
 			Auth:    types.PrivateRoute,
 			Handler: handlers.QueryFoldersHandler,
