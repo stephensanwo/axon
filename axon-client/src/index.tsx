@@ -3,26 +3,35 @@ import ReactDOM from "react-dom";
 import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { AuthProvider } from "./context/auth";
+import { BrowserRouter } from "react-router-dom";
 import { NoteContextProvider } from "./context/notes";
 import { AppProvider } from "./context/app";
+import { GlobalTheme } from "@carbon/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createRoot } from "react-dom/client";
+import { FolderProvider } from "./context/folder";
 
-ReactDOM.render(
+const queryClient = new QueryClient();
+
+const container = document.getElementById("root");
+const root = createRoot(container!);
+
+root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <AppProvider>
-          <NoteContextProvider>
-            <Routes>
-              <Route path="/*" element={<App />} />
-            </Routes>
-          </NoteContextProvider>
-        </AppProvider>
-      </AuthProvider>
-    </BrowserRouter>
-  </React.StrictMode>,
-  document.getElementById("root")
+    <GlobalTheme theme="g100">
+      <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <AppProvider>
+            <NoteContextProvider>
+              <FolderProvider>
+                <App />
+              </FolderProvider>
+            </NoteContextProvider>
+          </AppProvider>
+        </QueryClientProvider>
+      </BrowserRouter>
+    </GlobalTheme>
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

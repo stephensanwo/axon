@@ -1,5 +1,4 @@
-import React from "react";
-import { PageContainer } from "../../shared/layout";
+import { PageContainer } from "../shared/layout";
 
 const Terms = () => {
   return (

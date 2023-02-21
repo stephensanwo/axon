@@ -1,15 +1,7 @@
 import React, { useRef } from "react";
 import { NodeDataProps, NodeStyleProps } from "../../../context/notes";
 import { NodeThemes, StateColors } from "../../../shared/themes";
-import {
-  Code24,
-  DataBase24,
-  Cloud24,
-  BareMetalServer24,
-  ApplicationWeb24,
-  Notebook24,
-  Close24,
-} from "@carbon/icons-react";
+import {Close} from "@carbon/icons-react";
 import ContentEditable from "react-contenteditable";
 import { HeaderText, LabelText, ParagraphText } from "../../EditableLabels";
 import Controls from "../../Controls";
@@ -47,7 +39,7 @@ const TextBoxNode: React.FC<TextBoxNodeData> = (props) => {
           />
         </div>
         <button className="edgebutton">
-          <Close24 />
+          <Close size="24"/>
         </button>{" "}
       </div>
     </div>

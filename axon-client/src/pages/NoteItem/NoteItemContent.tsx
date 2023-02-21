@@ -53,7 +53,7 @@ const NoteItemContent = () => {
 
   return (
     <FlowItemAdjustable isSideNavExpanded={isSideNavExpanded}>
-      <PageHeader />
+      {/* <PageHeader /> */}
       {/* <Divider /> */}
       <FlowItemContainer>
         <NoteItemDiv>

@@ -8,10 +8,10 @@ import styled from "styled-components";
 import "./style.scss";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import { Tag } from "carbon-components-react";
+import { Tag } from "@carbon/react";
 import { Heading5 } from "../../shared/layout";
 import { NodeProps, NoteContext } from "../../context/notes";
-import { ViewFilled24, Edit24, Close24 } from "@carbon/icons-react";
+import { ViewFilled, Edit, Close } from "@carbon/icons-react";
 
 const MarkdownContainer = styled.div`
   display: flex;
@@ -79,17 +79,20 @@ const MarkdownNotes: React.FC<MarkdownProps> = (props) => {
         <Heading5 theme="dark">{props.header}</Heading5>
         <HeaderIcons>
           {showPreview ? (
-            <Edit24
+            <Edit
+              size="16"
               style={{ cursor: "pointer" }}
               onClick={handlePreviewToggle}
             />
           ) : (
-            <ViewFilled24
+            <ViewFilled
+              size="16"
               style={{ cursor: "pointer" }}
               onClick={handlePreviewToggle}
             />
           )}
-          <Close24
+          <Close
+          size="24"
             style={{ cursor: "pointer" }}
             onClick={handleTextPanelClose}
           />

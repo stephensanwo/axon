@@ -1,12 +1,10 @@
-import React from "react";
-import { PageContainer } from "../../shared/layout";
+import { PageContainer } from "shared/layout";
 import styled from "styled-components";
-import { Button } from "carbon-components-react";
-import { LogoGithub32, LogoGoogle32 } from "@carbon/icons-react";
-import { GITHUB_AUTH_URL } from "../../config";
+import { AxonButton } from "components/Button";
+import { LogoGithub } from "@carbon/icons-react";
+import { GITHUB_AUTH_URL } from "config";
 import { Link } from "react-router-dom";
-import { ThemeColors } from "../../shared/themes";
-import axonLogo from "../../assets/icons/axon-logo.svg";
+import axonLogo from "assets/icons/axon-logo.svg";
 
 const SignUpContainer = styled.div`
   width: 100%;
@@ -34,33 +32,26 @@ const SignUp = () => {
         <SignUpBox>
           <img src={axonLogo} alt="axon-logo" />
           <p style={{ marginTop: "4rem" }}>Create an Account or Sign In</p>
-          <a
-            style={{ textDecoration: "none" }}
+          <AxonButton
+            kind="primary"
+            renderIcon={() => <LogoGithub size="16" />}
+            iconDescription={"Login with Github"}
+            style={{ marginTop: "50px" }}
+            size="md"
             href={`${GITHUB_AUTH_URL}`}
           >
-            <Button
-              kind="secondary"
-              renderIcon={LogoGithub32}
-              iconDescription={"Login with Github"}
-              style={{ marginTop: "50px" }}
-              size="md"
-            >
-              Continue with Github
-            </Button>
-          </a>
-          <a style={{ textDecoration: "none" }} href={`abx`}>
-            <Button
-              kind="secondary"
-              renderIcon={LogoGoogle32}
-              iconDescription={"Login with Google"}
-              style={{ marginTop: "25px" }}
-              size="md"
-              disabled
-            >
-              Continue with Google
-            </Button>
-          </a>
-
+            Continue with Github
+          </AxonButton>
+          <AxonButton
+            kind="secondary"
+            renderIcon={() => <LogoGithub size="16" />}
+            iconDescription={"Sign Up"}
+            onClick={() => <Link to="/" />}
+            href="/"
+            disabled
+          >
+            Continue with Google
+          </AxonButton>
           <div
             style={{
               marginTop: "50px",

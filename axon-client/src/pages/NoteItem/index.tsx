@@ -1,31 +1,25 @@
-import { useState, useEffect, Fragment } from "react";
-import SideNavPanel from "../../components/SideNavPanel/MenuPanel";
-import { PageContainer, MobileWarningDiv } from "../../shared/layout";
+import { useState, useEffect, Fragment, useContext } from "react";
+import PageHeader from "components/PageHeader";
+import SideNavPanel from "components/SideNavPanel";
+import { PageContainer, MobileWarningDiv } from "shared/layout";
 import NoteItemContent from "./NoteItemContent";
+import { HeaderMenu } from "./Menu";
 
-const FlowItem: React.FC = () => {
-  const [showMobileWarning, setShowMobileWarning] = useState(false);
-
-  useEffect(() => {
-    if (window.innerWidth <= 800) setShowMobileWarning(true);
-  }, []);
+const NoteItem: React.FC = () => {
   return (
     <Fragment>
-      {showMobileWarning ? (
-        <MobileWarningDiv>
-          <p>
-            <strong>Axon</strong> is not supported on this screen size, Please
-            open on a desktop browser
-          </p>
-        </MobileWarningDiv>
-      ) : (
-        <PageContainer dark>
-          <SideNavPanel />
-          <NoteItemContent />
-        </PageContainer>
-      )}
+      <PageHeader
+        headerText={"nodeItemData.name"}
+        theme={"dark"}
+        documentTitle="New Document"
+        headerMenu={HeaderMenu}
+      />
+      <PageContainer dark>
+        <SideNavPanel />
+        {/* <NoteItemContent /> */}
+      </PageContainer>
     </Fragment>
   );
 };
 
-export default FlowItem;
+export default NoteItem;

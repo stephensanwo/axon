@@ -2,9 +2,10 @@
 import styled from "styled-components";
 import { PageContainer } from "../shared/layout";
 import { DoNot_02 } from "@carbon/pictograms-react";
-import { Button } from "carbon-components-react";
-import { ArrowRight32 } from "@carbon/icons-react";
+import { Button } from "@carbon/react";
+import { ArrowRight } from "@carbon/icons-react";
 import { Link } from "react-router-dom";
+import { ThemeColors } from "shared/themes";
 
 const ErrorPage = styled.div`
   display: flex;
@@ -19,18 +20,15 @@ const Error = () => {
     <PageContainer dark>
       <ErrorPage>
         <DoNot_02
-          style={{ fill: "#fa4d56", width: "124px", height: "124px" }}
+          style={{
+            fill: ThemeColors.dangerAction,
+            width: "124px",
+            height: "124px",
+          }}
         />
         <h2>404 Error</h2>
         <h5>Sorry, the page you are looking for does not exist</h5>
-        <Button
-          kind="ghost"
-          renderIcon={ArrowRight32}
-          iconDescription={"Go Back Home"}
-          style={{ width: "200px", height: "40px" }}
-          to={"/"}
-          as={Link}
-        >
+        <Button kind="" iconDescription={"Go to Notes"} to={"notes/"} as={Link}>
           Go Back Home
         </Button>
       </ErrorPage>

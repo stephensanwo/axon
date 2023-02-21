@@ -1,7 +1,7 @@
 import React, { Fragment, useContext, useEffect, useRef } from "react";
 import { Handle, Position } from "react-flow-renderer";
 
-import { InlineLoading } from "carbon-components-react";
+import { InlineLoading } from "@carbon/react";
 import "./style.scss";
 // import { FlowItemContext } from "../../pages/FlowItem/context";
 import { StateColors } from "../../shared/themes";
@@ -9,7 +9,7 @@ import { StateColors } from "../../shared/themes";
 import styled from "styled-components";
 import { NodeProps, NoteContext } from "../../context/notes";
 import { useParams } from "react-router-dom";
-import { Tag } from "carbon-components-react";
+import { Tag } from "@carbon/react";
 import { AnchorNode } from "./NodeTypes";
 import TextBoxNode from "./NodeTypes/TextBoxNode";
 

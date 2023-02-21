@@ -24,6 +24,7 @@ h3 {
   font-weight: 600;
   line-height: 1.4;
 }
+
 h4 {
   font-family: "IBM Plex Sans";
   font-weight: 600;
@@ -35,6 +36,7 @@ h5 {
   color: #fff;
   line-height: 1.4;
 }
+
 h6 {
   color: #fff;
   line-height: 1.4;
@@ -54,7 +56,7 @@ small {
 p {
   color: #fff;
   line-height: 1.4;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 li {
@@ -69,30 +71,32 @@ ol,
 ul {
   margin: 0;
 }
+
 a {
-  color: #1192e8;
+  color: rgb(234, 255, 150);
   line-height: 1.4;
-  font-size: 16px;
+  font-size: 14px;
+  text-decoration: none;
 }
 
-a:hover:after {
+a:hover {
   text-decoration: underline;
-  color: #1192e8;
+  color: rgb(203, 228, 105);
 }
 
 .styled-span {
   display: flex;
   align-items: center;
 }
+
 table {
   color: #c9d1d9;
 }
 
 body {
-  // background-color: #161616;
+  background-color: #161616;
   // background-color: #1c1f23;
   // background-color: #2f3337;
-  background-color: rgb(19, 19, 19);
 }
 
 code {
@@ -102,47 +106,6 @@ code {
 hr {
   border: 1px solid #262626;
 }
-// Carbon Overrides
-
-.bx--header {
-  background-color: rgb(19, 19, 19);
-}
-
-.bx--accordion__content {
-  padding-right: 16px;
-}
-
-.container {
-  margin-bottom: 47px;
-}
-
-
-.bx--btn--ghost {
-  color:#1192e8
-}
-
-.bx--btn--ghost:hover {
-  background-color: transparent;
-  color:#0b68a6
-}
-
-
-
-// Buttons
-
-.bx--btn--secondary {
-  background-color: #AEC948;
-  color: #000;
-  width: 350px;
-  height: 50px
-  
-}
-
-.bx--btn--secondary:hover {
-  background-color: #bac986;
-  color: #000;
-}
-
 
 .axon {
   font-family: "IBM Plex Sans";
@@ -153,6 +116,20 @@ hr {
   letter-spacing: 0.5rem;
 }
 
+// Carbon Overrides
 
+// .cds--btn--primary {
+//   background-color: #b3c66c; rgb(234, 255, 150)
+//   color: #000;
+//   width: 350px;
+//   height: 50px
+//   }
+  
+//   .cds--btn--primary:hover {
+//   background-color: #a7bf51;
+//   color: #000;
+//   }
 
-
+.cds--header {
+  height: 40px;
+}

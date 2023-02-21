@@ -1,4 +1,4 @@
-import { HeaderPanel } from "carbon-components-react";
+import { HeaderPanel } from "@carbon/react";
 import { useParams } from "react-router-dom";
 import { NodeProps, NoteContext } from "../../context/notes";
 import React, { Fragment, useContext, useEffect, useState } from "react";

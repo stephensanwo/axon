@@ -4,7 +4,7 @@ import {
   getEdgeCenter,
   getMarkerEnd,
 } from "react-flow-renderer";
-import { Close24 } from "@carbon/icons-react";
+import { Close } from "@carbon/icons-react";
 import "./style.scss";
 
 const foreignObjectSize = 40;
@@ -63,7 +63,7 @@ const CustomEdge: React.FC<any> = ({
             className="edgebutton"
             onClick={(event) => onEdgeClick(event, id)}
           >
-            <Close24 />
+            <Close size = "24"/>
           </button>
         </body>
       </foreignObject>

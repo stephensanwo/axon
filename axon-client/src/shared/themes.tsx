@@ -18,6 +18,9 @@ export const ThemeColors = {
   bgHiglight1: "#202020",
   bgHighlight2: "rgb(43, 43, 43)",
   textDark: "#6f6f6f",
+  primary: "rgb(234, 255, 150)",
+  primaryHover: "rgb(203, 228, 105)",
+  textBlack: "#000",
 };
 
 export const NodeThemes = {

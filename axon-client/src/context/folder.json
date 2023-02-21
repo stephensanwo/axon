@@ -1,0 +1,44 @@
+[
+    {
+      "date_created": "string",
+      "folder_id": "string",
+      "last_edited": "string",
+      "name": "string",
+      "user_id": "string",
+      "notes": [
+        {
+            "note_id": "string",
+            "name": "string"
+        },
+        {
+            "note_id": "string",
+            "name": "string"
+        },
+        {
+            "note_id": "string",
+            "name": "string"
+        }
+      ]
+    },
+    {
+        "date_created": "string",
+        "folder_id": "string",
+        "last_edited": "string",
+        "name": "string",
+        "user_id": "string",
+        "notes": [
+          {
+              "note_id": "string",
+              "name": "string"
+          },
+          {
+              "note_id": "string",
+              "name": "string"
+          },
+          {
+              "note_id": "string",
+              "name": "string"
+          }
+        ]
+      }
+  ]

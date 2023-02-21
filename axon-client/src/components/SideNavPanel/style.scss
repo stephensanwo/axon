@@ -1,5 +1,5 @@
 .side-nav-menu-overrides button {
-  background-color: rgb(27, 27, 27) !important;
+  background-color: #262626 !important;
 }
 
 .side-nav-menu-overrides button:hover {
@@ -16,11 +16,12 @@
 
 .side-nav-menu-item-overrides a {
   cursor: pointer;
-  background-color: rgb(27, 27, 27) !important;
+  background-color: #262626 !important;
 }
 
 .side-nav-menu-item-overrides a:hover {
   background-color: rgb(48, 48, 48) !important;
+  text-decoration: none;
 }
 
 .side-nav-menu-item-overrides [aria-current="page"] {
@@ -37,7 +38,7 @@
   align-items: center;
   padding: 5px;
   padding-left: 35px;
-  padding-right: 20px;
+  padding-right: 15px;
   cursor: pointer;
 }
 .new-folder-button:hover {

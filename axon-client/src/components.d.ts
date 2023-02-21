@@ -1,4 +1,5 @@
-declare module "carbon-components-react";
+declare module "@carbon/react";
+declare module "@carbon/themes";
 declare module "carbon-components-react/lib/components/UIShell";
 declare module "@carbon/icons-react";
 declare module "@carbon/icons-react/*";

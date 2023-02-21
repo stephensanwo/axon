@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { OverflowMenu, OverflowMenuItem } from "carbon-components-react";
+import { OverflowMenu, OverflowMenuItem } from "@carbon/react";
 import styled from "styled-components";
 import {
   Menu as StyledMenu,

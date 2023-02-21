@@ -1,10 +1,5 @@
-import React from "react";
-import {
-  Settings20,
-  Notification20,
-  User20,
-  AppSwitcher20,
-} from "@carbon/icons-react";
+import React, { useContext } from "react";
+
 import {
   Header,
   HeaderName,
@@ -13,14 +8,10 @@ import {
   HeaderNavigation,
   HeaderMenuItem,
   HeaderMenuButton,
-} from "carbon-components-react";
+} from "@carbon/react";
 import AppContext from "../context/app";
 import styled from "styled-components";
 import axonLogoSmall from "../assets/icons/axon-logo-small.svg";
-
-interface Props {
-  isHeaderMenu?: boolean;
-}
 
 const ProfileImage = styled.div`
   width: 60px;
@@ -31,15 +22,15 @@ const ProfileImage = styled.div`
   align-items: center;
 
   > img {
-    height: 32px;
-    width: 32px;
+    height: 25px;
+    width: 25px;
     border-radius: 50%;
   }
 `;
 
-const StyledHeader: React.FC<Props> = ({ isHeaderMenu }) => {
-  const { isSideNavExpanded, onClickSideNavExpand } =
-    React.useContext(AppContext);
+const StyledHeader: React.FC = () => {
+  const { user, isSignedIn, isSideNavExpanded, onClickSideNavExpand } =
+    useContext(AppContext);
 
   const handleSideNav = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (isSideNavExpanded === true) {
@@ -50,31 +41,28 @@ const StyledHeader: React.FC<Props> = ({ isHeaderMenu }) => {
   };
 
   return (
-    <div className="container">
-      <Header aria-label="">
-        {isHeaderMenu ? (
-          <HeaderMenuButton
-            aria-label="Open menu"
-            isCollapsible
-            onClick={handleSideNav}
-            isActive={isSideNavExpanded}
-          />
-        ) : (
-          <> </>
-        )}
-        <HeaderName href="/" prefix="" style={{ marginLeft: "15px" }}>
-          <img src={axonLogoSmall} alt="axon-logo" />
-        </HeaderName>
-        <HeaderGlobalBar>
+    <Header aria-label="">
+      {isSignedIn ? (
+        <HeaderMenuButton
+          aria-label="Open menu"
+          isCollapsible
+          onClick={handleSideNav}
+          isActive={isSideNavExpanded}
+        />
+      ) : (
+        <> </>
+      )}
+      <HeaderName href="/" prefix="" style={{ marginLeft: "15px" }}>
+        <img src={axonLogoSmall} alt="axon-logo" />
+      </HeaderName>
+      <HeaderGlobalBar>
+        {isSignedIn && (
           <ProfileImage>
-            <img
-              src="https://avatars.githubusercontent.com/u/49814040?v=4"
-              alt="Profile"
-            />
+            <img src={user?.avatar} alt="Profile" />
           </ProfileImage>
-        </HeaderGlobalBar>
-      </Header>
-    </div>
+        )}
+      </HeaderGlobalBar>
+    </Header>
   );
 };
 

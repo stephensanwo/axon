@@ -2,18 +2,38 @@ import styled from "styled-components";
 import { device } from "./media";
 import { ThemeColors } from "./themes";
 
+// export const PageContainer = styled.div`
+//   height: 92vh;
+//   /* overflow: auto; */
+//   width: 100%;
+//   padding-right: 3.5%;
+//   padding-left: 3.5%;
+//   padding-top: 1vh;
+//   background-color: ${(props: any) =>
+//     props.dark ? ThemeColors.bgDark : ThemeColors.bgLight};
+//   /* @media (max-width: 1080px) {
+//     display: none;
+//   } */
+// `;
+
 export const PageContainer = styled.div`
-  height: 92vh;
-  /* overflow: auto; */
+  padding-top: 88px;
+  overflow-y: scroll;
+  height: 100vh;
+  max-height: 100vh;
   width: 100%;
-  padding-right: 3.5%;
-  padding-left: 3.5%;
-  padding-top: 1vh;
-  background-color: ${(props: any) =>
-    props.dark ? ThemeColors.bgDark : ThemeColors.bgLight};
-  /* @media (max-width: 1080px) {
+  background-color: ${(props: any) => (props.dark ? "#161616" : "#f4f4f4")};
+  @media (max-width: 1080px) {
     display: none;
-  } */
+  }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 `;
 
 export const PageHeaderContainer = styled.h2`
@@ -23,7 +43,6 @@ export const PageHeaderContainer = styled.h2`
   /* border-bottom: 1px solid #393939; */
   padding-bottom: 10px;
   padding-top: 10px;
-  /* background-color: red; */
 `;
 
 export const HeaderAction = styled.div`

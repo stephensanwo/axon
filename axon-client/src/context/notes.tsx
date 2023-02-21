@@ -109,7 +109,7 @@ export const NoteContextProvider = ({ children }: NoteContextProviderProps) => {
 
   const [openTextPanel, setOpenTextPanel] = useState<boolean>(false);
 
-  console.log(folders);
+  // console.log(folders);
   return (
     <NoteContext.Provider
       value={{
