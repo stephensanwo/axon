@@ -11,6 +11,48 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// QueryNoteDetail godoc
+// @Summary      Query Note Detail
+// @Description  Query Note Detail
+// @Tags         Note
+// @ID get-note
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  types.NoteDetail "NoteDetail"
+// @Failure      400  {string}	string "Bad Request"
+// @Failure      401  {string}	string "Unauthorized"
+// @Router /note-detail [get]
+// @Param 		 folder_id query string true "Folder ID"
+// @Param 		 note_id query string true "Note ID"
+func QueryNoteDetail(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
+	session, err := core.GetAuthenticatedUserData(a)
+	if err != nil {
+		http.Error(w, "unauthorized", http.StatusUnauthorized)
+		return
+	}
+	query := r.URL.Query()
+	folderID := query.Get("folder_id")
+	noteID := query.Get("note_id")
+
+	if folderID == "" || noteID == "" {
+		http.Error(w, "fields note_id and folder_id are required in query", http.StatusBadRequest)
+		return
+	}
+	note := core.Note{
+		Session: session,
+	}
+	folder_id, _ := primitive.ObjectIDFromHex(folderID)
+	note_id, _ := primitive.ObjectIDFromHex(noteID)
+	res, err := note.GetNoteDetail(a, &folder_id, &note_id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(res)
+}
+
 // QueryNotesHandler godoc
 // @Summary      Query all notes
 // @Description  Query all notes

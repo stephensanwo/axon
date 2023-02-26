@@ -6,7 +6,6 @@ import (
 	"axon-server/axonserver/types"
 	"context"
 	"errors"
-	"fmt"
 	"sync"
 	"time"
 
@@ -41,7 +40,6 @@ func (f *Folder) GetFolderList(a *types.AxonContext) (*[]types.FolderList, error
 
 	for index, item := range folders {
 		i := index
-		fmt.Println(i)
 		wg.Add(1)
 		go func(item types.Folder) {
 			var folderList types.FolderList
@@ -51,7 +49,7 @@ func (f *Folder) GetFolderList(a *types.AxonContext) (*[]types.FolderList, error
 			folderList.DateCreated = item.DateCreated
 			folderList.LastEdited = item.LastEdited
 
-			var note []types.Note
+			note := []types.Note{}
 			filter := bson.M{"user_id": f.Session.SessionData.User.UserId, "folder_id": item.FolderID}
 			cursor, _ := note_collection.Find(context.TODO(), filter)
 			err = cursor.All(context.TODO(), &note)

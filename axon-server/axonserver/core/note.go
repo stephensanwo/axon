@@ -17,6 +17,31 @@ type Note struct {
 	Session session.Session
 }
 
+func (f *Note) GetNoteDetail(a *types.AxonContext, folder_id *primitive.ObjectID, note_id *primitive.ObjectID) (*types.NoteDetail, error) {
+	dbclient, _ := coredb.DB{}.GetCoreDBClient(a)
+	defer coredb.DB{}.DisconnectCoreDBClient(dbclient)
+
+	note_collection := coredb.DB{}.GetCollection(dbclient, coredb.AXON_DATABASE, coredb.AXON_NOTES_COLLECTION)
+
+	filter := bson.M{"user_id": f.Session.SessionData.User.UserId, "folder_id": folder_id, "note_id": note_id}
+
+	var noteData types.NoteDetail
+
+	err := note_collection.FindOne(context.TODO(), filter).Decode(&noteData)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, errors.New("could not find note - " + err.Error())
+		}
+		return nil, errors.New("could not find note - " + err.Error())
+	}
+
+	// Fetch Nodes and Edges
+	noteData.Nodes = []types.Node{}
+	noteData.Edges = []types.Edge{}
+
+	return &noteData, err
+}
+
 func (f *Note) GetNotes(a *types.AxonContext, folder_id *primitive.ObjectID) (*[]types.Note, error) {
 	dbclient, _ := coredb.DB{}.GetCoreDBClient(a)
 	defer coredb.DB{}.DisconnectCoreDBClient(dbclient)

@@ -66,6 +66,13 @@ func Server(settings *types.Settings) {
 			Method:  http.MethodDelete,
 		},
 		{
+			Path:    "/note-detail",
+			Auth:    types.PrivateRoute,
+			Handler: handlers.QueryNoteDetail,
+			Method:  http.MethodGet,
+		},
+
+		{
 			Path:    "/notes",
 			Auth:    types.PrivateRoute,
 			Handler: handlers.QueryNotesHandler,
