@@ -23,38 +23,22 @@ export const NoteItemDiv = styled.div`
   height: 100%;
 `;
 
-const Divider = styled.div`
-  background-color: #393939;
-  height: 1px;
-  width: 100vw;
-  position: absolute;
-  top: 95px;
-  left: 0%;
-  transform: translate(-0%, -50%);
-`;
-
 const NoteItemContent = () => {
-  const { folderId, noteId } = useParams();
-  const noteData = useContext(NoteContext);
+  // const { folderId, noteId } = useParams();
+  // const noteData = useContext(NoteContext);
+  // const { isSideNavExpanded } = useContext(AppContext);
+  // const [note, setNote] = useState<NoteProps>(noteData.folders[0].notes[0]);
+
+  //   console.log(folder);
+  //   const note = folder.notes.filter((note) => note.id === noteId)[0];
+  //   console.log(note);
+
+  //   setNote(folder.notes.filter((note) => note.id === noteId)[0]);
+  // }, [noteId]);
   const { isSideNavExpanded } = useContext(AppContext);
-  const [note, setNote] = useState<NoteProps>(noteData.folders[0].notes[0]);
-
-  useEffect(() => {
-    const folder = noteData.folders.filter(
-      (folder) => folder.id === folderId
-    )[0];
-
-    console.log(folder);
-    const note = folder.notes.filter((note) => note.id === noteId)[0];
-    console.log(note);
-
-    setNote(folder.notes.filter((note) => note.id === noteId)[0]);
-  }, [noteId]);
 
   return (
     <FlowItemAdjustable isSideNavExpanded={isSideNavExpanded}>
-      {/* <PageHeader /> */}
-      {/* <Divider /> */}
       <FlowItemContainer>
         <NoteItemDiv>
           <FlowTree />

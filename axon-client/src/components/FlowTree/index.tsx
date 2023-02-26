@@ -13,6 +13,8 @@ import { CustomComponentNode } from "../Node";
 import { NoteContext } from "../../context/notes";
 import CustomEdge from "../Node/CustomEdge";
 import TextPanel from "../TextPanel";
+import FolderContext from "context/folder";
+import AppContext from "context/app";
 
 const FlowTreeDiv = styled.div`
   height: 85vh;
@@ -20,6 +22,7 @@ const FlowTreeDiv = styled.div`
   margin: auto;
   padding-top: 10px;
   padding-bottom: 10px;
+  background-color: red;
 `;
 
 const nodeTypes = {
@@ -30,10 +33,13 @@ const edgeTypes = {
 };
 
 const FlowTree = () => {
-  const { folderId, noteId } = useParams();
-  const noteData = useContext(NoteContext);
-  const folder = noteData.folders.filter((folder) => folder.id === folderId)[0];
-  const note = folder.notes.filter((note) => note.id === noteId)[0];
+  // const { folderId, noteId } = useParams();
+  // const noteData = useContext(NoteContext);
+  // const folder = noteData.folders.filter((folder) => folder.id === folderId)[0];
+  // const note = folder.notes.filter((note) => note.id === noteId)[0];
+
+  const { note } = useContext(NoteContext);
+
   console.log(note);
 
   const [nodes, setNodes, onNodesChange] = useNodesState();
@@ -46,9 +52,9 @@ const FlowTree = () => {
   //     setEdges((els: any) => updateEdge(oldEdge, newConnection, els));
 
   useEffect(() => {
-    setNodes(note.nodes);
-    setEdges(note.edges);
-  }, [note.edges, note.nodes, setEdges, setNodes]);
+    setNodes(note?.nodes);
+    setEdges(note?.edges);
+  }, [note?.edges, note?.nodes, setEdges, setNodes]);
 
   const onConnect = (params: object) =>
     setEdges((els: any) => addEdge({ ...params, type: "buttonedge" }, els));
@@ -65,7 +71,6 @@ const FlowTree = () => {
 
   return (
     <FlowTreeDiv>
-      {/* <TreeControls /> */}
       <ReactFlowProvider>
         <ReactFlow
           nodes={nodes}
@@ -84,7 +89,7 @@ const FlowTree = () => {
           <Controls />
         </div>
       </ReactFlowProvider>
-      <TextPanel expanded={noteData.openTextPanel} />
+      {/* <TextPanel expanded={noteData.openTextPanel} /> */}
     </FlowTreeDiv>
   );
 };

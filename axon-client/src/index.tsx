@@ -4,7 +4,7 @@ import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
-import { NoteContextProvider } from "./context/notes";
+import { NoteProvider } from "./context/notes";
 import { AppProvider } from "./context/app";
 import { GlobalTheme } from "@carbon/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -22,11 +22,11 @@ root.render(
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
           <AppProvider>
-            <NoteContextProvider>
+            <NoteProvider>
               <FolderProvider>
                 <App />
               </FolderProvider>
-            </NoteContextProvider>
+            </NoteProvider>
           </AppProvider>
         </QueryClientProvider>
       </BrowserRouter>

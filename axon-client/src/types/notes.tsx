@@ -1,3 +1,51 @@
+import { Edge } from "react-flow-renderer";
+
+export interface NoteProps {
+  date_created: string;
+  description: string;
+  folder_id: string;
+  last_edited: string;
+  name: string;
+  note_id: string;
+  user_id: string;
+  nodes: Array<NodeProps>;
+  edges: Array<EdgeProps>;
+}
+
+export type NoteActionProps =
+  | {
+      type: "init_note";
+      payload: NoteProps;
+    }
+  | {
+      type: "init_note";
+      payload: NoteProps;
+    }
+  | {
+      type: "edit_note";
+      payload: {
+        folder_id: string;
+        name: string;
+      };
+    }
+  | {
+      type: "delete_note";
+      payload: {
+        folder_id: string;
+      };
+    };
+
+export interface SelectedNoteProps {
+  folder_id: string;
+  note_id: string;
+}
+
+export interface CreateNoteProps {
+  folder_id: string;
+  note_description: string;
+  note_name: string;
+}
+
 export interface NodeDataProps {
   id: string;
   label: string;
@@ -56,7 +104,7 @@ export interface MarkdownNoteProps {
   published: boolean;
 }
 
-export interface NoteProps {
+export interface NoteProps_ {
   id: string;
   name: string;
   category: "flow" | "code-snippet" | "notes";

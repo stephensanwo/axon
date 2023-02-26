@@ -1,16 +1,11 @@
-import { FolderProps, NotesActionProps, NotesActionType } from "../types/notes";
+import { NoteActionProps, NoteProps } from "types/notes";
 
-const noteReducer = (folder: Array<FolderProps>, action: NotesActionProps) => {
+const noteReducer = (note: NoteProps, action: NoteActionProps) => {
   switch (action.type) {
-    case NotesActionType.NEW_FOLDER: {
-      return [...folder, action.payload];
+    case "init_note": {
+      return action.payload;
     }
-    case NotesActionType.EDIT_FOLDER: {
-      return;
-    }
-    case NotesActionType.DELETE_FOLDER: {
-      return;
-    }
+
     default: {
       throw Error("Unknown action: " + action);
     }

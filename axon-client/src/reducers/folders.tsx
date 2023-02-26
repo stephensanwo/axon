@@ -1,4 +1,8 @@
-import { FolderActionProps, FolderListProps } from "types/folders";
+import {
+  FolderActionProps,
+  FolderListProps,
+  NoteSummaryProps,
+} from "types/folders";
 
 const folderReducer = (
   folders: Array<FolderListProps>,
@@ -13,12 +17,40 @@ const folderReducer = (
       const newFolder = {} as FolderListProps;
       newFolder.folder_id = action.payload.folder_id;
       newFolder.name = action.payload.name;
-      newFolder.date_created = "";
-      newFolder.last_edit = "";
-      newFolder.user_id = "";
-      newFolder.notes = null;
       return [...folders, newFolder];
     }
+
+    case "new_note": {
+      const newNote: NoteSummaryProps = {} as NoteSummaryProps;
+      newNote.folder_id = action.payload.folder_id;
+      newNote.name = action.payload.note_name;
+      newNote.description = action.payload.note_description;
+
+      return folders.map((folder) => {
+        if (folder.folder_id === action.payload.folder_id) {
+          return { ...folder, notes: [...folder.notes, newNote] };
+        } else {
+          return folder;
+        }
+      });
+    }
+
+    case "edit_folder": {
+      return folders.map((folder) => {
+        if (folder.folder_id === action.payload.folder_id) {
+          return { ...folder, name: action.payload.name };
+        } else {
+          return folder;
+        }
+      });
+    }
+
+    case "delete_folder": {
+      return folders.filter(
+        (folder) => folder.folder_id !== action.payload.folder_id
+      );
+    }
+
     default: {
       throw Error("Unknown action: " + action);
     }

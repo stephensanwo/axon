@@ -4,12 +4,15 @@ import {
   ModalBody,
   ModalFooter,
   ComposedModal,
+  Button,
 } from "@carbon/react";
 import { useMutation } from "@tanstack/react-query";
 import { useContext, useState } from "react";
 import { CREATE_NEW_FOLDER } from "api/queries/folder";
 import FolderContext from "context/folder";
 import { CreateFolderProps } from "types/folders";
+import { AxonButton } from "components/Button";
+import AxonInlineLoader from "components/Loader/InlineLoader";
 
 const NewFolder: React.FC<{
   folderModal: boolean;
@@ -22,11 +25,9 @@ const NewFolder: React.FC<{
     folder_name: "",
   });
 
-  const { folders, folderDispatch } = useContext(FolderContext);
+  const { folderDispatch } = useContext(FolderContext);
 
-  console.log(folderModal);
-
-  const mutation = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: () => CREATE_NEW_FOLDER(newFolder),
     onSuccess: (res: any) => {
       console.log(res);
@@ -46,8 +47,7 @@ const NewFolder: React.FC<{
   });
 
   const handleNewFolder = () => {
-    console.log(newFolder);
-    mutation.mutate();
+    mutate();
   };
   return (
     <ComposedModal
@@ -73,15 +73,19 @@ const NewFolder: React.FC<{
           invalid={formErros.folder_name && true}
           invalidText={"Invalid data provided"}
         />
-        <div style={{ marginTop: "20px" }}></div>
       </ModalBody>
-      <ModalFooter
-        primaryButtonText="OK"
-        secondaryButtonText="Cancel"
-        onRequestSubmit={handleNewFolder}
-        shouldSubmitOnEnter={true}
-        onSecondarySubmit={() => setFolderModal(false)}
-      />
+      <ModalFooter>
+        <AxonButton kind="secondary" onClick={() => setFolderModal(false)}>
+          Cancel
+        </AxonButton>
+        <AxonButton
+          kind="primary"
+          onClick={handleNewFolder}
+          disabled={newFolder.folder_name.length > 0 ? false : true}
+        >
+          {isLoading ? <AxonInlineLoader /> : "OK"}
+        </AxonButton>
+      </ModalFooter>
     </ComposedModal>
   );
 };

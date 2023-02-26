@@ -92,7 +92,7 @@ const MarkdownNotes: React.FC<MarkdownProps> = (props) => {
             />
           )}
           <Close
-          size="24"
+            size="24"
             style={{ cursor: "pointer" }}
             onClick={handleTextPanelClose}
           />

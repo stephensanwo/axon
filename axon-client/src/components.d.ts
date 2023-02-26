@@ -1,8 +1,6 @@
 declare module "@carbon/react";
 declare module "@carbon/themes";
-declare module "carbon-components-react/lib/components/UIShell";
 declare module "@carbon/icons-react";
-declare module "@carbon/icons-react/*";
 declare module "react-router-dom";
 declare module "styled-components";
 declare module "@carbon/pictograms-react";
@@ -10,6 +8,5 @@ declare module "react-flow-renderer";
 declare module "react-syntax-highlighter";
 declare module "react-syntax-highlighter/dist/esm/styles/prism";
 declare module "react-syntax-highlighter/dist/esm/styles/hljs";
-declare module "@monaco-editor/react";
 declare module "react-contenteditable";
 declare let module: any;

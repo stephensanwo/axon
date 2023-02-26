@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Button as CarbonButton } from "@carbon/react";
-import { ThemeColors } from "shared/themes";
+import { StateColors, ThemeColors } from "shared/themes";
 
 export const AxonButton = styled(CarbonButton)`
   margin-top: 40px;
@@ -13,12 +13,15 @@ export const AxonButton = styled(CarbonButton)`
   padding-left: 15px;
   padding-right: 15px;
   text-decoration: none;
-  background-color: ${ThemeColors.primary};
-  color: #000;
+  background-color: ${(props: { kind: string }) =>
+    (props.kind === "primary" && ThemeColors.primary) ||
+    (props.kind === "danger" && ThemeColors.dangerAction) ||
+    ""} !important;
+  color: ${(props: { kind: string }) =>
+    (props.kind === "primary" && "#000") || "#fff"} !important;
 
   :hover {
     text-decoration: none;
     color: #000;
-    background-color: ${ThemeColors.primaryHover};
   }
 `;

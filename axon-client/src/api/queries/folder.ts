@@ -1,4 +1,4 @@
-import { CreateFolderProps } from "types/folders";
+import { CreateFolderProps, PatchFolderProps } from "types/folders";
 import { axiosPrivate } from "../axios";
 
 export const GET_FOLDER_LIST = async () => {
@@ -8,5 +8,21 @@ export const GET_FOLDER_LIST = async () => {
 
 export const CREATE_NEW_FOLDER = async (folder: CreateFolderProps) => {
   const response = await axiosPrivate.post("/folder", folder);
+  return response;
+};
+
+export const EDIT_NEW_FOLDER = async (
+  folder: PatchFolderProps,
+  folder_id: string
+) => {
+  const response = await axiosPrivate.patch(
+    `/folder?folder_id=${folder_id}`,
+    folder
+  );
+  return response;
+};
+
+export const DELETE_FOLDER = async (folder_id: string) => {
+  const response = await axiosPrivate.delete(`/folder?folder_id=${folder_id}`);
   return response;
 };

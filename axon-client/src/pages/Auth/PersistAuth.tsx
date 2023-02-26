@@ -2,8 +2,8 @@ import { Fragment, useContext } from "react";
 import { Outlet } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useQueryAuth from "../../hooks/useQueryAuth";
-import { Loading } from "@carbon/react";
 import AppContext from "../../context/app";
+import AxonLoader from "components/Loader/Loader";
 
 const PersistAuth = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -23,7 +23,7 @@ const PersistAuth = () => {
     !user ? runQueryAuth() : setIsLoading(false);
   }, [user, queryAuth]);
 
-  return <Fragment>{isLoading ? <Loading /> : <Outlet />} </Fragment>;
+  return <Fragment>{isLoading ? <AxonLoader /> : <Outlet />} </Fragment>;
 };
 
 export default PersistAuth;

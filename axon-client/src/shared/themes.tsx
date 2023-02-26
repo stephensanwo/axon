@@ -6,7 +6,6 @@ export const StateColors = {
   warning: "#f1c21b",
   running: "#393939",
 };
-
 export const ThemeColors = {
   bgDark: "rgb(19, 19, 19)",
   // bgDark: "rgba(0, 0, 0, 0.93)"

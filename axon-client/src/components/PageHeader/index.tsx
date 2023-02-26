@@ -21,7 +21,8 @@ interface PageHeaderProps {
   }>;
 }
 export const PageHeaderContainer = styled.div`
-  background-color: #262626;
+  /* background-color: #262626; */
+  border-bottom: 1px solid #393939;
   width: 100vw;
   top: 0;
   margin-top: 40px;
