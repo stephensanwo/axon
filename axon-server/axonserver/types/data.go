@@ -51,14 +51,15 @@ type Note struct {
 }
 
 type Node struct {
-	UserId   primitive.ObjectID `json:"user_id" bson:"user_id"`
-	FolderID primitive.ObjectID `json:"folder_id" bson:"folder_id"`
-	NoteID   primitive.ObjectID `json:"note_id" bson:"note_id"`
-	NodeID   primitive.ObjectID `json:"node_id" bson:"node_id"`
-	Data     NodeData           `json:"data" bson:"data"`
-	Position Position           `json:"position" bson:"position"`
-	Content  NodeContent        `json:"node_content" bson:"node_content"`
-	Styles   NodeStyles         `json:"node_styles" bson:"node_styles"`
+	UserId     primitive.ObjectID `json:"user_id" bson:"user_id"`
+	FolderID   primitive.ObjectID `json:"folder_id" bson:"folder_id"`
+	NoteID     primitive.ObjectID `json:"note_id" bson:"note_id"`
+	NodeID     primitive.ObjectID `json:"node_id" bson:"node_id"`
+	Data       NodeData           `json:"data" bson:"data"`
+	Position   Position           `json:"position" bson:"position"`
+	Content    NodeContent        `json:"node_content" bson:"node_content"`
+	Styles     NodeStyles         `json:"node_styles" bson:"node_styles"`
+	LastEdited time.Time          `json:"last_edited" bson:"last_edited"`
 }
 
 type NodeData struct {
@@ -74,8 +75,7 @@ type Position struct {
 }
 
 type NodeContent struct {
-	ContentHeader int `json:"content_header" bson:"content_header"`
-	ContentData   int `json:"content_data" bson:"content_data"`
+	MarkDown string `json:"markdown" bson:"markdown"`
 }
 
 type NodeStyles struct {
@@ -85,13 +85,14 @@ type NodeStyles struct {
 }
 
 type Edge struct {
-	UserId   primitive.ObjectID `json:"user_id" bson:"user_id"`
-	FolderID primitive.ObjectID `json:"folder_id" bson:"folder_id"`
-	NoteID   primitive.ObjectID `json:"note_id" bson:"note_id"`
-	EdgeId   primitive.ObjectID `json:"edge_id" bson:"edge_id"`
-	Source   string             `json:"source" bson:"source"`
-	Target   string             `json:"target" bson:"target"`
-	Animated bool               `json:"animated" bson:"animated"`
-	Label    string             `json:"label" bson:"label"`
-	Type     string             `json:"type" bson:"type"`
+	UserId     primitive.ObjectID `json:"user_id" bson:"user_id"`
+	FolderID   primitive.ObjectID `json:"folder_id" bson:"folder_id"`
+	NoteID     primitive.ObjectID `json:"note_id" bson:"note_id"`
+	EdgeId     primitive.ObjectID `json:"edge_id" bson:"edge_id"`
+	Source     string             `json:"source" bson:"source"`
+	Target     string             `json:"target" bson:"target"`
+	Animated   bool               `json:"animated" bson:"animated"`
+	Label      string             `json:"label" bson:"label"`
+	Type       string             `json:"type" bson:"type"`
+	LastEdited time.Time          `json:"last_edited" bson:"last_edited"`
 }
