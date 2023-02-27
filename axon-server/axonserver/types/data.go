@@ -88,11 +88,11 @@ type Edge struct {
 	UserId     primitive.ObjectID `json:"user_id" bson:"user_id"`
 	FolderID   primitive.ObjectID `json:"folder_id" bson:"folder_id"`
 	NoteID     primitive.ObjectID `json:"note_id" bson:"note_id"`
-	EdgeId     primitive.ObjectID `json:"edge_id" bson:"edge_id"`
-	Source     string             `json:"source" bson:"source"`
-	Target     string             `json:"target" bson:"target"`
+	EdgeID     primitive.ObjectID `json:"edge_id" bson:"edge_id"`
+	SourceID   primitive.ObjectID `json:"source" bson:"source"`
+	TargetID   primitive.ObjectID `json:"target" bson:"target"`
 	Animated   bool               `json:"animated" bson:"animated"`
 	Label      string             `json:"label" bson:"label"`
-	Type       string             `json:"type" bson:"type"`
+	EdgeType   string             `json:"edge_type" bson:"edge_type"`
 	LastEdited time.Time          `json:"last_edited" bson:"last_edited"`
 }
