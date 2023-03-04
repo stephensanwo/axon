@@ -49,7 +49,7 @@ const SideNavPanel = () => {
 
   useEffect(() => {
     console.log(folders);
-  }, [folders]);
+  }, [folders, setEditFolderModal, setFolderModal, setNoteModal]);
 
   const handleNewNote = (selectedFolder: FolderListProps) => {
     setNoteModal(true);

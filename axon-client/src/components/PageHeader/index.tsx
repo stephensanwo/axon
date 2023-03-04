@@ -1,25 +1,40 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { OverflowMenu, OverflowMenuItem, Tag } from "@carbon/react";
 import styled from "styled-components";
 import "./style.scss";
 import AppContext from "../../context/app";
 import { StateColors, ThemeColors } from "../../shared/themes";
+import DeleteNote from "components/Note/DeleteNote";
+
+import {
+  AddAlt,
+  Edit,
+  Information,
+  ColorPalette,
+  TrashCan,
+  Share,
+} from "@carbon/icons-react";
+import { NoteProps } from "types/notes";
 
 interface PageHeaderProps {
-  headerText: string;
   theme?: "dark" | "light";
   documentTitle: string;
-  headerMenu?: Array<{
-    menuText: string;
-    menuIcon: React.ReactNode;
-    menuOptions: Array<{
-      text: string;
-      className: string;
-      isDisabled: boolean;
-      isDelete: boolean;
-    }>;
+  note: NoteProps;
+}
+
+interface HeaderMenuProps {
+  menuText: string;
+  menuIcon: React.ReactNode;
+  action?: any;
+  menuOptions: Array<{
+    text: string;
+    className: string;
+    isDisabled: boolean;
+    isDelete: boolean;
+    action?: any;
   }>;
 }
+
 export const PageHeaderContainer = styled.div`
   /* background-color: #262626; */
   border-bottom: 1px solid #393939;
@@ -63,11 +78,142 @@ const NavDocumentTitle = styled.div`
 
 const PageHeader: React.FC<PageHeaderProps> = (props) => {
   const { isOnline, isSideNavExpanded } = useContext(AppContext);
+  const [deleteModal, setDeleteModal] = useState(false);
+
+  const HeaderMenu: Array<HeaderMenuProps> = [
+    {
+      menuText: "Add Node",
+      menuIcon: <AddAlt size={16} />,
+      menuOptions: [
+        {
+          text: "Create new node",
+          className: "create-new-node",
+          isDisabled: false,
+          isDelete: false,
+        },
+        {
+          text: "Import from marketplace",
+          className: "marketplace-import",
+          isDisabled: false,
+          isDelete: false,
+        },
+        {
+          text: "Import custom node",
+          className: "custom-import",
+          isDisabled: false,
+          isDelete: false,
+        },
+      ],
+    },
+    {
+      menuText: "Edit Note",
+      menuIcon: <Edit size={16} />,
+      menuOptions: [
+        {
+          text: "Create new node",
+          className: "create-new-node",
+          isDisabled: false,
+          isDelete: false,
+        },
+        {
+          text: "Import from marketplace",
+          className: "marketplace-import",
+          isDisabled: false,
+          isDelete: false,
+        },
+        {
+          text: "Import custom node",
+          className: "custom-import",
+          isDisabled: false,
+          isDelete: false,
+        },
+      ],
+    },
+    {
+      menuText: "Delete Note",
+      menuIcon: <TrashCan size={16} />,
+      menuOptions: [],
+      action: () => setDeleteModal(true),
+    },
+    {
+      menuText: "Node Styles",
+      menuIcon: <ColorPalette size={16} />,
+      menuOptions: [
+        {
+          text: "Create new node",
+          className: "create-new-node",
+          isDisabled: false,
+          isDelete: false,
+        },
+        {
+          text: "Import from marketplace",
+          className: "marketplace-import",
+          isDisabled: false,
+          isDelete: false,
+        },
+        {
+          text: "Import custom node",
+          className: "custom-import",
+          isDisabled: false,
+          isDelete: false,
+        },
+      ],
+    },
+    {
+      menuText: "Publish Note",
+      menuIcon: <Share size={16} />,
+      menuOptions: [
+        {
+          text: "Create new node",
+          className: "create-new-node",
+          isDisabled: false,
+          isDelete: false,
+        },
+        {
+          text: "Import from marketplace",
+          className: "marketplace-import",
+          isDisabled: false,
+          isDelete: false,
+        },
+        {
+          text: "Import custom node",
+          className: "custom-import",
+          isDisabled: false,
+          isDelete: false,
+        },
+      ],
+    },
+    {
+      menuText: "Note Information",
+      menuIcon: <Information size={16} />,
+      menuOptions: [
+        {
+          text: "Create new node",
+          className: "create-new-node",
+          isDisabled: false,
+          isDelete: false,
+        },
+        {
+          text: "Import from marketplace",
+          className: "marketplace-import",
+          isDisabled: false,
+          isDelete: false,
+        },
+        {
+          text: "Import custom node",
+          className: "custom-import",
+          isDisabled: false,
+          isDelete: false,
+        },
+      ],
+    },
+  ];
+
   return (
     <PageHeaderContainer expand={isSideNavExpanded && true}>
       <NavMenu>
         <NavActions>
-          {props.headerMenu?.map((menu, index) => (
+          {HeaderMenu.map((menu, index) => (
             <OverflowMenu
               data-floating-menu-container
               size="md"
@@ -77,6 +223,7 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
               iconDescription={menu.menuText}
               key={index}
               ariaLabel="Menu"
+              onClick={menu.action}
             >
               {menu.menuOptions.map((option, index) => (
                 <OverflowMenuItem
@@ -85,6 +232,7 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
                   disabled={option.isDisabled}
                   isDelete={option.isDelete}
                   key={index}
+                  onClick={option.action}
                 />
               ))}
             </OverflowMenu>
@@ -95,6 +243,13 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
           <OnlinePresence isOnline={isOnline} />
         </NavDocumentTitle>
       </NavMenu>
+      {deleteModal && (
+        <DeleteNote
+          noteModal={deleteModal}
+          setNoteModal={setDeleteModal}
+          note={props.note}
+        />
+      )}
     </PageHeaderContainer>
   );
 };

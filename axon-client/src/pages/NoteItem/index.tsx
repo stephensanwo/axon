@@ -3,7 +3,6 @@ import PageHeader from "components/PageHeader";
 import SideNavPanel from "components/SideNavPanel";
 import { PageContainer, MobileWarningDiv } from "shared/layout";
 import NoteItemContent from "./NoteItemContent";
-import { HeaderMenu } from "./Menu";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { GET_NOTE_DETAIL } from "api/queries/note";
 import NoteContext from "context/notes";
@@ -12,10 +11,11 @@ import AxonLoader from "components/Loader/Loader";
 import { NoteProps } from "types/notes";
 
 const NoteItem: React.FC = () => {
-  const { folders, folderDispatch, selectedNote, setSelectedNote } =
-    useContext(FolderContext);
-
+  const { folders, selectedNote } = useContext(FolderContext);
   const { note, noteDispatch } = useContext(NoteContext);
+  const folder = folders?.filter(
+    (folder) => folder.folder_id === note?.folder_id
+  )[0];
 
   const queryNote = useMutation({
     mutationFn: () => GET_NOTE_DETAIL(selectedNote),
@@ -41,10 +41,9 @@ const NoteItem: React.FC = () => {
       {note ? (
         <Fragment>
           <PageHeader
-            headerText={"note"}
             theme={"dark"}
-            documentTitle={note?.name}
-            headerMenu={HeaderMenu}
+            documentTitle={`${folder?.name} / ${note?.name}`}
+            note={note}
           />
           <PageContainer dark>
             <SideNavPanel />
