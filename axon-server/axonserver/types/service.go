@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
-	"github.com/go-chi/cors"
+	_ "axon-server/docs"
+
 	log "github.com/sirupsen/logrus"
+	"github.com/stephensanwo/handlers"
+	"github.com/stephensanwo/mux"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
@@ -59,33 +60,28 @@ func (a AxonService) ConfigureLogger() {
 
 func (a AxonService) CreateApi() {
 	a.ConfigureLogger()
-	r := chi.NewRouter()
-	r.Use(middleware.Recoverer)
-	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   a.AxonContext.Settings.HttpSettings.AllowedOrigins,
-		AllowedMethods:   a.AxonContext.Settings.HttpSettings.AllowedMethods,
-		AllowedHeaders:   a.AxonContext.Settings.HttpSettings.AllowedHeaders,
-		ExposedHeaders:   a.AxonContext.Settings.HttpSettings.ExposedHeaders,
-		AllowCredentials: a.AxonContext.Settings.HttpSettings.AllowCredentials,
-		MaxAge:           a.AxonContext.Settings.HttpSettings.MaxAge,
-	}))
+	r := mux.NewRouter()
+
+	ALLOWED_ORIGINS := handlers.AllowedOrigins(a.AxonContext.Settings.HttpSettings.AllowedOrigins)
+	ALLOWED_METHODS := handlers.AllowedMethods(a.AxonContext.Settings.HttpSettings.AllowedMethods)
+	ALLOWED_HEADERS := handlers.AllowedHeaders(a.AxonContext.Settings.HttpSettings.AllowedHeaders)
+	EXPOSED_HEADERS := handlers.ExposedHeaders(a.AxonContext.Settings.HttpSettings.ExposedHeaders)
+	ALLOWED_CREDENTIALS := handlers.AllowCredentials()
+	MAX_AGE := handlers.MaxAge(a.AxonContext.Settings.HttpSettings.MaxAge)
+	
 	for _, item := range *a.Routes {
 		switch item.Auth {
 		case PublicRoute:
-			{
-				r.Method(item.Method, item.Path, a.PublicHandler(item.Handler))
-			}
-
+			{r.HandleFunc(item.Path, a.PublicHandler(item.Handler)).Methods(item.Method)}
 		case PrivateRoute:
-			{
-				r.Method(item.Method, item.Path, a.PrivateHandler(item.Handler))
-			}
+			{r.HandleFunc(item.Path, a.PrivateHandler(item.Handler)).Methods(item.Method)}
 		}
 	}
-	r.Get("/docs/*", httpSwagger.Handler(
-		httpSwagger.URL("http://127.0.0.1:8100/docs/doc.json"),
-	))
+	// r.HandleFunc("/docs/*", httpSwagger.Handler(
+	// 	httpSwagger.URL("http://127.0.0.1:8100/docs/doc.json"),
+	// ))
+	r.PathPrefix("/docs").Handler(httpSwagger.WrapHandler)
 
 	log.Println("Server running on port 8100")
-	log.Fatal(http.ListenAndServe(":8100", r))
+	log.Fatal(http.ListenAndServe(":8100", handlers.CORS(ALLOWED_ORIGINS, ALLOWED_METHODS, ALLOWED_HEADERS,EXPOSED_HEADERS,ALLOWED_CREDENTIALS,MAX_AGE)(r) ))
 }
