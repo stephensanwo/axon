@@ -51,6 +51,19 @@ const folderReducer = (
       );
     }
 
+    case "delete_note": {
+      return folders.map((folder) => {
+        if (folder.folder_id === action.payload.folder_id) {
+          const filteredNotes = folder.notes.filter((note) => {
+            note.note_id !== action.payload.note_id;
+          });
+          return { ...folder, notes: filteredNotes };
+        } else {
+          return folder;
+        }
+      });
+    }
+
     default: {
       throw Error("Unknown action: " + action);
     }

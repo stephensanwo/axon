@@ -1,4 +1,4 @@
-import { CreateNoteProps } from "./notes";
+import { CreateNoteProps, SelectedNoteProps } from "./notes";
 
 export interface FolderListProps {
   date_created: string;
@@ -55,6 +55,10 @@ export type FolderActionProps =
       payload: {
         folder_id: string;
       };
+    }
+  | {
+      type: "delete_note";
+      payload: SelectedNoteProps;
     };
 
 export interface CreateFolderProps {
