@@ -38,12 +38,12 @@ const NoteItem: React.FC = () => {
   console.log(note);
   return (
     <Fragment>
-      {note ? (
+      {!queryNote.isLoading ? (
         <Fragment>
           <PageHeader
             headerText={"note"}
             theme={"dark"}
-            documentTitle={note?.name}
+            documentTitle={note?.name || ""}
             headerMenu={HeaderMenu}
           />
           <PageContainer dark>

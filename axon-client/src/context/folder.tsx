@@ -45,7 +45,7 @@ export const FolderProvider = ({ children }: FolderProviderProps) => {
 
     let first_folder_id = "";
     let first_note_id = "";
-    if (query.data && query.data[0].notes && query.data[0].notes.length > 0) {
+    if (query.data && query.data[0]?.notes && query.data[0]?.notes.length > 0) {
       first_folder_id = query.data[0].notes[0].folder_id;
       first_note_id = query.data[0].notes[0].note_id;
     }

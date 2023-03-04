@@ -77,67 +77,66 @@ const SideNavPanel = () => {
             <FolderAdd size="16" fill={ThemeColors.primary} />
           </div>
           <SideNavItems>
-            {folders &&
-              folders.map((folder, index) => (
-                <StyledSideNavMenu
-                  key={index}
-                  id={folder.folder_id}
-                  renderIcon={() => (
-                    <OptionsButton
-                      action={setEditFolderModal}
-                      onClick={() => setSelectedFolder(folder)}
-                    />
-                  )}
-                  title={folder.name}
-                  onClick={() => setSelectedFolder(folder)}
+            {folders?.map((folder, index) => (
+              <StyledSideNavMenu
+                key={index}
+                id={folder.folder_id}
+                renderIcon={() => (
+                  <OptionsButton
+                    action={setEditFolderModal}
+                    onClick={() => setSelectedFolder(folder)}
+                  />
+                )}
+                title={folder.name}
+                onClick={() => setSelectedFolder(folder)}
 
-                  // aria-current={
-                  //   selectedFolder?.folder_id === folder.folder_id
-                  //     ? "folder"
-                  //     : ""
-                  // }
+                // aria-current={
+                //   selectedFolder?.folder_id === folder.folder_id
+                //     ? "folder"
+                //     : ""
+                // }
+              >
+                <div
+                  className="new-note-button"
+                  onClick={() => handleNewNote(folder)}
                 >
-                  <div
-                    className="new-note-button"
-                    onClick={() => handleNewNote(folder)}
+                  <p
+                    style={{
+                      color: ThemeColors.primary,
+                      paddingLeft: "20px",
+                    }}
                   >
-                    <p
-                      style={{
-                        color: ThemeColors.primary,
-                        paddingLeft: "20px",
-                      }}
+                    Add New Note
+                  </p>
+                  <AddAlt size="16" fill={ThemeColors.primary} />
+                </div>
+                {folder.notes?.length > 0 &&
+                  folder.notes?.map((note, index) => (
+                    <SideNavMenuItem
+                      key={index}
+                      id={note?.note_id || ""}
+                      onClick={() =>
+                        setSelectedNote({
+                          ...selectedNote,
+                          folder_id: folder.folder_id,
+                          note_id: note.note_id,
+                        })
+                      }
+                      // aria-current={
+                      //   clickedItemId === note.note_id ? "page" : ""
+                      // }
+                      className="side-nav-menu-item-overrides"
+                      // className={`side-nav-menu-overrides ${
+                      //   selectedNote.note_id === note.note_id
+                      //     ? "side-nav-menu-item-overrides-selected"
+                      //     : ""
+                      // }`}
                     >
-                      Add New Note
-                    </p>
-                    <AddAlt size="16" fill={ThemeColors.primary} />
-                  </div>
-                  {folder.notes !== null &&
-                    folder.notes.map((note, index) => (
-                      <SideNavMenuItem
-                        key={index}
-                        id={note.note_id}
-                        onClick={() =>
-                          setSelectedNote({
-                            ...selectedNote,
-                            folder_id: folder.folder_id,
-                            note_id: note.note_id,
-                          })
-                        }
-                        // aria-current={
-                        //   clickedItemId === note.note_id ? "page" : ""
-                        // }
-                        className="side-nav-menu-item-overrides"
-                        // className={`side-nav-menu-overrides ${
-                        //   selectedNote.note_id === note.note_id
-                        //     ? "side-nav-menu-item-overrides-selected"
-                        //     : ""
-                        // }`}
-                      >
-                        {note.name}
-                      </SideNavMenuItem>
-                    ))}
-                </StyledSideNavMenu>
-              ))}
+                      {note?.name || ""}
+                    </SideNavMenuItem>
+                  ))}
+              </StyledSideNavMenu>
+            ))}
           </SideNavItems>
           {folderModal && (
             <NewFolder
