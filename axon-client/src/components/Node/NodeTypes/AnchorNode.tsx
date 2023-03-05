@@ -1,6 +1,5 @@
 import React from "react";
-import { NodeDataProps } from "../../../context/notes";
-import { NodeThemes } from "../../../shared/themes";
+import { NodeDataProps } from "types/notes";
 
 interface AnchorNodeData {
   data: NodeDataProps;

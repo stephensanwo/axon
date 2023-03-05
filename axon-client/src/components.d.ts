@@ -9,4 +9,6 @@ declare module "react-syntax-highlighter";
 declare module "react-syntax-highlighter/dist/esm/styles/prism";
 declare module "react-syntax-highlighter/dist/esm/styles/hljs";
 declare module "react-contenteditable";
+declare module "uuid";
+declare module "moment";
 declare let module: any;

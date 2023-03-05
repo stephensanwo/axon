@@ -13,12 +13,12 @@ import { AxonButton } from "components/Button";
 import AxonInlineLoader from "components/Loader/InlineLoader";
 import { CreateNoteProps } from "types/notes";
 import { CREATE_NEW_NOTE } from "api/queries/note";
-import { FolderListProps } from "types/folders";
+import { IFolderList } from "types/folders";
 
 const NewNote: React.FC<{
   noteModal: boolean;
   setNoteModal: React.Dispatch<React.SetStateAction<boolean>>;
-  folder: FolderListProps;
+  folder: IFolderList;
 }> = ({ folder, noteModal, setNoteModal }) => {
   const [newNote, setNewNote] = useState<CreateNoteProps>({
     folder_id: folder.folder_id,

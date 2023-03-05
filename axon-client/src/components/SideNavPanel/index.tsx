@@ -5,22 +5,17 @@ import {
   SideNavMenu,
   SideNavMenuItem,
 } from "@carbon/react";
-import { Folder, AddAlt, FolderAdd, Pending } from "@carbon/icons-react";
+import { AddAlt, FolderAdd } from "@carbon/icons-react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { NoteContext } from "../../context/notes";
 import "./style.scss";
-import { useParams } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import AppContext from "../../context/app";
-import { NotesActionType } from "../../types/notes";
-import { StateColors, ThemeColors } from "../../shared/themes";
+import { ThemeColors } from "../../shared/themes";
 import { NewFolder } from "../Folder";
 import { NewNote } from "../Note";
 import FolderContext from "context/folder";
 import EditFolder from "components/Folder/EditFolder";
 import OptionsButton from "./OptionsButton";
-import { FolderListProps, FolderProps } from "types/folders";
+import { IFolderList } from "types/folders";
 
 const StyledSideNavMenu = styled(SideNavMenu)`
   background-color: transparent;
@@ -40,7 +35,7 @@ const SideNavPanel = () => {
   const [editFolderModal, setEditFolderModal] = useState(false);
   const [noteModal, setNoteModal] = useState(false);
   const { folders, selectedNote, setSelectedNote } = useContext(FolderContext);
-  const [selectedFolder, setSelectedFolder] = useState<FolderListProps>();
+  const [selectedFolder, setSelectedFolder] = useState<IFolderList>();
 
   useEffect(() => {
     if (window.innerWidth >= 1080) onClickSideNavExpand(true);
@@ -51,7 +46,7 @@ const SideNavPanel = () => {
     console.log(folders);
   }, [folders, setEditFolderModal, setFolderModal, setNoteModal]);
 
-  const handleNewNote = (selectedFolder: FolderListProps) => {
+  const handleNewNote = (selectedFolder: IFolderList) => {
     setNoteModal(true);
     setSelectedFolder(selectedFolder);
   };
@@ -120,6 +115,10 @@ const SideNavPanel = () => {
                           ...selectedNote,
                           folder_id: folder.folder_id,
                           note_id: note.note_id,
+                          name: note.name,
+                          description: note.description,
+                          date_created: note.date_created,
+                          last_edited: note.last_edited,
                         })
                       }
                       // aria-current={

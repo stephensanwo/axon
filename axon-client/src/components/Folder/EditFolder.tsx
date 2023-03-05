@@ -10,19 +10,19 @@ import { useMutation } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
 import { DELETE_FOLDER, EDIT_NEW_FOLDER } from "api/queries/folder";
 import FolderContext from "context/folder";
-import { CreateFolderProps, FolderListProps } from "types/folders";
+import { ICreateFolder, IFolderList } from "types/folders";
 import { AxonButton } from "components/Button";
 import AxonInlineLoader from "components/Loader/InlineLoader";
 
 const EditFolder: React.FC<{
   folderModal: boolean;
   setFolderModal: React.Dispatch<React.SetStateAction<boolean>>;
-  folder: FolderListProps;
+  folder: IFolderList;
 }> = ({ folder, folderModal, setFolderModal }) => {
-  const [updateFolder, setUpdateFolder] = useState<CreateFolderProps>({
+  const [updateFolder, setUpdateFolder] = useState<ICreateFolder>({
     folder_name: folder.name,
   });
-  const [formErros, setFormErrors] = useState<CreateFolderProps>({
+  const [formErros, setFormErrors] = useState<ICreateFolder>({
     folder_name: "",
   });
 

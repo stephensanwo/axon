@@ -1,15 +1,15 @@
-import { CreateNoteProps, SelectedNoteProps } from "./notes";
+import { CreateNoteProps, ISelectedNote } from "./notes";
 
-export interface FolderListProps {
+export interface IFolderList {
   date_created: string;
   folder_id: string;
   last_edit?: string;
   name: string;
   user_id: string;
-  notes: Array<NoteSummaryProps> | [];
+  notes: Array<INoteSummary> | [];
 }
 
-export interface NoteSummaryProps {
+export interface INoteSummary {
   user_id: string;
   folder_id: string;
   note_id: string;
@@ -19,7 +19,7 @@ export interface NoteSummaryProps {
   last_edited: string;
 }
 
-export interface FolderProps {
+export interface IFolder {
   date_created: string;
   folder_id: string;
   last_edit?: string;
@@ -27,10 +27,10 @@ export interface FolderProps {
   user_id: string;
 }
 
-export type FolderActionProps =
+export type IFolderAction =
   | {
       type: "init_folder";
-      payload: Array<FolderListProps>;
+      payload: Array<IFolderList>;
     }
   | {
       type: "new_folder";
@@ -58,13 +58,13 @@ export type FolderActionProps =
     }
   | {
       type: "delete_note";
-      payload: SelectedNoteProps;
+      payload: ISelectedNote;
     };
 
-export interface CreateFolderProps {
+export interface ICreateFolder {
   folder_name: string;
 }
 
-export interface PatchFolderProps {
+export interface IPatchFolder {
   folder_name: string;
 }

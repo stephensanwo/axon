@@ -1,27 +1,26 @@
 import React, { createContext, useEffect, useReducer, useState } from "react";
 import folderReducer from "../reducers/folders";
-import folderStore from "./folder.json";
 import { Reducer } from "react";
-import { FolderActionProps, FolderListProps } from "../types/folders";
+import { IFolderAction, IFolderList } from "../types/folders";
 import { useQuery } from "@tanstack/react-query";
 import { GET_FOLDER_LIST } from "../api/queries/folder";
-import { SelectedNoteProps } from "types/notes";
+import { ISelectedNote } from "types/notes";
 
 interface FolderProviderProps {
   children: React.ReactNode;
 }
 
 interface FolderContextProps {
-  folders: Array<FolderListProps> | null;
-  folderDispatch: React.Dispatch<FolderActionProps>;
-  selectedNote: SelectedNoteProps;
-  setSelectedNote: React.Dispatch<SelectedNoteProps>;
+  folders: Array<IFolderList> | null;
+  folderDispatch: React.Dispatch<IFolderAction>;
+  selectedNote: ISelectedNote;
+  setSelectedNote: React.Dispatch<ISelectedNote>;
 }
 
 export const FolderContext = createContext({} as FolderContextProps);
 
 export const FolderProvider = ({ children }: FolderProviderProps) => {
-  const InitialState: Array<FolderListProps> = [];
+  const InitialState: Array<IFolderList> = [];
 
   const query = useQuery({
     queryKey: ["folders"],
@@ -29,13 +28,12 @@ export const FolderProvider = ({ children }: FolderProviderProps) => {
   });
 
   const [folders, folderDispatch] = useReducer<
-    Reducer<Array<FolderListProps>, FolderActionProps>
+    Reducer<Array<IFolderList>, IFolderAction>
   >(folderReducer, InitialState);
 
-  const [selectedNote, setSelectedNote] = useState<SelectedNoteProps>({
-    folder_id: "",
-    note_id: "",
-  });
+  const [selectedNote, setSelectedNote] = useState<ISelectedNote>(
+    {} as ISelectedNote
+  );
 
   useEffect(() => {
     folderDispatch({
@@ -43,17 +41,17 @@ export const FolderProvider = ({ children }: FolderProviderProps) => {
       payload: query.data,
     });
 
-    let first_folder_id = "";
-    let first_note_id = "";
     if (query.data && query.data[0]?.notes && query.data[0]?.notes.length > 0) {
-      first_folder_id = query.data[0].notes[0].folder_id;
-      first_note_id = query.data[0].notes[0].note_id;
+      setSelectedNote({
+        ...selectedNote,
+        folder_id: query.data[0].notes[0].folder_id,
+        note_id: query.data[0].notes[0].note_id,
+        name: query.data[0].notes[0].name,
+        description: query.data[0].notes[0].description,
+        date_created: query.data[0].notes[0].date_created,
+        last_edited: query.data[0].notes[0].last_edited,
+      });
     }
-    setSelectedNote({
-      ...selectedNote,
-      folder_id: first_folder_id,
-      note_id: first_note_id,
-    });
   }, [query.data]);
 
   console.log(query.data);

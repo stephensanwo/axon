@@ -1,10 +1,10 @@
 import React, { useRef } from "react";
-import { NodeDataProps, NodeStyleProps } from "../../../context/notes";
 import { NodeThemes, StateColors } from "../../../shared/themes";
-import {Close} from "@carbon/icons-react";
+import { Close } from "@carbon/icons-react";
 import ContentEditable from "react-contenteditable";
 import { HeaderText, LabelText, ParagraphText } from "../../EditableLabels";
 import Controls from "../../Controls";
+import { NodeDataProps, NodeStyleProps } from "types/notes";
 
 interface TextBoxNodeData {
   data: NodeDataProps;
@@ -39,7 +39,7 @@ const TextBoxNode: React.FC<TextBoxNodeData> = (props) => {
           />
         </div>
         <button className="edgebutton">
-          <Close size="24"/>
+          <Close size="24" />
         </button>{" "}
       </div>
     </div>

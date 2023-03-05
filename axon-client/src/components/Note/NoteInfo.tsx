@@ -11,12 +11,18 @@ import { useContext, useEffect, useState } from "react";
 import FolderContext from "context/folder";
 import { AxonButton } from "components/Button";
 import AxonInlineLoader from "components/Loader/InlineLoader";
-import { CreateNoteProps, NoteProps, ISelectedNote } from "types/notes";
+import {
+  CreateNoteProps,
+  NoteProps,
+  ISelectedNote,
+  INoteModal,
+} from "types/notes";
 import { CREATE_NEW_NOTE, DELETE_NOTE } from "api/queries/note";
+import moment from "moment";
 
-const DeleteNote: React.FC<{
-  noteModal: boolean;
-  setNoteModal: React.Dispatch<React.SetStateAction<boolean>>;
+const NoteInfo: React.FC<{
+  noteModal: INoteModal;
+  setNoteModal: React.Dispatch<React.SetStateAction<INoteModal>>;
   note: NoteProps;
 }> = ({ note, noteModal, setNoteModal }) => {
   const { folderDispatch } = useContext(FolderContext);
@@ -34,7 +40,10 @@ const DeleteNote: React.FC<{
         type: "delete_note",
         payload: selectedNoteData,
       });
-      setNoteModal(false);
+      setNoteModal({
+        ...noteModal,
+        info: false,
+      });
     },
     onError: (err: any) => {
       console.log(err);
@@ -49,27 +58,36 @@ const DeleteNote: React.FC<{
   return (
     <ComposedModal
       size="sm"
-      modalHeading="Modal heading"
-      modalLabel="Label"
       open={noteModal}
-      onClose={() => setNoteModal(false)}
+      onClose={() =>
+        setNoteModal({
+          ...noteModal,
+          info: false,
+        })
+      }
       preventCloseOnClickOutside={true}
     >
       <ModalHeader
-        title="Are you sure you want to delete this note?"
-        label={note?.name}
+        title={note?.name}
+        label={"Note Details"}
         style={{ marginBottom: "20px" }}
       />
-      <ModalFooter>
-        <AxonButton kind="secondary" onClick={() => setNoteModal(false)}>
-          Cancel
-        </AxonButton>
-        <AxonButton kind="danger" onClick={handleNewFolder} disabled={false}>
-          {isLoading ? <AxonInlineLoader /> : "Delete"}
-        </AxonButton>
-      </ModalFooter>
+      <ModalBody>
+        <div style={{ marginBottom: "20px" }}>
+          <h6>Description</h6>
+          <p>{note.description}</p>
+        </div>
+        <div style={{ marginBottom: "20px" }}>
+          <h6>Created On</h6>
+          <p>{moment(note.date_created, "YYYYMMDD").fromNow()}</p>
+        </div>
+        <div>
+          <h6>Last Updated</h6>
+          <p>{moment(note.last_edited, "YYYYMMDD").fromNow()}</p>
+        </div>
+      </ModalBody>
     </ComposedModal>
   );
 };
 
-export default DeleteNote;
+export default NoteInfo;

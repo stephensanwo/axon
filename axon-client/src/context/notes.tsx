@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useReducer, useState } from "react";
 import noteReducer from "../reducers/notes";
 import { Reducer } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { NoteActionProps, NoteProps, SelectedNoteProps } from "types/notes";
+import { NoteActionProps, NoteProps } from "types/notes";
 import { GET_NOTE_DETAIL } from "api/queries/note";
 
 interface NoteProviderProps {

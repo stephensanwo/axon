@@ -7,11 +7,12 @@ import "./style.scss";
 import { StateColors } from "../../shared/themes";
 // import { NewNodeProps } from "../NodeSelector/NodeSelectorItem";
 import styled from "styled-components";
-import { NodeProps, NoteContext } from "../../context/notes";
+import { NoteContext } from "../../context/notes";
 import { useParams } from "react-router-dom";
 import { Tag } from "@carbon/react";
 import { AnchorNode } from "./NodeTypes";
 import TextBoxNode from "./NodeTypes/TextBoxNode";
+import { INode } from "types/notes";
 
 const Description = styled.div`
   display: flex;
@@ -21,33 +22,31 @@ const Description = styled.div`
   margin-top: 5px;
 `;
 
-const CustomComponentNode: React.FC<NodeProps> = ({
-  id,
-  data,
-  node_styles,
-}) => {
+const CustomComponentNode: React.FC<INode> = ({ id, data, node_styles }) => {
   // const nodeContext = useContext(FlowItemContext);
-  const { folderId, noteId } = useParams();
-  const noteData = useContext(NoteContext);
-  const folder = noteData.folders.filter((folder) => folder.id === folderId)[0];
-  const note = folder.notes.filter((note) => note.id === noteId)[0];
+  // const { folderId, noteId } = useParams();
+  // const noteData = useContext(NoteContext);
+  // const folder = noteData.folders.filter((folder) => folder.id === folderId)[0];
+  // const note = folder.notes.filter((note) => note.id === noteId)[0];
+  const { note } = useContext(NoteContext);
 
   const handleNodeClick = (id: string) => {
-    noteData?.setFlowSelectedNode(id);
-    console.log(id);
+    // noteData?.setFlowSelectedNode(id);
+    // console.log(id);
   };
 
   const handleNodeDoubleClick = () => {
-    if (noteData.openTextPanel === false) {
-      noteData?.setOpenTextPanel(true);
-    }
+    // if (noteData.openTextPanel === false) {
+    //   noteData?.setOpenTextPanel(true);
+    // }
   };
+
+  console.log(data);
 
   return (
     <Fragment>
-      {data.node_category === "anchor" ? (
-        <AnchorNode data={data}></AnchorNode>
-      ) : (
+      {data.category === "anchor-node" && <AnchorNode data={data}></AnchorNode>}
+      {data.category === "input-node" && (
         <TextBoxNode
           data={data}
           selected_id={id}

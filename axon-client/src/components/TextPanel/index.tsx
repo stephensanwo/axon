@@ -1,6 +1,6 @@
 import { HeaderPanel } from "@carbon/react";
 import { useParams } from "react-router-dom";
-import { NodeProps, NoteContext } from "../../context/notes";
+import { NoteContext } from "../../context/notes";
 import React, { Fragment, useContext, useEffect, useState } from "react";
 import "./style.scss";
 import MarkdownNotes from "../MarkdownNotes";
@@ -10,11 +10,11 @@ interface Props {
 }
 
 const TextPanel: React.FC<Props> = (props) => {
-  const { folderId, noteId } = useParams();
-  const noteData = useContext(NoteContext);
-  const [selectedNode, setSelectedNode] = useState<NodeProps>();
-  const folder = noteData.folders.filter((folder) => folder.id === folderId)[0];
-  const note = folder.notes.filter((note) => note.id === noteId)[0];
+  // const { folderId, noteId } = useParams();
+  // const noteData = useContext(NoteContext);
+  // const [selectedNode, setSelectedNode] = useState<NodeProps>();
+  // const folder = noteData.folders.filter((folder) => folder.id === folderId)[0];
+  // const note = folder.notes.filter((note) => note.id === noteId)[0];
   //   const selectedNode = note.nodes?.filter(
   //     (node) => node.id === noteData.flowSelectedNode
   //   )[0];
@@ -23,12 +23,12 @@ const TextPanel: React.FC<Props> = (props) => {
   //     (node) => node.id === noteData.flowSelectedNode
   //   )[0].data.title
 
-  useEffect(() => {
-    const selectedNodeItem = note.nodes?.filter(
-      (node) => node.id === noteData.flowSelectedNode
-    )[0];
-    setSelectedNode(selectedNodeItem);
-  }, [noteData.folders, noteData.flowSelectedNode, note.nodes]);
+  // useEffect(() => {
+  //   const selectedNodeItem = note.nodes?.filter(
+  //     (node) => node.id === noteData.flowSelectedNode
+  //   )[0];
+  //   setSelectedNode(selectedNodeItem);
+  // }, [noteData.folders, noteData.flowSelectedNode, note.nodes]);
 
   const onChangeData = (e: any) => {
     console.log(e.target.id);
@@ -53,7 +53,7 @@ const TextPanel: React.FC<Props> = (props) => {
 
   return (
     <HeaderPanel expanded={props.expanded}>
-      {selectedNode?.content_type === "markdown" ? (
+      {/* {selectedNode?.content_type === "markdown" ? (
         <MarkdownNotes
           header={selectedNode?.content_header}
           selectedNodeId={selectedNode?.id}
@@ -61,7 +61,7 @@ const TextPanel: React.FC<Props> = (props) => {
         ></MarkdownNotes>
       ) : (
         <Fragment></Fragment>
-      )}
+      )} */}
     </HeaderPanel>
   );
 };

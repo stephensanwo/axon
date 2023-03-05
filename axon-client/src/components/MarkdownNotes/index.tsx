@@ -10,8 +10,9 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { Tag } from "@carbon/react";
 import { Heading5 } from "../../shared/layout";
-import { NodeProps, NoteContext } from "../../context/notes";
+import { NoteContext } from "../../context/notes";
 import { ViewFilled, Edit, Close } from "@carbon/icons-react";
+import { INode } from "types/notes";
 
 const MarkdownContainer = styled.div`
   display: flex;
@@ -45,13 +46,13 @@ const MarkdownPreview = styled.div`
 interface MarkdownProps {
   header: string;
   selectedNodeId?: string;
-  content: NodeProps;
+  content: INode;
 }
 
 const MarkdownNotes: React.FC<MarkdownProps> = (props) => {
   const [markdown, setMarkdown] = useState<any>();
   const [showPreview, setShowPreview] = useState(false);
-  const { openTextPanel, setOpenTextPanel } = useContext(NoteContext);
+  // const { openTextPanel, setOpenTextPanel } = useContext(NoteContext);
 
   const handlePreviewToggle = () => {
     if (showPreview === false) {
@@ -63,14 +64,14 @@ const MarkdownNotes: React.FC<MarkdownProps> = (props) => {
   };
 
   const handleTextPanelClose = () => {
-    if (openTextPanel === true) {
-      setOpenTextPanel(false);
-    }
+    // if (openTextPanel === true) {
+    //   setOpenTextPanel(false);
+    // }
   };
 
-  useEffect(() => {
-    setMarkdown(props.content.content_data);
-  }, [props.content.content_data]);
+  // useEffect(() => {
+  //   setMarkdown(props.content.content_data);
+  // }, [props.content.content_data]);
 
   console.log(markdown);
   return (

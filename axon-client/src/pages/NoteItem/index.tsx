@@ -1,21 +1,37 @@
 import { useEffect, Fragment, useContext } from "react";
 import PageHeader from "components/PageHeader";
 import SideNavPanel from "components/SideNavPanel";
-import { PageContainer, MobileWarningDiv } from "shared/layout";
-import NoteItemContent from "./NoteItemContent";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { PageContainer } from "shared/layout";
+import { useMutation } from "@tanstack/react-query";
 import { GET_NOTE_DETAIL } from "api/queries/note";
 import NoteContext from "context/notes";
 import FolderContext from "context/folder";
 import AxonLoader from "components/Loader/Loader";
 import { NoteProps } from "types/notes";
+import styled from "styled-components";
+import AppContext from "context/app";
+import FlowTree from "components/FlowTree";
+
+const FlowItemAdjustable = styled.div`
+  margin-left: ${(props: { isSideNavExpanded: boolean }) =>
+    props.isSideNavExpanded ? "320px" : "0px"};
+`;
+
+const FlowItemContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+`;
+
+export const NoteItemDiv = styled.div`
+  width: 100%;
+  height: 100%;
+`;
 
 const NoteItem: React.FC = () => {
-  const { folders, selectedNote } = useContext(FolderContext);
+  const { selectedNote } = useContext(FolderContext);
   const { note, noteDispatch } = useContext(NoteContext);
-  const folder = folders?.filter(
-    (folder) => folder.folder_id === note?.folder_id
-  )[0];
+  const { isSideNavExpanded } = useContext(AppContext);
 
   const queryNote = useMutation({
     mutationFn: () => GET_NOTE_DETAIL(selectedNote),
@@ -33,6 +49,7 @@ const NoteItem: React.FC = () => {
 
   useEffect(() => {
     queryNote.mutate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedNote]);
 
   console.log(note);
@@ -40,14 +57,16 @@ const NoteItem: React.FC = () => {
     <Fragment>
       {!queryNote.isLoading ? (
         <Fragment>
-          <PageHeader
-            theme={"dark"}
-            documentTitle={note?.name || ""}
-            headerMenu={HeaderMenu}
-          />
+          <PageHeader theme={"dark"} documentTitle={note?.name || ""} />
           <PageContainer dark>
             <SideNavPanel />
-            <NoteItemContent />
+            <FlowItemAdjustable isSideNavExpanded={isSideNavExpanded}>
+              <FlowItemContainer>
+                <NoteItemDiv>
+                  <FlowTree />
+                </NoteItemDiv>
+              </FlowItemContainer>
+            </FlowItemAdjustable>
           </PageContainer>
         </Fragment>
       ) : (

@@ -22,7 +22,7 @@ const FlowTreeDiv = styled.div`
   margin: auto;
   padding-top: 10px;
   padding-bottom: 10px;
-  background-color: red;
+  /* background-color: red; */
 `;
 
 const nodeTypes = {
@@ -37,7 +37,7 @@ const FlowTree = () => {
   // const noteData = useContext(NoteContext);
   // const folder = noteData.folders.filter((folder) => folder.id === folderId)[0];
   // const note = folder.notes.filter((note) => note.id === noteId)[0];
-
+  const { isSideNavExpanded } = useContext(AppContext);
   const { note } = useContext(NoteContext);
 
   console.log(note);
@@ -85,9 +85,7 @@ const FlowTree = () => {
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
         ></ReactFlow>
-        <div>
-          <Controls />
-        </div>
+        <Controls style={{ left: isSideNavExpanded ? "320px" : "0px" }} />
       </ReactFlowProvider>
       {/* <TextPanel expanded={noteData.openTextPanel} /> */}
     </FlowTreeDiv>

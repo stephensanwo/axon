@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
-import { OverflowMenu, OverflowMenuItem, Tag } from "@carbon/react";
+import { OverflowMenu, OverflowMenuItem } from "@carbon/react";
 import styled from "styled-components";
 import "./style.scss";
 import AppContext from "../../context/app";
-import { StateColors, ThemeColors } from "../../shared/themes";
+import { StateColors } from "../../shared/themes";
 import DeleteNote from "components/Note/DeleteNote";
 
 import {
@@ -14,12 +14,15 @@ import {
   TrashCan,
   Share,
 } from "@carbon/icons-react";
-import { NoteProps } from "types/notes";
+import { INoteModal } from "types/notes";
+import FolderContext from "context/folder";
+import NoteInfo from "components/Note/NoteInfo";
+import PublishNote from "components/Note/PublishNote";
+import NoteContext from "context/notes";
 
 interface PageHeaderProps {
   theme?: "dark" | "light";
   documentTitle: string;
-  note: NoteProps;
 }
 
 interface HeaderMenuProps {
@@ -78,7 +81,17 @@ const NavDocumentTitle = styled.div`
 
 const PageHeader: React.FC<PageHeaderProps> = (props) => {
   const { isOnline, isSideNavExpanded } = useContext(AppContext);
+  const [noteModal, setNoteModal] = useState<INoteModal>({
+    delete: false,
+    info: false,
+    new: false,
+    publish: false,
+  });
   const [deleteModal, setDeleteModal] = useState(false);
+  const { selectedNote } = useContext(FolderContext);
+  const { note, noteDispatch } = useContext(NoteContext);
+
+  console.log(selectedNote);
 
   const HeaderMenu: Array<HeaderMenuProps> = [
     {
@@ -86,22 +99,36 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
       menuIcon: <AddAlt size={16} />,
       menuOptions: [
         {
-          text: "Create new node",
+          text: "Default Node",
           className: "create-new-node",
           isDisabled: false,
           isDelete: false,
+          action: () => {
+            note &&
+              noteDispatch({
+                type: "add_node",
+                payload: {
+                  node_type: "input-node",
+                  node_data: note,
+                },
+              });
+          },
         },
         {
-          text: "Import from marketplace",
+          text: "Connector",
           className: "marketplace-import",
           isDisabled: false,
           isDelete: false,
-        },
-        {
-          text: "Import custom node",
-          className: "custom-import",
-          isDisabled: false,
-          isDelete: false,
+          action: () => {
+            note &&
+              noteDispatch({
+                type: "add_node",
+                payload: {
+                  node_type: "anchor-node",
+                  node_data: note,
+                },
+              });
+          },
         },
       ],
     },
@@ -162,50 +189,22 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
     {
       menuText: "Publish Note",
       menuIcon: <Share size={16} />,
-      menuOptions: [
-        {
-          text: "Create new node",
-          className: "create-new-node",
-          isDisabled: false,
-          isDelete: false,
-        },
-        {
-          text: "Import from marketplace",
-          className: "marketplace-import",
-          isDisabled: false,
-          isDelete: false,
-        },
-        {
-          text: "Import custom node",
-          className: "custom-import",
-          isDisabled: false,
-          isDelete: false,
-        },
-      ],
+      menuOptions: [],
+      action: () =>
+        setNoteModal({
+          ...noteModal,
+          publish: true,
+        }),
     },
     {
       menuText: "Note Information",
       menuIcon: <Information size={16} />,
-      menuOptions: [
-        {
-          text: "Create new node",
-          className: "create-new-node",
-          isDisabled: false,
-          isDelete: false,
-        },
-        {
-          text: "Import from marketplace",
-          className: "marketplace-import",
-          isDisabled: false,
-          isDelete: false,
-        },
-        {
-          text: "Import custom node",
-          className: "custom-import",
-          isDisabled: false,
-          isDelete: false,
-        },
-      ],
+      menuOptions: [],
+      action: () =>
+        setNoteModal({
+          ...noteModal,
+          info: true,
+        }),
     },
   ];
 
@@ -247,7 +246,21 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
         <DeleteNote
           noteModal={deleteModal}
           setNoteModal={setDeleteModal}
-          note={props.note}
+          note={selectedNote}
+        />
+      )}
+      {noteModal.info && (
+        <NoteInfo
+          noteModal={noteModal}
+          setNoteModal={setNoteModal}
+          note={selectedNote}
+        />
+      )}
+      {noteModal.publish && (
+        <PublishNote
+          noteModal={noteModal}
+          setNoteModal={setNoteModal}
+          note={selectedNote}
         />
       )}
     </PageHeaderContainer>

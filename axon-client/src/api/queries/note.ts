@@ -1,7 +1,7 @@
-import { CreateNoteProps, SelectedNoteProps } from "types/notes";
+import { CreateNoteProps, ISelectedNote } from "types/notes";
 import { axiosPrivate } from "../axios";
 
-export const GET_NOTE_DETAIL = async (selectedNote: SelectedNoteProps) => {
+export const GET_NOTE_DETAIL = async (selectedNote: ISelectedNote) => {
   if (selectedNote.folder_id === "" || selectedNote.note_id === "") {
     return null;
   } else {
@@ -17,7 +17,7 @@ export const CREATE_NEW_NOTE = async (note: CreateNoteProps) => {
   return response;
 };
 
-export const DELETE_NOTE = async (selectedNote: SelectedNoteProps) => {
+export const DELETE_NOTE = async (selectedNote: ISelectedNote) => {
   if (selectedNote.folder_id === "" || selectedNote.note_id === "") {
     return null;
   } else {

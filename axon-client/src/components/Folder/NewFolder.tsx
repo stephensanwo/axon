@@ -10,7 +10,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useContext, useState } from "react";
 import { CREATE_NEW_FOLDER } from "api/queries/folder";
 import FolderContext from "context/folder";
-import { CreateFolderProps } from "types/folders";
+import { ICreateFolder } from "types/folders";
 import { AxonButton } from "components/Button";
 import AxonInlineLoader from "components/Loader/InlineLoader";
 
@@ -18,10 +18,10 @@ const NewFolder: React.FC<{
   folderModal: boolean;
   setFolderModal: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ folderModal, setFolderModal }) => {
-  const [newFolder, setNewFolder] = useState<CreateFolderProps>({
+  const [newFolder, setNewFolder] = useState<ICreateFolder>({
     folder_name: "",
   });
-  const [formErros, setFormErrors] = useState<CreateFolderProps>({
+  const [formErros, setFormErrors] = useState<ICreateFolder>({
     folder_name: "",
   });
 

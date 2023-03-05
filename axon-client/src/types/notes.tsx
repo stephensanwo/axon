@@ -8,7 +8,7 @@ export interface NoteProps {
   name: string;
   note_id: string;
   user_id: string;
-  nodes: Array<NodeProps>;
+  nodes: Array<INode>;
   edges: Array<EdgeProps>;
 }
 
@@ -18,8 +18,11 @@ export type NoteActionProps =
       payload: NoteProps;
     }
   | {
-      type: "init_note";
-      payload: NoteProps;
+      type: "add_node";
+      payload: {
+        node_type: "input-node" | "anchor-node";
+        node_data: NoteProps;
+      };
     }
   | {
       type: "edit_note";
@@ -35,10 +38,12 @@ export type NoteActionProps =
       };
     };
 
-export interface SelectedNoteProps {
-  folder_id: string;
-  note_id: string;
-}
+// export interface SelectedNoteProps {
+//   folder_id: string;
+//   note_id: string;
+// }
+
+export interface ISelectedNote extends NoteProps {}
 
 export interface CreateNoteProps {
   folder_id: string;
@@ -51,8 +56,7 @@ export interface NodeDataProps {
   label: string;
   title: string;
   description: string;
-  node_category: "component" | "note" | "code" | "anchor";
-  node_type: string;
+  category: "input-node" | "anchor-node";
 }
 
 export interface NodeContentProps {
@@ -68,7 +72,7 @@ export interface NodeStyleProps {
   description_styles: Object;
 }
 
-export interface NodeProps {
+export interface INode {
   id: string;
   type: string;
   data: NodeDataProps;
@@ -76,10 +80,8 @@ export interface NodeProps {
     x: number;
     y: number;
   };
-  code?: string;
-  note?: string;
   className: string;
-  content?: Array<NodeContentProps>;
+  content: string;
   node_styles: NodeStyleProps;
 }
 
@@ -104,19 +106,19 @@ export interface MarkdownNoteProps {
   published: boolean;
 }
 
-export interface NoteProps_ {
-  id: string;
-  name: string;
-  category: "flow" | "code-snippet" | "notes";
-  description: string;
-  created_by: string;
-  created_on: string;
-  last_edit?: string;
-  nodes: Array<NodeProps>;
-  edges: Array<EdgeProps>;
-  code: Array<CodeSnippetProps>;
-  note: MarkdownNoteProps;
-}
+// export interface NoteProps_ {
+//   id: string;
+//   name: string;
+//   category: "flow" | "code-snippet" | "notes";
+//   description: string;
+//   created_by: string;
+//   created_on: string;
+//   last_edit?: string;
+//   nodes: Array<INode>;
+//   edges: Array<EdgeProps>;
+//   code: Array<CodeSnippetProps>;
+//   note: MarkdownNoteProps;
+// }
 
 export interface FolderProps {
   id: string;
@@ -127,23 +129,23 @@ export interface FolderProps {
   notes: Array<NoteProps>;
 }
 
-interface NoteContextProps {
-  folders: Array<FolderProps>;
-  setFolders:
-    | React.Dispatch<React.SetStateAction<Array<FolderProps>>>
-    | React.Dispatch<React.SetStateAction<FolderProps>>
-    | any;
-  flowSelectedNode: string;
-  setFlowSelectedNode: React.Dispatch<React.SetStateAction<string>> | any;
-  openTextPanel: boolean;
-  setOpenTextPanel: React.Dispatch<React.SetStateAction<boolean>> | any;
-}
+// interface NoteContextProps {
+//   folders: Array<FolderProps>;
+//   setFolders:
+//     | React.Dispatch<React.SetStateAction<Array<FolderProps>>>
+//     | React.Dispatch<React.SetStateAction<FolderProps>>
+//     | any;
+//   flowSelectedNode: string;
+//   setFlowSelectedNode: React.Dispatch<React.SetStateAction<string>> | any;
+//   openTextPanel: boolean;
+//   setOpenTextPanel: React.Dispatch<React.SetStateAction<boolean>> | any;
+// }
 
-export enum NotesActionType {
-  NEW_FOLDER = "new_folder",
-  EDIT_FOLDER = "edit_folder",
-  DELETE_FOLDER = "delete_folder",
-}
+// export enum NotesActionType {
+//   NEW_FOLDER = "new_folder",
+//   EDIT_FOLDER = "edit_folder",
+//   DELETE_FOLDER = "delete_folder",
+// }
 
 // export type NotesActionProps =
 //   | {
@@ -159,22 +161,22 @@ export enum NotesActionType {
 //       payload: FolderProps;
 //     };
 
-interface NEW_FOLDER {
-  type: NotesActionType.NEW_FOLDER;
-  payload: Required<FolderProps>;
-}
+// interface NEW_FOLDER {
+//   type: NotesActionType.NEW_FOLDER;
+//   payload: Required<FolderProps>;
+// }
 
-interface EDIT_FOLDER {
-  type: NotesActionType.EDIT_FOLDER;
-  payload: FolderProps;
-}
+// interface EDIT_FOLDER {
+//   type: NotesActionType.EDIT_FOLDER;
+//   payload: FolderProps;
+// }
 
-interface DELETE_FOLDER {
-  type: NotesActionType.DELETE_FOLDER;
-  payload: string;
-}
+// interface DELETE_FOLDER {
+//   type: NotesActionType.DELETE_FOLDER;
+//   payload: string;
+// }
 
-export type NotesActionProps = NEW_FOLDER | EDIT_FOLDER | DELETE_FOLDER;
+// export type NotesActionProps = NEW_FOLDER | EDIT_FOLDER | DELETE_FOLDER;
 // export type NotesAction =
 //   | { type: NotesActionType.NEW_FOLDER; payload: Required<FolderProps> }
 //   | {
@@ -182,3 +184,10 @@ export type NotesActionProps = NEW_FOLDER | EDIT_FOLDER | DELETE_FOLDER;
 //       payload: Required<FolderProps>;
 //     }
 //   | { type: NotesActionType.DELETE_FOLDER; payload: string };
+
+export interface INoteModal {
+  info: boolean;
+  delete: boolean;
+  new: boolean;
+  publish: boolean;
+}

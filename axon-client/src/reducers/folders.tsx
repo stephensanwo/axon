@@ -1,27 +1,20 @@
-import {
-  FolderActionProps,
-  FolderListProps,
-  NoteSummaryProps,
-} from "types/folders";
+import { IFolderAction, IFolderList, INoteSummary } from "types/folders";
 
-const folderReducer = (
-  folders: Array<FolderListProps>,
-  action: FolderActionProps
-) => {
+const folderReducer = (folders: Array<IFolderList>, action: IFolderAction) => {
   switch (action.type) {
     case "init_folder": {
       return action.payload;
     }
 
     case "new_folder": {
-      const newFolder = {} as FolderListProps;
+      const newFolder = {} as IFolderList;
       newFolder.folder_id = action.payload.folder_id;
       newFolder.name = action.payload.name;
       return [...folders, newFolder];
     }
 
     case "new_note": {
-      const newNote: NoteSummaryProps = {} as NoteSummaryProps;
+      const newNote = {} as INoteSummary;
       newNote.folder_id = action.payload.folder_id;
       newNote.name = action.payload.note_name;
       newNote.description = action.payload.note_description;
@@ -55,7 +48,7 @@ const folderReducer = (
       return folders.map((folder) => {
         if (folder.folder_id === action.payload.folder_id) {
           const filteredNotes = folder.notes.filter((note) => {
-            note.note_id !== action.payload.note_id;
+            return note.note_id !== action.payload.note_id;
           });
           return { ...folder, notes: filteredNotes };
         } else {
