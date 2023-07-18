@@ -1,13 +1,13 @@
 import { Route, Routes } from "react-router-dom";
-import StyledHeader from "./components/StyledHeader";
-import { NoteItem, Terms } from "./pages";
-import "./App.scss";
-import { SignUp } from "./pages/Auth";
+import StyledHeader from "src/components/StyledHeader";
+import { NoteItem, Terms } from "src/pages";
+import "src/App.scss";
+import { SignUp } from "src/pages/Auth";
 import { Fragment, useContext } from "react";
-import Layout from "./pages/Layout";
-import Error from "./pages/Error";
-import PersistAuth from "./pages/Auth/PersistAuth";
-import RequireAuth from "./pages/Auth/RequireAuth";
+import Layout from "src/pages/Layout";
+import Error from "src/pages/Error";
+import PersistAuth from "src/pages/Auth/PersistAuth";
+import RequireAuth from "src/pages/Auth/RequireAuth";
 
 const App = () => {
   return (

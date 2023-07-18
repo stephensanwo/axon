@@ -1,4 +1,4 @@
-import { CreateNoteProps, ISelectedNote } from "types/notes";
+import { CreateNoteProps, ISelectedNote } from "src/types/notes";
 import { axiosPrivate } from "../axios";
 
 export const GET_NOTE_DETAIL = async (selectedNote: ISelectedNote) => {

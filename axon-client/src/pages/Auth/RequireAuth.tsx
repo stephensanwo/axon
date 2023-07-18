@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { useLocation, Navigate, Outlet } from "react-router-dom";
-import AppContext from "../../context/app";
+import AppContext from "src/context/app";
 
 const RequireAuth = () => {
   const { user } = useContext(AppContext);

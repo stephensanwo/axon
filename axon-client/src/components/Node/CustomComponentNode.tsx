@@ -12,7 +12,7 @@ import { useParams } from "react-router-dom";
 import { Tag } from "@carbon/react";
 import { AnchorNode } from "./NodeTypes";
 import TextBoxNode from "./NodeTypes/TextBoxNode";
-import { INode } from "types/notes";
+import { INode } from "src/types/notes";
 
 const Description = styled.div`
   display: flex;

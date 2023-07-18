@@ -5,7 +5,7 @@ import { DoNot_02 } from "@carbon/pictograms-react";
 import { Button } from "@carbon/react";
 import { ArrowRight } from "@carbon/icons-react";
 import { Link } from "react-router-dom";
-import { ThemeColors } from "shared/themes";
+import { ThemeColors } from "src/shared/themes";
 
 const ErrorPage = styled.div`
   display: flex;

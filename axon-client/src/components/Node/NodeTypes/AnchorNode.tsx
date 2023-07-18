@@ -1,5 +1,5 @@
 import React from "react";
-import { NodeDataProps } from "types/notes";
+import { NodeDataProps } from "src/types/notes";
 
 interface AnchorNodeData {
   data: NodeDataProps;

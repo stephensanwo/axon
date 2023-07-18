@@ -1,16 +1,16 @@
 import { useEffect, Fragment, useContext } from "react";
-import PageHeader from "components/PageHeader";
-import SideNavPanel from "components/SideNavPanel";
-import { PageContainer } from "shared/layout";
+import PageHeader from "src/components/PageHeader";
+import SideNavPanel from "src/components/SideNavPanel";
+import { PageContainer } from "src/shared/layout";
 import { useMutation } from "@tanstack/react-query";
-import { GET_NOTE_DETAIL } from "api/queries/note";
-import NoteContext from "context/notes";
-import FolderContext from "context/folder";
-import AxonLoader from "components/Loader/Loader";
-import { NoteProps } from "types/notes";
+import { GET_NOTE_DETAIL } from "src/api/queries/note";
+import NoteContext from "src/context/notes";
+import FolderContext from "src/context/folder";
+import AxonLoader from "src/components/Loader/Loader";
+import { NoteProps } from "src/types/notes";
 import styled from "styled-components";
-import AppContext from "context/app";
-import FlowTree from "components/FlowTree";
+import AppContext from "src/context/app";
+import FlowTree from "src/components/FlowTree";
 
 const FlowItemAdjustable = styled.div`
   margin-left: ${(props: { isSideNavExpanded: boolean }) =>

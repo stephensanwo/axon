@@ -8,14 +8,14 @@ import {
 import { AddAlt, FolderAdd } from "@carbon/icons-react";
 import styled from "styled-components";
 import "./style.scss";
-import AppContext from "../../context/app";
-import { ThemeColors } from "../../shared/themes";
+import AppContext from "src/context/app";
+import { ThemeColors } from "src/shared/themes";
 import { NewFolder } from "../Folder";
 import { NewNote } from "../Note";
-import FolderContext from "context/folder";
-import EditFolder from "components/Folder/EditFolder";
+import FolderContext from "src/context/folder";
+import EditFolder from "src/components/Folder/EditFolder";
 import OptionsButton from "./OptionsButton";
-import { IFolderList } from "types/folders";
+import { IFolderList } from "src/types/folders";
 
 const StyledSideNavMenu = styled(SideNavMenu)`
   background-color: transparent;

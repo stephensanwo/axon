@@ -1,10 +1,10 @@
-import { PageContainer } from "shared/layout";
+import { PageContainer } from "src/shared/layout";
 import styled from "styled-components";
-import { AxonButton } from "components/Button";
+import { AxonButton } from "src/components/Button";
 import { LogoGithub } from "@carbon/icons-react";
-import { GITHUB_AUTH_URL } from "config";
+import { GITHUB_AUTH_URL } from "src/config";
 import { Link } from "react-router-dom";
-import axonLogo from "assets/icons/axon-logo.svg";
+import axonLogo from "src/assets/icons/axon-logo.svg";
 
 const SignUpContainer = styled.div`
   width: 100%;
@@ -38,7 +38,7 @@ const SignUp = () => {
             iconDescription={"Login with Github"}
             style={{ marginTop: "50px" }}
             size="md"
-            href={`${GITHUB_AUTH_URL}`}
+            onClick={() => (window.location.href = `${"GITHUB_AUTH_URL"}`)}
           >
             Continue with Github
           </AxonButton>

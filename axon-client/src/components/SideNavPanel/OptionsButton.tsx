@@ -1,5 +1,5 @@
 import { Pending } from "@carbon/icons-react";
-import { ThemeColors } from "shared/themes";
+import { ThemeColors } from "src/shared/themes";
 import styled from "styled-components";
 
 const OptionsIcon = styled(Pending)`

@@ -1,10 +1,10 @@
 import React, { useRef } from "react";
-import { NodeThemes, StateColors } from "../../../shared/themes";
+import { NodeThemes, StateColors } from "src/shared/themes";
 import { Close } from "@carbon/icons-react";
 import ContentEditable from "react-contenteditable";
 import { HeaderText, LabelText, ParagraphText } from "../../EditableLabels";
 import Controls from "../../Controls";
-import { NodeDataProps, NodeStyleProps } from "types/notes";
+import { NodeDataProps, NodeStyleProps } from "src/types/notes";
 
 interface TextBoxNodeData {
   data: NodeDataProps;

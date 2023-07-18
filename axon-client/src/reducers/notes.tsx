@@ -5,7 +5,7 @@ import {
   NodeStyleProps,
   NoteActionProps,
   NoteProps,
-} from "types/notes";
+} from "src/types/notes";
 import { v4 as uuidv4 } from "uuid";
 
 const noteReducer = (note: NoteProps, action: NoteActionProps) => {

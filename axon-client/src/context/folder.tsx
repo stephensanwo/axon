@@ -4,7 +4,7 @@ import { Reducer } from "react";
 import { IFolderAction, IFolderList } from "../types/folders";
 import { useQuery } from "@tanstack/react-query";
 import { GET_FOLDER_LIST } from "../api/queries/folder";
-import { ISelectedNote } from "types/notes";
+import { ISelectedNote } from "src/types/notes";
 
 interface FolderProviderProps {
   children: React.ReactNode;

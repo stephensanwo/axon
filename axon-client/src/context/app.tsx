@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { User } from "../types/user";
+import { User } from "src/types/user";
 
 interface AppProviderProps {
   children: React.ReactNode;

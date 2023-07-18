@@ -4,7 +4,7 @@ import styled from "styled-components";
 import "./style.scss";
 import AppContext from "../../context/app";
 import { StateColors } from "../../shared/themes";
-import DeleteNote from "components/Note/DeleteNote";
+import DeleteNote from "src/components/Note/DeleteNote";
 
 import {
   AddAlt,
@@ -14,11 +14,11 @@ import {
   TrashCan,
   Share,
 } from "@carbon/icons-react";
-import { INoteModal } from "types/notes";
-import FolderContext from "context/folder";
-import NoteInfo from "components/Note/NoteInfo";
-import PublishNote from "components/Note/PublishNote";
-import NoteContext from "context/notes";
+import { INoteModal } from "src/types/notes";
+import FolderContext from "src/context/folder";
+import NoteInfo from "src/components/Note/NoteInfo";
+import PublishNote from "src/components/Note/PublishNote";
+import NoteContext from "src/context/notes";
 
 interface PageHeaderProps {
   theme?: "dark" | "light";

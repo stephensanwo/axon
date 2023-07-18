@@ -1,4 +1,4 @@
-import { ICreateFolder, IPatchFolder } from "types/folders";
+import { ICreateFolder, IPatchFolder } from "src/types/folders";
 import { axiosPrivate } from "../axios";
 
 export const GET_FOLDER_LIST = async () => {
@@ -11,7 +11,10 @@ export const CREATE_NEW_FOLDER = async (folder: ICreateFolder) => {
   return response;
 };
 
-export const EDIT_NEW_FOLDER = async (folder: IPatchFolder, folder_id: string) => {
+export const EDIT_NEW_FOLDER = async (
+  folder: IPatchFolder,
+  folder_id: string
+) => {
   const response = await axiosPrivate.patch(
     `/folder?folder_id=${folder_id}`,
     folder

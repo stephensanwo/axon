@@ -8,16 +8,16 @@ import {
 } from "@carbon/react";
 import { useMutation } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
-import FolderContext from "context/folder";
-import { AxonButton } from "components/Button";
-import AxonInlineLoader from "components/Loader/InlineLoader";
+import FolderContext from "src/context/folder";
+import { AxonButton } from "src/components/Button";
+import AxonInlineLoader from "src/components/Loader/InlineLoader";
 import {
   CreateNoteProps,
   NoteProps,
   ISelectedNote,
   INoteModal,
-} from "types/notes";
-import { CREATE_NEW_NOTE, DELETE_NOTE } from "api/queries/note";
+} from "src/types/notes";
+import { CREATE_NEW_NOTE, DELETE_NOTE } from "src/api/queries/note";
 import moment from "moment";
 
 const NoteInfo: React.FC<{

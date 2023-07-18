@@ -1,4 +1,4 @@
-import { IFolderAction, IFolderList, INoteSummary } from "types/folders";
+import { IFolderAction, IFolderList, INoteSummary } from "src/types/folders";
 
 const folderReducer = (folders: Array<IFolderList>, action: IFolderAction) => {
   switch (action.type) {

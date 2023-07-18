@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { axiosPrivate } from "../api/axios";
-import AppContext from "../context/app";
+import { axiosPrivate } from "src/api/axios";
+import AppContext from "src/context/app";
 
 const useQueryAuth = () => {
   const { setUser, setIsSignedIn } = useContext(AppContext);

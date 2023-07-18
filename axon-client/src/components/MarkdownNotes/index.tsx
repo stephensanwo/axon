@@ -9,10 +9,10 @@ import "./style.scss";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { Tag } from "@carbon/react";
-import { Heading5 } from "../../shared/layout";
-import { NoteContext } from "../../context/notes";
+import { Heading5 } from "src/shared/layout";
+import { NoteContext } from "src/context/notes";
 import { ViewFilled, Edit, Close } from "@carbon/icons-react";
-import { INode } from "types/notes";
+import { INode } from "src/types/notes";
 
 const MarkdownContainer = styled.div`
   display: flex;

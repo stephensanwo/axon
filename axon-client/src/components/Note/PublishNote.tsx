@@ -1,5 +1,5 @@
 import { ModalHeader, ModalBody, ComposedModal } from "@carbon/react";
-import { NoteProps, INoteModal } from "types/notes";
+import { NoteProps, INoteModal } from "src/types/notes";
 
 const PublishNote: React.FC<{
   noteModal: INoteModal;

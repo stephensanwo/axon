@@ -1,10 +1,10 @@
 import { Fragment, useContext, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import Footer from "components/Footer";
-import StyledHeader from "components/StyledHeader";
+import Footer from "src/components/Footer";
+import StyledHeader from "src/components/StyledHeader";
 import { Theme } from "@carbon/react";
-import AppContext from "context/app";
-import { MobileWarningDiv } from "shared/layout";
+import AppContext from "src/context/app";
+import { MobileWarningDiv } from "src/shared/layout";
 
 const Layout = () => {
   const { isSignedIn, showMobileWarning, setShowMobileWarning } =

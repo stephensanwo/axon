@@ -8,11 +8,11 @@ import {
 } from "@carbon/react";
 import { useMutation } from "@tanstack/react-query";
 import { useContext, useState } from "react";
-import { CREATE_NEW_FOLDER } from "api/queries/folder";
-import FolderContext from "context/folder";
-import { ICreateFolder } from "types/folders";
-import { AxonButton } from "components/Button";
-import AxonInlineLoader from "components/Loader/InlineLoader";
+import { CREATE_NEW_FOLDER } from "src/api/queries/folder";
+import FolderContext from "src/context/folder";
+import { ICreateFolder } from "src/types/folders";
+import { AxonButton } from "src/components/Button";
+import AxonInlineLoader from "src/components/Loader/InlineLoader";
 
 const NewFolder: React.FC<{
   folderModal: boolean;

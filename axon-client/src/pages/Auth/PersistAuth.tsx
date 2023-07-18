@@ -1,9 +1,9 @@
 import { Fragment, useContext } from "react";
 import { Outlet } from "react-router-dom";
 import { useState, useEffect } from "react";
-import useQueryAuth from "../../hooks/useQueryAuth";
-import AppContext from "../../context/app";
-import AxonLoader from "components/Loader/Loader";
+import useQueryAuth from "src/hooks/useQueryAuth";
+import AppContext from "src/context/app";
+import AxonLoader from "src/components/Loader/Loader";
 
 const PersistAuth = () => {
   const [isLoading, setIsLoading] = useState(true);

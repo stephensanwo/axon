@@ -8,12 +8,12 @@ import {
 } from "@carbon/react";
 import { useMutation } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
-import FolderContext from "context/folder";
-import { AxonButton } from "components/Button";
-import AxonInlineLoader from "components/Loader/InlineLoader";
-import { CreateNoteProps } from "types/notes";
-import { CREATE_NEW_NOTE } from "api/queries/note";
-import { IFolderList } from "types/folders";
+import FolderContext from "src/context/folder";
+import { AxonButton } from "src/components/Button";
+import AxonInlineLoader from "src/components/Loader/InlineLoader";
+import { CreateNoteProps } from "src/types/notes";
+import { CREATE_NEW_NOTE } from "src/api/queries/note";
+import { IFolderList } from "src/types/folders";
 
 const NewNote: React.FC<{
   noteModal: boolean;

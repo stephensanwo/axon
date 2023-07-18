@@ -13,8 +13,8 @@ import { CustomComponentNode } from "../Node";
 import { NoteContext } from "../../context/notes";
 import CustomEdge from "../Node/CustomEdge";
 import TextPanel from "../TextPanel";
-import FolderContext from "context/folder";
-import AppContext from "context/app";
+import FolderContext from "src/context/folder";
+import AppContext from "src/context/app";
 
 const FlowTreeDiv = styled.div`
   height: 85vh;
