@@ -26,6 +26,8 @@ const SignUpBox = styled.div`
 `;
 
 const SignUp = () => {
+  console.log(GITHUB_AUTH_URL);
+  console.log("Test");
   return (
     <PageContainer dark>
       <SignUpContainer>
@@ -38,7 +40,7 @@ const SignUp = () => {
             iconDescription={"Login with Github"}
             style={{ marginTop: "50px" }}
             size="md"
-            onClick={() => (window.location.href = `${"GITHUB_AUTH_URL"}`)}
+            onClick={() => (window.location.href = `${GITHUB_AUTH_URL}`)}
           >
             Continue with Github
           </AxonButton>

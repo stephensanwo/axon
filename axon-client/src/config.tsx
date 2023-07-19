@@ -1,1 +1,1 @@
-export const GITHUB_AUTH_URL = process.env.REACT_APP_GITHUB_AUTH_URL;
+export const GITHUB_AUTH_URL = import.meta.env.VITE_GITHUB_AUTH_URL;
