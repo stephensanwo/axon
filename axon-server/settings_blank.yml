@@ -39,13 +39,6 @@ oauth_settings:
 core_settings:
   github_archive_repo: axon-archive
 
-mongodb_settings:
-  development:
-    connection_uri: "mongodb://127.0.0.1:27017"
-
-  production:
-    connection_uri: ""
-
 axon_client:
   auth_redirect_url: "http://localhost:4514/folders"
   error_url: "http://localhost:4514/error"

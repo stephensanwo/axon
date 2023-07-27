@@ -8,10 +8,6 @@ type Settings struct {
 	CoreSettings  struct {
 		GithubArchiveRepo string `yaml:"github_archive_repo"`
 	} `yaml:"core_settings"`
-	MongoDBSettings struct {
-		Development MongoDBCredentials `yaml:"development"`
-		Production  MongoDBCredentials `yaml:"production"`
-	} `yaml:"mongodb_settings"`
 	AxonClient struct {
 		AuthRedirectUrl string `yaml:"auth_redirect_url"`
 		ErrorUrl        string `yaml:"error_url"`

@@ -119,7 +119,6 @@ func Server(settings *types.Settings) {
 			},
 			RedirectURL: settings.OauthSettings.RedirectUri,
 		},
-		MongoDBCredentials: types.InitMongoDBCredentials(settings),
 		SessionId:          "",
 	}
 

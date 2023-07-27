@@ -1,13 +1,7 @@
 package coredb
 
 import (
-	"axon-server/src/types"
-	"context"
 	"errors"
-
-	log "github.com/sirupsen/logrus"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
@@ -17,30 +11,6 @@ import (
 
 type DB struct{
 	Client *dynamodb.DynamoDB
-}
-
-func (c DB) GetCoreDBClient(a *types.AxonContext) (*mongo.Client, error) {
-	// Set client options
-	clientOptions := options.Client().ApplyURI(a.MongoDBCredentials.ConnectionURI)
-
-	// Connect to MongoDB
-	client, err := mongo.Connect(context.TODO(), clientOptions)
-	if err != nil {
-		log.Fatal("Error connecting to mongodb instance: %v ", err)
-	} else {
-		log.Info("MongoDB instance online")
-	}
-
-	return client, err
-}
-
-func (c DB) GetCollection(client *mongo.Client, database string, collection string) *mongo.Collection {
-	return client.Database(database).Collection(collection)
-
-}
-
-func (c DB) DisconnectCoreDBClient(client *mongo.Client) {
-	client.Disconnect(context.TODO())
 }
 
 // CreateDynamoDBClient creates a new DynamoDB client and session
@@ -108,7 +78,7 @@ func (c DB) MutateDatabase(table_name string, partition_key string, sort_key str
 	for attributeName, attributeValue := range attributeMap {
 		input.Item[attributeName] = attributeValue
 	}
-	
+
 	// Update the database
 	_, err = c.Client.PutItem(input)
 	
