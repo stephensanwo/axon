@@ -1,0 +1,647 @@
+definitions:
+  types.BaseResponse:
+    properties:
+      message: {}
+    type: object
+  types.Edge:
+    properties:
+      animated:
+        type: boolean
+      edge_id:
+        type: string
+      edge_type:
+        type: string
+      folder_id:
+        type: string
+      label:
+        type: string
+      last_edited:
+        type: string
+      note_id:
+        type: string
+      source:
+        type: string
+      target:
+        type: string
+      user_id:
+        type: string
+    type: object
+  types.FieldErrors:
+    properties:
+      fields:
+        additionalProperties:
+          type: string
+        type: object
+      msg:
+        type: string
+      status:
+        type: integer
+    type: object
+  types.Folder:
+    properties:
+      date_created:
+        type: string
+      folder_id:
+        type: string
+      last_edited:
+        type: string
+      name:
+        type: string
+      user_id:
+        type: string
+    type: object
+  types.FolderList:
+    properties:
+      date_created:
+        type: string
+      folder_id:
+        type: string
+      last_edited:
+        type: string
+      name:
+        type: string
+      notes:
+        items:
+          $ref: '#/definitions/types.Note'
+        type: array
+      user_id:
+        type: string
+    type: object
+  types.MutateFolder:
+    properties:
+      folder_name:
+        type: string
+    required:
+    - folder_name
+    type: object
+  types.MutateNote:
+    properties:
+      folder_id:
+        type: string
+      note_description:
+        type: string
+      note_name:
+        type: string
+    required:
+    - folder_id
+    - note_description
+    - note_name
+    type: object
+  types.Node:
+    properties:
+      data:
+        $ref: '#/definitions/types.NodeData'
+      folder_id:
+        type: string
+      last_edited:
+        type: string
+      node_content:
+        $ref: '#/definitions/types.NodeContent'
+      node_id:
+        type: string
+      node_styles:
+        $ref: '#/definitions/types.NodeStyles'
+      note_id:
+        type: string
+      position:
+        $ref: '#/definitions/types.Position'
+      user_id:
+        type: string
+    type: object
+  types.NodeContent:
+    properties:
+      markdown:
+        type: string
+    type: object
+  types.NodeData:
+    properties:
+      description:
+        type: string
+      label:
+        type: string
+      node_category:
+        type: string
+      title:
+        type: string
+    type: object
+  types.NodeStyles:
+    properties:
+      background_styles:
+        type: object
+      description_styles:
+        type: object
+      label_styles:
+        type: object
+    type: object
+  types.Note:
+    properties:
+      date_created:
+        type: string
+      description:
+        type: string
+      folder_id:
+        type: string
+      last_edited:
+        type: string
+      name:
+        type: string
+      note_id:
+        type: string
+      user_id:
+        type: string
+    type: object
+  types.NoteDetail:
+    properties:
+      date_created:
+        type: string
+      description:
+        type: string
+      edges:
+        items:
+          $ref: '#/definitions/types.Edge'
+        type: array
+      folder_id:
+        type: string
+      last_edited:
+        type: string
+      name:
+        type: string
+      nodes:
+        items:
+          $ref: '#/definitions/types.Node'
+        type: array
+      note_id:
+        type: string
+      user_id:
+        type: string
+    type: object
+  types.PatchNote:
+    properties:
+      note_description:
+        type: string
+      note_name:
+        type: string
+    required:
+    - note_description
+    - note_name
+    type: object
+  types.Position:
+    properties:
+      x:
+        type: integer
+      "y":
+        type: integer
+    type: object
+  types.UpdateDataResponse:
+    properties:
+      MatchedCount:
+        type: integer
+      ModifiedCount:
+        type: integer
+      UpsertedCount:
+        type: integer
+      UpsertedID:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /auth-user:
+    get:
+      description: Query Authenticated User
+      operationId: get-auth-user
+      responses:
+        "200":
+          description: User
+          schema:
+            $ref: '#/definitions/types.Folder'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Query Authenticated User
+      tags:
+      - User
+  /callback:
+    get:
+      consumes:
+      - application/json
+      description: AuthCallback
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.BaseResponse'
+      summary: AuthCallback
+      tags:
+      - Auth
+  /folder:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Folder
+      operationId: delete-folder
+      parameters:
+      - description: Folder ID
+        in: query
+        name: folder_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Records Deleted
+          schema:
+            type: int
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Delete Folder
+      tags:
+      - Folder
+    get:
+      consumes:
+      - application/json
+      description: Query Folder
+      operationId: get-folder
+      parameters:
+      - description: Folder ID
+        in: query
+        name: folder_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Folder
+          schema:
+            $ref: '#/definitions/types.Folder'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Query Folder
+      tags:
+      - Folder
+    patch:
+      consumes:
+      - application/json
+      description: Patch Folder
+      operationId: patch-folder
+      parameters:
+      - description: Folder ID
+        in: query
+        name: folder_id
+        required: true
+        type: string
+      - description: Folder Object
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/types.MutateFolder'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Update Response
+          schema:
+            $ref: '#/definitions/types.UpdateDataResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "422":
+          description: Unprocessible Entity
+          schema:
+            $ref: '#/definitions/types.FieldErrors'
+      summary: Patch Folder
+      tags:
+      - Folder
+    post:
+      consumes:
+      - application/json
+      description: Create New Folder
+      operationId: post-folder
+      parameters:
+      - description: Folder Object
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/types.MutateFolder'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Folder Id
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "422":
+          description: Unprocessible Entity
+          schema:
+            $ref: '#/definitions/types.FieldErrors'
+      summary: Create New Folder
+      tags:
+      - Folder
+  /folder-list:
+    get:
+      consumes:
+      - application/json
+      description: Query folder list from db or cache
+      operationId: get-folder-list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/types.FolderList'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Query folder list from db or cache
+      tags:
+      - Folder
+  /folders:
+    get:
+      consumes:
+      - application/json
+      description: Query all folders
+      operationId: get-folders
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/types.Folder'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Query all folders
+      tags:
+      - Folder
+  /note:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Note
+      operationId: delete-note
+      parameters:
+      - description: Folder ID
+        in: query
+        name: folder_id
+        required: true
+        type: string
+      - description: Note ID
+        in: query
+        name: note_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Records Deleted
+          schema:
+            type: int
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Delete Note
+      tags:
+      - Note
+    get:
+      consumes:
+      - application/json
+      description: Query Note
+      operationId: get-note
+      parameters:
+      - description: Folder ID
+        in: query
+        name: folder_id
+        required: true
+        type: string
+      - description: Note ID
+        in: query
+        name: note_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Note
+          schema:
+            $ref: '#/definitions/types.Note'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Query Note
+      tags:
+      - Note
+    patch:
+      consumes:
+      - application/json
+      description: Patch Note
+      operationId: patch-note
+      parameters:
+      - description: Folder ID
+        in: query
+        name: folder_id
+        required: true
+        type: string
+      - description: Note ID
+        in: query
+        name: note_id
+        required: true
+        type: string
+      - description: Note Object
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/types.PatchNote'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Update Response
+          schema:
+            $ref: '#/definitions/types.UpdateDataResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "422":
+          description: Unprocessible Entity
+          schema:
+            $ref: '#/definitions/types.FieldErrors'
+      summary: Patch Note
+      tags:
+      - Note
+    post:
+      consumes:
+      - application/json
+      description: Create New Note
+      operationId: post-note
+      parameters:
+      - description: Note Object
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/types.MutateNote'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Note Id
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "422":
+          description: Unprocessible Entity
+          schema:
+            $ref: '#/definitions/types.FieldErrors'
+      summary: Create New Note
+      tags:
+      - Note
+  /note-detail:
+    get:
+      consumes:
+      - application/json
+      description: Query Note Detail
+      operationId: get-note
+      parameters:
+      - description: Folder ID
+        in: query
+        name: folder_id
+        required: true
+        type: string
+      - description: Note ID
+        in: query
+        name: note_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: NoteDetail
+          schema:
+            $ref: '#/definitions/types.NoteDetail'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Query Note Detail
+      tags:
+      - Note
+  /notes:
+    get:
+      consumes:
+      - application/json
+      description: Publish Messages to Channel
+      operationId: publish
+      parameters:
+      - description: Folder ID
+        in: query
+        name: folder_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Notes
+          schema:
+            items:
+              $ref: '#/definitions/types.Note'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Publish Messages to Channel
+      tags:
+      - Note
+  /ping:
+    get:
+      description: Ping the server
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/types.BaseResponse'
+      summary: Ping the server
+      tags:
+      - Ping
+swagger: "2.0"
