@@ -12,6 +12,7 @@ type CdkDynamoDBTableProps struct {
 	PrimaryKey string
 	SortKey string
 	SecondaryIndexes []awsdynamodb.GlobalSecondaryIndexProps
+	SecondarySortKeys []string
 }
 
 func Table(scope constructs.Construct, id string, props *CdkDynamoDBTableProps) awsdynamodb.Table {
@@ -33,5 +34,21 @@ func Table(scope constructs.Construct, id string, props *CdkDynamoDBTableProps) 
 			&props.SecondaryIndexes[0]) 
 	}}
 
+	if len(props.SecondarySortKeys) > 0 {
+		for _, sortKey := range props.SecondarySortKeys {
+			table.AddGlobalSecondaryIndex(&awsdynamodb.GlobalSecondaryIndexProps{
+				IndexName: jsii.String(sortKey + "Index"),
+				PartitionKey: &awsdynamodb.Attribute{
+					Type: awsdynamodb.AttributeType_STRING,
+					Name: jsii.String(props.PrimaryKey),
+				},
+				SortKey: &awsdynamodb.Attribute{
+					Type: awsdynamodb.AttributeType_STRING,
+					Name: jsii.String(sortKey),
+				},
+				ReadCapacity: jsii.Number(5),
+			})
+		}
+	}
 	return table
 }

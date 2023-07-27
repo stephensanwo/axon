@@ -24,6 +24,7 @@ func AxonStack(scope constructs.Construct, id string, props *CdkStackProps) awsc
 		TableName: "axon",
 		PrimaryKey: "partition_key",
 		SortKey: "sort_key",
+		SecondarySortKeys: []string{"date_created"},
 		// Add any secondary indexes here if needed
 	})
 
