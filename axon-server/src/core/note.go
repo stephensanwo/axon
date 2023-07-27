@@ -28,21 +28,21 @@ func (n *Note) GetNoteDetail(a *types.AxonContext, folder_id string, note_id str
 	}
 
 	// Fetch the Note
-	noteResult, err := db.QueryDatabase(coredb.AXON_TABLE, fmt.Sprintf("NOTE#%s#%s", n.Session.SessionData.User.Email, folder_id), nil)
+	noteResult, err := db.QueryDatabase(coredb.AXON_TABLE, fmt.Sprintf("NOTE#%s#%s", n.Session.SessionData.User.Email, folder_id), &note_id)
 
 	if err != nil {
 		return nil, errors.New("could not fetch note - " + err.Error())
 	}
 
 	// Fetch Nodes and Edges
-	nodeResult, err := db.QueryDatabase(coredb.AXON_TABLE, fmt.Sprintf("NODE#%s#%s#%s", n.Session.SessionData.User.Email, folder_id, note_id), nil)
+	nodeResult, err := db.QueryDatabasePartition(coredb.AXON_TABLE, fmt.Sprintf("NODE#%s#%s#%s", n.Session.SessionData.User.Email, folder_id, note_id))
 
 	if err != nil {
 		return nil, errors.New("could not fetch node details - " + err.Error())
 	}
 
 
-	edgeResult, err := db.QueryDatabase(coredb.AXON_TABLE, fmt.Sprintf("EDGE#%s#%s#%s", n.Session.SessionData.User.Email, folder_id, note_id), nil)
+	edgeResult, err := db.QueryDatabasePartition(coredb.AXON_TABLE, fmt.Sprintf("EDGE#%s#%s#%s", n.Session.SessionData.User.Email, folder_id, note_id))
 
 	if err != nil {
 		return nil, errors.New("could not fetch edge details - " + err.Error())
@@ -57,17 +57,17 @@ func (n *Note) GetNoteDetail(a *types.AxonContext, folder_id string, note_id str
 	if err := dynamodbattribute.UnmarshalMap(noteResult.Item, &note); err != nil {
 		return nil, err
 	}
-	if err := dynamodbattribute.UnmarshalMap(nodeResult.Item, &nodes); err != nil {
+	if err := dynamodbattribute.UnmarshalListOfMaps(nodeResult.Items, &nodes); err != nil {
 		return nil, err
 	}
-	if err := dynamodbattribute.UnmarshalMap(edgeResult.Item, &edges); err != nil {
+	if err := dynamodbattribute.UnmarshalListOfMaps(edgeResult.Items, &edges); err != nil {
 		return nil, err
 	}
 
 	noteData.UserId = note.UserId
 	noteData.FolderID = note.FolderID
 	noteData.NoteID = note.NoteID
-	noteData.Name = note.Name
+	noteData.NoteName = note.NoteName
 	noteData.Description = note.Description
 	noteData.DateCreated = note.DateCreated
 	noteData.LastEdited = note.LastEdited
@@ -86,7 +86,7 @@ func (n *Note) GetNotes(a *types.AxonContext, folder_id string) (*[]types.Note, 
 	}
 
 	// Fetch the Note
-	notesResult, err := db.QueryDatabase(coredb.AXON_TABLE, fmt.Sprintf("NOTE#%s#%s", n.Session.SessionData.User.Email, folder_id), nil)
+	notesResult, err := db.QueryDatabasePartition(coredb.AXON_TABLE, fmt.Sprintf("NOTE#%s#%s", n.Session.SessionData.User.Email, folder_id))
 
 	if err != nil {
 		return nil, errors.New("could not fetch notes - " + err.Error())
@@ -95,7 +95,7 @@ func (n *Note) GetNotes(a *types.AxonContext, folder_id string) (*[]types.Note, 
 	var notes []types.Note
 
 	// Unmarshal the DynamoDB item into a Note struct
-	if err := dynamodbattribute.UnmarshalMap(notesResult.Item, &notes); err != nil {
+	if err := dynamodbattribute.UnmarshalListOfMaps(notesResult.Items, &notes); err != nil {
 		return nil, err
 	}
 
@@ -103,7 +103,7 @@ func (n *Note) GetNotes(a *types.AxonContext, folder_id string) (*[]types.Note, 
 
 }
 
-func (n *Note) CreateNote(a *types.AxonContext, name string, description string, folder_id string) (*string, error) {
+func (n *Note) CreateNote(a *types.AxonContext, note_name string, description string, folder_id string) (*string, error) {
 
 	// Create the DynamoDB client
 	db, err := coredb.NewDb()
@@ -116,7 +116,7 @@ func (n *Note) CreateNote(a *types.AxonContext, name string, description string,
 		UserId:      n.Session.SessionData.User.UserId,
 		FolderID:    folder_id,
 		NoteID:      uuid.New().String(),
-		Name:        name,
+		NoteName:        note_name,
 		Description: description,
 		DateCreated: time.Now(),
 		LastEdited:  time.Now(),
@@ -186,7 +186,7 @@ func (n *Note) UpdateNote(a *types.AxonContext, name *string, description *strin
 	if name != nil {
 		updatedAttributes["name"] = &dynamodb.AttributeValue{S: name}
 	}
-
+ 
 	// Check if the description field is provided and update it
 	if description != nil {
 		updatedAttributes["description"] = &dynamodb.AttributeValue{S: description}
@@ -197,7 +197,7 @@ func (n *Note) UpdateNote(a *types.AxonContext, name *string, description *strin
 		S: jsii.String(time.Now().Format(time.RFC3339)),
 	}
 
-	err = db.UpdateRecord(coredb.AXON_TABLE, fmt.Sprintf("NOTE#%s#%s", n.Session.SessionData.User.Email, folder_id), &note_id, updatedAttributes)
+	err = db.UpdateRecord(coredb.AXON_TABLE, fmt.Sprintf("NOTE#%s#%s", n.Session.SessionData.User.Email, folder_id), note_id, updatedAttributes)
 
 
 	return &note_id, err

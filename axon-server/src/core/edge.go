@@ -169,7 +169,7 @@ func (e *Edge) UpdateEdge(a *types.AxonContext, source_id string, target_id stri
 		S: jsii.String(time.Now().Format(time.RFC3339)),
 	}
 
-	err = db.UpdateRecord(coredb.AXON_TABLE, fmt.Sprintf("NODE#%s#%s#%s", e.Session.SessionData.User.Email, folder_id, note_id), &edge_id, updatedAttributes)
+	err = db.UpdateRecord(coredb.AXON_TABLE, fmt.Sprintf("NODE#%s#%s#%s", e.Session.SessionData.User.Email, folder_id, note_id), edge_id, updatedAttributes)
 
 	return &edge_id, err
 

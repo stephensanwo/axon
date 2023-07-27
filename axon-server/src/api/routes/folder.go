@@ -230,7 +230,7 @@ func PatchFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonCon
 //	@Tags			Folder
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{int}		int		"Records Deleted"
+//	@Success		200	{string}	string	"Records Deleted"
 //	@Failure		400	{string}	string	"Bad Request"
 //	@Failure		401	{string}	string	"Unauthorized"
 //	@Router			/folder [delete]

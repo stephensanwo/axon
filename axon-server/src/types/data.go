@@ -12,7 +12,7 @@ type AxonData struct {
 type FolderList struct {
 	UserId      string `json:"user_id"`
 	FolderID    string `json:"folder_id"`
-	Name        string             `json:"name"`
+	FolderName        string             `json:"folder_name"`
 	DateCreated time.Time          `json:"date_created"`
 	LastEdited  time.Time          `json:"last_edited"`
 	Notes       []Note             `json:"notes"`
@@ -22,7 +22,7 @@ type NoteDetail struct {
 	UserId      string `json:"user_id"`
 	FolderID    string `json:"folder_id"`
 	NoteID      string `json:"note_id"`
-	Name        string             `json:"name"`
+	NoteName        string             `json:"note_name"`
 	Description string             `json:"description"`
 	DateCreated time.Time          `json:"date_created"`
 	LastEdited  time.Time          `json:"last_edited"`
@@ -33,7 +33,7 @@ type NoteDetail struct {
 type Folder struct {
 	UserId      string 			   `json:"user_id"`
 	FolderID    string 			   `json:"folder_id"`
-	Name        string             `json:"name" `
+	FolderName        string             `json:"folder_name" `
 	DateCreated time.Time          `json:"date_created"`
 	LastEdited  time.Time          `json:"last_edited"`
 }
@@ -42,7 +42,7 @@ type Note struct {
 	UserId      string `json:"user_id"`
 	FolderID    string `json:"folder_id"`
 	NoteID      string `json:"note_id"`
-	Name        string             `json:"name"`
+	NoteName        string             `json:"note_name"`
 	Description string             `json:"description"`
 	DateCreated time.Time          `json:"date_created"`
 	LastEdited  time.Time          `json:"last_edited"`

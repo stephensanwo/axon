@@ -27,13 +27,13 @@ func (f *Folder) GetFolderList(a *types.AxonContext) (*[]types.FolderList, error
 	
 	var folders []types.Folder
 
-	result, err := db.QueryDatabase(coredb.AXON_TABLE, fmt.Sprintf("FOLDER#%s", f.Session.SessionData.User.Email), nil)
+	result, err := db.QueryDatabasePartition(coredb.AXON_TABLE, fmt.Sprintf("FOLDER#%s", f.Session.SessionData.User.Email))
 	if err != nil {
 		return nil, errors.New("could not fetch folders - " + err.Error())
 	}
 
 	// Unmarshal the DynamoDB item into a Folder struct
-	if err := dynamodbattribute.UnmarshalMap(result.Item, &folders); err != nil {
+	if err := dynamodbattribute.UnmarshalListOfMaps(result.Items, &folders); err != nil {
 		return nil, err
 	}
 	
@@ -47,15 +47,15 @@ func (f *Folder) GetFolderList(a *types.AxonContext) (*[]types.FolderList, error
 			var folderList types.FolderList
 			folderList.UserId = item.UserId
 			folderList.FolderID = item.FolderID
-			folderList.Name = item.Name
+			folderList.FolderName = item.FolderName
 			folderList.DateCreated = item.DateCreated
 			folderList.LastEdited = item.LastEdited
 
 			note := []types.Note{}
-			result, _ := db.QueryDatabase(coredb.AXON_TABLE, fmt.Sprintf("NOTE#%s#%s", f.Session.SessionData.User.Email, item.FolderID),  nil)
+			result, _ := db.QueryDatabasePartition(coredb.AXON_TABLE, fmt.Sprintf("NOTE#%s#%s", f.Session.SessionData.User.Email, item.FolderID))
 			
 			// Unmarshal the DynamoDB item into a Note struct
-			dynamodbattribute.UnmarshalMap(result.Item, &note)
+			dynamodbattribute.UnmarshalListOfMaps(result.Items, &note)
 
 			folderList.Notes = note
 			res[i] = folderList
@@ -79,10 +79,10 @@ func (f *Folder) GetFolders(a *types.AxonContext) (*[]types.Folder, error) {
 	
 	var folder []types.Folder
 
-	result, err := db.QueryDatabase(coredb.AXON_TABLE, fmt.Sprintf("FOLDER#%s", f.Session.SessionData.User.Email), nil)
+	result, err := db.QueryDatabasePartition(coredb.AXON_TABLE, fmt.Sprintf("FOLDER#%s", f.Session.SessionData.User.Email))
 
 	// Unmarshal the DynamoDB item into a Note struct
-	dynamodbattribute.UnmarshalMap(result.Item, &folder)
+	dynamodbattribute.UnmarshalListOfMaps(result.Items, &folder)
 
 	if err != nil {
 		return nil, errors.New("could not fetch folder - " + err.Error())
@@ -91,7 +91,7 @@ func (f *Folder) GetFolders(a *types.AxonContext) (*[]types.Folder, error) {
 
 }
 
-func (f *Folder) CreateFolder(a *types.AxonContext, name string) (*string, error) {
+func (f *Folder) CreateFolder(a *types.AxonContext, folder_name string) (*string, error) {
 
 	// Create the DynamoDB client
 	db, err := coredb.NewDb()
@@ -103,7 +103,7 @@ func (f *Folder) CreateFolder(a *types.AxonContext, name string) (*string, error
 	folder := types.Folder{
 		UserId:      f.Session.SessionData.User.UserId,
 		FolderID:    uuid.New().String(),
-		Name:        name,
+		FolderName:  folder_name,
 		DateCreated: time.Now(),
 		LastEdited:  time.Now(),
 	}
@@ -159,7 +159,11 @@ func (f *Folder) DeleteFolder(a *types.AxonContext, folder_id string) (*string, 
 
 }
 
-func (f *Folder) UpdateFolder(a *types.AxonContext, name string, folder_id string) (*string, error) {
+type FolderAttributes struct {
+	FolderName string `json:"folder_name"`
+}
+
+func (f *Folder) UpdateFolder(a *types.AxonContext, folder_name string, folder_id string) (*string, error) {
 
 	// Create the DynamoDB client
 	db, err := coredb.NewDb()
@@ -167,7 +171,11 @@ func (f *Folder) UpdateFolder(a *types.AxonContext, name string, folder_id strin
 		return nil, errors.New("could not update folder - " + err.Error())
 	}
 
-	db.UpdateRecord(coredb.AXON_DATABASE, fmt.Sprintf("FOLDER#%s", f.Session.SessionData.User.Email), &folder_id, name)
+	attributes := FolderAttributes{
+		FolderName: folder_name,
+	}
+
+	err = db.UpdateRecord(coredb.AXON_TABLE, fmt.Sprintf("FOLDER#%s", f.Session.SessionData.User.Email), folder_id, attributes)
 
 	if err != nil {
 		return nil, errors.New("could not update folder or folder does not exist - " + err.Error())

@@ -212,7 +212,7 @@ func (no *Node) UpdateNode(a *types.AxonContext, userNodeData types.NodeData, cl
 		S: jsii.String(time.Now().Format(time.RFC3339)),
 	}
 
-	err = db.UpdateRecord(coredb.AXON_TABLE, fmt.Sprintf("NODE#%s#%s#%s", no.Session.SessionData.User.Email, folder_id, note_id), &node_id, updatedAttributes)
+	err = db.UpdateRecord(coredb.AXON_TABLE, fmt.Sprintf("NODE#%s#%s#%s", no.Session.SessionData.User.Email, folder_id, note_id), node_id, updatedAttributes)
 
 	return &node_id, err
 
