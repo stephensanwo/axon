@@ -3,10 +3,7 @@ module axon-server
 go 1.19
 
 require (
-	github.com/aws/aws-cdk-go/awscdk/v2 v2.70.0
 	github.com/aws/aws-sdk-go v1.44.314
-	github.com/aws/constructs-go/constructs/v10 v10.2.69
-	github.com/aws/jsii-runtime-go v1.86.1
 	github.com/go-playground/validator/v10 v10.11.2
 	github.com/sirupsen/logrus v1.9.3
 	github.com/stephensanwo/axon-lib v1.0.8
@@ -17,9 +14,7 @@ require (
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/Masterminds/semver/v3 v3.2.1 // indirect
-	github.com/cdklabs/awscdk-asset-awscli-go/awscliv1/v2 v2.2.200 // indirect
-	github.com/cdklabs/awscdk-asset-kubectl-go/kubectlv20/v2 v2.1.2 // indirect
-	github.com/cdklabs/awscdk-asset-node-proxy-agent-go/nodeproxyagentv5/v2 v2.0.165 // indirect
+	github.com/aws/jsii-runtime-go v1.86.1 // indirect
 	github.com/fatih/color v1.15.0 // indirect
 	github.com/felixge/httpsnoop v1.0.1 // indirect
 	github.com/go-openapi/jsonpointer v0.20.0 // indirect
