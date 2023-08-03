@@ -1,7 +1,7 @@
 package cdk_stacks
 
 import (
-	cdk_constructs "axon-server/cdk/constructs"
+	cdk_constructs "axon-cdk/lib/constructs"
 
 	"github.com/aws/aws-cdk-go/awscdk/v2"
 	"github.com/aws/constructs-go/constructs/v10"
@@ -28,6 +28,19 @@ func AxonStack(scope constructs.Construct, id string, props *CdkStackProps) awsc
 		// Add any secondary indexes here if needed
 	})
 
+	// Create the User Session DAX table
+	cdk_constructs.Table(stack, "AxonUserSessionTable", &cdk_constructs.CdkDynamoDBTableProps{
+		TableName: "axon_user_session",
+		PrimaryKey: "partition_key",
+		SortKey: "sort_key",
+		SecondarySortKeys: []string{"date_created"},
+	})
+
+	// Enable DAX for the DynamoDB table
+	// daxCluster := cdk_constructs.DynamoDBDaxStack(stack, "AxonDaxCluster", &cdk_constructs.DynamoDBDaxStackProps{})
+	
+	// Associate the DAX cluster with the DynamoDB table using raw CloudFormation resource
+	// userSessionTable.Node().AddDependency(daxCluster)
 
 	// Create a CloudFormation output that displays the table name
 	// awscdk.NewCfnOutput(stack, jsii.String("TableNameOutput"), &awscdk.CfnOutputProps{

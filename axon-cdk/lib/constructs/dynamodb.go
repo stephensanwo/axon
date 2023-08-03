@@ -16,6 +16,7 @@ type CdkDynamoDBTableProps struct {
 }
 
 func Table(scope constructs.Construct, id string, props *CdkDynamoDBTableProps) awsdynamodb.Table {
+	
 	table := awsdynamodb.NewTable(scope, &id, &awsdynamodb.TableProps{
 		TableName:       jsii.String(props.TableName),
 		PartitionKey:    &awsdynamodb.Attribute{Type: awsdynamodb.AttributeType_STRING, Name: jsii.String(props.PrimaryKey)},
@@ -50,5 +51,6 @@ func Table(scope constructs.Construct, id string, props *CdkDynamoDBTableProps) 
 			})
 		}
 	}
+	
 	return table
 }
