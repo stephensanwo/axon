@@ -1,12 +1,15 @@
 package routes
 
 import (
-	"axon-server/src/core"
+	aws "axon-server/src/aws"
 	"axon-server/src/types"
 	"axon-server/src/utils"
 	"context"
 	"encoding/json"
 	"net/http"
+
+	axon_core "github.com/stephensanwo/axon-lib/core"
+	axon_types "github.com/stephensanwo/axon-lib/types"
 )
 
 // QueryNoteDetail godoc
@@ -16,14 +19,17 @@ import (
 //	@ID				get-note
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}	types.NoteDetail	"NoteDetail"
+//	@Success		200	{object}	axon_types.NoteDetail	"NoteDetail"
 //	@Failure		400	{string}	string				"Bad Request"
 //	@Failure		401	{string}	string				"Unauthorized"
 //	@Router			/note-detail [get]
 //	@Param			folder_id	query	string	true	"Folder ID"
 //	@Param			note_id		query	string	true	"Note ID"
-func QueryNoteDetail(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
-	session, err := core.GetAuthenticatedUserData(a)
+func QueryNoteDetail(w http.ResponseWriter, r *http.Request, a *axon_types.AxonContext) {
+	user := axon_core.User{
+		AwsSession: aws.CreateSession(),
+	}
+	session, err := user.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
@@ -36,8 +42,10 @@ func QueryNoteDetail(w http.ResponseWriter, r *http.Request, a *types.AxonContex
 		http.Error(w, "fields note_id and folder_id are required in query", http.StatusBadRequest)
 		return
 	}
-	note := core.Note{
+	note := axon_core.Note{
 		Session: session,
+		AwsSession: aws.CreateSession(),
+
 	}
 
 	res, err := note.GetNoteDetail(a, folderID, noteID)
@@ -57,13 +65,16 @@ func QueryNoteDetail(w http.ResponseWriter, r *http.Request, a *types.AxonContex
 //	@ID				get-notes
 //	@Accept			json
 //	@Produce		json
-//	@Success		200			{object}	[]types.Note	"Notes"
+//	@Success		200			{object}	[]axon_types.Note	"Notes"
 //	@Failure		400			{string}	string			"Bad Request"
 //	@Failure		401			{string}	string			"Unauthorized"
 //	@Param			folder_id	query		string			true	"Folder ID"
 //	@Router			/notes [get]
-func QueryNotesHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
-	session, err := core.GetAuthenticatedUserData(a)
+func QueryNotesHandler(w http.ResponseWriter, r *http.Request, a *axon_types.AxonContext) {
+	user := axon_core.User{
+		AwsSession: aws.CreateSession(),
+	}
+	session, err := user.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
@@ -75,8 +86,10 @@ func QueryNotesHandler(w http.ResponseWriter, r *http.Request, a *types.AxonCont
 		return
 	}
 
-	note := core.Note{
+	note := axon_core.Note{
 		Session: session,
+		AwsSession: aws.CreateSession(),
+
 	}
 
 	notes, err := note.GetNotes(a, folderID)
@@ -96,14 +109,17 @@ func QueryNotesHandler(w http.ResponseWriter, r *http.Request, a *types.AxonCont
 //	@ID				get-note
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}	types.Note	"Note"
+//	@Success		200	{object}	axon_types.Note	"Note"
 //	@Failure		400	{string}	string		"Bad Request"
 //	@Failure		401	{string}	string		"Unauthorized"
 //	@Router			/note [get]
 //	@Param			folder_id	query	string	true	"Folder ID"
 //	@Param			note_id		query	string	true	"Note ID"
-func QueryNoteHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
-	session, err := core.GetAuthenticatedUserData(a)
+func QueryNoteHandler(w http.ResponseWriter, r *http.Request, a *axon_types.AxonContext) {
+	user := axon_core.User{
+		AwsSession: aws.CreateSession(),
+	}
+	session, err := user.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
@@ -116,8 +132,10 @@ func QueryNoteHandler(w http.ResponseWriter, r *http.Request, a *types.AxonConte
 		http.Error(w, "fields note_id and folder_id are required in query", http.StatusBadRequest)
 		return
 	}
-	note := core.Note{
+	note := axon_core.Note{
 		Session: session,
+		AwsSession: aws.CreateSession(),
+
 	}
 
 	res, err := note.FindNote(a, folderID, noteID)
@@ -137,14 +155,17 @@ func QueryNoteHandler(w http.ResponseWriter, r *http.Request, a *types.AxonConte
 //	@Tags			Note
 //	@Accept			json
 //	@Produce		json
-//	@Success		201	{string}	types.Note.NoteID	"Note Id"
+//	@Success		201	{string}	axon_types.Note.NoteID	"Note Id"
 //	@Failure		400	{string}	string				"Bad Request"
 //	@Failure		401	{string}	string				"Unauthorized"
 //	@Failure		422	{object}	types.FieldErrors	"Unprocessible Entity"
 //	@Router			/note [post]
 //	@Param			data	body	types.MutateNote	true	"Note Object"
-func PostNoteHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
-	session, err := core.GetAuthenticatedUserData(a)
+func PostNoteHandler(w http.ResponseWriter, r *http.Request, a *axon_types.AxonContext) {
+	user := axon_core.User{
+		AwsSession: aws.CreateSession(),
+	}
+	session, err := user.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
@@ -167,8 +188,10 @@ func PostNoteHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContex
 		return
 	}
 
-	note := core.Note{
+	note := axon_core.Note{
 		Session: session,
+		AwsSession: aws.CreateSession(),
+
 	}
 
 	noteId, err := note.CreateNote(a, requestData.NoteName, requestData.NoteDescription, requestData.FolderId)
@@ -196,8 +219,11 @@ func PostNoteHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContex
 //	@Param			folder_id	query	string			true	"Folder ID"
 //	@Param			note_id		query	string			true	"Note ID"
 //	@Param			data		body	types.PatchNote	true	"Note Object"
-func PatchNoteHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
-	session, err := core.GetAuthenticatedUserData(a)
+func PatchNoteHandler(w http.ResponseWriter, r *http.Request, a *axon_types.AxonContext) {
+	user := axon_core.User{
+		AwsSession: aws.CreateSession(),
+	}
+	session, err := user.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
@@ -230,8 +256,10 @@ func PatchNoteHandler(w http.ResponseWriter, r *http.Request, a *types.AxonConte
 		return
 	}
 
-	note := core.Note{
+	note := axon_core.Note{
 		Session: session,
+		AwsSession: aws.CreateSession(),
+
 	}
 
 	updatedData, err := note.UpdateNote(a, &requestData.NoteName, &requestData.NoteDescription, folderID, noteID)
@@ -258,8 +286,11 @@ func PatchNoteHandler(w http.ResponseWriter, r *http.Request, a *types.AxonConte
 //	@Router			/note [delete]
 //	@Param			folder_id	query	string	true	"Folder ID"
 //	@Param			note_id		query	string	true	"Note ID"
-func DeleteNoteHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
-	session, err := core.GetAuthenticatedUserData(a)
+func DeleteNoteHandler(w http.ResponseWriter, r *http.Request, a *axon_types.AxonContext) {
+	user := axon_core.User{
+		AwsSession: aws.CreateSession(),
+	}
+	session, err := user.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
@@ -273,8 +304,10 @@ func DeleteNoteHandler(w http.ResponseWriter, r *http.Request, a *types.AxonCont
 		return
 	}
 
-	note := core.Note{
+	note := axon_core.Note{
 		Session: session,
+		AwsSession: aws.CreateSession(),
+
 	}
 
 	res, err := note.DeleteNote(a, folderID, noteID)

@@ -21,10 +21,6 @@ http:
   allow_credentials: false
   max_age: 300
 
-redis:
-  connection_uri: localhost:6379
-  password: ""
-
 oauth_settings:
   provider: "github"
   client_id: ""

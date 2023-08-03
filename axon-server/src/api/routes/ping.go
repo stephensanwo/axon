@@ -2,6 +2,9 @@ package routes
 
 import (
 	"axon-server/src/types"
+
+	axon_types "github.com/stephensanwo/axon-lib/types"
+
 	"encoding/json"
 	"net/http"
 )
@@ -13,7 +16,7 @@ import (
 //	@Produce		json
 //	@Success		201	{object}	types.BaseResponse
 //	@Router			/ping [get]
-func PingHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
+func PingHandler(w http.ResponseWriter, r *http.Request, a *axon_types.AxonContext) {
 	ping := types.BaseResponse{
 		Message: "Server Online",
 	}

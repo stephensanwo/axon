@@ -1,5 +1,8 @@
 package types
 
+import (
+	axon_types "github.com/stephensanwo/axon-lib/types"
+)
 const (
 	SUCCESS string = "success"
 	FAILED  string = "failed"
@@ -16,7 +19,7 @@ type FoldersResponse struct {
 
 type GetFolderResponse struct {
 	Message struct {
-		Folder Folder
+		Folder axon_types.Folder
 	} `json:"message"`
 }
 

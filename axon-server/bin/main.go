@@ -2,18 +2,14 @@ package main
 
 import (
 	cli "axon-server/bin/cli"
-	axonserver "axon-server/src"
-	channel "axon-server/src/channel"
-	types "axon-server/src/types"
-	utils "axon-server/src/utils"
-	"bytes"
-	"context"
-	"encoding/binary"
+	axonserver "axon-server/src/api"
+
+	axon_types "github.com/stephensanwo/axon-lib/types"
+
 	"fmt"
 	"log"
 	"os"
 
-	"github.com/joho/godotenv"
 	"gopkg.in/yaml.v3"
 )
 
@@ -35,44 +31,44 @@ func Axon() {
 	case "server":
 		{
 			settings := settings()
-			axonserver.Server(&settings)
+			axonserver.NewAxonService(&settings)
 		}
 
 	case "channel":
-		{
-			settings := settings()
-			redisClient, err := utils.RedisClient(context.TODO(), &settings, 0)
-			if err != nil {
-				log.Fatal("Unable to start redis channel")
+		// {
+		// 	settings := settings()
+		// 	redisClient, err := utils.RedisClient(context.TODO(), &settings, 0)
+		// 	if err != nil {
+		// 		log.Fatal("Unable to start redis channel")
 
-			}
-			channel := channel.Channel{
-				Client: redisClient.Client,
-			}
-			channel.InitChannel()
-		}
+		// 	}
+		// 	channel := channel.Channel{
+		// 		Client: redisClient.Client,
+		// 	}
+		// 	channel.InitChannel()
+		// }
 	case "publish":
-		{
-			settings := settings()
-			redisClient, _ := utils.RedisClient(context.TODO(), &settings, 0)
-			msg := types.Message{
-				Action: types.UPDATE_NODE_POSITION,
-				Payload: types.Position{
-					X: 250,
-					Y: 450,
-				},
-			}
-			buf := new(bytes.Buffer)
-			err := binary.Write(buf, binary.LittleEndian, msg)
-			if err != nil {
-				fmt.Println("binary.Write failed:", err)
-			}
-			fmt.Printf("% x", buf.Bytes())
+		// {
+		// 	settings := settings()
+		// 	redisClient, _ := utils.RedisClient(context.TODO(), &settings, 0)
+		// 	msg := types.Message{
+		// 		Action: types.UPDATE_NODE_POSITION,
+		// 		Payload: types.Position{
+		// 			X: 250,
+		// 			Y: 450,
+		// 		},
+		// 	}
+		// 	buf := new(bytes.Buffer)
+		// 	err := binary.Write(buf, binary.LittleEndian, msg)
+		// 	if err != nil {
+		// 		fmt.Println("binary.Write failed:", err)
+		// 	}
+		// 	fmt.Printf("% x", buf.Bytes())
 
-			// redisClient.Client.Publish(context.TODO(), "axon_channel", "test")
-			redisClient.Client.Publish(context.TODO(), "axon_channel", msg)
+		// 	// redisClient.Client.Publish(context.TODO(), "axon_channel", "test")
+		// 	redisClient.Client.Publish(context.TODO(), "axon_channel", msg)
 
-		}
+		// }
 
 	default:
 		{
@@ -83,26 +79,17 @@ func Axon() {
 
 }
 
-func settings() types.Settings {
-	log.Println("Loading settings")
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Some error occured loading environment settings. Err: %s", err)
-	}
-
-	settings_path := os.Getenv("SETTINGS_PATH")
-
-	settings_data, err := os.ReadFile(settings_path)
-
+func settings() axon_types.Settings {
+	settings_data, err := os.ReadFile("settings.yml")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	var settings types.Settings
-	err2 := yaml.Unmarshal([]byte(settings_data), &settings)
+	var settings axon_types.Settings
+	err = yaml.Unmarshal([]byte(settings_data), &settings)
 
-	if err2 != nil {
-		log.Fatalf("error marshaling settings: %v", err2)
+	if err != nil {
+		log.Fatalf("error marshaling settings: %v", err)
 	}
 
 	fmt.Println(settings)

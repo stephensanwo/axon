@@ -1,12 +1,16 @@
 package routes
 
 import (
-	"axon-server/src/core"
 	"axon-server/src/types"
 	"axon-server/src/utils"
 	"context"
 	"encoding/json"
 	"net/http"
+
+	aws "axon-server/src/aws"
+
+	axon_core "github.com/stephensanwo/axon-lib/core"
+	axon_types "github.com/stephensanwo/axon-lib/types"
 )
 
 // QueryFolderListHandler godoc
@@ -16,18 +20,22 @@ import (
 //	@ID				get-folder-list
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}	[]types.FolderList
+//	@Success		200	{object}	[]axon_types.FolderList
 //	@Failure		400	{string}	string	"Bad Request"
 //	@Failure		401	{string}	string	"Unauthorized"
 //	@Router			/folder-list [get]
-func QueryFolderListHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
-	session, err := core.GetAuthenticatedUserData(a)
+func QueryFolderListHandler(w http.ResponseWriter, r *http.Request, a *axon_types.AxonContext) {
+	user := axon_core.User{
+		AwsSession: aws.CreateSession(),
+	}
+	session, err := user.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
 	}
-	folder := core.Folder{
+	folder := axon_core.Folder{
 		Session: session,
+		AwsSession: aws.CreateSession(),
 	}
 
 	folders, err := folder.GetFolderList(a)
@@ -48,18 +56,22 @@ func QueryFolderListHandler(w http.ResponseWriter, r *http.Request, a *types.Axo
 //	@ID				get-folders
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}	[]types.Folder
+//	@Success		200	{object}	[]axon_types.Folder
 //	@Failure		400	{string}	string	"Bad Request"
 //	@Failure		401	{string}	string	"Unauthorized"
 //	@Router			/folders [get]
-func QueryFoldersHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
-	session, err := core.GetAuthenticatedUserData(a)
+func QueryFoldersHandler(w http.ResponseWriter, r *http.Request, a *axon_types.AxonContext) {
+	user := axon_core.User{
+		AwsSession: aws.CreateSession(),
+	}
+	session, err := user.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
 	}
-	folder := core.Folder{
+	folder := axon_core.Folder{
 		Session: session,
+		AwsSession: aws.CreateSession(),
 	}
 
 	folders, err := folder.GetFolders(a)
@@ -80,13 +92,16 @@ func QueryFoldersHandler(w http.ResponseWriter, r *http.Request, a *types.AxonCo
 //	@ID				get-folder
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}	types.Folder	"Folder"
+//	@Success		200	{object}	axon_types.Folder	"Folder"
 //	@Failure		400	{string}	string			"Bad Request"
 //	@Failure		401	{string}	string			"Unauthorized"
 //	@Router			/folder [get]
 //	@Param			folder_id	query	string	true	"Folder ID"
-func QueryFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
-	session, err := core.GetAuthenticatedUserData(a)
+func QueryFolderHandler(w http.ResponseWriter, r *http.Request, a *axon_types.AxonContext) {
+	user := axon_core.User{
+		AwsSession: aws.CreateSession(),
+	}
+	session, err := user.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
@@ -97,8 +112,9 @@ func QueryFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonCon
 		http.Error(w, "field folder_id is required in query", http.StatusBadRequest)
 		return
 	}
-	folder := core.Folder{
+	folder := axon_core.Folder{
 		Session: session,
+		AwsSession: aws.CreateSession(),
 	}
 
 	res, err := folder.FindFolder(a, folderID)
@@ -118,14 +134,17 @@ func QueryFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonCon
 //	@Tags			Folder
 //	@Accept			json
 //	@Produce		json
-//	@Success		201	{string}	types.Folder.FolderID	"Folder Id"
+//	@Success		201	{string}	axon_types.Folder.FolderID	"Folder Id"
 //	@Failure		400	{string}	string					"Bad Request"
 //	@Failure		401	{string}	string					"Unauthorized"
 //	@Failure		422	{object}	types.FieldErrors		"Unprocessible Entity"
 //	@Router			/folder [post]
 //	@Param			data	body	types.MutateFolder	true	"Folder Object"
-func PostFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
-	session, err := core.GetAuthenticatedUserData(a)
+func PostFolderHandler(w http.ResponseWriter, r *http.Request, a *axon_types.AxonContext) {
+	user := axon_core.User{
+		AwsSession: aws.CreateSession(),
+	}
+	session, err := user.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
@@ -148,8 +167,9 @@ func PostFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonCont
 		return
 	}
 
-	folder := core.Folder{
+	folder := axon_core.Folder{
 		Session: session,
+		AwsSession: aws.CreateSession(),
 	}
 
 	folderId, err := folder.CreateFolder(a, requestData.FolderName)
@@ -176,8 +196,11 @@ func PostFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonCont
 //	@Router			/folder [patch]
 //	@Param			folder_id	query	string				true	"Folder ID"
 //	@Param			data		body	types.MutateFolder	true	"Folder Object"
-func PatchFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
-	session, err := core.GetAuthenticatedUserData(a)
+func PatchFolderHandler(w http.ResponseWriter, r *http.Request, a *axon_types.AxonContext) {
+	user := axon_core.User{
+		AwsSession: aws.CreateSession(),
+	}
+	session, err := user.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
@@ -208,8 +231,9 @@ func PatchFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonCon
 		return
 	}
 
-	folder := core.Folder{
+	folder := axon_core.Folder{
 		Session: session,
+		AwsSession: aws.CreateSession(),
 	}
 
 	updatedData, err := folder.UpdateFolder(a, requestData.FolderName, folderID)
@@ -235,8 +259,11 @@ func PatchFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonCon
 //	@Failure		401	{string}	string	"Unauthorized"
 //	@Router			/folder [delete]
 //	@Param			folder_id	query	string	true	"Folder ID"
-func DeleteFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonContext) {
-	session, err := core.GetAuthenticatedUserData(a)
+func DeleteFolderHandler(w http.ResponseWriter, r *http.Request, a *axon_types.AxonContext) {
+	user := axon_core.User{
+		AwsSession: aws.CreateSession(),
+	}
+	session, err := user.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
@@ -244,8 +271,9 @@ func DeleteFolderHandler(w http.ResponseWriter, r *http.Request, a *types.AxonCo
 	query := r.URL.Query()
 	folderID := query.Get("folder_id")
 
-	folder := core.Folder{
+	folder := axon_core.Folder{
 		Session: session,
+		AwsSession: aws.CreateSession(),
 	}
 
 	if folderID == "" {
