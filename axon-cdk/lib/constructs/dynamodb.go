@@ -22,10 +22,9 @@ func Table(scope constructs.Construct, id string, props *CdkDynamoDBTableProps) 
 		PartitionKey:    &awsdynamodb.Attribute{Type: awsdynamodb.AttributeType_STRING, Name: jsii.String(props.PrimaryKey)},
 		SortKey:         &awsdynamodb.Attribute{Type: awsdynamodb.AttributeType_STRING, Name: jsii.String(props.SortKey)},
 		ReadCapacity:    jsii.Number(5),  // Adjust these values based on your read/write capacity requirements
-		// WriteCapacity:   jsii.Number(5),  // You can also use OnDemand capacity mode if needed
-		// BillingMode:     awsdynamodb.BillingMode_PAY_PER_REQUEST,
 		RemovalPolicy:   awscdk.RemovalPolicy_DESTROY,
 		PointInTimeRecovery: jsii.Bool(true), // Enable Point-in-Time Recovery if needed
+		TimeToLiveAttribute: jsii.String("ttl"),
 	})
 
 	// Add secondary indexes if provided
