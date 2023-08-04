@@ -42,12 +42,19 @@ func AxonStack(scope constructs.Construct, id string, props *CdkStackProps) awsc
 	// Associate the DAX cluster with the DynamoDB table using raw CloudFormation resource
 	// userSessionTable.Node().AddDependency(daxCluster)
 
+	// Create an SQS Queue
+	cdk_constructs.Queue(stack, "AxonEventsQueue", &cdk_constructs.SqsQueueProps{
+		QueueName: "axon_events_queue",
+	})
+
 	// Create a CloudFormation output that displays the table name
 	// awscdk.NewCfnOutput(stack, jsii.String("TableNameOutput"), &awscdk.CfnOutputProps{
 	// 	Value: dynamoDBTable.TableName(),
 	// 	Description: jsii.String("DynamoDB Table Name"),
 	// })
 	
+		
+
 	return stack
 }
 
