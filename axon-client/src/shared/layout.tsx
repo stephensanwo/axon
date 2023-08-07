@@ -76,3 +76,31 @@ export const Heading5 = styled.h5`
   color: ${(props: { theme: string }) =>
     props.theme === "dark" ? "#fff" : ""};
 `;
+
+
+export const DataPageLayout = styled.div`
+  padding-top: 88px;
+  padding-bottom: 88px;
+  display: flex;
+  justify-content: center;
+  background-color: ${(props: any) => (props.dark ? "#161616" : "#f4f4f4")};
+  @media (max-width: 1080px) {
+    display: none;
+  }
+`;
+
+export const InfoPageContainer = styled.div`
+  max-width: 800px;
+
+  > div {
+    margin-bottom: 2rem;
+  }
+  > div > h4 {
+    margin-bottom: 1rem;
+  }
+  > div > ul {
+    list-style-position: outside;
+    padding-left: 16px;
+    margin-top: 0.5rem;
+  }
+`;
