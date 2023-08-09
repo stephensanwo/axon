@@ -2,17 +2,19 @@ import React, { createContext, useEffect, useReducer, useState } from "react";
 import folderReducer from "../reducers/folders";
 import { Reducer } from "react";
 import { IFolderAction, IFolderList } from "../types/folders";
-import { useQuery } from "@tanstack/react-query";
-import { GET_FOLDER_LIST } from "../api/queries/folder";
 import { ISelectedNote } from "src/types/notes";
+import { fetchData } from "src/api/query";
+import { useDataFetching } from "src/hooks/useDataFetching";
 
 interface FolderProviderProps {
   children: React.ReactNode;
 }
 
 interface FolderContextProps {
-  folders: Array<IFolderList> | null;
+  folders: IFolderList[] | null;
   folderDispatch: React.Dispatch<IFolderAction>;
+  folderError: boolean;
+  folderLoading: boolean;
   selectedNote: ISelectedNote;
   setSelectedNote: React.Dispatch<ISelectedNote>;
 }
@@ -20,46 +22,86 @@ interface FolderContextProps {
 export const FolderContext = createContext({} as FolderContextProps);
 
 export const FolderProvider = ({ children }: FolderProviderProps) => {
-  const InitialState: Array<IFolderList> = [];
-
-  const query = useQuery({
-    queryKey: ["folders"],
-    queryFn: GET_FOLDER_LIST,
-  });
-
-  const [folders, folderDispatch] = useReducer<
-    Reducer<Array<IFolderList>, IFolderAction>
-  >(folderReducer, InitialState);
+  const {
+    error: folderError,
+    data: folderData,
+    loading: folderLoading,
+  } = useDataFetching<IFolderList[]>("folder-list", () =>
+    fetchData("folder-list")
+  );
 
   const [selectedNote, setSelectedNote] = useState<ISelectedNote>(
     {} as ISelectedNote
   );
 
-  useEffect(() => {
-    folderDispatch({
-      type: "init_folder",
-      payload: query.data,
-    });
+  const [folders, folderDispatch] = useReducer<
+    Reducer<IFolderList[], IFolderAction>
+  >(folderReducer, [] as IFolderList[]);
 
-    if (query.data && query.data[0]?.notes && query.data[0]?.notes.length > 0) {
+  // Update initialFolders when folderData becomes available
+  useEffect(() => {
+    if (folderData) {
       setSelectedNote({
         ...selectedNote,
-        folder_id: query.data[0].notes[0].folder_id,
-        note_id: query.data[0].notes[0].note_id,
-        name: query.data[0].notes[0].name,
-        description: query.data[0].notes[0].description,
-        date_created: query.data[0].notes[0].date_created,
-        last_edited: query.data[0].notes[0].last_edited,
+        folder_name: folderData[0].folder_name,
+      });
+      if (folderData[0]?.notes && folderData[0]?.notes.length > 0) {
+        setSelectedNote({
+          ...selectedNote,
+          folder_name: folderData[0].folder_name,
+          ...folderData[0].notes[0],
+        });
+      }
+      folderDispatch({
+        type: "INIT_FOLDER_LIST",
+        payload: folderData as IFolderList[],
       });
     }
-  }, [query.data]);
+  }, [folderData]);
+  console.log("folderData", folderData);
+  console.log("selectedNote", selectedNote);
 
-  console.log(query.data);
+  // const InitialState: Array<IFolderList> = [];
+
+  // const query = useQuery({
+  //   queryKey: ["folders"],
+  //   queryFn: GET_FOLDER_LIST,
+  // });
+
+  // const [folders, folderDispatch] = useReducer<
+  //   Reducer<Array<IFolderList>, IFolderAction>
+  // >(folderReducer, InitialState);
+
+  // const [selectedNote, setSelectedNote] = useState<ISelectedNote>(
+  //   {} as ISelectedNote
+  // );
+
+  // useEffect(() => {
+  //   folderDispatch({
+  //     type: "init_folder",
+  //     payload: query.data,
+  //   });
+
+  //   if (query.data && query.data[0]?.notes && query.data[0]?.notes.length > 0) {
+  //     setSelectedNote({
+  //       ...selectedNote,
+  //       folder_id: query.data[0].notes[0].folder_id,
+  //       note_id: query.data[0].notes[0].note_id,
+  //       name: query.data[0].notes[0].folder_name,
+  //       description: query.data[0].notes[0].description,
+  //       date_created: query.data[0].notes[0].date_created,
+  //       last_edited: query.data[0].notes[0].last_edited,
+  //     });
+  //   }
+  // }, [query.data]);
+
   return (
     <FolderContext.Provider
       value={{
         folders,
         folderDispatch,
+        folderError,
+        folderLoading,
         selectedNote,
         setSelectedNote,
       }}

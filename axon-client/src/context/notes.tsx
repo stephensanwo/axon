@@ -1,37 +1,23 @@
-import React, { createContext, useEffect, useReducer, useState } from "react";
+import React, { createContext, useReducer, useState } from "react";
 import noteReducer from "../reducers/notes";
 import { Reducer } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { NoteActionProps, NoteProps } from "src/types/notes";
-import { GET_NOTE_DETAIL } from "src/api/queries/note";
+import { INote, INoteAction } from "src/types/notes";
 
 interface NoteProviderProps {
   children: React.ReactNode;
 }
 
 interface NoteContextProps {
-  note: NoteProps | null;
-  noteDispatch: React.Dispatch<NoteActionProps>;
+  note: INote;
+  noteDispatch: React.Dispatch<INoteAction>;
 }
 
 export const NoteContext = createContext({} as NoteContextProps);
 
 export const NoteProvider = ({ children }: NoteProviderProps) => {
-  const InitialState: NoteProps = {
-    date_created: "",
-    description: "",
-    folder_id: "",
-    last_edited: "",
-    name: "",
-    note_id: "",
-    user_id: "",
-    nodes: [],
-    edges: [],
-  };
-
-  const [note, noteDispatch] = useReducer<Reducer<NoteProps, NoteActionProps>>(
+  const [note, noteDispatch] = useReducer<Reducer<INote, INoteAction>>(
     noteReducer,
-    InitialState
+    {} as INote
   );
 
   return (

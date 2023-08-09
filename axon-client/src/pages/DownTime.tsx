@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { PageContainer } from "../shared/layout";
 import { FaceVeryDissatisfied } from "@carbon/pictograms-react";
 import { ThemeColors } from "src/shared/themes";
-import { Link } from "react-router-dom";
 
 const DownTimePage = styled.div`
   display: flex;
@@ -28,7 +27,7 @@ const Error = () => {
         <h5>
           Sorry, the service is currently unavailable, please try again later
         </h5>
-        <Link to={"/"}>Go Back Home</Link>
+        <a href={"/"}>Go Back Home</a>
       </DownTimePage>
     </PageContainer>
   );

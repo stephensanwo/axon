@@ -1,20 +1,19 @@
 import {
   INode,
-  NodeContentProps,
+  INote,
+  INoteAction,
   NodeDataProps,
   NodeStyleProps,
-  NoteActionProps,
-  NoteProps,
 } from "src/types/notes";
 import { v4 as uuidv4 } from "uuid";
 
-const noteReducer = (note: NoteProps, action: NoteActionProps) => {
+const noteReducer = (note: INote, action: INoteAction) => {
   switch (action.type) {
-    case "init_note": {
+    case "INIT_NOTE": {
       return action.payload;
     }
 
-    case "add_node": {
+    case "ADD_NODE": {
       let id = uuidv4();
       const newNode = {
         id: id,

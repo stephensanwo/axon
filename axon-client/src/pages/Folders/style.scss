@@ -17,29 +17,26 @@
 
 .side-nav-menu-item-overrides a {
   cursor: pointer;
-  background-color: #262626 !important;
   text-decoration: none;
 }
 
 .side-nav-menu-item-overrides a:hover {
   cursor: pointer;
-  background-color: rgb(48, 48, 48) !important;
+  background-color: rgb(48, 48, 48);
   text-decoration: none;
 }
 
-#selected-note a {
-  background-color: red !important;
+.side-nav-menu-item-overrides-selected {
+  background-color: rgb(48, 48, 48);
+
 }
 
-// .side-nav-menu-item-overrides [aria-current="folder"] {
-//   background-color: rgb(206, 16, 16) !important;
-// }
 
 .side-nav-menu-overrides button::before {
   display: none !important;
 }
 
-.cds--side-nav__submenu-chevron > svg  {
+.cds--side-nav__submenu-chevron>svg {
   fill: #6f6f6f;
 }
 
@@ -66,6 +63,7 @@
   padding-right: 15px;
   cursor: pointer;
 }
+
 .new-folder-button:hover {
   background-color: rgb(48, 48, 48);
 }
@@ -79,6 +77,7 @@
   padding-right: 16px;
   cursor: pointer;
 }
+
 .new-note-button:hover {
   background-color: rgb(48, 48, 48);
 }

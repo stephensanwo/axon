@@ -6,13 +6,12 @@ import {
   ComposedModal,
   Button,
 } from "@carbon/react";
-import { useMutation } from "@tanstack/react-query";
 import { useContext, useEffect, useState } from "react";
-import { DELETE_FOLDER, EDIT_NEW_FOLDER } from "src/api/queries/folder";
 import FolderContext from "src/context/folder";
 import { ICreateFolder, IFolderList } from "src/types/folders";
 import { AxonButton } from "src/components/Button";
 import AxonInlineLoader from "src/components/Loader/InlineLoader";
+import { useDataDeletion, useDataUpdate } from "src/hooks/useDataMutation";
 
 const EditFolder: React.FC<{
   folderModal: boolean;
@@ -20,55 +19,45 @@ const EditFolder: React.FC<{
   folder: IFolderList;
 }> = ({ folder, folderModal, setFolderModal }) => {
   const [updateFolder, setUpdateFolder] = useState<ICreateFolder>({
-    folder_name: folder.name,
-  });
-  const [formErros, setFormErrors] = useState<ICreateFolder>({
-    folder_name: "",
+    folder_name: folder.folder_name,
   });
 
-  console.log(updateFolder);
-  const { folderDispatch } = useContext(FolderContext);
+  const { folders, folderDispatch } = useContext(FolderContext);
 
-  const editFolder = useMutation({
-    mutationFn: () => EDIT_NEW_FOLDER(updateFolder, folder.folder_id),
-    onSuccess: (res: any) => {
-      console.log(res);
-      folderDispatch({
-        type: "edit_folder",
-        payload: {
-          folder_id: res.data,
-          name: updateFolder.folder_name,
-        },
-      });
+  const {
+    loading: editFolderLoading,
+    error: editFolderError,
+    update,
+  } = useDataUpdate<ICreateFolder>(`folder?folder_id=${folder.folder_id}`);
 
+  const {
+    loading: deleteFolderLoading,
+    error: deleteFolderError,
+    delete: deletefn,
+  } = useDataDeletion<ICreateFolder>(`folder?folder_id=${folder.folder_id}`);
+
+  const editFolder = () => {
+    setFolderModal(false);
+    update(updateFolder);
+    folderDispatch({
+      type: "EDIT_FOLDER",
+      payload: {
+        folder_id: folder.folder_id,
+        folder_name: updateFolder.folder_name,
+      },
+    });
+  };
+
+  const deleteFolder = () => {
+    if (window.confirm(`Are you sure you want to delete this folder?`)) {
       setFolderModal(false);
-    },
-    onError: (err: any) => {
-      setFormErrors(err.response.data?.fields);
-    },
-  });
-
-  const deleteFolder = useMutation({
-    mutationFn: () => DELETE_FOLDER(folder.folder_id),
-    onSuccess: (res: any) => {
-      console.log(res);
+      deletefn();
       folderDispatch({
-        type: "delete_folder",
+        type: "DELETE_FOLDER",
         payload: {
           folder_id: folder.folder_id,
         },
       });
-
-      setFolderModal(false);
-    },
-    onError: (err: any) => {
-      setFormErrors(err.response.data?.fields);
-    },
-  });
-
-  const handleDelete = () => {
-    if (window.confirm(`Are you sure you want to delete this folder?`)) {
-      deleteFolder.mutate();
     }
   };
 
@@ -81,7 +70,7 @@ const EditFolder: React.FC<{
       onClose={() => setFolderModal(false)}
       preventCloseOnClickOutside={true}
     >
-      <ModalHeader title="Edit Folder Group" />
+      <ModalHeader title="Edit Folder" />
       <ModalBody hasForm>
         <TextInput
           data-modal-primary-focus
@@ -96,20 +85,17 @@ const EditFolder: React.FC<{
               [e.target.name]: e.target.value,
             })
           }
-          invalid={formErros.folder_name && true}
+          invalid={editFolderError && true}
           invalidText={"Invalid data provided"}
         />
         <div style={{ marginTop: "20px" }}></div>
       </ModalBody>
       <ModalFooter>
-        <AxonButton kind="secondary" onClick={() => setFolderModal(false)}>
-          Cancel
+        <AxonButton kind="secondary" onClick={deleteFolder}>
+          {deleteFolderLoading ? <AxonInlineLoader /> : "Delete"}
         </AxonButton>
-        <AxonButton kind="danger" onClick={handleDelete}>
-          Delete
-        </AxonButton>
-        <AxonButton kind="primary" onClick={() => editFolder.mutate()}>
-          {editFolder.isLoading ? <AxonInlineLoader /> : "Confirm Changes"}
+        <AxonButton kind="primary" onClick={() => editFolder()}>
+          {editFolderLoading ? <AxonInlineLoader /> : "Confirm Changes"}
         </AxonButton>
       </ModalFooter>
     </ComposedModal>

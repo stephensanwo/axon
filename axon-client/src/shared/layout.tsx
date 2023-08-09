@@ -1,20 +1,5 @@
 import styled from "styled-components";
 import { device } from "./media";
-import { ThemeColors } from "./themes";
-
-// export const PageContainer = styled.div`
-//   height: 92vh;
-//   /* overflow: auto; */
-//   width: 100%;
-//   padding-right: 3.5%;
-//   padding-left: 3.5%;
-//   padding-top: 1vh;
-//   background-color: ${(props: any) =>
-//     props.dark ? ThemeColors.bgDark : ThemeColors.bgLight};
-//   /* @media (max-width: 1080px) {
-//     display: none;
-//   } */
-// `;
 
 export const PageContainer = styled.div`
   padding-top: 88px;

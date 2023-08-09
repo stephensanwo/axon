@@ -5,10 +5,12 @@ import StyledHeader from "src/components/StyledHeader";
 import { Theme } from "@carbon/react";
 import AppContext from "src/context/app";
 import { MobileWarningDiv } from "src/shared/layout";
+import AuthContext from "src/context/auth";
 
 const Layout = () => {
-  const { isSignedIn, showMobileWarning, setShowMobileWarning } =
-    useContext(AppContext);
+  const { showMobileWarning, setShowMobileWarning } = useContext(AppContext);
+
+  const { isSignedIn } = useContext(AuthContext);
 
   useEffect(() => {
     if (window.innerWidth <= 800) setShowMobileWarning(true);

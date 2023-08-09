@@ -16,7 +16,7 @@ const OptionsIconContainer = styled.div`
 
 const OptionsButton: React.FC<{
   action: React.Dispatch<React.SetStateAction<boolean>>;
-  onClick: () => void;
+  onClick?: () => void;
 }> = ({ action, ...props }) => {
   return (
     <OptionsIconContainer {...props}>

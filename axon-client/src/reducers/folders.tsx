@@ -1,50 +1,68 @@
-import { IFolderAction, IFolderList, INoteSummary } from "src/types/folders";
+import { IFolderAction, IFolderList } from "src/types/folders";
 
-const folderReducer = (folders: Array<IFolderList>, action: IFolderAction) => {
+const folderReducer = (
+  folders: IFolderList[],
+  action: IFolderAction
+): IFolderList[] => {
   switch (action.type) {
-    case "init_folder": {
+    case "INIT_FOLDER_LIST": {
       return action.payload;
     }
 
-    case "new_folder": {
+    case "NEW_FOLDER": {
       const newFolder = {} as IFolderList;
       newFolder.folder_id = action.payload.folder_id;
-      newFolder.name = action.payload.name;
-      return [...folders, newFolder];
+      newFolder.folder_name = action.payload.folder_name;
+      return [newFolder, ...folders];
     }
 
-    case "new_note": {
-      const newNote = {} as INoteSummary;
-      newNote.folder_id = action.payload.folder_id;
-      newNote.name = action.payload.note_name;
-      newNote.description = action.payload.note_description;
-
+    case "NEW_NOTE": {
       return folders.map((folder) => {
         if (folder.folder_id === action.payload.folder_id) {
-          return { ...folder, notes: [...folder.notes, newNote] };
+          return { ...folder, notes: [action.payload, ...folder.notes] };
         } else {
           return folder;
         }
       });
     }
 
-    case "edit_folder": {
+    case "EDIT_FOLDER": {
       return folders.map((folder) => {
         if (folder.folder_id === action.payload.folder_id) {
-          return { ...folder, name: action.payload.name };
+          return { ...folder, folder_name: action.payload.folder_name };
         } else {
           return folder;
         }
       });
     }
 
-    case "delete_folder": {
+    case "EDIT_NOTE": {
+      return folders.map((folder) => {
+        if (folder.folder_id === action.payload.folder_id) {
+          const updatedNotes = folder.notes.map((note) => {
+            if (note.note_id === action.payload.note_id) {
+              return {
+                ...note,
+                note_name: action.payload.note_name,
+                description: action.payload.description,
+              };
+            } else {
+              return note;
+            }
+          });
+          return { ...folder, notes: updatedNotes };
+        }
+        return folder;
+      });
+    }
+
+    case "DELETE_FOLDER": {
       return folders.filter(
         (folder) => folder.folder_id !== action.payload.folder_id
       );
     }
 
-    case "delete_note": {
+    case "DELETE_NOTE": {
       return folders.map((folder) => {
         if (folder.folder_id === action.payload.folder_id) {
           const filteredNotes = folder.notes.filter((note) => {

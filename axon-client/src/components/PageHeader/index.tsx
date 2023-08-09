@@ -4,19 +4,10 @@ import styled from "styled-components";
 import "./style.scss";
 import AppContext from "../../context/app";
 import { StateColors } from "../../shared/themes";
-import DeleteNote from "src/components/Note/DeleteNote";
 
-import {
-  AddAlt,
-  Edit,
-  Information,
-  ColorPalette,
-  TrashCan,
-  Share,
-} from "@carbon/icons-react";
+import { AddAlt, Share } from "@carbon/icons-react";
 import { INoteModal } from "src/types/notes";
 import FolderContext from "src/context/folder";
-import NoteInfo from "src/components/Note/NoteInfo";
 import PublishNote from "src/components/Note/PublishNote";
 import NoteContext from "src/context/notes";
 
@@ -24,7 +15,6 @@ interface PageHeaderProps {
   theme?: "dark" | "light";
   documentTitle: string;
 }
-
 interface HeaderMenuProps {
   menuText: string;
   menuIcon: React.ReactNode;
@@ -39,7 +29,6 @@ interface HeaderMenuProps {
 }
 
 export const PageHeaderContainer = styled.div`
-  /* background-color: #262626; */
   border-bottom: 1px solid #393939;
   width: 100vw;
   top: 0;
@@ -82,16 +71,11 @@ const NavDocumentTitle = styled.div`
 const PageHeader: React.FC<PageHeaderProps> = (props) => {
   const { isOnline, isSideNavExpanded } = useContext(AppContext);
   const [noteModal, setNoteModal] = useState<INoteModal>({
-    delete: false,
-    info: false,
     new: false,
     publish: false,
   });
-  const [deleteModal, setDeleteModal] = useState(false);
   const { selectedNote } = useContext(FolderContext);
   const { note, noteDispatch } = useContext(NoteContext);
-
-  console.log(selectedNote);
 
   const HeaderMenu: Array<HeaderMenuProps> = [
     {
@@ -106,7 +90,7 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
           action: () => {
             note &&
               noteDispatch({
-                type: "add_node",
+                type: "ADD_NODE",
                 payload: {
                   node_type: "input-node",
                   node_data: note,
@@ -122,67 +106,13 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
           action: () => {
             note &&
               noteDispatch({
-                type: "add_node",
+                type: "ADD_NODE",
                 payload: {
                   node_type: "anchor-node",
                   node_data: note,
                 },
               });
           },
-        },
-      ],
-    },
-    {
-      menuText: "Edit Note",
-      menuIcon: <Edit size={16} />,
-      menuOptions: [
-        {
-          text: "Create new node",
-          className: "create-new-node",
-          isDisabled: false,
-          isDelete: false,
-        },
-        {
-          text: "Import from marketplace",
-          className: "marketplace-import",
-          isDisabled: false,
-          isDelete: false,
-        },
-        {
-          text: "Import custom node",
-          className: "custom-import",
-          isDisabled: false,
-          isDelete: false,
-        },
-      ],
-    },
-    {
-      menuText: "Delete Note",
-      menuIcon: <TrashCan size={16} />,
-      menuOptions: [],
-      action: () => setDeleteModal(true),
-    },
-    {
-      menuText: "Node Styles",
-      menuIcon: <ColorPalette size={16} />,
-      menuOptions: [
-        {
-          text: "Create new node",
-          className: "create-new-node",
-          isDisabled: false,
-          isDelete: false,
-        },
-        {
-          text: "Import from marketplace",
-          className: "marketplace-import",
-          isDisabled: false,
-          isDelete: false,
-        },
-        {
-          text: "Import custom node",
-          className: "custom-import",
-          isDisabled: false,
-          isDelete: false,
         },
       ],
     },
@@ -194,16 +124,6 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
         setNoteModal({
           ...noteModal,
           publish: true,
-        }),
-    },
-    {
-      menuText: "Note Information",
-      menuIcon: <Information size={16} />,
-      menuOptions: [],
-      action: () =>
-        setNoteModal({
-          ...noteModal,
-          info: true,
         }),
     },
   ];
@@ -223,6 +143,7 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
               key={index}
               ariaLabel="Menu"
               onClick={menu.action}
+              disabled={!selectedNote.note_id && true}
             >
               {menu.menuOptions.map((option, index) => (
                 <OverflowMenuItem
@@ -242,20 +163,6 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
           <OnlinePresence isOnline={isOnline} />
         </NavDocumentTitle>
       </NavMenu>
-      {deleteModal && (
-        <DeleteNote
-          noteModal={deleteModal}
-          setNoteModal={setDeleteModal}
-          note={selectedNote}
-        />
-      )}
-      {noteModal.info && (
-        <NoteInfo
-          noteModal={noteModal}
-          setNoteModal={setNoteModal}
-          note={selectedNote}
-        />
-      )}
       {noteModal.publish && (
         <PublishNote
           noteModal={noteModal}

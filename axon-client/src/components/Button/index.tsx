@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { Button as CarbonButton } from "@carbon/react";
-import { StateColors, ThemeColors } from "src/shared/themes";
+import { ThemeColors } from "src/shared/themes";
 
 export const AxonButton = styled(CarbonButton)`
-  margin-top: 40px;
+  margin-top: 20px;
   max-width: 300px;
   width: 100%;
   height: 50px;

@@ -4,56 +4,63 @@ import {
   ModalBody,
   ModalFooter,
   ComposedModal,
-  Button,
 } from "@carbon/react";
-import { useMutation } from "@tanstack/react-query";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import FolderContext from "src/context/folder";
 import { AxonButton } from "src/components/Button";
 import AxonInlineLoader from "src/components/Loader/InlineLoader";
-import { CreateNoteProps } from "src/types/notes";
-import { CREATE_NEW_NOTE } from "src/api/queries/note";
+import { ICreateNoteProps, INote } from "src/types/notes";
 import { IFolderList } from "src/types/folders";
+import { useDataMutation } from "src/hooks/useDataMutation";
+import AuthContext from "src/context/auth";
 
 const NewNote: React.FC<{
   noteModal: boolean;
   setNoteModal: React.Dispatch<React.SetStateAction<boolean>>;
   folder: IFolderList;
 }> = ({ folder, noteModal, setNoteModal }) => {
-  const [newNote, setNewNote] = useState<CreateNoteProps>({
+  const [newNote, setNewNote] = useState<ICreateNoteProps>({
     folder_id: folder.folder_id,
-    note_description: "",
-    note_name: "",
-  });
-  const [formErros, setFormErrors] = useState<CreateNoteProps>({
-    folder_id: "",
-    note_description: "",
+    description: "",
     note_name: "",
   });
 
-  const { folderDispatch } = useContext(FolderContext);
+  const { folderDispatch, setSelectedNote } = useContext(FolderContext);
+  const { user } = useContext(AuthContext);
+  const {
+    loading: newNoteLoading,
+    error: newNoteError,
+    mutate,
+    data: newNoteData,
+  } = useDataMutation<ICreateNoteProps>("note");
 
-  const { mutate, isLoading } = useMutation({
-    mutationFn: () => CREATE_NEW_NOTE(newNote),
-    onSuccess: (res: any) => {
-      console.log(res);
-      folderDispatch({
-        type: "new_note",
-        payload: newNote,
-      });
-      setNoteModal(false);
-    },
-    onError: (err: any) => {
-      console.log(err);
-      setFormErrors(err.response.data?.fields);
-    },
-  });
-
-  const handleNewFolder = () => {
-    mutate();
+  const handleNewNote = () => {
+    setNoteModal(false);
+    mutate(newNote);
+    folderDispatch({
+      type: "NEW_NOTE",
+      payload: {
+        user_id: user?.user_id || "",
+        folder_id: folder.folder_id,
+        note_id: "",
+        note_name: newNote?.note_name || "",
+        description: newNote?.description || "",
+        date_created: "",
+        last_edited: "",
+      },
+    });
+    setSelectedNote({
+      user_id: user?.user_id || "",
+      folder_id: folder.folder_id,
+      note_id: newNoteData,
+      note_name: newNote?.note_name || "",
+      description: newNote?.description || "",
+      date_created: "",
+      last_edited: "",
+      folder_name: folder.folder_name,
+    });
   };
 
-  console.log(newNote);
   return (
     <ComposedModal
       size="sm"
@@ -63,7 +70,10 @@ const NewNote: React.FC<{
       onClose={() => setNoteModal(false)}
       preventCloseOnClickOutside={true}
     >
-      <ModalHeader title="Add Note to Folder Group" label={folder.name} />
+      <ModalHeader
+        title="Create New Note"
+        label={`${folder.folder_name} / ${newNote?.note_name}`}
+      />
       <ModalBody hasForm>
         <TextInput
           data-modal-primary-focus
@@ -75,21 +85,21 @@ const NewNote: React.FC<{
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setNewNote({ ...newNote, [e.target.name]: e.target.value })
           }
-          invalid={formErros.note_name && true}
+          invalid={newNoteError && true}
           invalidText={"Invalid data provided"}
         />
         <div style={{ marginTop: "20px" }}></div>
         <TextInput
           data-modal-primary-focus
           labelText="Description"
-          value={newNote.note_description}
+          value={newNote.description}
           placeholder="e.g. Project Axon Frontend Workflow"
           type="text"
-          name="note_description"
+          name="description"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setNewNote({ ...newNote, [e.target.name]: e.target.value })
           }
-          invalid={formErros.note_description && true}
+          invalid={newNoteError && true}
           invalidText={"Invalid data provided"}
         />
       </ModalBody>
@@ -99,10 +109,14 @@ const NewNote: React.FC<{
         </AxonButton>
         <AxonButton
           kind="primary"
-          onClick={handleNewFolder}
-          disabled={newNote.note_name.length > 0 ? false : true}
+          onClick={handleNewNote}
+          disabled={
+            newNote.note_name.length && newNote.description.length > 0
+              ? false
+              : true
+          }
         >
-          {isLoading ? <AxonInlineLoader /> : "OK"}
+          {newNoteLoading ? <AxonInlineLoader /> : "OK"}
         </AxonButton>
       </ModalFooter>
     </ComposedModal>

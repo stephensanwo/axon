@@ -1,19 +1,19 @@
-import { CreateNoteProps, ISelectedNote } from "./notes";
+import { ISelectedNote } from "./notes";
 
 export interface IFolderList {
   date_created: string;
   folder_id: string;
   last_edit?: string;
-  name: string;
+  folder_name: string;
   user_id: string;
-  notes: Array<INoteSummary> | [];
+  notes: INoteSummary[] | [];
 }
 
 export interface INoteSummary {
   user_id: string;
   folder_id: string;
   note_id: string;
-  name: string;
+  note_name: string;
   description: string;
   date_created: string;
   last_edited: string;
@@ -23,42 +23,54 @@ export interface IFolder {
   date_created: string;
   folder_id: string;
   last_edit?: string;
-  name: string;
+  folder_name: string;
   user_id: string;
 }
 
 export type IFolderAction =
   | {
-      type: "init_folder";
-      payload: Array<IFolderList>;
+      type: "INIT_FOLDER_LIST";
+      payload: IFolderList[];
     }
   | {
-      type: "new_folder";
+      type: "NEW_FOLDER";
       payload: {
         folder_id: string;
-        name: string;
+        folder_name: string;
       };
     }
   | {
-      type: "new_note";
-      payload: CreateNoteProps;
+      type: "NEW_NOTE";
+      payload: INoteSummary;
     }
   | {
-      type: "edit_folder";
+      type: "EDIT_FOLDER";
       payload: {
         folder_id: string;
-        name: string;
+        folder_name: string;
       };
     }
   | {
-      type: "delete_folder";
+      type: "EDIT_NOTE";
+      payload: {
+        folder_id: string;
+        note_id: string;
+        description: string;
+        note_name: string;
+      };
+    }
+  | {
+      type: "DELETE_FOLDER";
       payload: {
         folder_id: string;
       };
     }
   | {
-      type: "delete_note";
-      payload: ISelectedNote;
+      type: "DELETE_NOTE";
+      payload: {
+        note_id: string;
+        folder_id: string;
+      };
     };
 
 export interface ICreateFolder {

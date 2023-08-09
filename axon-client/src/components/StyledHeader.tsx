@@ -12,6 +12,8 @@ import {
 import AppContext from "../context/app";
 import styled from "styled-components";
 import axonLogoSmall from "../assets/icons/axon-logo-small.svg";
+import { Link } from "react-router-dom";
+import AuthContext from "src/context/auth";
 
 const ProfileImage = styled.div`
   width: 60px;
@@ -29,8 +31,8 @@ const ProfileImage = styled.div`
 `;
 
 const StyledHeader: React.FC = () => {
-  const { user, isSignedIn, isSideNavExpanded, onClickSideNavExpand } =
-    useContext(AppContext);
+  const { isSideNavExpanded, onClickSideNavExpand } = useContext(AppContext);
+  const { user, isSignedIn } = useContext(AuthContext);
 
   const handleSideNav = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (isSideNavExpanded === true) {
@@ -52,7 +54,7 @@ const StyledHeader: React.FC = () => {
       ) : (
         <> </>
       )}
-      <HeaderName href="/" prefix="" style={{ marginLeft: "15px" }}>
+      <HeaderName to="/" prefix="" style={{ marginLeft: "15px" }} as={Link}>
         <img src={axonLogoSmall} alt="axon-logo" />
       </HeaderName>
       <HeaderGlobalBar>
