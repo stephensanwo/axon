@@ -1,10 +1,10 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
-import { ParagraphInput } from "./styles";
+import { ParagraphInput, ParagraphTextContent } from "./styles";
 
 interface ParagraphTextProps {
   description: string;
   style?: object;
-  children?: React.ReactChildren;
+  children?: React.ReactNode;
 }
 
 const ParagraphText: React.FC<ParagraphTextProps> = (props) => {
@@ -40,18 +40,15 @@ const ParagraphText: React.FC<ParagraphTextProps> = (props) => {
           value={data}
           onBlur={handleBlur}
           type="text"
-          placeholder="Enter Header"
+          placeholder="Node Text"
           onChange={handleChange}
+          rows={2}
         />
       ) : (
-        <div
-          className="node-description"
-          onClick={handleClick}
-          onBlur={handleBlur}
-        >
-          {`${props.description}`.slice(0, 100)}
-          {props.description.length > 100 ? "..." : ""}
-        </div>
+        <ParagraphTextContent onClick={handleClick} onBlur={handleBlur}>
+          {`${data}`.slice(0, 100)}
+          {data.length > 100 ? "..." : ""}
+        </ParagraphTextContent>
       )}
     </Fragment>
   );

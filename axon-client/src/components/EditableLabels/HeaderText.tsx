@@ -1,10 +1,10 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
-import { HeaderTextInput } from "./styles";
+import { HeaderTextContent, HeaderTextInput } from "./styles";
 
 interface HeaderTextProps {
   title: string;
   style?: object;
-  children?: React.ReactChildren;
+  children?: React.ReactNode;
 }
 
 const HeaderText: React.FC<HeaderTextProps> = (props) => {
@@ -40,14 +40,18 @@ const HeaderText: React.FC<HeaderTextProps> = (props) => {
           value={data}
           onBlur={handleBlur}
           type="text"
-          placeholder="Enter Header"
+          placeholder="Untitled Node"
           onChange={handleChange}
         />
       ) : (
-        <h5 style={props.style} onClick={handleClick} onBlur={handleBlur}>
+        <HeaderTextContent
+          style={props.style}
+          onClick={handleClick}
+          onBlur={handleBlur}
+        >
           {`${data}`.slice(0, 20)}
           {data.length > 20 ? "..." : ""}
-        </h5>
+        </HeaderTextContent>
       )}
     </Fragment>
   );

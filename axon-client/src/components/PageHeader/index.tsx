@@ -5,22 +5,22 @@ import "./style.scss";
 import AppContext from "../../context/app";
 import { StateColors } from "../../shared/themes";
 
-import { AddAlt, Share } from "@carbon/icons-react";
 import { INoteModal } from "src/types/notes";
 import FolderContext from "src/context/folder";
 import PublishNote from "src/components/Note/PublishNote";
 import NoteContext from "src/context/notes";
+import { usePageActions } from "src/hooks/usePageActions";
 
 interface PageHeaderProps {
   theme?: "dark" | "light";
   documentTitle: string;
 }
-interface HeaderMenuProps {
+export interface HeaderMenuProps {
   menuText: string;
   menuIcon: React.ReactNode;
   action?: any;
   menuOptions: Array<{
-    text: string;
+    text: React.ReactNode;
     className: string;
     isDisabled: boolean;
     isDelete: boolean;
@@ -75,64 +75,14 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
     publish: false,
   });
   const { selectedNote } = useContext(FolderContext);
-  const { note, noteDispatch } = useContext(NoteContext);
 
-  const HeaderMenu: Array<HeaderMenuProps> = [
-    {
-      menuText: "Add Node",
-      menuIcon: <AddAlt size={16} />,
-      menuOptions: [
-        {
-          text: "Default Node",
-          className: "create-new-node",
-          isDisabled: false,
-          isDelete: false,
-          action: () => {
-            note &&
-              noteDispatch({
-                type: "ADD_NODE",
-                payload: {
-                  node_type: "input-node",
-                  node_data: note,
-                },
-              });
-          },
-        },
-        {
-          text: "Connector",
-          className: "marketplace-import",
-          isDisabled: false,
-          isDelete: false,
-          action: () => {
-            note &&
-              noteDispatch({
-                type: "ADD_NODE",
-                payload: {
-                  node_type: "anchor-node",
-                  node_data: note,
-                },
-              });
-          },
-        },
-      ],
-    },
-    {
-      menuText: "Publish Note",
-      menuIcon: <Share size={16} />,
-      menuOptions: [],
-      action: () =>
-        setNoteModal({
-          ...noteModal,
-          publish: true,
-        }),
-    },
-  ];
+  const pageActions = usePageActions();
 
   return (
     <PageHeaderContainer expand={isSideNavExpanded && true}>
       <NavMenu>
         <NavActions>
-          {HeaderMenu.map((menu, index) => (
+          {pageActions.map((menu, index) => (
             <OverflowMenu
               data-floating-menu-container
               size="md"

@@ -17,7 +17,7 @@ export const ThemeColors = {
   bgHiglight1: "#202020",
   bgHighlight2: "rgb(43, 43, 43)",
   textDark: "#6f6f6f",
-  primary: "rgb(234, 255, 150)",
+  primary: "#51ff83",
   primaryHover: "rgb(203, 228, 105)",
   textBlack: "#000",
 };
@@ -31,77 +31,81 @@ export const NodeThemes = {
   black: "#000000",
 };
 
-export const ColorPalette = [
-  {
-    id: "1",
-    label: "Grey 1",
-    hex: "#EDEDED",
+export const ColorPalette = {
+  "green-1": {
+    label: "Green 1",
+    hex: "#b6d9bb",
   },
-  {
-    id: "2",
-    label: "Yellow 1",
-    hex: "#FFE9AE",
-  },
-  {
-    id: "3",
-    label: "Yellow 2",
-    hex: "#E2DE88",
-  },
+};
   // {
-  //   id: "4",
-  //   label: "Yellow 3",
-  //   hex: "#E4DD5E",
+  //   id: "1",
+  //   label: "Grey 1",
+  //   hex: "#EDEDED",
+  // },
+  // {
+  //   id: "2",
+  //   label: "Yellow 1",
+  //   hex: "#FFE9AE",
+  // },
+  // {
+  //   id: "3",
+  //   label: "Yellow 2",
+  //   hex: "#E2DE88",
+  // },
+  // // {
+  // //   id: "4",
+  // //   label: "Yellow 3",
+  // //   hex: "#E4DD5E",
+  // // },
+
+  // {
+  //   id: "6",
+  //   label: "Orange 1",
+  //   hex: "#F7AE94",
   // },
 
-  {
-    id: "6",
-    label: "Orange 1",
-    hex: "#F7AE94",
-  },
+  // {
+  //   id: "7",
+  //   label: "Pink 1",
+  //   hex: "#ED94BD",
+  // },
 
-  {
-    id: "7",
-    label: "Pink 1",
-    hex: "#ED94BD",
-  },
+  // {
+  //   id: "8",
+  //   label: "Green 1",
+  //   hex: "#AEC948",
+  // },
+  // {
+  //   id: "9",
+  //   label: "Purple 1",
+  //   hex: "#D48BE5",
+  // },
 
-  {
-    id: "8",
-    label: "Green 1",
-    hex: "#AEC948",
-  },
-  {
-    id: "9",
-    label: "Purple 1",
-    hex: "#D48BE5",
-  },
+  // {
+  //   id: "10",
+  //   label: "Blue 1",
+  //   hex: "#B3CADE",
+  // },
 
-  {
-    id: "10",
-    label: "Blue 1",
-    hex: "#B3CADE",
-  },
+  // {
+  //   id: "11",
+  //   label: "Blue 2",
+  //   hex: "#5FC0CA",
+  // },
 
-  {
-    id: "11",
-    label: "Blue 2",
-    hex: "#5FC0CA",
-  },
+  // {
+  //   id: "11",
+  //   label: "Dark Blue 1",
+  //   hex: "#4F8087",
+  // },
+  // {
+  //   id: "11",
+  //   label: "Blue 2",
+  //   hex: "#5FC0CA",
+  // },
 
-  {
-    id: "11",
-    label: "Dark Blue 1",
-    hex: "#4F8087",
-  },
-  {
-    id: "11",
-    label: "Blue 2",
-    hex: "#5FC0CA",
-  },
-
-  {
-    id: "11",
-    label: "Dark Blue 1",
-    hex: "#4F8087",
-  },
-];
+  // {
+  //   id: "11",
+  //   label: "Dark Blue 1",
+  //   hex: "#4F8087",
+  // },
