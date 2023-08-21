@@ -1,16 +1,18 @@
-import React, { Fragment, useEffect, useRef, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { HeaderTextContent, HeaderTextInput } from "./styles";
 
 interface HeaderTextProps {
   title: string;
+  mutateTitle: (fieldName: "title" | "description", value: string) => void;
   style?: object;
   children?: React.ReactNode;
+  color: string;
 }
 
 const HeaderText: React.FC<HeaderTextProps> = (props) => {
   const [editing, setEditing] = useState(false);
-  const [data, setData] = useState(props.title);
-  const inputRef = useRef<any>(null);
+  const [inputValue, setInputValue] = useState(props.title); // Controlled input value
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {
     setEditing(true);
@@ -21,39 +23,44 @@ const HeaderText: React.FC<HeaderTextProps> = (props) => {
     // Update the global context with data
   };
 
-  const handleChange = (e: any) => {
-    setData(e.target.value);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
   };
 
   useEffect(() => {
-    if (inputRef && inputRef.current && editing === true) {
+    if (editing && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [editing, inputRef]);
+  }, [editing]);
+
+  useEffect(() => {
+    setInputValue(props.title); // Update input value when the title prop changes
+  }, [props.title]);
 
   return (
-    <Fragment>
+    <>
       {editing ? (
         <HeaderTextInput
-          autofocus
+          autoFocus
           ref={inputRef}
-          value={data}
+          value={inputValue}
           onBlur={handleBlur}
           type="text"
           placeholder="Untitled Node"
           onChange={handleChange}
+          color={props.color}
         />
       ) : (
         <HeaderTextContent
           style={props.style}
           onClick={handleClick}
           onBlur={handleBlur}
+          color={props.color}
         >
-          {`${data}`.slice(0, 20)}
-          {data.length > 20 ? "..." : ""}
+          {`${inputValue}`.slice(0, 25)}
         </HeaderTextContent>
       )}
-    </Fragment>
+    </>
   );
 };
 

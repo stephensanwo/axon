@@ -7,9 +7,10 @@ export const StateColors = {
   running: "#393939",
 };
 export const ThemeColors = {
-  bgDark: "rgb(19, 19, 19)",
+  bgDark: "#161616",
   // bgDark: "rgba(0, 0, 0, 0.93)"
   bgLight: "#ffffff",
+  white: "#ffffff",
   bgPrimary: "#f4f4f4",
   bgSecondary: "rgb(27, 27, 27)",
   primaryAction: "#42be65",
@@ -20,6 +21,7 @@ export const ThemeColors = {
   primary: "#51ff83",
   primaryHover: "rgb(203, 228, 105)",
   textBlack: "#000",
+  accent: "#1688d4",
 };
 
 export const NodeThemes = {
@@ -31,81 +33,81 @@ export const NodeThemes = {
   black: "#000000",
 };
 
-export const ColorPalette = {
-  "green-1": {
+export enum ColorTypes {
+  GREEN1 = "GREEN1",
+  GREEN2 = "GREEN2",
+  RED1 = "RED1",
+  RED2 = "RED2",
+  GREY1 = "GREY1",
+  YELLOW1 = "YELLOW1",
+  YELLOW2 = "YELLOW2",
+  YELLOW3 = "YELLOW3",
+  ORANGE1 = "ORANGE1",
+  PINK1 = "PINK1",
+  PURPLE1 = "PURPLE1",
+  BLUE1 = "BLUE1",
+  BLUE2 = "BLUE2",
+}
+
+export type IColorPalette = Record<
+  ColorTypes,
+  {
+    label: string;
+    hex: string;
+  }
+>;
+
+export const ColorPalette: IColorPalette = {
+  GREEN1: {
     label: "Green 1",
     hex: "#b6d9bb",
   },
+  GREEN2: {
+    label: "Green 2",
+    hex: "#b6d9bb",
+  },
+  RED1: {
+    label: "Red 1",
+    hex: "#b6d9bb",
+  },
+  RED2: {
+    label: "Red 2",
+    hex: "#b6d9bb",
+  },
+  GREY1: {
+    label: "Grey 1",
+    hex: "#EDEDED",
+  },
+  YELLOW1: {
+    label: "Yellow 1",
+    hex: "#FFE9AE",
+  },
+  YELLOW2: {
+    label: "Yellow 2",
+    hex: "#E2DE88",
+  },
+  YELLOW3: {
+    label: "Yellow 3",
+    hex: "#E4DD5E",
+  },
+  ORANGE1: {
+    label: "Orange 1",
+    hex: "#F7AE94",
+  },
+  PINK1: {
+    label: "Pink 1",
+    hex: "#ED94BD",
+  },
+  PURPLE1: {
+    label: "Purple 1",
+    hex: "#D48BE5",
+  },
+  BLUE1: {
+    label: "Blue 1",
+    hex: "#B3CADE",
+  },
+  BLUE2: {
+    label: "Blue 2",
+    hex: "#5FC0CA",
+  },
 };
-  // {
-  //   id: "1",
-  //   label: "Grey 1",
-  //   hex: "#EDEDED",
-  // },
-  // {
-  //   id: "2",
-  //   label: "Yellow 1",
-  //   hex: "#FFE9AE",
-  // },
-  // {
-  //   id: "3",
-  //   label: "Yellow 2",
-  //   hex: "#E2DE88",
-  // },
-  // // {
-  // //   id: "4",
-  // //   label: "Yellow 3",
-  // //   hex: "#E4DD5E",
-  // // },
-
-  // {
-  //   id: "6",
-  //   label: "Orange 1",
-  //   hex: "#F7AE94",
-  // },
-
-  // {
-  //   id: "7",
-  //   label: "Pink 1",
-  //   hex: "#ED94BD",
-  // },
-
-  // {
-  //   id: "8",
-  //   label: "Green 1",
-  //   hex: "#AEC948",
-  // },
-  // {
-  //   id: "9",
-  //   label: "Purple 1",
-  //   hex: "#D48BE5",
-  // },
-
-  // {
-  //   id: "10",
-  //   label: "Blue 1",
-  //   hex: "#B3CADE",
-  // },
-
-  // {
-  //   id: "11",
-  //   label: "Blue 2",
-  //   hex: "#5FC0CA",
-  // },
-
-  // {
-  //   id: "11",
-  //   label: "Dark Blue 1",
-  //   hex: "#4F8087",
-  // },
-  // {
-  //   id: "11",
-  //   label: "Blue 2",
-  //   hex: "#5FC0CA",
-  // },
-
-  // {
-  //   id: "11",
-  //   label: "Dark Blue 1",
-  //   hex: "#4F8087",
-  // },

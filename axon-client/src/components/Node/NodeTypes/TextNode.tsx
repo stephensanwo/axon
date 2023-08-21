@@ -1,22 +1,23 @@
 import React, { useContext, useRef, useState } from "react";
 import { ColorPalette, ThemeColors } from "src/shared/themes";
-import { HeaderText, ParagraphText } from "../../EditableLabels";
+import { ParagraphText } from "../../EditableLabels";
 import { NodeDataProps, NodeStyleProps } from "src/types/notes";
 import styled from "styled-components";
 import NoteContext from "src/context/notes";
 
-interface TextBoxNodeData {
+interface TextNodeData {
   data: NodeDataProps;
   selected_id: string;
   handleNodeClick: any;
   handleNodeBlur: any;
 }
 
-const TextBoxNodeContainer = styled.div`
+const TextNodeContainer = styled.div`
+  border: none;
   border-radius: 0;
   padding: 0;
   width: 280px;
-  min-height: 100px;
+  min-height: 60px;
   padding: 16px;
   background-color: ${(props: { background: string }) =>
     props.background ? props.background : ""};
@@ -52,13 +53,13 @@ const TextBoxNodeContainer = styled.div`
   }
 `;
 
-const TextBoxNodeContent = styled.div`
+const TextNodeContent = styled.div`
   display: flex;
   gap: 0.2rem;
   justify-content: space-between;
 `;
 
-const TextBoxNode: React.FC<TextBoxNodeData> = (props) => {
+const TextNode: React.FC<TextNodeData> = (props) => {
   const { noteDispatch, selectedNode } = useContext(NoteContext);
 
   const handleNodeDataMutation = (
@@ -91,7 +92,7 @@ const TextBoxNode: React.FC<TextBoxNodeData> = (props) => {
   };
 
   return (
-    <TextBoxNodeContainer
+    <TextNodeContainer
       tabIndex={0}
       onClick={() => {
         props.handleNodeClick(props.selected_id);
@@ -101,7 +102,7 @@ const TextBoxNode: React.FC<TextBoxNodeData> = (props) => {
       background={props.data.node_styles.node_background_color}
       border={props.data.node_styles.node_border_color}
     >
-      <TextBoxNodeContent>
+      <TextNodeContent>
         <div
           style={{
             padding: 0,
@@ -110,20 +111,15 @@ const TextBoxNode: React.FC<TextBoxNodeData> = (props) => {
             gap: "8px",
           }}
         >
-          <HeaderText
-            title={props.data.title}
-            color={props.data.node_styles.font_color}
-            mutateTitle={handleNodeDataMutation}
-          ></HeaderText>
           <ParagraphText
             description={props.data.description}
             mutateDescription={handleNodeDataMutation}
             color={props.data.node_styles.font_color}
           />
         </div>
-      </TextBoxNodeContent>
-    </TextBoxNodeContainer>
+      </TextNodeContent>
+    </TextNodeContainer>
   );
 };
 
-export default TextBoxNode;
+export default TextNode;

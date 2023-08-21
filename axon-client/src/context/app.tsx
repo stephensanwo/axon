@@ -1,4 +1,7 @@
-import { createContext, useState } from "react";
+import React, { createContext, useState } from "react";
+import { ColorPalette, ThemeColors } from "src/shared/themes";
+import { IAppSettings } from "src/types/app";
+import { NodeStyleProps } from "src/types/notes";
 
 interface AppProviderProps {
   children: React.ReactNode;
@@ -11,15 +14,26 @@ interface AppContextProps {
   setShowMobileWarning: React.Dispatch<React.SetStateAction<boolean>>;
   isOnline: boolean;
   setIsOnline: React.Dispatch<React.SetStateAction<boolean>>;
+  appSettings: IAppSettings;
+  setAppSettings: React.Dispatch<React.SetStateAction<IAppSettings>>;
+  defaultNodeTheme: NodeStyleProps;
+  setDefaultNodeTheme: React.Dispatch<React.SetStateAction<NodeStyleProps>>;
 }
 
 const AppContext = createContext({} as AppContextProps);
 
 export const AppProvider = ({ children }: AppProviderProps) => {
   const [isSideNavExpanded, onClickSideNavExpand] = useState(false);
-  const [isSignedIn, setIsSignedIn] = useState(false);
   const [showMobileWarning, setShowMobileWarning] = useState(false);
   const [isOnline, setIsOnline] = useState(false);
+  const [appSettings, setAppSettings] = useState<IAppSettings>({
+    grid: false,
+  });
+  const [defaultNodeTheme, setDefaultNodeTheme] = useState<NodeStyleProps>({
+    node_background_color: ColorPalette.ORANGE1.hex,
+    node_border_color: "",
+    font_color: ThemeColors.textBlack,
+  });
 
   return (
     <AppContext.Provider
@@ -30,6 +44,10 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         setShowMobileWarning,
         isOnline,
         setIsOnline,
+        appSettings,
+        setAppSettings,
+        defaultNodeTheme,
+        setDefaultNodeTheme,
       }}
     >
       {children}

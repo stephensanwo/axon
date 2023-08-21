@@ -1,58 +1,62 @@
-import React, { Fragment, useContext, useEffect, useRef } from "react";
+import React, { Fragment, useContext } from "react";
 import { Handle, Position } from "react-flow-renderer";
-
-import { InlineLoading } from "@carbon/react";
 import "./style.scss";
-// import { FlowItemContext } from "../../pages/FlowItem/context";
-import { StateColors } from "../../shared/themes";
-// import { NewNodeProps } from "../NodeSelector/NodeSelectorItem";
-import styled from "styled-components";
 import { NoteContext } from "../../context/notes";
-import { useParams } from "react-router-dom";
-import { Tag } from "@carbon/react";
-import { AnchorNode } from "./NodeTypes";
 import TextBoxNode from "./NodeTypes/TextBoxNode";
 import { INode } from "src/types/notes";
+import IconNode from "./NodeTypes/IconNode";
+import TitleNode from "./NodeTypes/TitleNode";
+import TextNode from "./NodeTypes/TextNode";
 
-const Description = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: left;
-  gap: 10px;
-  margin-top: 5px;
-`;
-
-const CustomComponentNode: React.FC<INode> = ({ id, data, node_styles }) => {
-  // const nodeContext = useContext(FlowItemContext);
-  // const { folderId, noteId } = useParams();
-  // const noteData = useContext(NoteContext);
-  // const folder = noteData.folders.filter((folder) => folder.id === folderId)[0];
-  // const note = folder.notes.filter((note) => note.id === noteId)[0];
-  const { note } = useContext(NoteContext);
+const CustomComponentNode: React.FC<INode> = ({ id, data }) => {
+  const { note, setSelectedNode } = useContext(NoteContext);
 
   const handleNodeClick = (id: string) => {
-    // noteData?.setFlowSelectedNode(id);
-    // console.log(id);
+    note.nodes?.filter((node) => {
+      if (node.id === id) {
+        setSelectedNode(node);
+      }
+    });
   };
 
-  const handleNodeDoubleClick = () => {
-    // if (noteData.openTextPanel === false) {
-    //   noteData?.setOpenTextPanel(true);
-    // }
+  const handleNodeBlur = () => {
+    setSelectedNode({} as INode);
   };
-
-  console.log(data);
 
   return (
     <Fragment>
-      {data.category === "anchor-node" && <AnchorNode data={data}></AnchorNode>}
+      {data.category === "icon-node" && (
+        <IconNode
+          data={data}
+          selected_id={id}
+          handleNodeClick={handleNodeClick}
+          handleNodeBlur={handleNodeBlur}
+        ></IconNode>
+      )}
+      {data.category === "text-node" && (
+        <TextNode
+          data={data}
+          selected_id={id}
+          handleNodeClick={handleNodeClick}
+          handleNodeBlur={handleNodeBlur}
+        ></TextNode>
+      )}
+
+      {data.category === "title-node" && (
+        <TitleNode
+          data={data}
+          selected_id={id}
+          handleNodeClick={handleNodeClick}
+          handleNodeBlur={handleNodeBlur}
+        ></TitleNode>
+      )}
+
       {data.category === "input-node" && (
         <TextBoxNode
           data={data}
           selected_id={id}
           handleNodeClick={handleNodeClick}
-          handleNodeDoubleClick={handleNodeDoubleClick}
-          node_styles={node_styles}
+          handleNodeBlur={handleNodeBlur}
         ></TextBoxNode>
       )}
       <Handle
@@ -67,16 +71,16 @@ const CustomComponentNode: React.FC<INode> = ({ id, data, node_styles }) => {
         }}
       />
 
-      {/* <Handle
+      <Handle
         type="source"
         position={Position.Bottom}
         id="bottom_handle"
         style={{
+          // top: "50%",
           borderRadius: 0,
           backgroundColor: "transparent",
-          width: "100%",
-          height: "10px",
-          top: "100%",
+          width: "10px",
+          bottom: 0,
         }}
       />
       <Handle
@@ -86,11 +90,10 @@ const CustomComponentNode: React.FC<INode> = ({ id, data, node_styles }) => {
         style={{
           borderRadius: 0,
           backgroundColor: "transparent",
-          width: "100%",
-          height: "10px",
-          top: "0%",
+          width: "10px",
+          bottom: 0,
         }}
-      /> */}
+      />
 
       <Handle
         type="target"

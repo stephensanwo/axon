@@ -12,13 +12,15 @@ export const HeaderTextInput = styled.input`
   text-align: left;
   font-family: "IBM Plex Sans", sans-serif;
   border: none;
-  color: #000;
+  color: ${(props: { color: string }) => props.color};
+  padding-right: 24px;
 
   ::placeholder {
     font-weight: 600;
     font-size: 1rem;
     font-family: "IBM Plex Sans", sans-serif;
     text-align: left;
+    color: ${(props: { color: string }) => props.color};
   }
   :focus {
     outline: none;
@@ -33,34 +35,10 @@ export const HeaderTextContent = styled.h4`
   letter-spacing: 0;
   padding: 0;
   text-align: left;
-  color: #000;
+  color: ${(props: { color: string }) => props.color};
 
   :hover {
     cursor: text;
-  }
-`;
-
-export const HeaderTitleInput = styled.input`
-  height: ${(props: { height: string }) => props.height};
-  min-width: 600px;
-  background-color: transparent;
-  font-size: 1.25rem;
-  font-weight: 600;
-  line-height: 1.4;
-  letter-spacing: 0;
-  padding: 0;
-  text-align: left;
-  color: #000;
-
-  ::placeholder {
-    font-size: 2rem;
-    font-weight: 600;
-    font-family: "IBM Plex Sans", sans-serif;
-    text-align: left;
-  }
-  :focus {
-    outline: none;
-    border: none;
   }
 `;
 
@@ -70,7 +48,6 @@ export const ParagraphInput = styled.textarea`
   background-color: transparent;
   margin: 0;
   text-align: left;
-  color: #000;
   overflow: auto;
   resize: none;
   font-size: 14px;
@@ -80,6 +57,7 @@ export const ParagraphInput = styled.textarea`
   line-height: 1.4;
   letter-spacing: 0;
   border: none;
+  color: ${(props: { color: string }) => props.color};
 
   ::placeholder {
     font-size: 14px;
@@ -88,12 +66,20 @@ export const ParagraphInput = styled.textarea`
     text-align: left;
     line-height: 1.4;
     letter-spacing: 0;
-    color: #000;
+    color: ${(props: { color: string }) => props.color};
   }
   :focus {
     outline: none;
     border: none;
   }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 `;
 
 export const ParagraphTextContent = styled.p`
@@ -103,8 +89,11 @@ export const ParagraphTextContent = styled.p`
   line-height: 1.4;
   letter-spacing: 0;
   text-align: left;
-  color: #000;
   width: calc(280px - 32px);
+  word-wrap: break-word;
+  max-height: 38px;
+  overflow: hidden;
+  color: ${(props: { color: string }) => props.color};
 
   :hover {
     cursor: text;

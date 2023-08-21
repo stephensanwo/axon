@@ -1,3 +1,4 @@
+import { type } from "os";
 import { INoteSummary } from "./folders";
 
 export interface INote {
@@ -20,8 +21,20 @@ export type INoteAction =
   | {
       type: "ADD_NODE";
       payload: {
-        node_type: "input-node" | "anchor-node";
-        node_data: INote;
+        node_type:
+          | "input-node"
+          | "anchor-node"
+          | "icon-node"
+          | "title-node"
+          | "text-node";
+        default_theme: NodeStyleProps;
+      };
+    }
+  | {
+      type: "UPDATE_NODE";
+      payload: {
+        node_id: string;
+        updated_fields: Partial<NodeDataProps>; // Use Partial to allow updating specific fields
       };
     }
   | {
@@ -52,10 +65,16 @@ export interface IUpdateNoteProps
   extends Omit<INoteSummary, "user_id" | "date_created" | "last_edited"> {}
 export interface NodeDataProps {
   id: string;
-  label: string;
   title: string;
   description: string;
-  category: "input-node" | "anchor-node";
+  category:
+    | "input-node"
+    | "anchor-node"
+    | "icon-node"
+    | "title-node"
+    | "text-node";
+  icon?: string;
+  node_styles: NodeStyleProps;
 }
 
 export interface NodeContentProps {
@@ -66,9 +85,9 @@ export interface NodeContentProps {
 }
 
 export interface NodeStyleProps {
-  background_styles: Object;
-  label_styles: Object;
-  description_styles: Object;
+  node_background_color: string;
+  node_border_color: string;
+  font_color: string;
 }
 
 export interface INode {
@@ -81,7 +100,6 @@ export interface INode {
   };
   className: string;
   content: string;
-  node_styles: NodeStyleProps;
 }
 
 export interface EdgeProps {
@@ -108,4 +126,11 @@ export interface MarkdownNoteProps {
 export interface INoteModal {
   new: boolean;
   publish: boolean;
+}
+
+export interface INodePanel {
+  toogle: boolean;
+  styles: boolean;
+  markdown: boolean;
+  settings: boolean;
 }

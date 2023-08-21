@@ -1,16 +1,21 @@
-import React, { Fragment, useEffect, useRef, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ParagraphInput, ParagraphTextContent } from "./styles";
 
 interface ParagraphTextProps {
   description: string;
+  mutateDescription: (
+    fieldName: "title" | "description",
+    value: string
+  ) => void;
   style?: object;
   children?: React.ReactNode;
+  color: string;
 }
 
 const ParagraphText: React.FC<ParagraphTextProps> = (props) => {
   const [editing, setEditing] = useState(false);
-  const [data, setData] = useState(props.description);
-  const paragraphInputRef = useRef<any>(null);
+  const [inputValue, setInputValue] = useState(props.description); // Controlled input value
+  const paragraphInputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {
     setEditing(true);
@@ -21,36 +26,45 @@ const ParagraphText: React.FC<ParagraphTextProps> = (props) => {
     // Update the global context with data
   };
 
-  const handleChange = (e: any) => {
-    setData(e.target.value);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
   };
 
   useEffect(() => {
-    if (paragraphInputRef && paragraphInputRef.current && editing === true) {
+    if (editing && paragraphInputRef.current) {
       paragraphInputRef.current.focus();
     }
-  }, [editing, paragraphInputRef]);
+  }, [editing]);
+
+  useEffect(() => {
+    setInputValue(props.description); // Update input value when the description prop changes
+  }, [props.description]);
 
   return (
-    <Fragment>
+    <>
       {editing ? (
         <ParagraphInput
-          autofocus
+          autoFocus
           ref={paragraphInputRef}
-          value={data}
+          value={inputValue}
           onBlur={handleBlur}
           type="text"
           placeholder="Node Text"
           onChange={handleChange}
           rows={2}
+          color={props.color}
         />
       ) : (
-        <ParagraphTextContent onClick={handleClick} onBlur={handleBlur}>
-          {`${data}`.slice(0, 100)}
-          {data.length > 100 ? "..." : ""}
+        <ParagraphTextContent
+          onClick={handleClick}
+          onBlur={handleBlur}
+          color={props.color}
+        >
+          {`${inputValue}`.slice(0, 100)}
+          {inputValue.length > 100 ? "..." : ""}
         </ParagraphTextContent>
       )}
-    </Fragment>
+    </>
   );
 };
 

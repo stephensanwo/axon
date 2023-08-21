@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { device } from "./media";
 
 export const PageContainer = styled.div`
-  padding-top: 88px;
+  padding-top: 40px;
   overflow-y: scroll;
   height: 100vh;
   max-height: 100vh;

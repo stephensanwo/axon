@@ -1,14 +1,12 @@
 import React, { useContext, useState } from "react";
-import { OverflowMenu, OverflowMenuItem } from "@carbon/react";
+import { IconButton } from "@carbon/react";
 import styled from "styled-components";
 import "./style.scss";
 import AppContext from "../../context/app";
-import { StateColors } from "../../shared/themes";
-
+import { StateColors, ThemeColors } from "../../shared/themes";
 import { INoteModal } from "src/types/notes";
 import FolderContext from "src/context/folder";
 import PublishNote from "src/components/Note/PublishNote";
-import NoteContext from "src/context/notes";
 import { usePageActions } from "src/hooks/usePageActions";
 
 interface PageHeaderProps {
@@ -19,6 +17,7 @@ export interface HeaderMenuProps {
   menuText: string;
   menuIcon: React.ReactNode;
   action?: any;
+  isDisabled?: boolean;
   menuOptions: Array<{
     text: React.ReactNode;
     className: string;
@@ -29,15 +28,9 @@ export interface HeaderMenuProps {
 }
 
 export const PageHeaderContainer = styled.div`
-  border-bottom: 1px solid #393939;
-  width: 100vw;
-  top: 0;
-  margin-top: 40px;
-  position: fixed;
-  z-index: 9000;
-  height: 40px;
-  padding-left: ${(props: { expand: boolean }) =>
-    props.expand ? "320px" : "0px"};
+  width: 50vw;
+  background-color: ${ThemeColors.bgDark};
+  margin-left: 320px;
 `;
 
 const NavMenu = styled.div`
@@ -82,31 +75,31 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
     <PageHeaderContainer expand={isSideNavExpanded && true}>
       <NavMenu>
         <NavActions>
-          {pageActions.map((menu, index) => (
-            <OverflowMenu
-              data-floating-menu-container
-              size="md"
-              renderIcon={() => menu.menuIcon}
-              id="overflow-menu"
-              focusTrap={false}
-              iconDescription={menu.menuText}
-              key={index}
-              ariaLabel="Menu"
-              onClick={menu.action}
-              disabled={!selectedNote.note_id && true}
-            >
-              {menu.menuOptions.map((option, index) => (
-                <OverflowMenuItem
-                  className={option.className}
-                  itemText={option.text}
-                  disabled={option.isDisabled}
-                  isDelete={option.isDelete}
-                  key={index}
-                  onClick={option.action}
-                />
-              ))}
-            </OverflowMenu>
-          ))}
+          {pageActions.map((menu, index) => {
+            return (
+              <IconButton
+                size="md"
+                focusTrap={false}
+                iconDescription={"Close"}
+                key={index}
+                ariaLabel="Close"
+                onClick={menu.action}
+                disabled={false}
+                kind="secondary"
+                style={{
+                  width: "50px",
+                  height: "47px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: 0,
+                }}
+                label={""}
+              >
+                {menu.menuIcon}
+              </IconButton>
+            );
+          })}
         </NavActions>
         <NavDocumentTitle>
           <p>{props.documentTitle}</p>

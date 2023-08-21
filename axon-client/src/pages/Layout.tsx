@@ -1,6 +1,5 @@
 import { Fragment, useContext, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import Footer from "src/components/Footer";
 import StyledHeader from "src/components/StyledHeader";
 import { Theme } from "@carbon/react";
 import AppContext from "src/context/app";
@@ -29,7 +28,6 @@ const Layout = () => {
       ) : (
         <Fragment>
           <Outlet />
-          {isSignedIn && <Footer />}
         </Fragment>
       )}
     </Theme>

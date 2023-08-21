@@ -9,3 +9,7 @@ export interface ILoadingState {
   success: boolean;
   error: boolean;
 }
+
+export interface IAppSettings {
+  grid: boolean;
+}

@@ -12,11 +12,6 @@ import { fetchData } from "src/api/query";
 import { Alert } from "src/components/Alert";
 import useSWR from "swr";
 
-const FlowItemAdjustable = styled.div`
-  margin-left: ${(props: { isSideNavExpanded: boolean }) =>
-    props.isSideNavExpanded ? "320px" : "0px"};
-`;
-
 const FlowItemContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -32,7 +27,6 @@ export const NoteDiv = styled.div`
 const Notes: React.FC = () => {
   const { selectedNote } = useContext(FolderContext);
   const { noteDispatch } = useContext(NoteContext);
-  const { isSideNavExpanded } = useContext(AppContext);
 
   //  Fetch the data directly without using the useDataFetching Hook
   // Set selectedNote as dependency
@@ -63,33 +57,19 @@ const Notes: React.FC = () => {
 
   return (
     <Fragment>
-      <PageHeader
-        theme={"dark"}
-        documentTitle={
-          noteLoading
-            ? "Fetching Note..."
-            : selectedNote?.note_name
-            ? `${selectedNote.folder_name ?? ""} / ${
-                selectedNote.note_name ?? ""
-              }`
-            : `${selectedNote.folder_name ?? ""} / Create new note`
-        }
-      />
       <PageContainer dark>
         <Folders />
-        <FlowItemAdjustable isSideNavExpanded={isSideNavExpanded}>
-          <FlowItemContainer>
-            <NoteDiv>{noteData && <FlowTree />}</NoteDiv>
-            {noteError && (
-              <Alert
-                title={"Error fetching note detail. Please try again later"}
-                kind={"error"}
-                hideCloseButton={false}
-                lowContrast={true}
-              />
-            )}
-          </FlowItemContainer>
-        </FlowItemAdjustable>
+        <FlowItemContainer>
+          <NoteDiv>{noteData && <FlowTree />}</NoteDiv>
+          {noteError && (
+            <Alert
+              title={"Error fetching note detail. Please try again later"}
+              kind={"error"}
+              hideCloseButton={false}
+              lowContrast={true}
+            />
+          )}
+        </FlowItemContainer>
       </PageContainer>
     </Fragment>
   );

@@ -8,21 +8,24 @@ import ReactFlow, {
   updateEdge,
   useNodesState,
   useEdgesState,
+  Background,
+  BackgroundVariant,
 } from "react-flow-renderer";
 import { CustomComponentNode } from "../Node";
 import { NoteContext } from "../../context/notes";
 import CustomEdge from "../Node/CustomEdge";
-import TextPanel from "../TextPanel";
+import NodePanel from "../NodePanel";
 import FolderContext from "src/context/folder";
 import AppContext from "src/context/app";
+import { ThemeColors } from "src/shared/themes";
 
 const FlowTreeDiv = styled.div`
-  height: 85vh;
+  height: calc(100vh - 40px);
   width: 100%;
   margin: auto;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  /* background-color: red; */
+  /* padding-top: 10px;
+  padding-bottom: 10px; */
+  /* background-color: #2b2929; */
 `;
 
 const nodeTypes = {
@@ -37,11 +40,8 @@ const FlowTree = () => {
   // const noteData = useContext(NoteContext);
   // const folder = noteData.folders.filter((folder) => folder.id === folderId)[0];
   // const note = folder.notes.filter((note) => note.id === noteId)[0];
-  const { isSideNavExpanded } = useContext(AppContext);
-  const { note } = useContext(NoteContext);
-
-  console.log(note);
-
+  const { isSideNavExpanded, appSettings } = useContext(AppContext);
+  const { note, nodePanel } = useContext(NoteContext);
   const [nodes, setNodes, onNodesChange] = useNodesState();
   const [edges, setEdges, onEdgesChange] = useEdgesState();
 
@@ -57,7 +57,9 @@ const FlowTree = () => {
   }, [note?.edges, note?.nodes, setEdges, setNodes]);
 
   const onConnect = (params: object) =>
-    setEdges((els: any) => addEdge({ ...params, type: "buttonedge" }, els));
+    setEdges((els: any) =>
+      addEdge({ ...params, type: "buttonedge", animated: true }, els)
+    );
 
   const onLoad = (reactFlowInstance: any) =>
     reactFlowInstance.setTransform({
@@ -65,9 +67,6 @@ const FlowTree = () => {
       y: 0,
       zoom: 1,
     });
-
-  console.log(edges);
-  console.log(nodes);
 
   return (
     <FlowTreeDiv>
@@ -84,10 +83,21 @@ const FlowTree = () => {
           snapGrid={[15, 15]}
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
-        ></ReactFlow>
+          onlyRenderVisibleElements={true}
+        >
+          {appSettings.grid && (
+            <Background
+              id="2"
+              gap={50}
+              offset={1}
+              color={ThemeColors.bgHighlight2}
+              variant={BackgroundVariant.Lines}
+            />
+          )}
+        </ReactFlow>
         <Controls style={{ left: isSideNavExpanded ? "320px" : "0px" }} />
       </ReactFlowProvider>
-      {/* <TextPanel expanded={noteData.openTextPanel} /> */}
+      <NodePanel expanded={nodePanel.toogle} />
     </FlowTreeDiv>
   );
 };

@@ -1,2 +1,157 @@
-@use '@carbon/react';
+@use '@carbon/react' with ($font-path: '@ibm/plex'
+);
+@use '@carbon/react/scss/themes';
+@use '@carbon/react/scss/theme';
+@use '@carbon/themes/scss/utilities';
+@use '@carbon/react/scss/components/button';
 
+// Override IBM Carbon Styles
+.cds--g100 {
+    --cds-background-brand: #35b058;
+    --cds-border-interactive: #35b058;
+    --cds-link-primary: #35b058;
+    --cds-button-primary: #35b058;
+    --cds-button-primary-hover: #258540;
+    --cds-button-primary-active: #258540;
+    --cds-text-on-color: #ffffff;
+    --cds-button-secondary: #161616;
+    --cds-button-secondary-hover: rgb(48, 48, 48);
+    --cds-button-secondary-active: rgb(38, 38, 38);
+
+    --cds-button-tertiary: #35b058;
+    --cds-focus: #35b058;
+    --cds-interactive: #51ff83;
+    --cds-support-info-inverse: #35b058;
+}
+
+.cds--menu {
+    @include theme.theme(themes.$g90);
+}
+
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "IBM Plex Sans";
+
+    // border: 1px dashed #1192e8;
+}
+
+body {
+    font-family: "IBM Plex Sans";
+    background-color: #161616;
+}
+
+button {
+    font-family: "IBM Plex Sans";
+}
+
+h1 {
+    font-family: "IBM Plex Sans";
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.4;
+    font-size: 38px;
+}
+
+h2 {
+    color: #fff;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+h3 {
+    color: #fff;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+h4 {
+    font-family: "IBM Plex Sans";
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.4;
+}
+
+h5 {
+    color: #fff;
+    line-height: 1.4;
+}
+
+h6 {
+    color: #fff;
+    line-height: 1.4;
+}
+
+small {
+    color: #c9d1d9;
+    line-height: 1.4;
+    font-size: 0.675rem;
+    font-weight: 400;
+    letter-spacing: 0.16px;
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+}
+
+p {
+    color: #fff;
+    line-height: 1.4;
+    font-size: 14px;
+}
+
+li {
+    color: #fff;
+    line-height: 1.4;
+    font-size: 14px;
+    list-style: disc;
+    padding: 0;
+}
+
+ol,
+ul {
+    margin: 0;
+}
+
+a {
+    color: rgb(234, 255, 150);
+    line-height: 1.4;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: rgb(203, 228, 105);
+}
+
+.styled-span {
+    display: flex;
+    align-items: center;
+}
+
+table {
+    color: #c9d1d9;
+}
+
+code {
+    color: #c9d1d9;
+}
+
+hr {
+    border: 1px solid #262626;
+}
+
+.axon {
+    font-family: "IBM Plex Sans";
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.4;
+    font-size: 38px;
+    letter-spacing: 0.5rem;
+}
+
+// .cds--header {
+//     height: 40px;
+// }

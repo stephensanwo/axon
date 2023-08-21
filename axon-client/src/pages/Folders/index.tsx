@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useContext, Fragment } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  Fragment,
+  useRef,
+} from "react";
 import {
   SideNav,
   SideNavItems,
@@ -27,7 +33,6 @@ const StyledSideNav = styled(SideNav)`
   background-color: #262626;
   min-width: 320px;
   padding-bottom: 40px;
-  position: fixed;
 `;
 
 const Folders = () => {
@@ -50,14 +55,31 @@ const Folders = () => {
     setSelectedFolder(selectedFolder);
   };
 
+  // Create a ref for the side navigation to handle outside click event
+  const navRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleDocumentClick = (event: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        onClickSideNavExpand(false);
+      }
+    };
+    document.addEventListener("click", handleDocumentClick);
+    return () => {
+      document.removeEventListener("click", handleDocumentClick);
+    };
+  }, []);
+
   return (
     <Fragment>
       {isSideNavExpanded ? (
         <StyledSideNav
+          ref={navRef}
+          tabIndex={1}
           isFixedNav
           expanded={isSideNavExpanded}
           isChildOfHeader={true}
-          aria-label="Side navigation"
+          aria-label="Side Navigation"
           style={{ paddingTop: "40px" }}
         >
           <div

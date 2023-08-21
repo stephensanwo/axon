@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import { axiosPrivate } from "src/api/axios";
-import AppContext from "src/context/app";
+import AuthContext from "src/context/auth";
 
 const useQueryAuth = () => {
-  const { setUser, setIsSignedIn } = useContext(AppContext);
+  const { setUser, setIsSignedIn } = useContext(AuthContext);
 
   const queryAuth = async () => {
     const response = await axiosPrivate("/auth-user");
