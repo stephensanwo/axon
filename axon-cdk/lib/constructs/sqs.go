@@ -17,7 +17,7 @@ func Queue(scope constructs.Construct, id string, props *SqsQueueProps) awssqs.Q
 	// create SQS queue
 	queue := awssqs.NewQueue(scope, jsii.String(props.QueueName), &awssqs.QueueProps{
 		VisibilityTimeout: awscdk.Duration_Seconds(jsii.Number(300)),
-		QueueName:         jsii.String("MySqsQueue"),
+		QueueName:         jsii.String(props.QueueName),
 	})
 	
 	return queue
