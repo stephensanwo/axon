@@ -9,3 +9,10 @@ export const axiosPrivate = axios.create({
   headers: { "Content-Type": "application/json" },
   withCredentials: true,
 });
+
+export const axiosAuthPrivate = axios.create({
+  baseURL: "https://127.0.0.1:8301",
+  headers: { "Content-Type": "application/json" },
+  withCredentials: true,
+});
+

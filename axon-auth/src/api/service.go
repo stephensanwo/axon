@@ -4,37 +4,38 @@ import (
 	"context"
 	"net/http"
 
-	_ "axon-server/docs/swagger"
-	routes "axon-server/src/api/routes"
+	_ "axon-auth/docs/swagger"
+	routes "axon-auth/src/api/routes"
 
 	log "github.com/sirupsen/logrus"
 	axon_types "github.com/stephensanwo/axon-lib/types"
 	"github.com/stephensanwo/handlers"
 	"github.com/stephensanwo/mux"
 	httpSwagger "github.com/swaggo/http-swagger"
+	oauth2 "golang.org/x/oauth2"
 )
 
-type AxonService struct {
+type AxonAuthService struct {
 	Routes      *[]axon_types.Route
 	AxonContext *axon_types.AxonContext
 }
 
-func (a AxonService) ErrorHandler(w http.ResponseWriter, err error) {
+func (a AxonAuthService) ErrorHandler(w http.ResponseWriter, err error) {
 	http.Error(w, err.Error(), http.StatusInternalServerError)
 }
 
-func (a AxonService) AuthenticationErrorHandler(w http.ResponseWriter, err error) {
+func (a AxonAuthService) AuthenticationErrorHandler(w http.ResponseWriter, err error) {
 	http.Error(w, err.Error(), http.StatusUnauthorized)
 }
 
-func (a AxonService) PublicHandler(fn func(http.ResponseWriter, *http.Request, *axon_types.AxonContext)) http.HandlerFunc {
+func (a AxonAuthService) PublicHandler(fn func(http.ResponseWriter, *http.Request, *axon_types.AxonContext)) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fn(w, r, a.AxonContext)
 
 	}
 }
 
-func (a AxonService) PrivateHandler(fn func(http.ResponseWriter, *http.Request, *axon_types.AxonContext)) http.HandlerFunc {
+func (a AxonAuthService) PrivateHandler(fn func(http.ResponseWriter, *http.Request, *axon_types.AxonContext)) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie(axon_types.AUTH_SESSION)
 		if cookie == nil || err != nil {
@@ -47,7 +48,7 @@ func (a AxonService) PrivateHandler(fn func(http.ResponseWriter, *http.Request, 
 	}
 }
 
-func (a AxonService) ConfigureLogger() {
+func (a AxonAuthService) ConfigureLogger() {
 	if a.AxonContext.Settings.Metadata.Environment == axon_types.DEVELOPMENT {
 		log.SetFormatter(&log.TextFormatter{DisableColors: false,
 			FullTimestamp: true})
@@ -56,7 +57,7 @@ func (a AxonService) ConfigureLogger() {
 	}
 }
 
-func (a AxonService) CreateApi() {
+func (a AxonAuthService) CreateApi() {
 	a.ConfigureLogger()
 	r := mux.NewRouter()
 
@@ -76,25 +77,35 @@ func (a AxonService) CreateApi() {
 		}
 	}
 	r.HandleFunc("/docs/*", httpSwagger.Handler(
-		httpSwagger.URL("https://127.0.0.1:8100/docs/doc.json"),
+		httpSwagger.URL("https://127.0.0.1:8301/docs/doc.json"),
 	))
 	r.PathPrefix("/docs").Handler(httpSwagger.WrapHandler)
 
-	log.Println("Server running on port 8100")
-	log.Fatal(http.ListenAndServeTLS("127.0.0.1:8100", "./ssl/server.crt", "./ssl/server.key", handlers.CORS(ALLOWED_ORIGINS, ALLOWED_METHODS, ALLOWED_HEADERS,EXPOSED_HEADERS,ALLOWED_CREDENTIALS,MAX_AGE)(r) ))
-	// log.Fatal(http.ListenAndServe("127.0.0.1:8100", handlers.CORS(ALLOWED_ORIGINS, ALLOWED_METHODS, ALLOWED_HEADERS,EXPOSED_HEADERS,ALLOWED_CREDENTIALS,MAX_AGE)(r) ))
+	log.Println("Server running on port 8301")
+	log.Fatal(http.ListenAndServeTLS("127.0.0.1:8301", "./ssl/server.crt", "./ssl/server.key", handlers.CORS(ALLOWED_ORIGINS, ALLOWED_METHODS, ALLOWED_HEADERS,EXPOSED_HEADERS,ALLOWED_CREDENTIALS,MAX_AGE)(r) ))
+	// log.Fatal(http.ListenAndServe("127.0.0.1:8301", handlers.CORS(ALLOWED_ORIGINS, ALLOWED_METHODS, ALLOWED_HEADERS,EXPOSED_HEADERS,ALLOWED_CREDENTIALS,MAX_AGE)(r) ))
 }
 
-func NewAxonService(settings *axon_types.Settings) {
+func NewAxonAuthService(settings *axon_types.Settings) {
 	routes := routes.GetRoutes()
 
 	axonContext := axon_types.AxonContext{
 		Context:  context.Background(),
 		Settings: *settings,
+		Oauth: oauth2.Config{
+			ClientID:     settings.OauthSettings.ClientID,
+			ClientSecret: settings.OauthSettings.ClientSecret,
+			Scopes:       settings.OauthSettings.Scope,
+			Endpoint: oauth2.Endpoint{
+				AuthURL:  settings.OauthSettings.AuthorizeUrl,
+				TokenURL: settings.OauthSettings.AccessTokenUrl,
+			},
+			RedirectURL: settings.OauthSettings.RedirectUri,
+		},
 		SessionId:          "",
 	}
 
-	service := AxonService{
+	service := AxonAuthService{
 		Routes:      &routes,
 		AxonContext: &axonContext,
 	}

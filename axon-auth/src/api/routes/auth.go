@@ -1,9 +1,11 @@
 package routes
 
 import (
-	aws "axon-server/src/aws"
 	"encoding/json"
+	"fmt"
 	"net/http"
+
+	_ "axon-auth/src/types"
 
 	axon_core "github.com/stephensanwo/axon-lib/core"
 	axon_session "github.com/stephensanwo/axon-lib/session"
@@ -28,12 +30,11 @@ func AuthCallbackHandler(w http.ResponseWriter, r *http.Request, a *axon_types.A
 	}
 
 	// Create User
-	user := axon_core.User{
-		AwsSession: aws.CreateSession(),
-	}
+	user := axon_core.User{}
+	fmt.Println("user",user)
 
 	userData, err := user.CreateUser(a, token)
-	
+	fmt.Println("User data", userData)
 	// Create User Session Data
 	sessionData := axon_types.Session{
 		SessionId: axon_session.NewSessionId(),
@@ -43,12 +44,17 @@ func AuthCallbackHandler(w http.ResponseWriter, r *http.Request, a *axon_types.A
 		},
 	}
 
+	fmt.Println("Session data", sessionData)
+
 	session := axon_session.SessionManager{
 		CookieName: axon_types.AUTH_SESSION,
 		SessionId:  sessionData.SessionId,
 	}
 
+	fmt.Println("Session", session)
+
 	session.CreateSession(w, a, &sessionData)
+	fmt.Println("Session created")
 
 	if err != nil {
 		http.Redirect(w, r, a.Settings.AxonClient.ErrorUrl, http.StatusUnauthorized)
@@ -68,9 +74,8 @@ func AuthCallbackHandler(w http.ResponseWriter, r *http.Request, a *axon_types.A
 //	@Failure		401	{string}	string			"Unauthorized"
 //	@Router			/auth-user [get]
 func QueryUserData(w http.ResponseWriter, r *http.Request, a *axon_types.AxonContext) {
-	user := axon_core.User{
-		AwsSession: aws.CreateSession(),
-	}
+	user := axon_core.User{}
+	
 	session, err := user.GetAuthenticatedUserData(a)
 
 	if err != nil {

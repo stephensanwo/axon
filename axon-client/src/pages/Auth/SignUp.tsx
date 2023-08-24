@@ -6,11 +6,12 @@ import { GITHUB_AUTH_URL, GOOGLE_AUTH_URL } from "src/config";
 import { TouchId } from "@carbon/pictograms-react";
 import axonLogo from "src/assets/icons/axon-logo.svg";
 import { Google } from "iconsax-react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { ThemeColors } from "src/shared/themes";
 import { Link } from "react-router-dom";
 import AuthContext from "src/context/auth";
+import AxonInlineLoader from "src/components/Loader/InlineLoader";
 
 const SignUpContainer = styled.div`
   width: 100%;
@@ -33,6 +34,7 @@ const SignUpBox = styled.div`
 
 const SignUp = () => {
   const { isSignedIn } = useContext(AuthContext);
+  const [loading, setLoading] = useState<string>();
 
   if (isSignedIn) {
     return <Navigate to="/notes" />;
@@ -54,23 +56,33 @@ const SignUp = () => {
 
           <p style={{ marginTop: "2rem" }}>Create an Account or Sign In</p>
           <AxonButton
+            id="github-auth"
             kind="primary"
             renderIcon={() => <LogoGithub size="16" />}
             iconDescription={"Login with Github"}
             style={{ marginTop: "50px" }}
             size="md"
-            onClick={() => (window.location.href = `${GITHUB_AUTH_URL}`)}
+            onClick={(e: any) => {
+              window.location.href = `${GITHUB_AUTH_URL}`;
+              setLoading(e.target.id);
+            }}
+            disabled={loading === "github-auth" ? true : false}
           >
-            Continue with Github
+            {loading === "github-auth"
+              ? "Authenticating..."
+              : "Continue with Github"}
           </AxonButton>
           <AxonButton
-            kind="secondary"
+            id="google-auth"
+            kind="primary"
             renderIcon={() => <Google size="16" variant="Bold" />}
             iconDescription={"Sign Up"}
             onClick={() => (window.location.href = `${GOOGLE_AUTH_URL}`)}
-            disabled
+            disabled={loading === "google-auth" ? true : false}
           >
-            Continue with Google
+            {loading === "google-auth"
+              ? "Authenticating..."
+              : "Continue with Google"}
           </AxonButton>
           <div
             style={{

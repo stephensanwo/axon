@@ -15,18 +15,6 @@ func GetRoutes() []axon_types.Route {
 			Method:  http.MethodGet,
 		},
 		{
-			Path:    "/callback",
-			Auth:    axon_types.PublicRoute,
-			Handler: AuthCallbackHandler,
-			Method:  http.MethodGet,
-		},
-		{
-			Path:    "/auth-user",
-			Auth:    axon_types.PublicRoute,
-			Handler: QueryUserData,
-			Method:  http.MethodGet,
-		},
-		{
 			Path:    "/folder-list",
 			Auth:    axon_types.PrivateRoute,
 			Handler: QueryFolderListHandler,

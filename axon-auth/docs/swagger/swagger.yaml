@@ -1,0 +1,101 @@
+basePath: /
+definitions:
+  axon-auth_src_types.BaseResponse:
+    properties:
+      message: {}
+    type: object
+  types.Folder:
+    properties:
+      date_created:
+        type: string
+      folder_id:
+        type: string
+      folder_name:
+        type: string
+      last_edited:
+        type: string
+      user_id:
+        type: string
+    type: object
+host: 127.0.0.1:8301
+info:
+  contact:
+    email: stephen.sanwo@icloud.com
+    name: Stephen Sanwo
+  description: Axon Auth API
+  license:
+    name: MIT
+    url: https://mit-license.org
+  termsOfService: stephen.sanwo@icloud.com
+  title: Axon Auth API
+  version: "1.0"
+paths:
+  /auth-github:
+    get:
+      description: Oauth with Github
+      operationId: github-oauth
+      responses:
+        "200":
+          description: Ok
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Oauth with Github
+      tags:
+      - User
+  /auth-user:
+    get:
+      description: Query Authenticated User
+      operationId: get-auth-user
+      responses:
+        "200":
+          description: User
+          schema:
+            $ref: '#/definitions/types.Folder'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Query Authenticated User
+      tags:
+      - User
+  /callback:
+    get:
+      consumes:
+      - application/json
+      description: AuthCallback
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/axon-auth_src_types.BaseResponse'
+      summary: AuthCallback
+      tags:
+      - Auth
+  /ping:
+    get:
+      description: Ping the server
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/axon-auth_src_types.BaseResponse'
+      summary: Ping the server
+      tags:
+      - Ping
+swagger: "2.0"

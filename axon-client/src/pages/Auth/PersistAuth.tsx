@@ -5,7 +5,7 @@ import AxonLoader from "src/components/Loader/Loader";
 import AuthContext from "src/context/auth";
 import { useDataFetching } from "src/hooks/useDataFetching";
 import { IUser } from "src/types/user";
-import { fetchData } from "src/api/query";
+import { fetchData, fetchUser } from "src/api/query";
 import Notes from "../Notes";
 
 const PersistAuth = () => {
@@ -15,7 +15,7 @@ const PersistAuth = () => {
     error: authError,
     data: userData,
     loading: loadingUser,
-  } = useDataFetching<IUser>("auth-user", () => fetchData("auth-user"));
+  } = useDataFetching<IUser>("auth-user", () => fetchUser("auth-user"));
   const location = useLocation();
 
   useEffect(() => {
