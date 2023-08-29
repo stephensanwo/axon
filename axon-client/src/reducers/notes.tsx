@@ -1,4 +1,5 @@
 import { ColorPalette } from "src/shared/themes";
+import { nodeEvents } from "src/types/node";
 import {
   INode,
   INote,
@@ -26,27 +27,31 @@ const noteReducer = (note: INote, action: INoteAction) => {
         ? lastNode.position.y + 0
         : window.outerHeight / 2.5;
       const newNode = {
-         id: id,
-         type: "input",
-         data: {
-           id: id,
-           title: "Text Box",
-           description: "Text Description",
-           category: action.payload.node_type,
-           node_styles: {
-             node_background_color:
-               action.payload.default_theme.node_background_color,
-             node_border_color: action.payload.default_theme.node_border_color,
-             font_color: action.payload.default_theme.font_color,
-           } as NodeStyleProps,
-         } as NodeDataProps,
-         position: {
-           x: newX,
-           y: newY,
-         },
-         className: action.payload.node_type,
-         content: "",
-       } as INode;
+        id: id,
+        type: "input",
+        data: {
+          id: id,
+          title: "Text Box",
+          description: "Text Description",
+          category: action.payload.node_type,
+          node_styles: {
+            node_background_color:
+              action.payload.default_theme.node_background_color,
+            node_border_color: action.payload.default_theme.node_border_color,
+            font_color: action.payload.default_theme.font_color,
+          } as NodeStyleProps,
+        } as NodeDataProps,
+        position: {
+          x: newX,
+          y: newY,
+        },
+        className: action.payload.node_type,
+        content: "",
+      } as INode;
+
+      // Send Node Event
+      action.payload.eventFn &&
+        action.payload.eventFn(nodeEvents.ADD_NODE, newNode);
 
       return { ...note, nodes: [...note.nodes, newNode] };
     }

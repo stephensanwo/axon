@@ -1,5 +1,6 @@
 import { type } from "os";
 import { INoteSummary } from "./folders";
+import { nodeEvents } from "./node";
 
 export interface INote {
   date_created: string;
@@ -28,6 +29,7 @@ export type INoteAction =
           | "title-node"
           | "text-node";
         default_theme: NodeStyleProps;
+        eventFn?: (event: nodeEvents, data: any) => void;
       };
     }
   | {

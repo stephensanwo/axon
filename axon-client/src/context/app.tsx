@@ -1,4 +1,6 @@
 import React, { createContext, useState } from "react";
+import { Message } from "src/api/events/socket";
+import useEventSocket from "src/hooks/events/useEventSocket";
 import { ColorPalette, ThemeColors } from "src/shared/themes";
 import { IAppSettings } from "src/types/app";
 import { NodeStyleProps } from "src/types/notes";
@@ -18,6 +20,8 @@ interface AppContextProps {
   setAppSettings: React.Dispatch<React.SetStateAction<IAppSettings>>;
   defaultNodeTheme: NodeStyleProps;
   setDefaultNodeTheme: React.Dispatch<React.SetStateAction<NodeStyleProps>>;
+  isAutoSave: boolean;
+  sendMessage: (message: Message) => void;
 }
 
 const AppContext = createContext({} as AppContextProps);
@@ -29,6 +33,9 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   const [appSettings, setAppSettings] = useState<IAppSettings>({
     grid: false,
   });
+
+  const { isAutoSave, sendMessage } = useEventSocket();
+
   const [defaultNodeTheme, setDefaultNodeTheme] = useState<NodeStyleProps>({
     node_background_color: ColorPalette.ORANGE1.hex,
     node_border_color: "",
@@ -48,6 +55,8 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         setAppSettings,
         defaultNodeTheme,
         setDefaultNodeTheme,
+        isAutoSave,
+        sendMessage,
       }}
     >
       {children}

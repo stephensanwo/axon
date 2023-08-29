@@ -13,17 +13,14 @@ import {
 import { useContext } from "react";
 import NoteContext from "src/context/notes";
 import AppContext from "src/context/app";
+import { Message } from "src/api/events/socket";
+import { nodeEvents } from "src/types/node";
 
 export const usePageActions = (): HeaderMenuProps[] => {
-  const {
-    note,
-    noteDispatch,
-    selectedNode,
-    setSelectedNode,
-    setNodePanel,
-    nodePanel,
-  } = useContext(NoteContext);
+  const { note, noteDispatch, setNodePanel, nodePanel } =
+    useContext(NoteContext);
   const { defaultNodeTheme } = useContext(AppContext);
+  const { isAutoSave, sendMessage } = useContext(AppContext);
 
   const toggleMarkdown = () => {
     setNodePanel({
@@ -55,6 +52,18 @@ export const usePageActions = (): HeaderMenuProps[] => {
     });
   };
 
+  const handleSendNodeEvent = async (event: nodeEvents, data: any) => {
+    if (isAutoSave) {
+      const message: Message = {
+        event: event,
+        data: `${data}`,
+      };
+      await sendMessage(message);
+    } else {
+      console.log("Socket not yet connected.");
+    }
+  };
+
   const pageActions: HeaderMenuProps[] = [
     {
       menuText: "Add Text Box",
@@ -67,6 +76,7 @@ export const usePageActions = (): HeaderMenuProps[] => {
             payload: {
               node_type: "input-node",
               default_theme: defaultNodeTheme,
+              eventFn: handleSendNodeEvent,
             },
           });
       },
