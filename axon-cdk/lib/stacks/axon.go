@@ -3,6 +3,8 @@ package cdk_stacks
 import (
 	cdk_constructs "axon-cdk/lib/constructs"
 
+	"axon-cdk/lib/types"
+
 	"github.com/aws/aws-cdk-go/awscdk/v2"
 	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
@@ -10,6 +12,7 @@ import (
 
 type CdkStackProps struct {
 	awscdk.StackProps
+	AxonCdkContext *types.AxonCdkContext
 }
 
 func AxonStack(scope constructs.Construct, id string, props *CdkStackProps) awscdk.Stack {
@@ -42,10 +45,19 @@ func AxonStack(scope constructs.Construct, id string, props *CdkStackProps) awsc
 	// Associate the DAX cluster with the DynamoDB table using raw CloudFormation resource
 	// userSessionTable.Node().AddDependency(daxCluster)
 
-	// Create an SQS Queue
-	cdk_constructs.Queue(stack, "AxonEventsQueue", &cdk_constructs.SqsQueueProps{
-		QueueName: "axon_events_queue",
-	})
+	// Create an SQS Queues
+	for _, queue := range props.AxonCdkContext.Settings.Queues {
+		cdk_constructs.Queue(stack, queue, &cdk_constructs.SqsQueueProps{
+			QueueName: queue,
+		})
+	}
+	
+	// Create a CloudWatch Log Groups
+	for _, logGroup := range props.AxonCdkContext.Settings.LogGroups {
+		cdk_constructs.LogGroup(stack, logGroup, &cdk_constructs.LogGroupProps{
+			LogGroupName: logGroup,
+		})
+	}
 
 	// Create a CloudFormation output that displays the table name
 	// awscdk.NewCfnOutput(stack, jsii.String("TableNameOutput"), &awscdk.CfnOutputProps{

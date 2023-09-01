@@ -1,0 +1,13 @@
+metadata:
+  environment: development
+  version: "1.0"
+
+log_groups:
+  - axon_event_logs
+  - axon_background_logs
+  - axon_server_logs
+  - axon_client_logs
+  - axon_auth_logs
+
+queues:
+  - axon_events_queue
