@@ -8,20 +8,22 @@ export const StateColors = {
 };
 export const ThemeColors = {
   bgDark: "#161616",
+  bgDark2: "#262626",
   // bgDark: "rgba(0, 0, 0, 0.93)"
   bgLight: "#ffffff",
   white: "#ffffff",
   bgPrimary: "#f4f4f4",
   bgSecondary: "rgb(27, 27, 27)",
-  primaryAction: "#42be65",
+  primaryAction: "#d3ec45",
   dangerAction: "#d92f37",
   bgHiglight1: "#202020",
   bgHighlight2: "rgb(43, 43, 43)",
   textDark: "#6f6f6f",
-  primary: "#51ff83",
-  primaryHover: "rgb(203, 228, 105)",
+  primary: "#DAEF68",
+  primaryHover: "#d3ec45",
   textBlack: "#000",
   accent: "#1688d4",
+  border: "#393939",
 };
 
 export const NodeThemes = {
@@ -47,6 +49,8 @@ export enum ColorTypes {
   PURPLE1 = "PURPLE1",
   BLUE1 = "BLUE1",
   BLUE2 = "BLUE2",
+  GREENNEON = "GREENNEON",
+  YELLOWNEON = "YELLOWNEON",
 }
 
 export type IColorPalette = Record<
@@ -109,5 +113,13 @@ export const ColorPalette: IColorPalette = {
   BLUE2: {
     label: "Blue 2",
     hex: "#5FC0CA",
+  },
+  GREENNEON: {
+    label: "Green Neon",
+    hex: "#A6FF00",
+  },
+  YELLOWNEON: {
+    label: "Yellow Neon",
+    hex: "#F6FF01",
   },
 };

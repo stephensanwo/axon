@@ -3,7 +3,7 @@
 }
 
 .side-nav-menu-overrides button:hover {
-  background-color: rgb(48, 48, 48) !important;
+  background-color: #262626 !important;
 }
 
 .side-nav-menu-overrides span {
@@ -22,12 +22,12 @@
 
 .side-nav-menu-item-overrides a:hover {
   cursor: pointer;
-  background-color: rgb(48, 48, 48);
+  background-color: #262626;
   text-decoration: none;
 }
 
 .side-nav-menu-item-overrides-selected {
-  background-color: rgb(48, 48, 48);
+  background-color: #262626;
 
 }
 
@@ -41,12 +41,14 @@
 }
 
 .cds--side-nav--ux {
-  z-index: 1000000;
+  z-index: 100;
 }
 
 .cds--header__action {
-  height: 40px;
+  height: calc(3rem + 1px) !important;
   width: 40px;
+  background-color: #161616;
+    border: 1px solid #393939;
 }
 
 .cds--header__name {
@@ -64,7 +66,7 @@
 }
 
 .new-folder-button:hover {
-  background-color: rgb(48, 48, 48);
+  background-color: #262626;
 }
 
 .new-note-button {
@@ -78,5 +80,5 @@
 }
 
 .new-note-button:hover {
-  background-color: rgb(48, 48, 48);
+  background-color: #262626;
 }

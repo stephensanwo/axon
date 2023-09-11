@@ -3,7 +3,7 @@ import { ISelectedNote } from "./notes";
 export interface IFolderList {
   date_created: string;
   folder_id: string;
-  last_edit?: string;
+  last_edited?: string;
   folder_name: string;
   user_id: string;
   notes: INoteSummary[] | [];
@@ -73,10 +73,7 @@ export type IFolderAction =
       };
     };
 
-export interface ICreateFolder {
+export interface IMutateFolder {
   folder_name: string;
-}
-
-export interface IPatchFolder {
-  folder_name: string;
+  folder_id: string;
 }

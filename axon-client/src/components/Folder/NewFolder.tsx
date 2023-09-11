@@ -5,42 +5,23 @@ import {
   ModalFooter,
   ComposedModal,
 } from "@carbon/react";
-import { useContext, useState } from "react";
-import FolderContext from "src/context/folder";
-import { ICreateFolder } from "src/types/folders";
+import { useState } from "react";
+import { IMutateFolder } from "src/types/folders";
 import { AxonButton } from "src/components/Button";
 import AxonInlineLoader from "src/components/Loader/InlineLoader";
-import { useDataMutation } from "src/hooks/useDataMutation";
-import { Alert } from "../Alert";
+import { useFolderMutation } from "src/hooks/folders/useFolderMutation";
+import InlineAlert from "../InlineAlert";
 
 const NewFolder: React.FC<{
   folderModal: boolean;
   setFolderModal: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ folderModal, setFolderModal }) => {
-  const [newFolder, setNewFolder] = useState<ICreateFolder>({
+  const [newFolder, setNewFolder] = useState<IMutateFolder>({
     folder_name: "",
+    folder_id: "",
   });
 
-  const { folderDispatch } = useContext(FolderContext);
-
-  const {
-    data,
-    loading: newFolderLoading,
-    error: newFolderError,
-    mutate,
-  } = useDataMutation<ICreateFolder>("folder");
-
-  const handleNewFolder = () => {
-    setFolderModal(false);
-    mutate(newFolder);
-    folderDispatch({
-      type: "NEW_FOLDER",
-      payload: {
-        folder_id: data?.data,
-        folder_name: newFolder.folder_name,
-      },
-    });
-  };
+  const { createFolder } = useFolderMutation(newFolder, setFolderModal);
 
   return (
     <ComposedModal
@@ -63,9 +44,12 @@ const NewFolder: React.FC<{
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setNewFolder({ ...newFolder, [e.target.name]: e.target.value })
           }
-          invalid={newFolderError && true}
+          invalid={createFolder.status === "error" && true}
           invalidText={"Invalid data provided"}
         />
+        {createFolder.status === "error" && (
+          <InlineAlert text="There was an error creating your folder. Please try again later." />
+        )}
       </ModalBody>
       <ModalFooter>
         <AxonButton kind="secondary" onClick={() => setFolderModal(false)}>
@@ -73,20 +57,12 @@ const NewFolder: React.FC<{
         </AxonButton>
         <AxonButton
           kind="primary"
-          onClick={handleNewFolder}
+          onClick={() => createFolder.mutate("folder")}
           disabled={newFolder.folder_name.length > 0 ? false : true}
         >
-          {newFolderLoading ? <AxonInlineLoader /> : "OK"}
+          {createFolder.status === "loading" ? <AxonInlineLoader /> : "OK"}
         </AxonButton>
       </ModalFooter>
-      {newFolderError && (
-        <Alert
-          title={"Error Creating new folder. Please try again later"}
-          kind={"error"}
-          hideCloseButton={false}
-          lowContrast={true}
-        />
-      )}
     </ComposedModal>
   );
 };

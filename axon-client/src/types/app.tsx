@@ -13,3 +13,8 @@ export interface ILoadingState {
 export interface IAppSettings {
   grid: boolean;
 }
+
+export enum LocalKeys {
+  LAST_NOTE_ID = "lastNoteId",
+  LAST_FOLDER_ID = "lastFolderId",
+}

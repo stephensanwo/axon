@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  Fragment,
-  useRef,
-} from "react";
+import { useState, useEffect, useContext, Fragment, useRef } from "react";
 import {
   SideNav,
   SideNavItems,
@@ -24,15 +18,17 @@ import { NewFolder } from "src/components/Folder";
 import { NewNote } from "src/components/Note";
 import { SkeletonText } from "@carbon/react";
 import EditNote from "src/components/Note/EditNote";
+import { LocalKeys } from "src/types/app";
 
 const StyledSideNavMenu = styled(SideNavMenu)`
   background-color: transparent;
 `;
 
 const StyledSideNav = styled(SideNav)`
-  background-color: #262626;
+  background-color: ${ThemeColors.bgDark};
   min-width: 320px;
   padding-bottom: 40px;
+  border-right: 1px solid ${ThemeColors.border};
 `;
 
 const Folders = () => {
@@ -42,7 +38,7 @@ const Folders = () => {
   const [editFolderModal, setEditFolderModal] = useState(false);
   const [newNoteModal, setNewNoteModal] = useState(false);
   const [updateNoteModal, setUpdateNoteModal] = useState(false);
-  const { folders, folderLoading, selectedNote, setSelectedNote } =
+  const { folders, folderStatus, selectedNote, setSelectedNote } =
     useContext(FolderContext);
   const [selectedFolder, setSelectedFolder] = useState<IFolderList>();
 
@@ -74,7 +70,7 @@ const Folders = () => {
     <Fragment>
       {isSideNavExpanded ? (
         <StyledSideNav
-          ref={navRef}
+          // ref={navRef}
           tabIndex={1}
           isFixedNav
           expanded={isSideNavExpanded}
@@ -82,16 +78,18 @@ const Folders = () => {
           aria-label="Side Navigation"
           style={{ paddingTop: "40px" }}
         >
-          <div
-            className="new-folder-button"
-            onClick={() => setFolderModal(true)}
-          >
-            <h6 style={{ color: ThemeColors.primary, paddingLeft: "20px" }}>
-              New Folder
-            </h6>
-            <FolderAdd size="16" fill={ThemeColors.primary} />
-          </div>
-          {folderLoading && (
+          {folderStatus === "success" && (
+            <div
+              className="new-folder-button"
+              onClick={() => setFolderModal(true)}
+            >
+              <h6 style={{ color: ThemeColors.primary, paddingLeft: "20px" }}>
+                New Folder
+              </h6>
+              <FolderAdd size="16" fill={ThemeColors.primary} />
+            </div>
+          )}
+          {folderStatus === "loading" && (
             <SideNavItems>
               <div
                 style={{
@@ -99,13 +97,18 @@ const Folders = () => {
                   margin: "auto",
                 }}
               >
-                {Array.from({ length: 5 }).map((index) => (
-                  <SkeletonText style={{ height: "32px" }} key={index} />
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <SkeletonText
+                    style={{
+                      height: "32px",
+                      backgroundColor: ThemeColors.bgDark2,
+                    }}
+                    key={index}
+                  />
                 ))}
               </div>
             </SideNavItems>
           )}
-
           <div style={{ overflowY: "scroll" }}>
             {folders && (
               <SideNavItems>
@@ -142,12 +145,20 @@ const Folders = () => {
                           key={index}
                           id={note?.note_id || ""}
                           onClick={() => {
-                            console.log("Selected note", note.note_name);
                             setSelectedNote({
                               ...note,
                               folder_id: folder.folder_id,
                               folder_name: folder.folder_name,
                             });
+                            // Set last note id and folder name in local storage
+                            localStorage.setItem(
+                              LocalKeys.LAST_NOTE_ID,
+                              note.note_id
+                            );
+                            localStorage.setItem(
+                              LocalKeys.LAST_FOLDER_ID,
+                              folder.folder_id
+                            );
                           }}
                           className={`side-nav-menu-item-overrides ${
                             selectedNote?.note_id === note?.note_id &&

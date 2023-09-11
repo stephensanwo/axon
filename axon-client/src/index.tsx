@@ -1,4 +1,3 @@
-import React from "react";
 import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -9,25 +8,30 @@ import { GlobalTheme } from "@carbon/react";
 import { createRoot } from "react-dom/client";
 import { FolderProvider } from "./context/folder";
 import { AuthProvider } from "./context/auth";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import React from "react";
 
 const container = document.getElementById("root");
 const root = createRoot(container!);
+const queryClient = new QueryClient();
 
 root.render(
   <React.StrictMode>
-    <GlobalTheme theme="g100">
-      <BrowserRouter>
-        <NoteProvider>
-          <FolderProvider>
-            <AppProvider>
-              <AuthProvider>
-                <App />
-              </AuthProvider>
-            </AppProvider>
-          </FolderProvider>
-        </NoteProvider>
-      </BrowserRouter>
-    </GlobalTheme>
+    <QueryClientProvider client={queryClient}>
+      <GlobalTheme theme="g100">
+        <BrowserRouter>
+          <NoteProvider>
+            <FolderProvider>
+              <AppProvider>
+                <AuthProvider>
+                  <App />
+                </AuthProvider>
+              </AppProvider>
+            </FolderProvider>
+          </NoteProvider>
+        </BrowserRouter>
+      </GlobalTheme>
+    </QueryClientProvider>
   </React.StrictMode>
 );
 

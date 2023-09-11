@@ -3,8 +3,8 @@ import folderReducer from "../reducers/folders";
 import { Reducer } from "react";
 import { IFolderAction, IFolderList } from "../types/folders";
 import { ISelectedNote } from "src/types/notes";
-import { fetchData } from "src/api/query";
-import { useDataFetching } from "src/hooks/useDataFetching";
+import { useFolderQuery } from "src/hooks/folders/useFolderQuery";
+import { useInitFolders } from "src/hooks/folders/useInitFolders";
 
 interface FolderProviderProps {
   children: React.ReactNode;
@@ -13,8 +13,9 @@ interface FolderProviderProps {
 interface FolderContextProps {
   folders: IFolderList[] | null;
   folderDispatch: React.Dispatch<IFolderAction>;
-  folderError: boolean;
-  folderLoading: boolean;
+  folderError: unknown;
+  folderStatus: "error" | "success" | "loading";
+  folderFetching: boolean;
   selectedNote: ISelectedNote;
   setSelectedNote: React.Dispatch<ISelectedNote>;
 }
@@ -22,13 +23,8 @@ interface FolderContextProps {
 export const FolderContext = createContext({} as FolderContextProps);
 
 export const FolderProvider = ({ children }: FolderProviderProps) => {
-  const {
-    error: folderError,
-    data: folderData,
-    loading: folderLoading,
-  } = useDataFetching<IFolderList[]>("folder-list", () =>
-    fetchData("folder-list")
-  );
+  const { folderData, folderError, folderStatus, folderFetching } =
+    useFolderQuery();
 
   const [selectedNote, setSelectedNote] = useState<ISelectedNote>(
     {} as ISelectedNote
@@ -38,62 +34,17 @@ export const FolderProvider = ({ children }: FolderProviderProps) => {
     Reducer<IFolderList[], IFolderAction>
   >(folderReducer, [] as IFolderList[]);
 
+  const { initFolders } = useInitFolders(
+    folderData,
+    folderDispatch,
+    selectedNote,
+    setSelectedNote
+  );
+
   // Update initialFolders when folderData becomes available
   useEffect(() => {
-    if (folderData) {
-      setSelectedNote({
-        ...selectedNote,
-        folder_name: folderData[0].folder_name,
-      });
-      if (folderData[0]?.notes && folderData[0]?.notes.length > 0) {
-        setSelectedNote({
-          ...selectedNote,
-          folder_name: folderData[0].folder_name,
-          ...folderData[0].notes[0],
-        });
-      }
-      folderDispatch({
-        type: "INIT_FOLDER_LIST",
-        payload: folderData as IFolderList[],
-      });
-    }
+    initFolders();
   }, [folderData]);
-  console.log("folderData", folderData);
-  console.log("selectedNote", selectedNote);
-
-  // const InitialState: Array<IFolderList> = [];
-
-  // const query = useQuery({
-  //   queryKey: ["folders"],
-  //   queryFn: GET_FOLDER_LIST,
-  // });
-
-  // const [folders, folderDispatch] = useReducer<
-  //   Reducer<Array<IFolderList>, IFolderAction>
-  // >(folderReducer, InitialState);
-
-  // const [selectedNote, setSelectedNote] = useState<ISelectedNote>(
-  //   {} as ISelectedNote
-  // );
-
-  // useEffect(() => {
-  //   folderDispatch({
-  //     type: "init_folder",
-  //     payload: query.data,
-  //   });
-
-  //   if (query.data && query.data[0]?.notes && query.data[0]?.notes.length > 0) {
-  //     setSelectedNote({
-  //       ...selectedNote,
-  //       folder_id: query.data[0].notes[0].folder_id,
-  //       note_id: query.data[0].notes[0].note_id,
-  //       name: query.data[0].notes[0].folder_name,
-  //       description: query.data[0].notes[0].description,
-  //       date_created: query.data[0].notes[0].date_created,
-  //       last_edited: query.data[0].notes[0].last_edited,
-  //     });
-  //   }
-  // }, [query.data]);
 
   return (
     <FolderContext.Provider
@@ -101,7 +52,8 @@ export const FolderProvider = ({ children }: FolderProviderProps) => {
         folders,
         folderDispatch,
         folderError,
-        folderLoading,
+        folderStatus,
+        folderFetching,
         selectedNote,
         setSelectedNote,
       }}
