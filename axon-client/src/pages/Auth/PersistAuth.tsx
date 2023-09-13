@@ -1,21 +1,16 @@
 import { Fragment, useContext } from "react";
-import { useLocation, Navigate, Outlet } from "react-router-dom";
+import { useLocation, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import AxonLoader from "src/components/Loader/Loader";
 import AuthContext from "src/context/auth";
-import { useDataFetching } from "src/hooks/useDataFetching";
-import { IUser } from "src/types/user";
-import { fetchData, fetchUser } from "src/api/query";
 import Notes from "../Notes";
+import { useAuthQuery } from "src/hooks/auth/useAuthQuery";
 
 const PersistAuth = () => {
   const { setUser, setIsSignedIn } = useContext(AuthContext);
 
-  const {
-    error: authError,
-    data: userData,
-    loading: loadingUser,
-  } = useDataFetching<IUser>("auth-user", () => fetchUser("auth-user"));
+  const { userData, userQuery } = useAuthQuery();
+
   const location = useLocation();
 
   useEffect(() => {
@@ -25,12 +20,15 @@ const PersistAuth = () => {
     }
   }, [userData]);
 
-  console.log("authError", authError);
-  if (authError) {
+  if (userQuery.status === "error") {
     return <Navigate to="/unavailable" state={{ from: location }} replace />;
   }
 
-  return <Fragment>{loadingUser ? <AxonLoader /> : <Notes />} </Fragment>;
+  return (
+    <Fragment>
+      {userQuery.status === "loading" ? <AxonLoader /> : <Notes />}{" "}
+    </Fragment>
+  );
 };
 
 export default PersistAuth;

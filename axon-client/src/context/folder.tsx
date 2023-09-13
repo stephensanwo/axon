@@ -1,10 +1,10 @@
-import React, { createContext, useEffect, useReducer, useState } from "react";
+import React, { createContext, useReducer, useState } from "react";
 import folderReducer from "../reducers/folders";
 import { Reducer } from "react";
 import { IFolderAction, IFolderList } from "../types/folders";
 import { ISelectedNote } from "src/types/notes";
-import { useFolderQuery } from "src/hooks/folders/useFolderQuery";
 import { useInitFolders } from "src/hooks/folders/useInitFolders";
+import { UseQueryResult } from "@tanstack/react-query";
 
 interface FolderProviderProps {
   children: React.ReactNode;
@@ -13,9 +13,7 @@ interface FolderProviderProps {
 interface FolderContextProps {
   folders: IFolderList[] | null;
   folderDispatch: React.Dispatch<IFolderAction>;
-  folderError: unknown;
-  folderStatus: "error" | "success" | "loading";
-  folderFetching: boolean;
+  folderQuery: UseQueryResult<IFolderList[], unknown>;
   selectedNote: ISelectedNote;
   setSelectedNote: React.Dispatch<ISelectedNote>;
 }
@@ -23,9 +21,6 @@ interface FolderContextProps {
 export const FolderContext = createContext({} as FolderContextProps);
 
 export const FolderProvider = ({ children }: FolderProviderProps) => {
-  const { folderData, folderError, folderStatus, folderFetching } =
-    useFolderQuery();
-
   const [selectedNote, setSelectedNote] = useState<ISelectedNote>(
     {} as ISelectedNote
   );
@@ -34,26 +29,18 @@ export const FolderProvider = ({ children }: FolderProviderProps) => {
     Reducer<IFolderList[], IFolderAction>
   >(folderReducer, [] as IFolderList[]);
 
-  const { initFolders } = useInitFolders(
-    folderData,
+  const { folderQuery } = useInitFolders(
     folderDispatch,
     selectedNote,
     setSelectedNote
   );
-
-  // Update initialFolders when folderData becomes available
-  useEffect(() => {
-    initFolders();
-  }, [folderData]);
 
   return (
     <FolderContext.Provider
       value={{
         folders,
         folderDispatch,
-        folderError,
-        folderStatus,
-        folderFetching,
+        folderQuery,
         selectedNote,
         setSelectedNote,
       }}

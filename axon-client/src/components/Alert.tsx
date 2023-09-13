@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { ToastNotification } from "@carbon/react";
 import styled from "styled-components";
 
@@ -16,21 +16,13 @@ interface AlertProps {
   lowContrast?: boolean;
 }
 
-export const AlertContainer = styled.div`
-  background-color: transparent;
+export const AlertContainer = styled(ToastNotification)`
   position: absolute;
-  top: 47px;
-  width: 100%;
+  z-index: 101;
+  bottom: 0;
+  min-height: 60px;
+  width: 100vw;
 `;
-
-interface AlertDataProps {
-  alerts: Array<AlertData>;
-}
-
-export interface AlertData {
-  title: string;
-  detail: string;
-}
 
 export const Alert: React.FC<AlertProps> = ({
   title,
@@ -40,14 +32,13 @@ export const Alert: React.FC<AlertProps> = ({
   lowContrast,
 }) => {
   return (
-    <ToastNotification
+    <AlertContainer
       kind={kind}
       title={title}
       lowContrast={lowContrast}
       subtitle={subtitle ?? ""}
-      style={{ width: "100%", maxWidth: "100%", maxHeight: "50px" }}
       hideCloseButton={hideCloseButton}
-      timeout={5000}
-    ></ToastNotification>
+      timeout={10000}
+    ></AlertContainer>
   );
 };

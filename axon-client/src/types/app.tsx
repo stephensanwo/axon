@@ -15,6 +15,6 @@ export interface IAppSettings {
 }
 
 export enum LocalKeys {
-  LAST_NOTE_ID = "lastNoteId",
-  LAST_FOLDER_ID = "lastFolderId",
+  SELECTED_NOTE_ID = "selectedNoteId",
+  SELECTED_FOLDER_ID = "selectedFolderId",
 }

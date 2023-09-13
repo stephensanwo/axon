@@ -4,73 +4,26 @@ import {
   ModalBody,
   ModalFooter,
   ComposedModal,
-  Button,
 } from "@carbon/react";
-import { useContext, useState } from "react";
-import FolderContext from "src/context/folder";
-import { ICreateFolder } from "src/types/folders";
+import { useState } from "react";
 import { AxonButton } from "src/components/Button";
 import AxonInlineLoader from "src/components/Loader/InlineLoader";
-import { useDataDeletion, useDataUpdate } from "src/hooks/useDataMutation";
-import { ISelectedNote, IUpdateNoteProps } from "src/types/notes";
+import { ISelectedNote, IMutateNote } from "src/types/notes";
+import { useNoteMutation } from "src/hooks/notes/useNoteMutation";
 
 const EditNote: React.FC<{
   noteModal: boolean;
   setNoteModal: React.Dispatch<React.SetStateAction<boolean>>;
   note: ISelectedNote;
 }> = ({ note, noteModal, setNoteModal }) => {
-  const [updateNote, setUpdateNote] = useState<IUpdateNoteProps>({
+  const [updateNote, setUpdateNote] = useState<IMutateNote>({
     folder_id: note?.folder_id,
     note_id: note?.note_id,
     description: note?.description,
     note_name: note?.note_name,
   });
 
-  const { folders, folderDispatch } = useContext(FolderContext);
-
-  const {
-    loading: editNoteLoading,
-    error: editNoteError,
-    update,
-  } = useDataUpdate<Omit<IUpdateNoteProps, "folder_id" | "note_id">>(
-    `note?folder_id=${note.folder_id}&note_id=${note.note_id}`
-  );
-
-  const {
-    loading: deleteNoteLoading,
-    error: deleteNoteError,
-    delete: deletefn,
-  } = useDataDeletion<IUpdateNoteProps>(
-    `note?folder_id=${note.folder_id}&note_id=${note.note_id}`
-  );
-
-  const editNote = () => {
-    setNoteModal(false);
-    update(updateNote);
-    folderDispatch({
-      type: "EDIT_NOTE",
-      payload: {
-        folder_id: note.folder_id,
-        note_id: note.note_id,
-        note_name: updateNote.note_name,
-        description: updateNote.description,
-      },
-    });
-  };
-
-  const deleteNote = () => {
-    if (window.confirm(`Are you sure you want to delete this folder?`)) {
-      setNoteModal(false);
-      deletefn();
-      folderDispatch({
-        type: "DELETE_NOTE",
-        payload: {
-          note_id: note.note_id,
-          folder_id: note.folder_id,
-        },
-      });
-    }
-  };
+  const { editNote, deleteNote } = useNoteMutation(updateNote, setNoteModal);
 
   return (
     <ComposedModal
@@ -96,7 +49,7 @@ const EditNote: React.FC<{
               [e.target.name]: e.target.value,
             })
           }
-          invalid={editNoteError && true}
+          invalid={editNote.status === "error" && true}
           invalidText={"Invalid data provided"}
         />
         <div style={{ marginTop: "20px" }}></div>
@@ -113,16 +66,34 @@ const EditNote: React.FC<{
               [e.target.name]: e.target.value,
             })
           }
-          invalid={editNoteError && true}
+          invalid={editNote.status === "error" && true}
           invalidText={"Invalid data provided"}
         />
       </ModalBody>
       <ModalFooter>
-        <AxonButton kind="secondary" onClick={deleteNote}>
-          {deleteNoteLoading ? <AxonInlineLoader /> : "Delete"}
+        <AxonButton
+          kind="secondary"
+          onClick={() =>
+            deleteNote.mutate(
+              `note?folder_id=${note.folder_id}&note_id=${note.note_id}`
+            )
+          }
+        >
+          {deleteNote.status === "loading" ? <AxonInlineLoader /> : "Delete"}
         </AxonButton>
-        <AxonButton kind="primary" onClick={() => editNote()}>
-          {editNoteLoading ? <AxonInlineLoader /> : "Confirm Changes"}
+        <AxonButton
+          kind="primary"
+          onClick={() =>
+            editNote.mutate(
+              `note?folder_id=${note.folder_id}&note_id=${note.note_id}`
+            )
+          }
+        >
+          {editNote.status === "loading" ? (
+            <AxonInlineLoader />
+          ) : (
+            "Confirm Changes"
+          )}
         </AxonButton>
       </ModalFooter>
     </ComposedModal>

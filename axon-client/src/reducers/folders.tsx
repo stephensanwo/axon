@@ -10,10 +10,7 @@ const folderReducer = (
     }
 
     case "NEW_FOLDER": {
-      const newFolder = {} as IFolderList;
-      newFolder.folder_id = action.payload.folder_id;
-      newFolder.folder_name = action.payload.folder_name;
-      return [newFolder, ...folders];
+      return [action.payload, ...folders];
     }
 
     case "NEW_NOTE": {

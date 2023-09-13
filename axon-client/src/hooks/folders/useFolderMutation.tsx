@@ -6,6 +6,7 @@ import {
 import { useContext } from "react";
 import { deleteData, patchData, postData } from "src/api/mutate";
 import FolderContext from "src/context/folder";
+import { LocalKeys } from "src/types/app";
 import { IMutateFolder } from "src/types/folders";
 
 export const useFolderMutation = (
@@ -28,8 +29,12 @@ export const useFolderMutation = (
       folderDispatch({
         type: "NEW_FOLDER",
         payload: {
-          folder_id: result?.data,
+          folder_id: result,
           folder_name: folderData.folder_name,
+          date_created: "",
+          last_edited: "",
+          user_id: "",
+          notes: [],
         },
       });
       setFolderModal(false);
@@ -66,6 +71,10 @@ export const useFolderMutation = (
           },
         });
       }
+
+      localStorage.removeItem(LocalKeys.SELECTED_NOTE_ID);
+      localStorage.removeItem(LocalKeys.SELECTED_FOLDER_ID);
+
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["folder"] });
     },

@@ -14,6 +14,8 @@ interface NoteContextProps {
   setNodePanel: React.Dispatch<React.SetStateAction<INodePanel>>;
   selectedNode: INode;
   setSelectedNode: React.Dispatch<React.SetStateAction<INode>>;
+  interactiveNode: INode;
+  setInteractiveNode: React.Dispatch<React.SetStateAction<INode>>;
 }
 
 export const NoteContext = createContext({} as NoteContextProps);
@@ -32,7 +34,7 @@ export const NoteProvider = ({ children }: NoteProviderProps) => {
   });
 
   const [selectedNode, setSelectedNode] = useState<INode>({} as INode);
-
+  const [interactiveNode, setInteractiveNode] = useState<INode>({} as INode);
   return (
     <NoteContext.Provider
       value={{
@@ -42,6 +44,8 @@ export const NoteProvider = ({ children }: NoteProviderProps) => {
         setNodePanel,
         selectedNode,
         setSelectedNode,
+        interactiveNode,
+        setInteractiveNode,
       }}
     >
       {children}

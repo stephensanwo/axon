@@ -1,17 +1,17 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "https://127.0.0.1:8100",
+  baseURL: "http://127.0.0.1:8100",
 });
 
 export const axiosPrivate = axios.create({
-  baseURL: "https://127.0.0.1:8100",
+  baseURL: "http://127.0.0.1:8100",
   headers: { "Content-Type": "application/json" },
   withCredentials: true,
 });
 
 export const axiosAuthPrivate = axios.create({
-  baseURL: "https://127.0.0.1:8301",
+  baseURL: "http://127.0.0.1:8301",
   headers: { "Content-Type": "application/json" },
   withCredentials: true,
 });

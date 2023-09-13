@@ -15,7 +15,7 @@ export const ThemeColors = {
   bgPrimary: "#f4f4f4",
   bgSecondary: "rgb(27, 27, 27)",
   primaryAction: "#d3ec45",
-  dangerAction: "#d92f37",
+  dangerAction: "#da1e28",
   bgHiglight1: "#202020",
   bgHighlight2: "rgb(43, 43, 43)",
   textDark: "#6f6f6f",

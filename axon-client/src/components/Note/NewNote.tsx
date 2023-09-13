@@ -5,61 +5,27 @@ import {
   ModalFooter,
   ComposedModal,
 } from "@carbon/react";
-import { useContext, useState } from "react";
-import FolderContext from "src/context/folder";
+import { useState } from "react";
 import { AxonButton } from "src/components/Button";
 import AxonInlineLoader from "src/components/Loader/InlineLoader";
-import { ICreateNoteProps, INote } from "src/types/notes";
+import { IMutateNote } from "src/types/notes";
 import { IFolderList } from "src/types/folders";
-import { useDataMutation } from "src/hooks/useDataMutation";
-import AuthContext from "src/context/auth";
+import { useNoteMutation } from "src/hooks/notes/useNoteMutation";
+import InlineAlert from "../InlineAlert";
 
 const NewNote: React.FC<{
   noteModal: boolean;
   setNoteModal: React.Dispatch<React.SetStateAction<boolean>>;
   folder: IFolderList;
 }> = ({ folder, noteModal, setNoteModal }) => {
-  const [newNote, setNewNote] = useState<ICreateNoteProps>({
+  const [newNote, setNewNote] = useState<IMutateNote>({
     folder_id: folder.folder_id,
     description: "",
     note_name: "",
+    note_id: "",
   });
 
-  const { folderDispatch, setSelectedNote } = useContext(FolderContext);
-  const { user } = useContext(AuthContext);
-  const {
-    loading: newNoteLoading,
-    error: newNoteError,
-    mutate,
-    data: newNoteData,
-  } = useDataMutation<ICreateNoteProps>("note");
-
-  const handleNewNote = () => {
-    setNoteModal(false);
-    mutate(newNote);
-    folderDispatch({
-      type: "NEW_NOTE",
-      payload: {
-        user_id: user?.user_id || "",
-        folder_id: folder.folder_id,
-        note_id: "",
-        note_name: newNote?.note_name || "",
-        description: newNote?.description || "",
-        date_created: "",
-        last_edited: "",
-      },
-    });
-    setSelectedNote({
-      user_id: user?.user_id || "",
-      folder_id: folder.folder_id,
-      note_id: newNoteData,
-      note_name: newNote?.note_name || "",
-      description: newNote?.description || "",
-      date_created: "",
-      last_edited: "",
-      folder_name: folder.folder_name,
-    });
-  };
+  const { createNote } = useNoteMutation(newNote, setNoteModal);
 
   return (
     <ComposedModal
@@ -85,7 +51,7 @@ const NewNote: React.FC<{
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setNewNote({ ...newNote, [e.target.name]: e.target.value })
           }
-          invalid={newNoteError && true}
+          invalid={createNote.status === "error" && true}
           invalidText={"Invalid data provided"}
         />
         <div style={{ marginTop: "20px" }}></div>
@@ -99,9 +65,12 @@ const NewNote: React.FC<{
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setNewNote({ ...newNote, [e.target.name]: e.target.value })
           }
-          invalid={newNoteError && true}
+          invalid={createNote.status === "error" && true}
           invalidText={"Invalid data provided"}
         />
+        {createNote.status === "error" && (
+          <InlineAlert text="There was an error creating your note. Please try again later." />
+        )}
       </ModalBody>
       <ModalFooter>
         <AxonButton kind="secondary" onClick={() => setNoteModal(false)}>
@@ -109,14 +78,14 @@ const NewNote: React.FC<{
         </AxonButton>
         <AxonButton
           kind="primary"
-          onClick={handleNewNote}
+          onClick={() => createNote.mutate("note")}
           disabled={
             newNote.note_name.length && newNote.description.length > 0
               ? false
               : true
           }
         >
-          {newNoteLoading ? <AxonInlineLoader /> : "OK"}
+          {createNote.status === "loading" ? <AxonInlineLoader /> : "OK"}
         </AxonButton>
       </ModalFooter>
     </ComposedModal>

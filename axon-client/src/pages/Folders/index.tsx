@@ -38,7 +38,7 @@ const Folders = () => {
   const [editFolderModal, setEditFolderModal] = useState(false);
   const [newNoteModal, setNewNoteModal] = useState(false);
   const [updateNoteModal, setUpdateNoteModal] = useState(false);
-  const { folders, folderStatus, selectedNote, setSelectedNote } =
+  const { folders, folderQuery, selectedNote, setSelectedNote } =
     useContext(FolderContext);
   const [selectedFolder, setSelectedFolder] = useState<IFolderList>();
 
@@ -78,7 +78,7 @@ const Folders = () => {
           aria-label="Side Navigation"
           style={{ paddingTop: "40px" }}
         >
-          {folderStatus === "success" && (
+          {folderQuery.status === "success" && (
             <div
               className="new-folder-button"
               onClick={() => setFolderModal(true)}
@@ -89,7 +89,7 @@ const Folders = () => {
               <FolderAdd size="16" fill={ThemeColors.primary} />
             </div>
           )}
-          {folderStatus === "loading" && (
+          {folderQuery.status === "loading" && (
             <SideNavItems>
               <div
                 style={{
@@ -150,13 +150,13 @@ const Folders = () => {
                               folder_id: folder.folder_id,
                               folder_name: folder.folder_name,
                             });
-                            // Set last note id and folder name in local storage
+                            // Set selected note id and folder id in local storage
                             localStorage.setItem(
-                              LocalKeys.LAST_NOTE_ID,
+                              LocalKeys.SELECTED_NOTE_ID,
                               note.note_id
                             );
                             localStorage.setItem(
-                              LocalKeys.LAST_FOLDER_ID,
+                              LocalKeys.SELECTED_FOLDER_ID,
                               folder.folder_id
                             );
                           }}

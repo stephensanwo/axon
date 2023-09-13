@@ -67,45 +67,46 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
     new: false,
     publish: false,
   });
-  const { selectedNote } = useContext(FolderContext);
-
+  const { selectedNote, folderQuery } = useContext(FolderContext);
   const pageActions = usePageActions();
 
   return (
     <PageHeaderContainer expand={isSideNavExpanded && true}>
-      <NavMenu>
-        <NavActions>
-          {pageActions.map((menu, index) => {
-            return (
-              <IconButton
-                size="md"
-                focusTrap={false}
-                iconDescription={"Close"}
-                key={index}
-                ariaLabel="Close"
-                onClick={menu.action}
-                disabled={false}
-                kind="secondary"
-                style={{
-                  width: "50px",
-                  height: "47px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  padding: 0,
-                }}
-                label={""}
-              >
-                {menu.menuIcon}
-              </IconButton>
-            );
-          })}
-        </NavActions>
-        <NavDocumentTitle>
-          <p>{props.documentTitle}</p>
-          <OnlinePresence isOnline={isOnline} />
-        </NavDocumentTitle>
-      </NavMenu>
+      {folderQuery.status === "success" && (
+        <NavMenu>
+          <NavActions>
+            {pageActions.map((menu, index) => {
+              return (
+                <IconButton
+                  size="md"
+                  focustrap={"false"}
+                  iconDescription={"Close"}
+                  key={index}
+                  aria-label="Close"
+                  onClick={menu.action}
+                  disabled={false}
+                  kind="secondary"
+                  style={{
+                    width: "50px",
+                    height: "47px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: 0,
+                  }}
+                  label={""}
+                >
+                  {menu.menuIcon}
+                </IconButton>
+              );
+            })}
+          </NavActions>
+          <NavDocumentTitle>
+            <p>{props.documentTitle}</p>
+            <OnlinePresence isOnline={isOnline} />
+          </NavDocumentTitle>
+        </NavMenu>
+      )}
       {noteModal.publish && (
         <PublishNote
           noteModal={noteModal}
@@ -113,6 +114,8 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
           note={selectedNote}
         />
       )}
+
+      {/* <AxonButton onClick={handleSendMessage} /> */}
     </PageHeaderContainer>
   );
 };
