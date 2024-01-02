@@ -1,22 +1,49 @@
-# Start typing your markdown here
+# Heading 1
+## Heading 2
+### Heading 3
+#### Heading 4
+##### Heading 5
+###### Heading 6
 
-# H1
 
-## H2
+#### Contents
+* [Underscores](#Underscores)
+  * [Discovery](#discovery)
+  * [Name and symbol](#name-and-symbol)
+  * [Planet X disproved](#planet-x-disproved)
+* [Orbit](#orbit)
 
-### H3
+*Italic* or _Italic_
 
-#### H4
+**Bold** or __Bold__
+***Bold and Italic*** or ___Bold and Italic___
 
-##### H5
+- Item 1
+- Item 2
+  - Subitem 1
+  - Subitem 2
+    - Sub-subitem 1
 
-###### H6
+1. Item 1
+2. Item 2
+   1. Subitem 1
+   2. Subitem 2
+      1. Sub-subitem 1
 
-Alternatively, for H1 and H2, an underline-ish style:
+* [ ] Task 1
+* [x] Task 2
 
-# Alt-H1
 
-## Alt-H2
+[Link Text](https://www.example.com)
+[Link with Title](https://www.example.com "Title")
+
+
+![Alt Text](https://www.example.com/image.jpg)
+![Image with Title](https://imagedelivery.net/QvztslYf_CbfgwmRjfn0OA/1c5d99c2-b79e-46ea-13c6-8555812baa00/public "Title")
+
+
+> This is a blockquote.
+> It can span multiple lines.
 
 Emphasis, aka italics, with _asterisks_ or _underscores_.
 
@@ -28,16 +55,16 @@ Strikethrough uses two tildes. ~~Scratch this.~~
 
 1. First ordered list item
 2. Another item
-   ⋅⋅\* Unordered sub-list.
+   \* Unordered sub-list.
 3. Actual numbers don't matter, just that it's a number
-   ⋅⋅1. Ordered sub-list
+   1. Ordered sub-list
 4. And another item.
 
-⋅⋅⋅You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).
+   You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).
 
-⋅⋅⋅To have a line break without a paragraph, you will need to use two trailing spaces.⋅⋅
-⋅⋅⋅Note that this line is separate, but within the same paragraph.⋅⋅
-⋅⋅⋅(This is contrary to the typical GFM line break behaviour, where trailing spaces are not required.)
+   To have a line break without a paragraph, you will need to use two trailing spaces.
+   Note that this line is separate, but within the same paragraph.
+   (This is contrary to the typical GFM line break behaviour, where trailing spaces are not required.)
 
 - Unordered list can use asterisks
 
@@ -67,15 +94,6 @@ Some text to show that the reference links can follow later.
 [1]: http://slashdot.org
 [link text itself]: http://www.reddit.com
 
-Here's our logo (hover to see the title text):
-
-Inline-style:
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
-
-Reference-style:
-![alt text][logo]
-
-[logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2"
 
 Inline `code` has `back-ticks around` it.
 
@@ -89,7 +107,7 @@ s = "Python syntax highlighting"
 print s
 ```
 
-```
+```text
 No language indicated, so no syntax highlighting
 But let's throw in a <b>tag</b>.
 ```
@@ -110,8 +128,6 @@ raw Markdown line up prettily. You can also use inline Markdown.
 | -------- | --------- | ---------- |
 | _Still_  | `renders` | **nicely** |
 | 1        | 2         | 3          |
-
-Colons can be used to align columns.
 
 | Tables        |      Are      |  Cool |
 | ------------- | :-----------: | ----: |
