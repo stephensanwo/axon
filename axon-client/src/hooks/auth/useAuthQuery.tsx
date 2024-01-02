@@ -9,6 +9,9 @@ export const useAuthQuery = (): {
   const query = useQuery<IUser>({
     queryKey: ["auth-user"],
     queryFn: () => fetchUser("auth-user"),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: true,
   });
 
   return {

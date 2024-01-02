@@ -1,18 +1,30 @@
-import { useEffect, useMemo, useRef } from "react";
-import SocketManager, { Message } from "../../api/events/socket";
+import { useContext, useEffect, useRef } from "react";
+import SocketManager from "../../api/events/socket";
+import { Message } from "src/types/event";
+import AuthContext from "src/context/auth";
 
-const useEventSocket = () => {
+const useEventSocket = (): {
+  isAutoSave: boolean;
+  sendMessage: (data: any) => Promise<void>;
+  disconnect: () => void;
+} => {
   const socketManagerRef = useRef<SocketManager | null>(null);
-
+  const { user } = useContext(AuthContext);
   useEffect(() => {
+    console.log("useEventSocket.tsx");
     if (!socketManagerRef.current) {
-      console.log("Init");
       socketManagerRef.current = new SocketManager();
     }
   }, []);
 
-  const sendMessage = async (message: Message): Promise<void> => {
-    console.log("sendMessage", message);
+  const sendMessage = async (data: any): Promise<void> => {
+    const message: Message = {
+      event: "UPDATE_NOTE",
+      data,
+      user: user.current?.email!!,
+      timestamp: new Date().toISOString(),
+    };
+    console.log("useEventSocket.tsx sendMessage", message);
     await socketManagerRef.current?.sendMessage(message);
   };
 

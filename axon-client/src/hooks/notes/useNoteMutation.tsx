@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { IMutateNote, INote, ISelectedNote } from "src/types/notes";
+import { IMutateNote } from "src/types/notes";
 import FolderContext from "src/context/folder";
-import { IFolderList, INoteSummary } from "src/types/folders";
+import { INoteSummary } from "src/types/folders";
 import { LocalKeys } from "src/types/app";
 import {
   UseMutationResult,
@@ -9,19 +9,42 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { deleteData, patchData, postData } from "src/api/mutate";
+import { ulid } from "ulid";
+import NoteContext from "src/context/notes";
+import { useNoteEvents } from "./useNoteEvents";
 
 export const useNoteMutation = (
-  noteData: IMutateNote,
-  setNoteModal: React.Dispatch<React.SetStateAction<boolean>>
+  noteData: IMutateNote
 ): {
   createNote: UseMutationResult<any, unknown, string, unknown>;
   editNote: UseMutationResult<any, unknown, string, unknown>;
   deleteNote: UseMutationResult<any, unknown, string, unknown>;
+  publishPublicNote: UseMutationResult<any, unknown, string, unknown>;
 } => {
-  const { folders, folderDispatch, setSelectedNote } =
-    useContext(FolderContext);
+  const {
+    folders,
+    folderDispatch,
+    setSelectedNote,
+    activeNotes,
+    folderMenu,
+    setFolderMenu,
+  } = useContext(FolderContext);
+  const { setPublicId } = useContext(NoteContext);
+  const {
+    setCachedNote,
+    deleteCachedNote,
+    cacheActiveNotes,
+    deleteActiveNotes,
+  } = useNoteEvents();
   const queryClient = useQueryClient();
-
+  console.log("Use Node Mutation");
+  /*
+  Create note mutation
+  Triggers the new_note action
+  Sets the selected note in the local storage
+  Adds the note id to the active notes
+  Toggles the new note modal
+  */
   const createNote = useMutation({
     mutationFn: (endpoint: string) =>
       postData(endpoint, {
@@ -30,7 +53,6 @@ export const useNoteMutation = (
         description: noteData.description,
       }),
     onSuccess: (result: any) => {
-      //  Set local state
       folderDispatch({
         type: "NEW_NOTE",
         payload: {
@@ -38,27 +60,23 @@ export const useNoteMutation = (
         },
       });
 
-      const selectedNote = result as ISelectedNote;
-      localStorage.setItem(LocalKeys.SELECTED_NOTE_ID, selectedNote.note_id);
-      localStorage.setItem(
-        LocalKeys.SELECTED_FOLDER_ID,
-        selectedNote.folder_id
-      );
-
-      const folderName = folders?.find(
-        (folder: IFolderList) => folder.folder_id === selectedNote.folder_id
-      )?.folder_name as string;
-
+      const selectedNote = result as INoteSummary;
       setSelectedNote({
         ...selectedNote,
-        folder_name: folderName,
       });
+      setCachedNote(selectedNote.note_id, selectedNote.folder_id);
+      cacheActiveNotes(activeNotes, selectedNote.note_id);
+      setFolderMenu({ ...folderMenu, newNote: false });
 
-      setNoteModal(false);
       queryClient.invalidateQueries({ queryKey: ["note-detail"] });
     },
   });
 
+  /*
+  Edit note mutation
+  Triggers the edit_note action
+  Toggles the edit note modal
+  */
   const editNote = useMutation({
     mutationFn: (endpoint: string) => patchData(endpoint, noteData),
     onSuccess: () => {
@@ -71,16 +89,23 @@ export const useNoteMutation = (
           description: noteData.description,
         },
       });
-      setNoteModal(false);
+      setFolderMenu({ ...folderMenu, updateNote: false });
+
       queryClient.invalidateQueries({ queryKey: ["note-detail"] });
     },
   });
 
+  /*
+  Delete note mutation
+  Triggers the delete_note action
+  Removes the note id from the active notes
+  Toggles the delete note modal
+  TODO: Handles the deletion of a note from the local state
+  */
   const deleteNote = useMutation({
     mutationFn: (endpoint: string) => deleteData(endpoint),
     onSuccess: () => {
       if (window.confirm(`Are you sure you want to delete this note?`)) {
-        setNoteModal(false);
         folderDispatch({
           type: "DELETE_NOTE",
           payload: {
@@ -88,9 +113,32 @@ export const useNoteMutation = (
             folder_id: noteData.folder_id,
           },
         });
+        deleteActiveNotes(activeNotes, noteData.note_id);
+        deleteCachedNote();
+        setSelectedNote(null);
+        setFolderMenu({ ...folderMenu, updateNote: false });
       }
     },
   });
 
-  return { createNote, editNote, deleteNote };
+  const publishPublicNote = useMutation({
+    mutationFn: (endpoint: string) => {
+      return postData(endpoint, {
+        folder_id: noteData.folder_id,
+        note_id: noteData.note_id,
+        public_note_id: ulid(),
+      });
+    },
+    onSuccess: (result: any) => {
+      setPublicId(() => result ?? null);
+    },
+    onError: (error) => {},
+  });
+
+  return {
+    createNote,
+    editNote,
+    deleteNote,
+    publishPublicNote,
+  };
 };

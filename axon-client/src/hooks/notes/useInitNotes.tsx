@@ -1,26 +1,43 @@
-import { useContext, useEffect } from "react";
-import NoteContext from "src/context/notes";
-import { useNoteQuery } from "./useNoteQuery";
-import { INote } from "src/types/notes";
-import { UseQueryResult } from "@tanstack/react-query";
+import { Reducer, useCallback, useContext, useEffect, useReducer } from "react";
+import { INote, INoteAction } from "src/types/notes";
+import { IEdge } from "src/types/edge";
+import { INode } from "src/types/node";
+import noteReducer from "src/reducers/notes";
+import FolderContext from "src/context/folder";
 
-export const useInitNotes = (): {
-  noteData: INote | null;
-  noteQuery: UseQueryResult<INote, unknown>;
+/*
+  Initialize note
+  Fetch note data and set nodes and edges  
+*/
+export const useInitNotes = (
+  noteData: INote | null,
+  setNodes: any,
+  setEdges: any,
+  publicNoteId?: string | null,
+  setPublicId?: React.Dispatch<React.SetStateAction<string | null>>
+): {
+  note: INote;
+  noteDispatch: React.Dispatch<INoteAction>;
 } => {
-  const { noteDispatch } = useContext(NoteContext);
-  const { noteData, noteQuery } = useNoteQuery();
+  const [note, noteDispatch] = useReducer<Reducer<INote, INoteAction>>(
+    noteReducer,
+    noteData ?? ({} as INote)
+  );
 
-  const initNote = () => {
+  const { selectedNote } = useContext(FolderContext);
+  const initNote = useCallback(() => {
     noteDispatch({
       type: "INIT_NOTE",
       payload: noteData ?? ({} as INote),
     });
-  };
+  }, [noteData, selectedNote]);
 
   useEffect(() => {
     initNote();
-  }, [noteData]);
+    setNodes(noteData?.nodes ?? ([] as INode[]));
+    setEdges(noteData?.edges ?? ([] as IEdge[]));
+    setPublicId && setPublicId(publicNoteId ?? null);
+  }, [noteData, selectedNote]);
 
-  return { noteData, noteQuery };
+  return { note, noteDispatch };
 };
