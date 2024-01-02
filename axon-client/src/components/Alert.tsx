@@ -22,6 +22,7 @@ export const AlertContainer = styled(ToastNotification)`
   bottom: 0;
   min-height: 60px;
   width: 100vw;
+  z-index: calc(100 * 100);
 `;
 
 export const Alert: React.FC<AlertProps> = ({
