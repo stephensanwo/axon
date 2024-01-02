@@ -1,9 +1,5 @@
 import * as io from "socket.io-client";
-
-export interface Message {
-  event: string;
-  data: any;
-}
+import { Message } from "src/types/event";
 
 class SocketManager {
   private socket: any;
@@ -30,8 +26,10 @@ class SocketManager {
   }
 
   connect() {
-    this.socket.connect(); // Connect to the socket
-    console.log("Socket connected", this.socket);
+    if (!this.socket.connected) {
+      this.socket.connect(); // Connect to the socket
+      console.log("Socket connected", this.socket);
+    }
   }
 
   status() {
