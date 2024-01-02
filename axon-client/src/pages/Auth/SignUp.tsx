@@ -11,7 +11,6 @@ import { Navigate } from "react-router-dom";
 import { ThemeColors } from "src/shared/themes";
 import { Link } from "react-router-dom";
 import AuthContext from "src/context/auth";
-import AxonInlineLoader from "src/components/Loader/InlineLoader";
 
 const SignUpContainer = styled.div`
   width: 100%;
@@ -35,7 +34,7 @@ const SignUpBox = styled.div`
 const SignUp = () => {
   const { isSignedIn } = useContext(AuthContext);
   const [loading, setLoading] = useState<string>();
-
+  console.log("isSignedIn", isSignedIn);
   if (isSignedIn) {
     return <Navigate to="/notes" />;
   }

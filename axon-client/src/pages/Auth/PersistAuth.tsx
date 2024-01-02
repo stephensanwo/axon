@@ -1,32 +1,29 @@
 import { Fragment, useContext } from "react";
 import { useLocation, Navigate } from "react-router-dom";
-import { useEffect } from "react";
 import AxonLoader from "src/components/Loader/Loader";
 import AuthContext from "src/context/auth";
 import Notes from "../Notes";
-import { useAuthQuery } from "src/hooks/auth/useAuthQuery";
 
 const PersistAuth = () => {
-  const { setUser, setIsSignedIn } = useContext(AuthContext);
-
-  const { userData, userQuery } = useAuthQuery();
-
+  const { user, userQuery } = useContext(AuthContext);
+  console.log("Persist Auth", user);
   const location = useLocation();
-
-  useEffect(() => {
-    if (userData) {
-      setIsSignedIn(true);
-      setUser(userData);
-    }
-  }, [userData]);
 
   if (userQuery.status === "error") {
     return <Navigate to="/unavailable" state={{ from: location }} replace />;
   }
-
+  if (user.current?.subscription.plan === "INACTIVE") {
+    // return (
+    //   <Navigate
+    //     to="/billing"
+    //     state={{ from: location, prefilled_email: user.current?.email }}
+    //     replace
+    //   />
+    // );
+  }
   return (
     <Fragment>
-      {userQuery.status === "loading" ? <AxonLoader /> : <Notes />}{" "}
+      {userQuery.status === "loading" ? <AxonLoader /> : <Notes />}
     </Fragment>
   );
 };

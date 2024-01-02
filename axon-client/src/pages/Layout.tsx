@@ -1,15 +1,12 @@
 import { Fragment, useContext, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import StyledHeader from "src/components/StyledHeader";
 import { Theme } from "@carbon/react";
 import AppContext from "src/context/app";
 import { MobileWarningDiv } from "src/shared/layout";
-import AuthContext from "src/context/auth";
+import Header from "src/components/Header";
 
 const Layout = () => {
   const { showMobileWarning, setShowMobileWarning } = useContext(AppContext);
-
-  const { isSignedIn } = useContext(AuthContext);
 
   useEffect(() => {
     if (window.innerWidth <= 800) setShowMobileWarning(true);
@@ -17,7 +14,7 @@ const Layout = () => {
 
   return (
     <Theme theme="g100">
-      <StyledHeader />
+      <Header />
       {showMobileWarning ? (
         <MobileWarningDiv dark>
           <p>
