@@ -4,5 +4,10 @@ export interface IUser {
   username: string;
   first_name: string;
   last_name: string;
-  avatar: string;
+  subscription: Subscription;
+}
+
+export interface Subscription {
+  id: string;
+  plan: "INACTIVE" | "EXPLORER" | "PRO";
 }

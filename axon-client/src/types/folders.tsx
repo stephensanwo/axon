@@ -1,12 +1,10 @@
-import { ISelectedNote } from "./notes";
-
 export interface IFolderList {
   date_created: string;
   folder_id: string;
   last_edited?: string;
   folder_name: string;
   user_id: string;
-  notes: INoteSummary[] | [];
+  notes: INoteSummary[];
 }
 
 export interface INoteSummary {
@@ -22,7 +20,7 @@ export interface INoteSummary {
 export interface IFolder {
   date_created: string;
   folder_id: string;
-  last_edit?: string;
+  last_edited?: string;
   folder_name: string;
   user_id: string;
 }
@@ -34,10 +32,7 @@ export type IFolderAction =
     }
   | {
       type: "NEW_FOLDER";
-      payload: {
-        folder_id: string;
-        folder_name: string;
-      };
+      payload: IFolderList;
     }
   | {
       type: "NEW_NOTE";
@@ -76,4 +71,11 @@ export type IFolderAction =
 export interface IMutateFolder {
   folder_name: string;
   folder_id: string;
+}
+
+export interface IFolderMenuEvents {
+  newFolder: boolean;
+  updateFolder: boolean;
+  newNote: boolean;
+  updateNote: boolean;
 }

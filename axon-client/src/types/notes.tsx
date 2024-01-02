@@ -1,6 +1,12 @@
-import { type } from "os";
+import { IEdge } from "./edge";
 import { INoteSummary } from "./folders";
-import { nodeEvents } from "./node";
+import {
+  ExtendedNodeTypes,
+  INode,
+  NodeStyleProps,
+  NodeThemes,
+  NodeTypes,
+} from "./node";
 
 export interface INote {
   date_created: string;
@@ -11,7 +17,15 @@ export interface INote {
   note_id: string;
   user_id: string;
   nodes: Array<INode>;
-  edges: Array<EdgeProps>;
+  edges: Array<IEdge>;
+}
+
+export interface INoteSettings {
+  grid: boolean;
+  snapToGrid: boolean;
+  defaultNodeType: NodeTypes;
+  defaultNodeStyles: NodeStyleProps;
+  defaultNodeTheme: NodeThemes;
 }
 
 export type INoteAction =
@@ -20,97 +34,16 @@ export type INoteAction =
       payload: INote;
     }
   | {
-      type: "ADD_NODE";
-      payload: {
-        node_type:
-          | "input-node"
-          | "anchor-node"
-          | "icon-node"
-          | "title-node"
-          | "text-node";
-        default_theme: NodeStyleProps;
-        eventFn?: (event: nodeEvents, data: any) => void;
-      };
+      type: "UPDATE_NODES";
+      payload: INode[];
     }
   | {
-      type: "UPDATE_NODE";
-      payload: {
-        node_id: string;
-        updated_fields: Partial<NodeDataProps>; // Use Partial to allow updating specific fields
-      };
-    }
-  | {
-      type: "EDIT_NOTE";
-      payload: {
-        folder_id: string;
-        name: string;
-      };
-    }
-  | {
-      type: "DELETE_NOTE";
-      payload: {
-        folder_id: string;
-      };
+      type: "UPDATE_EDGES";
+      payload: IEdge[];
     };
 
-export interface ISelectedNote extends Omit<INote, "nodes" | "edges"> {
-  folder_name: string;
-}
-
-export interface ICreateNoteProps
-  extends Omit<
-    INoteSummary,
-    "user_id" | "note_id" | "date_created" | "last_edited"
-  > {}
-
-export interface IUpdateNoteProps
+export interface IMutateNote
   extends Omit<INoteSummary, "user_id" | "date_created" | "last_edited"> {}
-export interface NodeDataProps {
-  id: string;
-  title: string;
-  description: string;
-  category:
-    | "input-node"
-    | "anchor-node"
-    | "icon-node"
-    | "title-node"
-    | "text-node";
-  icon?: string;
-  node_styles: NodeStyleProps;
-}
-
-export interface NodeContentProps {
-  id: string;
-  content_type: "markdown";
-  content_header: string;
-  content_data: string;
-}
-
-export interface NodeStyleProps {
-  node_background_color: string;
-  node_border_color: string;
-  font_color: string;
-}
-
-export interface INode {
-  id: string;
-  type: string;
-  data: NodeDataProps;
-  position: {
-    x: number;
-    y: number;
-  };
-  className: string;
-  content: string;
-}
-
-export interface EdgeProps {
-  id: string;
-  source: string;
-  target: string;
-  type: string;
-  label: string;
-}
 
 export interface CodeSnippetProps {
   id: string;
@@ -130,9 +63,13 @@ export interface INoteModal {
   publish: boolean;
 }
 
-export interface INodePanel {
-  toogle: boolean;
-  styles: boolean;
-  markdown: boolean;
-  settings: boolean;
+export interface IDefaultNodeSettings {
+  node_type: NodeTypes;
 }
+
+export type NoteMenuEvents =
+  | "toggle-content"
+  | "toggle-publish"
+  | "toggle-settings"
+  | "toggle-user"
+  | "toggle-extensions";

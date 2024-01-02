@@ -1,20 +1,11 @@
-export enum ILoadingStateTypes {
-  LOADING = "loading",
-  SUCCESS = "success",
-  ERROR = "error",
-}
-
-export interface ILoadingState {
-  loading: boolean;
-  success: boolean;
-  error: boolean;
-}
+import { IDefaultNodeSettings } from "./notes";
 
 export interface IAppSettings {
   grid: boolean;
+  default_node_settings: IDefaultNodeSettings;
 }
 
 export enum LocalKeys {
-  SELECTED_NOTE_ID = "selectedNoteId",
-  SELECTED_FOLDER_ID = "selectedFolderId",
+  CACHED_NOTES = "_cachedNotes",
+  ACTIVE_NOTES = "_activeNotes",
 }
