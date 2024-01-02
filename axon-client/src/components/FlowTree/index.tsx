@@ -1,104 +1,94 @@
-import React, { useContext, useEffect, useState } from "react";
-import styled from "styled-components";
-import { useParams } from "react-router-dom";
+import { useContext } from "react";
 import ReactFlow, {
-  ReactFlowProvider,
-  addEdge,
-  Controls,
-  updateEdge,
-  useNodesState,
-  useEdgesState,
   Background,
   BackgroundVariant,
-} from "react-flow-renderer";
-import { CustomComponentNode } from "../Node";
+  Node,
+  Viewport,
+} from "reactflow";
 import { NoteContext } from "../../context/notes";
-import CustomEdge from "../Node/CustomEdge";
-import NodePanel from "../NodePanel";
-import FolderContext from "src/context/folder";
 import AppContext from "src/context/app";
 import { ThemeColors } from "src/shared/themes";
-
-const FlowTreeDiv = styled.div`
-  height: calc(100vh - 40px);
-  width: 100%;
-  margin: auto;
-  /* padding-top: 10px;
-  padding-bottom: 10px; */
-  /* background-color: #2b2929; */
-`;
-
-const nodeTypes = {
-  input: CustomComponentNode,
-};
-const edgeTypes = {
-  buttonedge: CustomEdge,
-};
+import { useNodeEvents } from "src/hooks/node/useNodeEvents";
+import { edgeTypes } from "../Edge/Types";
+import { AxonControls } from "./Controls";
+import NodeContext from "src/context/node";
+import { nodeTypes } from "../Node/NodeTypes";
+import { ReactFlowInstance } from "reactflow";
+import { FlowTreeDiv } from "./styles";
+import "reactflow/dist/style.css";
 
 const FlowTree = () => {
-  // const { folderId, noteId } = useParams();
-  // const noteData = useContext(NoteContext);
-  // const folder = noteData.folders.filter((folder) => folder.id === folderId)[0];
-  // const note = folder.notes.filter((note) => note.id === noteId)[0];
-  const { isSideNavExpanded, appSettings } = useContext(AppContext);
-  const { note, nodePanel } = useContext(NoteContext);
-  const [nodes, setNodes, onNodesChange] = useNodesState();
-  const [edges, setEdges, onEdgesChange] = useEdgesState();
+  return (
+    <FlowTreeDiv onMouseDown={(e: any) => e.preventDefault()}>
+      <Flow />
+      <AxonControls />
+    </FlowTreeDiv>
+  );
+};
 
-  //   const onElementsRemove = (elementsToRemove: object) =>
-  //     setElements((els: any) => removeElements(elementsToRemove, els));
+const Flow = () => {
+  const { appSettings } = useContext(AppContext);
+  const { nodes, edges, onNodesChange, onEdgesChange, setSelectedNode } =
+    useContext(NoteContext);
+  const { globalNodeMutex } = useContext(NodeContext);
+  const {
+    onConnect,
+    onConnectStart,
+    onConnectEnd,
+    onNodeDragStart,
+    onNodeDragStop,
+  } = useNodeEvents();
 
-  //   const onEdgeUpdate = (oldEdge: any, newConnection: any) =>
-  //     setEdges((els: any) => updateEdge(oldEdge, newConnection, els));
+  const onInit = (reactFlowInstance: ReactFlowInstance) => {
+    reactFlowInstance.zoomTo(1);
+  };
 
-  useEffect(() => {
-    setNodes(note?.nodes);
-    setEdges(note?.edges);
-  }, [note?.edges, note?.nodes, setEdges, setNodes]);
-
-  const onConnect = (params: object) =>
-    setEdges((els: any) =>
-      addEdge({ ...params, type: "buttonedge", animated: true }, els)
-    );
-
-  const onLoad = (reactFlowInstance: any) =>
-    reactFlowInstance.setTransform({
-      x: 0,
-      y: 0,
-      zoom: 1,
-    });
+  const defaultViewport: Viewport = { x: 0, y: 0, zoom: 1 };
 
   return (
-    <FlowTreeDiv>
-      <ReactFlowProvider>
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          connectionLineComponent={CustomEdge}
-          onConnect={onConnect}
-          onLoad={onLoad}
-          snapToGrid={false}
-          snapGrid={[15, 15]}
-          nodeTypes={nodeTypes}
-          edgeTypes={edgeTypes}
-          onlyRenderVisibleElements={true}
-        >
-          {appSettings.grid && (
-            <Background
-              id="2"
-              gap={50}
-              offset={1}
-              color={ThemeColors.bgHighlight2}
-              variant={BackgroundVariant.Lines}
-            />
-          )}
-        </ReactFlow>
-        <Controls style={{ left: isSideNavExpanded ? "320px" : "0px" }} />
-      </ReactFlowProvider>
-      <NodePanel expanded={nodePanel.toogle} />
-    </FlowTreeDiv>
+    <ReactFlow
+      nodes={nodes}
+      edges={edges}
+      onNodesChange={onNodesChange}
+      onEdgesChange={onEdgesChange}
+      onConnect={onConnect}
+      onConnectStart={onConnectStart}
+      onConnectEnd={onConnectEnd}
+      onInit={onInit}
+      snapToGrid={false}
+      snapGrid={[15, 15]}
+      nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
+      onlyRenderVisibleElements={true}
+      onNodeDragStart={(event: any, node: Node, nodes: Node[]) =>
+        onNodeDragStart(event, node, nodes)
+      }
+      onNodeDragStop={(event: any, node: Node, nodes: Node[]) =>
+        onNodeDragStop(event, node, nodes)
+      }
+      // onNodeDragStop={(event: React.MouseEvent, node: INode) => {}}
+      // edgesUpdatable={!globalNodeMutex}
+      // edgesFocusable={!globalNodeMutex}
+      // nodesFocusable={!globalNodeMutex}
+      nodesDraggable={!globalNodeMutex}
+      nodesConnectable={!globalNodeMutex}
+      draggable={!globalNodeMutex}
+      panOnDrag={!globalNodeMutex}
+      elementsSelectable={!globalNodeMutex}
+      defaultViewport={defaultViewport}
+      zoomOnDoubleClick={false}
+      // onDoubleClickCapture={() => setSelectedNode(null)}
+    >
+      {appSettings.grid && (
+        <Background
+          id="2"
+          gap={50}
+          offset={1}
+          color={ThemeColors.bgHighlight2}
+          variant={BackgroundVariant.Lines}
+        />
+      )}
+    </ReactFlow>
   );
 };
 
