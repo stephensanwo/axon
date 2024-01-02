@@ -5,36 +5,34 @@ import {
   ModalFooter,
   ComposedModal,
 } from "@carbon/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { IMutateFolder } from "src/types/folders";
 import { AxonButton } from "src/components/Button";
 import AxonInlineLoader from "src/components/Loader/InlineLoader";
 import { useFolderMutation } from "src/hooks/folders/useFolderMutation";
 import InlineAlert from "../InlineAlert";
+import FolderContext from "src/context/folder";
 
-const NewFolder: React.FC<{
-  folderModal: boolean;
-  setFolderModal: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ folderModal, setFolderModal }) => {
+const NewFolder = () => {
   const [newFolder, setNewFolder] = useState<IMutateFolder>({
     folder_name: "",
     folder_id: "",
   });
 
-  const { createFolder } = useFolderMutation(newFolder, setFolderModal);
+  const { createFolder } = useFolderMutation(newFolder);
+  const { folderMenu, setFolderMenu } = useContext(FolderContext);
 
   return (
     <ComposedModal
       size="sm"
-      modalHeading="Modal heading"
-      modalLabel="Label"
-      open={folderModal}
-      onClose={() => setFolderModal(false)}
+      open={folderMenu.newFolder}
+      onClose={() => setFolderMenu({ ...folderMenu, newFolder: false })}
       preventCloseOnClickOutside={true}
     >
       <ModalHeader title="Create New Folder" />
       <ModalBody hasForm>
         <TextInput
+          id="folder-name"
           data-modal-primary-focus
           labelText="Name"
           value={newFolder.folder_name}
@@ -52,7 +50,10 @@ const NewFolder: React.FC<{
         )}
       </ModalBody>
       <ModalFooter>
-        <AxonButton kind="secondary" onClick={() => setFolderModal(false)}>
+        <AxonButton
+          kind="secondary"
+          onClick={() => setFolderMenu({ ...folderMenu, newFolder: false })}
+        >
           Cancel
         </AxonButton>
         <AxonButton

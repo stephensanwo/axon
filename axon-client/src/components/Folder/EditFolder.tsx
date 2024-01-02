@@ -5,41 +5,37 @@ import {
   ModalFooter,
   ComposedModal,
 } from "@carbon/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { IFolderList, IMutateFolder } from "src/types/folders";
 import { AxonButton } from "src/components/Button";
 import AxonInlineLoader from "src/components/Loader/InlineLoader";
 import { useFolderMutation } from "src/hooks/folders/useFolderMutation";
 import InlineAlert from "../InlineAlert";
+import FolderContext from "src/context/folder";
 
 const EditFolder: React.FC<{
-  folderModal: boolean;
-  setFolderModal: React.Dispatch<React.SetStateAction<boolean>>;
   folder: IFolderList;
-}> = ({ folder, folderModal, setFolderModal }) => {
+}> = ({ folder }) => {
   const [updateFolder, setUpdateFolder] = useState<IMutateFolder>({
     folder_name: folder.folder_name,
     folder_id: folder.folder_id,
   });
 
-  const { editFolder, deleteFolder } = useFolderMutation(
-    updateFolder,
-    setFolderModal
-  );
+  const { editFolder, deleteFolder } = useFolderMutation(updateFolder);
+  const { folderMenu, setFolderMenu } = useContext(FolderContext);
 
   return (
     <ComposedModal
       size="sm"
-      modalHeading="Modal heading"
-      modalLabel="Label"
-      open={folderModal}
-      onClose={() => setFolderModal(false)}
+      open={folderMenu.updateFolder}
+      onClose={() => setFolderMenu({ ...folderMenu, updateFolder: false })}
       preventCloseOnClickOutside={true}
     >
       <ModalHeader title="Edit Folder" />
       <ModalBody hasForm>
         <TextInput
           data-modal-primary-focus
+          id="folder-name"
           labelText="Name"
           value={updateFolder.folder_name}
           placeholder="e.g. Project Axon"
