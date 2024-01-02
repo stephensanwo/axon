@@ -4,9 +4,9 @@ import { ThemeColors } from "src/shared/themes";
 
 export const AxonButton = styled(CarbonButton)`
   margin-top: 20px;
-  max-width: 300px;
+  max-width: ${(props: { maxWidth?: string }) => props.maxWidth ?? "300px"};
   width: 100%;
-  height: 50px;
+  height: ${(props: { height?: string }) => props.height ?? "50px"};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -14,7 +14,7 @@ export const AxonButton = styled(CarbonButton)`
   padding-left: 15px;
   padding-right: 15px;
   /* text-decoration: none; */
-  background-color: ${(props: { kind: string }) =>
+  /* background-color: ${(props: { kind: string }) =>
     (props.kind === "primary" && ThemeColors.primary) ||
     (props.kind === "danger" && ThemeColors.dangerAction) ||
     ""} !important;
@@ -24,5 +24,5 @@ export const AxonButton = styled(CarbonButton)`
   :hover {
     text-decoration: none;
     color: #000;
-  }
+  } */
 `;
