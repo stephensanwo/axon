@@ -3,27 +3,31 @@ export const StateColors = {
   success: "#42be65",
   failed: "#fa4d56",
   neutral: "#fff",
-  warning: "#f1c21b",
+  warning: "#f7d96d",
   running: "#393939",
 };
 export const ThemeColors = {
   bgDark: "#161616",
   bgDark2: "#262626",
-  // bgDark: "rgba(0, 0, 0, 0.93)"
   bgLight: "#ffffff",
   white: "#ffffff",
   bgPrimary: "#f4f4f4",
   bgSecondary: "rgb(27, 27, 27)",
   primaryAction: "#d3ec45",
-  dangerAction: "#da1e28",
-  bgHiglight1: "#202020",
-  bgHighlight2: "rgb(43, 43, 43)",
+  dangerAction: "#fa4d56",
+  bgHighlight1: "#202020",
+  bgHighlight2: "#393939",
   textDark: "#6f6f6f",
+  textLight: "#c6c6c6",
   primary: "#DAEF68",
   primaryHover: "#d3ec45",
+  primaryVariant1: "#a7b651",
   textBlack: "#000",
   accent: "#1688d4",
   border: "#393939",
+  borderLight: "#a0a0a0",
+  warning: "#f7d96d",
+  transparent: "transparent",
 };
 
 export const NodeThemes = {
@@ -68,15 +72,15 @@ export const ColorPalette: IColorPalette = {
   },
   GREEN2: {
     label: "Green 2",
-    hex: "#b6d9bb",
+    hex: "#98d6a1",
   },
   RED1: {
     label: "Red 1",
-    hex: "#b6d9bb",
+    hex: "#e27d7d",
   },
   RED2: {
     label: "Red 2",
-    hex: "#b6d9bb",
+    hex: "#ff6161",
   },
   GREY1: {
     label: "Grey 1",

@@ -2,9 +2,9 @@ import styled from "styled-components";
 import { device } from "./media";
 
 export const PageContainer = styled.div`
-  padding-top: 40px;
+  margin-top: 35px;
   overflow-y: scroll;
-  height: 100vh;
+  height: calc(100vh - 35px);
   max-height: 100vh;
   width: 100%;
   background-color: ${(props: any) => (props.dark ? "#161616" : "#f4f4f4")};
