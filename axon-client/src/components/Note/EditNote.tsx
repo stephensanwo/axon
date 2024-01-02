@@ -5,17 +5,17 @@ import {
   ModalFooter,
   ComposedModal,
 } from "@carbon/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { AxonButton } from "src/components/Button";
 import AxonInlineLoader from "src/components/Loader/InlineLoader";
-import { ISelectedNote, IMutateNote } from "src/types/notes";
+import { IMutateNote } from "src/types/notes";
 import { useNoteMutation } from "src/hooks/notes/useNoteMutation";
+import FolderContext from "src/context/folder";
+import { INoteSummary } from "src/types/folders";
 
 const EditNote: React.FC<{
-  noteModal: boolean;
-  setNoteModal: React.Dispatch<React.SetStateAction<boolean>>;
-  note: ISelectedNote;
-}> = ({ note, noteModal, setNoteModal }) => {
+  note: INoteSummary;
+}> = ({ note }) => {
   const [updateNote, setUpdateNote] = useState<IMutateNote>({
     folder_id: note?.folder_id,
     note_id: note?.note_id,
@@ -23,21 +23,21 @@ const EditNote: React.FC<{
     note_name: note?.note_name,
   });
 
-  const { editNote, deleteNote } = useNoteMutation(updateNote, setNoteModal);
+  const { editNote, deleteNote } = useNoteMutation(updateNote);
+  const { folderMenu, setFolderMenu } = useContext(FolderContext);
 
   return (
     <ComposedModal
       size="sm"
-      modalHeading="Modal heading"
-      modalLabel="Label"
-      open={noteModal}
-      onClose={() => setNoteModal(false)}
+      open={folderMenu.updateNote}
+      onClose={() => setFolderMenu({ ...folderMenu, updateNote: false })}
       preventCloseOnClickOutside={true}
     >
       <ModalHeader title="Edit Note" />
       <ModalBody hasForm>
         <TextInput
           data-modal-primary-focus
+          id="note-name"
           labelText="Name"
           value={updateNote.note_name}
           placeholder="e.g. Project Axon Backend"
@@ -55,6 +55,7 @@ const EditNote: React.FC<{
         <div style={{ marginTop: "20px" }}></div>
         <TextInput
           data-modal-primary-focus
+          id="note-description"
           labelText="Description"
           value={updateNote.description}
           placeholder="e.g. Project Axon Backend"

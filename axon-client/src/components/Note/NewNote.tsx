@@ -1,3 +1,4 @@
+import React from "react";
 import {
   TextInput,
   ModalHeader,
@@ -5,35 +6,32 @@ import {
   ModalFooter,
   ComposedModal,
 } from "@carbon/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { AxonButton } from "src/components/Button";
 import AxonInlineLoader from "src/components/Loader/InlineLoader";
 import { IMutateNote } from "src/types/notes";
 import { IFolderList } from "src/types/folders";
 import { useNoteMutation } from "src/hooks/notes/useNoteMutation";
 import InlineAlert from "../InlineAlert";
+import FolderContext from "src/context/folder";
 
 const NewNote: React.FC<{
-  noteModal: boolean;
-  setNoteModal: React.Dispatch<React.SetStateAction<boolean>>;
   folder: IFolderList;
-}> = ({ folder, noteModal, setNoteModal }) => {
+}> = ({ folder }) => {
+  const { folderMenu, setFolderMenu } = useContext(FolderContext);
   const [newNote, setNewNote] = useState<IMutateNote>({
     folder_id: folder.folder_id,
     description: "",
     note_name: "",
     note_id: "",
   });
-
-  const { createNote } = useNoteMutation(newNote, setNoteModal);
+  const { createNote } = useNoteMutation(newNote);
 
   return (
     <ComposedModal
       size="sm"
-      modalHeading="Modal heading"
-      modalLabel="Label"
-      open={noteModal}
-      onClose={() => setNoteModal(false)}
+      open={folderMenu.newNote}
+      onClose={() => setFolderMenu({ ...folderMenu, newNote: false })}
       preventCloseOnClickOutside={true}
     >
       <ModalHeader
@@ -43,13 +41,17 @@ const NewNote: React.FC<{
       <ModalBody hasForm>
         <TextInput
           data-modal-primary-focus
+          id="note-name"
           labelText="Name"
           value={newNote.note_name}
           placeholder="e.g. Project Axon Frontend Workflow"
           type="text"
           name="note_name"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setNewNote({ ...newNote, [e.target.name]: e.target.value })
+            setNewNote((prevNote) => ({
+              ...prevNote,
+              [e.target.name]: e.target.value,
+            }))
           }
           invalid={createNote.status === "error" && true}
           invalidText={"Invalid data provided"}
@@ -57,13 +59,17 @@ const NewNote: React.FC<{
         <div style={{ marginTop: "20px" }}></div>
         <TextInput
           data-modal-primary-focus
+          id="note-description"
           labelText="Description"
           value={newNote.description}
           placeholder="e.g. Project Axon Frontend Workflow"
           type="text"
           name="description"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setNewNote({ ...newNote, [e.target.name]: e.target.value })
+            setNewNote((prevNote) => ({
+              ...prevNote,
+              [e.target.name]: e.target.value,
+            }))
           }
           invalid={createNote.status === "error" && true}
           invalidText={"Invalid data provided"}
@@ -73,7 +79,10 @@ const NewNote: React.FC<{
         )}
       </ModalBody>
       <ModalFooter>
-        <AxonButton kind="secondary" onClick={() => setNoteModal(false)}>
+        <AxonButton
+          kind="secondary"
+          onClick={() => setFolderMenu({ ...folderMenu, newNote: false })}
+        >
           Cancel
         </AxonButton>
         <AxonButton
@@ -81,6 +90,8 @@ const NewNote: React.FC<{
           onClick={() => createNote.mutate("note")}
           disabled={
             newNote.note_name.length && newNote.description.length > 0
+              ? false
+              : createNote.status === "loading"
               ? false
               : true
           }
@@ -92,4 +103,4 @@ const NewNote: React.FC<{
   );
 };
 
-export default NewNote;
+export default React.memo(NewNote);
