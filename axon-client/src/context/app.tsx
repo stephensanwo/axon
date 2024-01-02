@@ -1,9 +1,13 @@
+import { useSet } from "@uidotdev/usehooks";
 import React, { createContext, useState } from "react";
-import { Message } from "src/api/events/socket";
-import useEventSocket from "src/hooks/events/useEventSocket";
 import { ColorPalette, ThemeColors } from "src/shared/themes";
 import { IAppSettings } from "src/types/app";
-import { NodeStyleProps } from "src/types/notes";
+import {
+  ExtendedNodeTypes,
+  NodeStyleProps,
+  NodeThemes,
+  NodeTypes,
+} from "src/types/node";
 
 interface AppProviderProps {
   children: React.ReactNode;
@@ -18,10 +22,11 @@ interface AppContextProps {
   setIsOnline: React.Dispatch<React.SetStateAction<boolean>>;
   appSettings: IAppSettings;
   setAppSettings: React.Dispatch<React.SetStateAction<IAppSettings>>;
-  defaultNodeTheme: NodeStyleProps;
-  setDefaultNodeTheme: React.Dispatch<React.SetStateAction<NodeStyleProps>>;
-  isAutoSave: boolean;
-  sendMessage: (message: Message) => void;
+  defaultNodeStyles: NodeStyleProps;
+  setDefaultNodeStyles: React.Dispatch<React.SetStateAction<NodeStyleProps>>;
+  defaultNodeTheme: NodeThemes;
+  setDefaultNodeTheme: React.Dispatch<React.SetStateAction<NodeThemes>>;
+  extensions: Set<NodeTypes>;
 }
 
 const AppContext = createContext({} as AppContextProps);
@@ -32,15 +37,29 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   const [isOnline, setIsOnline] = useState(false);
   const [appSettings, setAppSettings] = useState<IAppSettings>({
     grid: false,
+    default_node_settings: {
+      node_type: "text",
+    },
   });
 
-  const { isAutoSave, sendMessage } = useEventSocket();
-
-  const [defaultNodeTheme, setDefaultNodeTheme] = useState<NodeStyleProps>({
-    node_background_color: ColorPalette.ORANGE1.hex,
-    node_border_color: "",
+  const [defaultNodeStyles, setDefaultNodeStyles] = useState<NodeStyleProps>({
+    background_color: ColorPalette.YELLOW3.hex,
+    border_color: "",
     font_color: ThemeColors.textBlack,
+    font_weight: 400,
+    font_alignment: "left",
+    font_size: 16,
+    border_style: "solid",
+    border_radius: 8,
   });
+
+  const [defaultNodeTheme, setDefaultNodeTheme] = useState<NodeThemes>({
+    style: "background-fill",
+    color: ColorPalette.YELLOW3.hex,
+  });
+
+  // TODO: Get Installed Node Types from Settings
+  const extensions = useSet<NodeTypes>([]);
 
   return (
     <AppContext.Provider
@@ -53,10 +72,11 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         setIsOnline,
         appSettings,
         setAppSettings,
+        defaultNodeStyles,
+        setDefaultNodeStyles,
         defaultNodeTheme,
         setDefaultNodeTheme,
-        isAutoSave,
-        sendMessage,
+        extensions,
       }}
     >
       {children}

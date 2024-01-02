@@ -1,11 +1,16 @@
-import React, { createContext, useReducer, useState } from "react";
+import React, { createContext, useEffect, useReducer, useState } from "react";
 import folderReducer from "../reducers/folders";
 import { Reducer } from "react";
-import { IFolderAction, IFolderList } from "../types/folders";
-import { ISelectedNote } from "src/types/notes";
+import {
+  IFolderAction,
+  IFolderList,
+  IFolderMenuEvents,
+  INoteSummary,
+} from "../types/folders";
 import { useInitFolders } from "src/hooks/folders/useInitFolders";
 import { UseQueryResult } from "@tanstack/react-query";
-
+import { useSet } from "@uidotdev/usehooks";
+import { useFolderQuery } from "src/hooks/folders/useFolderQuery";
 interface FolderProviderProps {
   children: React.ReactNode;
 }
@@ -14,26 +19,44 @@ interface FolderContextProps {
   folders: IFolderList[] | null;
   folderDispatch: React.Dispatch<IFolderAction>;
   folderQuery: UseQueryResult<IFolderList[], unknown>;
-  selectedNote: ISelectedNote;
-  setSelectedNote: React.Dispatch<ISelectedNote>;
+  selectedNote: INoteSummary | null;
+  setSelectedNote: React.Dispatch<INoteSummary | null>;
+  selectedFolder: IFolderList | undefined;
+  setSelectedFolder: React.Dispatch<
+    React.SetStateAction<IFolderList | undefined>
+  >;
+  activeNotes: Set<string>;
+  folderMenu: IFolderMenuEvents;
+  setFolderMenu: React.Dispatch<React.SetStateAction<IFolderMenuEvents>>;
 }
 
 export const FolderContext = createContext({} as FolderContextProps);
 
 export const FolderProvider = ({ children }: FolderProviderProps) => {
-  const [selectedNote, setSelectedNote] = useState<ISelectedNote>(
-    {} as ISelectedNote
+  const { folderData, folderQuery } = useFolderQuery();
+  const [folderMenu, setFolderMenu] = useState<IFolderMenuEvents>({
+    newFolder: false,
+    updateFolder: false,
+    newNote: false,
+    updateNote: false,
+  });
+
+  const [selectedFolder, setSelectedFolder] = useState<IFolderList>();
+  const [selectedNote, setSelectedNote] = useState<INoteSummary | null>(null);
+  const activeNotes = useSet<string>([]);
+
+  const { folders, folderDispatch } = useInitFolders(
+    setSelectedNote,
+    activeNotes,
+    folderData
   );
 
-  const [folders, folderDispatch] = useReducer<
-    Reducer<IFolderList[], IFolderAction>
-  >(folderReducer, [] as IFolderList[]);
-
-  const { folderQuery } = useInitFolders(
-    folderDispatch,
-    selectedNote,
-    setSelectedNote
-  );
+  // useEffect(() => {
+  //   console.log("Selected Note from Folder Context", selectedNote);
+  //   if (selectedNote?.note_id) {
+  //     activeNotes.add(selectedNote?.note_id);
+  //   }
+  // }, [selectedNote]);
 
   return (
     <FolderContext.Provider
@@ -43,6 +66,11 @@ export const FolderProvider = ({ children }: FolderProviderProps) => {
         folderQuery,
         selectedNote,
         setSelectedNote,
+        selectedFolder,
+        setSelectedFolder,
+        activeNotes,
+        folderMenu,
+        setFolderMenu,
       }}
     >
       {children}
