@@ -1,5 +1,5 @@
 import { HeaderPanel } from "@carbon/react";
-import { Maximize, Close } from "@carbon/icons-react";
+import { Close } from "@carbon/icons-react";
 import styled from "styled-components";
 
 interface Props {
@@ -24,6 +24,7 @@ const ControlPanel: React.FC<Props> = (props) => {
       expanded={props.expanded}
       aria-label="Header Panel"
       style={{ marginTop: "40px" }}
+      onHeaderPanelFocus={() => {}} // Needed for Carbon Error: onHeaderPanelFocus is not a function
     >
       <ControlPanelContainer>
         <div
