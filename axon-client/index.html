@@ -4,12 +4,17 @@
     <meta charset="utf-8" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#161616" />
+    <meta name="background-color" content="#161616" />
     <meta
       name="description"
-      content="Web site created using create-react-app"
+      content="Axon is a mind mapping tool for techies"
     />
     <link rel="apple-touch-icon" href="/logo192.png" />
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"> -->
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -28,17 +33,48 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="loading-screen" class="loading-screen">
+      <img src="./src/assets/icons/axon-logo-small-dark.svg" alt="Axon Logo" width="150px" />
+    </div>
     <div id="root"></div>
+    <style>
+      html,body {
+        margin: 0;
+        padding: 0;
+        background-color: #161616;        
+      }
+      .loading-screen {
+        height: calc(100vh - 35px) ;
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #161616;
+        margin-top: 35px;
+      }
+    </style>
+    <script>
+      // JavaScript code to display the axon loading screen when the React app not ready
+      function hideLoadingScreen() {
+        const loadingScreen = document.getElementById('loading-screen');
+        loadingScreen.style.display = 'none';
+      }
+      // Wait for the React app to be fully rendered
+      function waitForReactApp() {
+        const root = document.getElementById('root');
+        if (root && root.childElementCount > 0) {
+          hideLoadingScreen();
+        } else {
+          requestAnimationFrame(waitForReactApp);
+        }
+      }  
+      // Start waiting for the React app to render
+      requestAnimationFrame(waitForReactApp);
+    </script>
     <script type="module" src="/src/index.tsx"></script>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    <script
+    async
+    src="https://js.stripe.com/v3/pricing-table.js">
+  </script>
   </body>
 </html>
