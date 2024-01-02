@@ -1,0 +1,113 @@
+// create variables for colors
+:root {
+    --banner-error-border: #f5353e;
+    --banner-error-background: #fad0d0;
+    --banner-warning-border: #f8cc2e;
+    --banner-warning-background: #f7e9b5;
+    --banner-success-border: #42be65;
+    --banner-success-background: #aeefc1;
+    --banner-info-border: #0f62fe;
+    --banner-info-background: #c6d4ef;
+
+    --primary: #DAEF68;
+
+}
+
+.editor-wrapper {
+    width: 100%;
+    height: 90%;
+    padding: 20px;
+    outline: none;
+}
+
+[data-editor-placeholder] {
+    // position: absolute;
+    // top: 80px;
+    // left: 20px;
+    display: none;
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
+.text-italic {
+    font-style: italic;
+}
+
+.text-underline {
+    text-decoration: underline;
+}
+
+.text-code {
+    background-color: #393939;
+    padding: 0px 4px 0px 4px;
+    border-radius: 4px;
+    font-family: "IBM Plex Mono";
+    font-size: 90%;
+    color: #c6c6c6
+}
+
+.text-highlight {
+    margin: 0 5px;
+}
+
+.text-strikethrough {
+    text-decoration: line-through;
+}
+
+.text-subscript {
+    vertical-align: sub;
+}
+
+.text-superscript {
+    vertical-align: super;
+}
+
+.BlockNoteEditor__banner {
+    border-radius: 2px;
+    padding: 8px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    caret-color: #000;
+
+    [data-lexical-text] {
+        color: #000;
+        line-height: 1.4;
+        font-size: 14px;
+    }
+}
+
+.BlockNoteEditor__banner-error {
+    @extend .BlockNoteEditor__banner;
+    border-left: 5px var(--banner-error-border) solid;
+    background-color: var(--banner-error-background);
+}
+
+.BlockNoteEditor__banner-warning {
+    @extend .BlockNoteEditor__banner;
+    border-left: 5px var(--banner-warning-border) solid;
+    background-color: var(--banner-warning-background);
+}
+
+.BlockNoteEditor__banner-success {
+    @extend .BlockNoteEditor__banner;
+    border-left: 5px var(--banner-success-border) solid;
+    background-color: var(--banner-success-background);
+}
+
+.BlockNoteEditor__banner-info {
+    @extend .BlockNoteEditor__banner;
+    border-left: 5px var(--banner-info-border) solid;
+    background-color: var(--banner-info-background);
+}
+
+.BlockNoteEditor__link {
+    color: var(--primary);
+    cursor: pointer;
+}
+
+.BlockNoteEditor__link:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
