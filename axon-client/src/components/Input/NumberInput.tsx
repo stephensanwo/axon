@@ -19,17 +19,17 @@ const NumberInput: React.FC<{
   const increaseFn = () => {
     if (value + step <= maxValue) {
       setValue(value + step);
-    }
+    } else setValue(maxValue);
   };
   const decreaseFn = () => {
     if (value - step >= minValue) {
       setValue(value - step);
-    }
+    } else setValue(minValue);
   };
 
   return (
     <div
-      id={id}
+      id={`number-input-${id}`}
       style={{
         display: "flex",
         gap: "8px",
@@ -48,6 +48,7 @@ const NumberInput: React.FC<{
         <Subtract size={14} />
       </IconButton>
       <div
+        id={`number-input-value-${id}`}
         style={{
           minWidth: "32px",
           display: "flex",
