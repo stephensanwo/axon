@@ -18,7 +18,6 @@
     "@szhsin/react-menu": "^3.0.0",
     "@tanstack/react-query": "^4.35.0",
     "@tanstack/react-table": "^8.10.7",
-    "@types/jest": "^27.0.1",
     "@uidotdev/usehooks": "^2.4.1",
     "@uiw/react-markdown-editor": "^4.0.2",
     "@uiw/react-monacoeditor": "^3.5.9",
