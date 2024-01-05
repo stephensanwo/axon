@@ -1,29 +1,19 @@
 import React, { useContext, useState } from "react";
-import { NoteContext } from "../../context/notes";
-import { CustomNodeProps, INode, NodeDataProps } from "src/types/node";
-import NodeMenu from "./NodeMenu";
-import { Handle } from "./NodeHandles";
+import { NoteContext } from "src/context/notes";
+import { CustomNodeProps, NodeDataProps } from "src/types/node";
+import NodeMenu from "src/components/Node/NodeMenu";
+import { Handle } from "src/components/Node/NodeHandles";
 import { useNodeEvents } from "src/hooks/node/useNodeEvents";
 import { ThemeColors } from "src/shared/themes";
 import { Position } from "reactflow";
-import { NodeResizer, ResizeParams } from "reactflow";
-import styled from "styled-components";
-
-const BoundingBoxWrapper = styled.div`
-  background-color: ${(props: { background: string }) => props.background};
-  width: ${(props: { width: string }) => `${props.width}px`};
-  height: ${(props: { height: string }) => `${props.height}px`};
-  border: ${(props: { border: string }) =>
-    props.border && `1px solid ${props.border}`};
-  box-sizing: border-box;
-  border-radius: ${(props: { borderradius: string }) => props.borderradius};
-`;
+import { ResizeParams } from "reactflow";
+import NodeWrapper from "src/components/Node/NodeWrapper";
+import { BoundingBoxWrapper } from "./index.styles";
 
 const BoundingBox: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
   const { id, data } = props;
   const [resizing, setResizing] = useState<boolean>(false);
   const { selectedNode } = useContext(NoteContext);
-  const contentRef = React.createRef<any>();
   const {
     deleteNode,
     duplicateNode,
@@ -35,7 +25,7 @@ const BoundingBox: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
 
   return (
     <>
-      <NodeResizer
+      <NodeWrapper
         color={ThemeColors.borderLight}
         isVisible={selectedNode?.id === id}
         keepAspectRatio={true}
@@ -46,10 +36,6 @@ const BoundingBox: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
         onResizeEnd={(e: any, params: ResizeParams) => {
           onResizeEnd(id, params);
           setResizing(() => false);
-        }}
-        lineStyle={{
-          border: "0.9px dashed",
-          borderSpacing: "10 10",
         }}
       />
       <BoundingBoxWrapper

@@ -1,11 +1,12 @@
 import React, { useContext, useState } from "react";
-import { CustomNodeProps, INode, NodeDataProps } from "src/types/node";
+import { ResizeParams } from "reactflow";
+import { CustomNodeProps, NodeDataProps } from "src/types/node";
 import { useNodeEvents } from "src/hooks/node/useNodeEvents";
-import NodeMenu from "./NodeMenu";
+import NodeMenu from "src/components/Node/NodeMenu";
 import NoteContext from "src/context/notes";
 import { ThemeColors } from "src/shared/themes";
-import { NodeResizer, ResizeParams } from "reactflow";
-import { TextArea } from "../Input/TextArea";
+import { TextArea } from "src/components/Input/TextArea";
+import NodeWrapper from "src/components/Node/NodeWrapper";
 
 const CustomText: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
   const { id, data } = props;
@@ -22,13 +23,13 @@ const CustomText: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
     handleNodeContentChange,
   } = useNodeEvents();
 
+  const NODE_RESIZER_GUTTER: number = 4;
+
   return (
     <>
-      <NodeResizer
+      <NodeWrapper
         nodeId={id}
-        color={ThemeColors.borderLight}
         isVisible={selectedNode?.id === id}
-        keepAspectRatio={false}
         onResizeStart={(e: any, params: ResizeParams) => {
           setResizing(() => true);
           onResizeStart(id, params);
@@ -37,11 +38,6 @@ const CustomText: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
           onResizeEnd(id, params);
           setResizing(() => false);
         }}
-        lineStyle={{
-          border: "0.9px dashed",
-          borderSpacing: "10 10",
-        }}
-        shouldResize={() => true}
       />
       <TextArea
         ref={contentRef}
@@ -53,27 +49,20 @@ const CustomText: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
         onMouseEnter={() => {
           handleNodeInteraction(data.node_id);
         }}
-        autoCapitalize="off"
-        autoComplete="off"
-        autoCorrect="off"
-        spellCheck={false}
-        autoSave="off"
-        autoFocus={false}
         selected={selectedNode?.id === id}
         fontSize={data.node_styles.font_size}
         fontWeight={data.node_styles.font_weight}
         color={data.node_styles.font_color ?? ThemeColors.white}
         textalign={data.node_styles.font_alignment}
         padding={8}
-        width={data?.width - 4}
-        height={data?.height - 4}
-        margin={2}
+        width={data?.width - NODE_RESIZER_GUTTER}
+        height={data?.height - NODE_RESIZER_GUTTER}
+        margin={NODE_RESIZER_GUTTER / 2}
         border={"transparent"}
         background={"transparent"}
       >
         {data?.description}
       </TextArea>
-
       {selectedNode?.id === id && !resizing && (
         <NodeMenu
           node_props={props}

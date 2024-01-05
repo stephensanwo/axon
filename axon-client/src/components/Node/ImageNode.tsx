@@ -15,6 +15,7 @@ import { NodeMenuInfo } from "./NodeMenu/Shared";
 import { useMedia } from "src/hooks/content/useMedia";
 import { NodeResizer, ResizeParams } from "reactflow";
 import { IMAGE_ERROR_URL } from "src/types/image";
+import NodeWrapper from "./NodeWrapper";
 
 const ImageNodeContainer = styled.div`
   border: none;
@@ -141,7 +142,7 @@ const ImageNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
 
   return (
     <>
-      <NodeResizer
+      <NodeWrapper
         nodeId={id}
         color={ThemeColors.borderLight}
         isVisible={selectedNode?.id === id}

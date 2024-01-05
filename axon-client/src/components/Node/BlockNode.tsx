@@ -5,9 +5,10 @@ import NodeMenu from "./NodeMenu";
 import { Handle } from "./NodeHandles";
 import { useNodeEvents } from "src/hooks/node/useNodeEvents";
 import { Position } from "reactflow";
-import { NodeResizer, ResizeParams } from "reactflow";
+import { ResizeParams } from "reactflow";
 import { ThemeColors } from "src/shared/themes";
 import { BlockNoteEditor as AxonBlockNoteEditor } from "src/components/BlockNoteEditor";
+import NodeWrapper from "./NodeWrapper";
 const BlockNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
   const { id, data, type } = props;
   const [resizing, setResizing] = useState<boolean>(false);
@@ -25,7 +26,7 @@ const BlockNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
 
   return (
     <>
-      <NodeResizer
+      <NodeWrapper
         nodeId={id}
         color={ThemeColors.borderLight}
         isVisible={selectedNode?.id === id}
@@ -37,10 +38,6 @@ const BlockNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
         onResizeEnd={(e: any, params: ResizeParams) => {
           onResizeEnd(id, params);
           setResizing(() => false);
-        }}
-        lineStyle={{
-          border: "0.9px dashed",
-          borderSpacing: "10 10",
         }}
         shouldResize={() => true}
       />

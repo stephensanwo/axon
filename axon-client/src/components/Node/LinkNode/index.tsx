@@ -1,124 +1,24 @@
 import React, { useContext, useState } from "react";
-import { NoteContext } from "../../context/notes";
-import { CustomNodeProps, NodeDataProps } from "src/types/node";
-import NodeMenu from "./NodeMenu";
-import { NodeHandles } from "./NodeHandles";
-import { useNodeEvents } from "src/hooks/node/useNodeEvents";
-import { ThemeColors } from "src/shared/themes";
-import { NodeResizer, ResizeParams } from "reactflow";
-import styled from "styled-components";
-import { useLink } from "src/hooks/content/useLink";
-import { TextInput } from "../Input/TextInput";
-import IconButton from "../Button/IconButton";
 import { Launch, Link } from "@carbon/icons-react";
 import { Reset } from "@carbon/icons-react";
 import { ArrowRight } from "@carbon/icons-react";
-import { NodeMenuInfo } from "./NodeMenu/Shared";
-
-const LinkNodeContainer = styled.div`
-  border: none;
-  border-radius: 0;
-  padding: 0px;
-  width: ${(props: { width: string }) => props.width && `${props.width}px`};
-  height: ${(props: { height: string }) => props.height && `${props.height}px`};
-  background-color: ${ThemeColors.bgDark2};
-  border-radius: 8px;
-  margin: ${(props: { margin: string }) => props.margin && `${props.margin}px`};
-`;
-
-const LinkNodeInput = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px;
-  padding-top: 32px;
-
-  & div[data-node-icon] {
-    width: 48px;
-    height: 48px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: ${ThemeColors.bgHighlight1};
-    padding: 4px;
-    border-radius: 50%;
-  }
-
-  & div[data-node-input-container] {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  & div[data-node-input] {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-  }
-`;
-
-const LinkNodeImage = styled.div`
-  width: 100%;
-  height: 100%;
-
-  & img[data-node-image] {
-    width: 100%;
-    height: 70%;
-    object-fit: cover;
-    border: none;
-    outline: none;
-    border-top-right-radius: 8px;
-    border-top-left-radius: 8px;
-  }
-
-  & div[data-node-image-overlay-buttons] {
-    width: calc(100% - 16px);
-    left: 50%;
-    transform: translateX(-50%);
-    height: 24px;
-    position: absolute;
-    top: 8px;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  & div[data-node-image-text] {
-    padding: 8px;
-  }
-
-  & p[data-node-image-title] {
-    font-size: 10px;
-    font-weight: 600;
-    margin: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    line-height: 1.5;
-  }
-
-  & a[data-node-image-href] {
-    font-size: 8px;
-    margin: 0;
-    display: block;
-    /* overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap; */
-  }
-
-  & small[data-node-image-meta] {
-    font-size: 8px;
-    margin: 0;
-    display: block;
-    /* overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap; */
-    color: ${ThemeColors.textLight};
-  }
-`;
+import { ResizeParams } from "reactflow";
+import { NoteContext } from "src/context/notes";
+import { CustomNodeProps, NodeDataProps } from "src/types/node";
+import NodeMenu from "src/components/Node/NodeMenu";
+import { NodeHandles } from "src/components/Node/NodeHandles";
+import { useNodeEvents } from "src/hooks/node/useNodeEvents";
+import { ThemeColors } from "src/shared/themes";
+import { useLink } from "src/hooks/content/useLink";
+import { TextInput } from "src/components/Input/TextInput";
+import IconButton from "src/components/Button/IconButton";
+import { NodeMenuInfo } from "src/components/Node/NodeMenu/Shared";
+import NodeWrapper from "src/components/Node/NodeWrapper";
+import {
+  LinkNodeContainer,
+  LinkNodeImage,
+  LinkNodeInput,
+} from "./index.styles";
 
 const LinkNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
   const { id, data } = props;
@@ -141,7 +41,7 @@ const LinkNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
 
   return (
     <>
-      <NodeResizer
+      <NodeWrapper
         nodeId={id}
         color={ThemeColors.borderLight}
         isVisible={selectedNode?.id === id}

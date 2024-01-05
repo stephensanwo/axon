@@ -1,11 +1,11 @@
 import { NodeTypes } from "src/types/node";
-import TextNode from "./TextNode";
-import IconNode from "./IconNode";
-import CustomText from "./CustomText";
-import BoundingBox from "./BoundingBox";
-import LinkNode from "./LinkNode";
-import ImageNode from "./ImageNode";
-import BlockNode from "./BlockNode";
+import TextNode from "src/components/Node/TextNode";
+import IconNode from "src/components/Node/IconNode";
+import CustomText from "src/components/Node/CustomText";
+import BoundingBox from "src/components/Node/BoundingBox";
+import LinkNode from "src/components/Node/LinkNode";
+import ImageNode from "src/components/Node/ImageNode";
+import BlockNode from "src/components/Node/BlockNode";
 
 export const nodeTypes: Record<NodeTypes, React.FC<any>> = {
   text: TextNode,
