@@ -11,7 +11,15 @@ export const CustomEditorTheme = {
     "editorGutter.background": ThemeColors.bgDark,
     "editorMarkerNavigation.background": ThemeColors.bgDark,
 
+    // Input
     "input.background": ThemeColors.bgDark2,
+    "input.foreground": ThemeColors.textLight,
+    "inputOption.activeBorder": ThemeColors.primary,
+    "inputOption.hoverBackground": ThemeColors.primaryVariant1,
+
+    // List
+    "list.activeSelectionBackground": ThemeColors.primaryVariant1,
+
     "dropdown.background": ThemeColors.bgDark2,
     "dropdown.border": ThemeColors.bgDark2,
     "checkbox.background": ThemeColors.bgDark2,

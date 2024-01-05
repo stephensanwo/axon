@@ -1,38 +1,50 @@
-import MonacoEditor from "@monaco-editor/react";
-import { editor } from "monaco-editor";
+import Editor, { EditorProps } from "@monaco-editor/react";
 import { CustomEditorTheme } from "./theme";
+import React from "react";
+import { BASE_EDITOR_OPTIONS } from "./options";
+import { editor } from "monaco-editor";
 
-const Editor: React.FC<{
-  height?: string;
-  width?: string;
-  defaultValue?: string;
-  theme?: string;
-  language: string;
-  value: string;
-  line?: number;
-  loading?: string;
-  onMount: (editor: any, monaco: any) => void;
-  onChange: (value: string | undefined, event: any) => void;
-  options?: editor.IStandaloneEditorConstructionOptions | undefined;
-}> = (props) => {
+interface CodeEditorProps extends EditorProps {
+  // Custom props
+  overrideOptions?: editor.IStandaloneEditorConstructionOptions;
+}
+
+export const CodeEditor: React.FC<CodeEditorProps> = ({
+  height = "100vh",
+  width = "100%",
+  defaultValue = "// Start adding code here",
+  theme = "customEditorTheme",
+  language,
+  value,
+  line = 1,
+  loading = "Loading Code Editor...",
+  onMount,
+  onChange,
+  options = BASE_EDITOR_OPTIONS,
+  beforeMount = (monaco) => {
+    monaco.editor.defineTheme("customEditorTheme", CustomEditorTheme);
+  },
+  overrideOptions,
+}): JSX.Element => {
   return (
-    <MonacoEditor
-      height={props.height || "100vh"}
-      width={props.width || "100%"}
-      defaultValue={props.defaultValue || "// Start adding code here"}
-      theme="customEditorTheme"
-      language={props.language}
-      value={props.value}
-      line={props.line || 1}
-      loading={props.loading || "Loading Code..."}
-      onMount={props.onMount}
-      onChange={props.onChange}
-      options={props.options}
-      beforeMount={(monaco) => {
-        monaco.editor.defineTheme("customEditorTheme", CustomEditorTheme);
+    <Editor
+      height={height}
+      width={width}
+      defaultValue={defaultValue}
+      theme={theme}
+      language={language}
+      value={value}
+      line={line}
+      loading={loading}
+      onMount={onMount}
+      onChange={onChange}
+      options={{
+        ...options, // Spread the base options
+        ...overrideOptions, // Apply specific overrides
       }}
+      beforeMount={beforeMount}
     />
   );
 };
 
-export default Editor;
+export default CodeEditor;
