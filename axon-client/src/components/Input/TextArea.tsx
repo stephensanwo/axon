@@ -1,7 +1,42 @@
+import { forwardRef } from "react";
 import { BorderStyles } from "src/types/node";
 import styled from "styled-components";
 
-export const TextArea = styled.textarea`
+export interface ITextAreaProps
+  extends React.HTMLAttributes<HTMLTextAreaElement> {
+  disabled?: boolean;
+  autoComplete?: string;
+  selected?: boolean;
+  fontSize?: number;
+  fontWeight?: number;
+  textalign?: string;
+  padding?: number;
+  width?: number;
+  height?: number;
+  margin?: number;
+  borderradius?: string;
+  borderstyle?: string;
+  border?: string;
+  background?: string;
+}
+
+export const TextArea = forwardRef<HTMLTextAreaElement, ITextAreaProps>(
+  (props, ref) => {
+    const newProps = {
+      spellCheck: false,
+      autoSave: "off",
+      autoFocus: false,
+      autoCorrect: "off",
+      autoCapitalize: "off",
+      autoComplete: "off",
+      ...props,
+    };
+
+    return <STextArea ref={ref} {...newProps} />;
+  }
+);
+
+export const STextArea = styled.textarea`
   all: unset;
   cursor: ${(props: { disabled: boolean }) =>
     props.disabled ? "not-allowed" : "text"};
@@ -18,7 +53,6 @@ export const TextArea = styled.textarea`
     props.border && `1px ${props.borderstyle} ${props.border}`};
   line-height: 1.2;
   box-sizing: border-box;
-
   display: block;
   margin-left: ${(props: { margin: number }) => `${props.margin}px`};
   margin-top: ${(props: { margin: number }) => `${props.margin}px`};
