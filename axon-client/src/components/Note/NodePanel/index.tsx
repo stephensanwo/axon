@@ -1,33 +1,32 @@
-import { useContext } from "react";
-import IconButton from "src/components/Button/IconButton";
+import { IconButton, Tooltip } from "@primer/react";
+import { useAppContext } from "src/hooks/app";
 import { ThemeColors } from "src/shared/themes";
 import { useNodeEvents } from "src/hooks/node/useNodeEvents";
-import { DefaultNodes } from "./options";
-import AppContext from "src/context/app";
-import { ExtendedNodes } from "../Extensions/options";
+import { ExtendedNodes } from "src/components/Note/Extensions/options";
 import { NodePanelWrapper } from "./styles";
+import { DefaultNodes } from "./options";
 
 const NodePanel = () => {
-  const { extensions } = useContext(AppContext);
+  const { extensions } = useAppContext();
   const { createNewNode } = useNodeEvents();
 
   return (
     <NodePanelWrapper>
       {DefaultNodes.map((node, index) => (
-        <IconButton
-          key={index}
-          id={node.id}
-          name={node.name}
-          onClick={() => {
-            createNewNode(node.nodeType, node.nodeContentType);
-          }}
-          width="45px"
-          height="45px"
-          background={ThemeColors.bgDark2}
-          tooltipPosition="right"
-        >
-          {node.icon}
-        </IconButton>
+        <Tooltip aria-label={node.name} direction="e">
+          <IconButton
+            key={index}
+            id={node.id}
+            name={node.name}
+            onClick={() => {
+              createNewNode(node.nodeType, node.nodeContentType);
+            }}
+            size="large"
+            icon={() => node.icon}
+            variant="default"
+            aria-label={node.description}
+          />
+        </Tooltip>
       ))}
       {Array.from(extensions).length > 0 && (
         <>
@@ -50,13 +49,11 @@ const NodePanel = () => {
                   onClick={() => {
                     createNewNode(node.nodeType, node.nodeContentType);
                   }}
-                  width="45px"
-                  height="45px"
-                  background={ThemeColors.bgDark2}
-                  tooltipPosition="right"
-                >
-                  {node.icon}
-                </IconButton>
+                  size="large"
+                  icon={() => node.icon}
+                  variant="default"
+                  aria-label={node.description}
+                />
               )
           )}
         </>

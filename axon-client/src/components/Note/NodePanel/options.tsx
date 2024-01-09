@@ -1,8 +1,12 @@
-import { Image } from "@carbon/icons-react";
-import { TextCreation, FaceActivated, Link, Area } from "@carbon/icons-react";
+import { PiTextTLight } from "react-icons/pi";
+import { CiGlobe, CiImageOn } from "react-icons/ci";
+import {
+  PiSelectionLight,
+  PiSmileyLight,
+  PiStackLight,
+  PiArticleLight,
+} from "react-icons/pi";
 import { NodeOptions } from "src/types/node";
-import { PiTextT } from "react-icons/pi";
-import { LuTextSelect } from "react-icons/lu";
 
 export const DefaultNodes: NodeOptions[] = [
   {
@@ -11,7 +15,7 @@ export const DefaultNodes: NodeOptions[] = [
     description: "Add text content to your flow",
     nodeType: "text",
     nodeContentType: "block_editor",
-    icon: <TextCreation size={22} />,
+    icon: <PiArticleLight size={18} />,
   },
   {
     id: "add-block-node",
@@ -19,7 +23,7 @@ export const DefaultNodes: NodeOptions[] = [
     description: "Add text block to your flow",
     nodeType: "block",
     nodeContentType: "block_editor",
-    icon: <LuTextSelect size={22} />,
+    icon: <PiStackLight size={18} />,
   },
   {
     id: "add-paragraph",
@@ -27,7 +31,7 @@ export const DefaultNodes: NodeOptions[] = [
     description: "Add a paragraph to your flow",
     nodeType: "paragraph",
     nodeContentType: null,
-    icon: <PiTextT size={22} />,
+    icon: <PiTextTLight size={18} />,
   },
   {
     id: "add-icon-node",
@@ -35,7 +39,7 @@ export const DefaultNodes: NodeOptions[] = [
     description: "Add an icon to your flow",
     nodeType: "icon",
     nodeContentType: "block_editor",
-    icon: <FaceActivated size={18} />,
+    icon: <PiSmileyLight size={18} />,
   },
   {
     id: "add-boundary-box",
@@ -43,7 +47,7 @@ export const DefaultNodes: NodeOptions[] = [
     description: "Add a bounding box to group nodes",
     nodeType: "bounding_box",
     nodeContentType: "block_editor",
-    icon: <Area size={20} />,
+    icon: <PiSelectionLight size={18} />,
   },
   {
     id: "add-image-node",
@@ -51,14 +55,14 @@ export const DefaultNodes: NodeOptions[] = [
     description: "Embed SVG, JPG, PNG etc. images from url",
     nodeType: "image",
     nodeContentType: "block_editor",
-    icon: <Image size={20} />,
+    icon: <CiImageOn size={18} />,
   },
   {
     id: "add-link-node",
     name: "Link",
-    description: "Embed a website in your flow",
+    description: "Embed a link in your flow",
     nodeType: "link",
     nodeContentType: "block_editor",
-    icon: <Link size={18} />,
+    icon: <CiGlobe size={18} />,
   },
 ];
