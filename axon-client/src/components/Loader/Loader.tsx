@@ -1,10 +1,9 @@
-import "./style.scss";
-import { ThemeColors } from "src/shared/themes";
+import { themeGet } from "@primer/react";
 import styled, { keyframes } from "styled-components";
 import axonLogoSmall from "../../assets/icons/axon-logo-small-dark.svg";
 
 const AxonLoaderWrapper = styled.div`
-  background-color: ${ThemeColors.bgDark};
+  background-color: ${themeGet("colors.bg.black")};
   width: 100%;
   height: 100%;
   display: flex;
