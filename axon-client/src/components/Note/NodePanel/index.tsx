@@ -13,9 +13,8 @@ const NodePanel = () => {
   return (
     <NodePanelWrapper>
       {DefaultNodes.map((node, index) => (
-        <Tooltip aria-label={node.name} direction="e">
+        <Tooltip aria-label={node.name} direction="e" key={index}>
           <IconButton
-            key={index}
             id={node.id}
             name={node.name}
             onClick={() => {
