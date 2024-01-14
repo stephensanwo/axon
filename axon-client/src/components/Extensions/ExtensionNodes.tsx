@@ -2,7 +2,8 @@ import { Code } from "@carbon/icons-react";
 import { NodeOptions } from "src/types/node";
 import { BsFillMarkdownFill } from "react-icons/bs";
 import { VscJson } from "react-icons/vsc";
-export const ExtendedNodes: NodeOptions[] = [
+
+export const ExtensionNodes: NodeOptions[] = [
   {
     id: "code-node",
     name: "Code",
@@ -14,7 +15,7 @@ export const ExtendedNodes: NodeOptions[] = [
   {
     id: "json-editor-node",
     name: "JSON Editor",
-    description: "Embed and edit JSON data in your flow",
+    description: "Embed and edit JSON content in your flow",
     nodeType: "json",
     nodeContentType: "json_editor",
     icon: <VscJson size={18} />,
@@ -22,7 +23,7 @@ export const ExtendedNodes: NodeOptions[] = [
   {
     id: "markdown-editor-node",
     name: "Markdown Editor",
-    description: "Embed markdown in your flow",
+    description: "Embed markdown content in your flow",
     nodeType: "markdown",
     nodeContentType: "markdown",
     icon: <BsFillMarkdownFill size={18} />,
