@@ -48,17 +48,7 @@ export function DialogHeader({
 }
 
 export function DialogBody({ children }: { children?: React.ReactNode }) {
-  return (
-    <Box p={3}>
-      <Text
-        sx={{
-          fontSize: 1,
-        }}
-      >
-        {children}
-      </Text>
-    </Box>
-  );
+  return <Box p={3}>{children}</Box>;
 }
 
 export function DialogFooter({ children }: { children?: React.ReactNode }) {
