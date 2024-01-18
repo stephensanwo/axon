@@ -1,25 +1,24 @@
 import React from "react";
-import { ThemeColors } from "src/shared/themes";
+import { PiTextAlignLeftLight, PiTextAlignCenterLight } from "react-icons/pi";
+import { Box, useTheme } from "@primer/react";
+import MenuButton from "src/components/Button/MenuButton";
+import { useNodeEvents } from "src/hooks/node/useNodeEvents";
+import { CustomNodeProps, NodeDataProps } from "src/types/node";
+import NumberInput from "src/components/Input/NumberInput";
 import {
   NodeMenuHeader,
   NodeMenuWrapper,
   NodeMenuItem,
   NodeMenuSubHeaders,
   NodeMenuBody,
-  RadioGrid,
   NodeMenuItemLabel,
-} from "./styles";
-import { useNodeEvents } from "src/hooks/node/useNodeEvents";
-import IconButton from "src/components/Button/IconButton";
-import { CustomNodeProps, NodeDataProps } from "src/types/node";
-import NumberInput from "src/components/Input/NumberInput";
-import { TextAlignLeft } from "@carbon/icons-react";
-import { TextAlignCenter } from "@carbon/icons-react";
+} from "./index.styles";
 
 const NodeTextFormatting: React.FC<CustomNodeProps<NodeDataProps>> = (
   props
 ) => {
   const { id, data } = props;
+  const { theme } = useTheme();
   const { updateNodeFontSize, updateNodeFontWeight, updateNodeFontAlignment } =
     useNodeEvents();
   return (
@@ -29,17 +28,18 @@ const NodeTextFormatting: React.FC<CustomNodeProps<NodeDataProps>> = (
       </NodeMenuHeader>
       <NodeMenuBody>
         <NodeMenuItem>
-          <div
-            style={{
+          <Box
+            sx={{
               display: "flex",
-              gap: "2rem",
+              gap: 4,
             }}
           >
-            <div
-              style={{
+            <Box
+              sx={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "1rem",
+                alignItems: "center",
+                gap: 2,
               }}
             >
               <NodeMenuItemLabel>Font Size</NodeMenuItemLabel>
@@ -52,12 +52,13 @@ const NodeTextFormatting: React.FC<CustomNodeProps<NodeDataProps>> = (
                 maxValue={48}
                 setValue={updateNodeFontSize}
               />
-            </div>
-            <div
-              style={{
+            </Box>
+            <Box
+              sx={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "1rem",
+                alignItems: "center",
+                gap: 2,
               }}
             >
               <NodeMenuItemLabel>Font Weight</NodeMenuItemLabel>
@@ -66,42 +67,56 @@ const NodeTextFormatting: React.FC<CustomNodeProps<NodeDataProps>> = (
                 value={data.node_styles.font_weight}
                 step={200}
                 minValue={200}
-                maxValue={600}
+                maxValue={800}
                 setValue={updateNodeFontWeight}
               />
-            </div>
-            <div
-              style={{
+            </Box>
+            <Box
+              sx={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "1rem",
+                alignItems: "center",
+                gap: 2,
               }}
             >
               <NodeMenuItemLabel>Alignment</NodeMenuItemLabel>
-              <RadioGrid id={`select-alignment-${id}`}>
-                <IconButton
+              <Box
+                id={`select-alignment-${id}`}
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 2,
+                }}
+              >
+                <MenuButton
                   id={`node-left-align-${id}`}
                   name="Left Align"
                   onClick={() => updateNodeFontAlignment("left")}
-                  width="24px"
-                  height="24px"
-                  background={ThemeColors.bgHighlight2}
+                  width="28px"
+                  height="28px"
+                  aria-label="Left Align"
+                  hoverfill={theme?.colors.fg.default}
+                  backgroundHoverFill={theme?.colors.bg.variant2}
                 >
-                  <TextAlignLeft size={14} />
-                </IconButton>
-                <IconButton
+                  <PiTextAlignLeftLight size={20} />
+                </MenuButton>
+                <MenuButton
                   id={`node-center-align-${id}`}
                   name="Center Align"
                   onClick={() => updateNodeFontAlignment("center")}
-                  width="24px"
-                  height="24px"
-                  background={ThemeColors.bgHighlight2}
+                  aria-label="Center Align"
+                  width="28px"
+                  height="28px"
+                  hoverfill={theme?.colors.fg.default}
+                  backgroundHoverFill={theme?.colors.bg.variant2}
                 >
-                  <TextAlignCenter size={14} />
-                </IconButton>
-              </RadioGrid>
-            </div>
-          </div>
+                  <PiTextAlignCenterLight size={20} />
+                </MenuButton>
+              </Box>
+            </Box>
+          </Box>
         </NodeMenuItem>
       </NodeMenuBody>
     </NodeMenuWrapper>

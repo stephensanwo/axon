@@ -1,39 +1,33 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
+import { CiImageOn, CiUndo } from "react-icons/ci";
 import { ResizeParams } from "reactflow";
-import {
-  Box,
-  FormControl,
-  Link,
-  Text,
-  TextInput,
-  useTheme,
-} from "@primer/react";
-import { CiGlobe, CiUndo } from "react-icons/ci";
-import { NoteContext } from "src/context/notes";
+import { Box, FormControl, TextInput, useTheme } from "@primer/react";
 import { CustomNodeProps, NodeDataProps } from "src/types/node";
 import NodeMenu from "src/components/Node/NodeMenu";
 import { NodeHandles } from "src/components/Node/NodeHandles";
 import { useNodeEvents } from "src/hooks/node/useNodeEvents";
-import { useLink } from "src/hooks/content/useLink";
-import { NodeMenuInfo } from "src/components/Node/NodeMenu/Shared";
-import NodeWrapper from "src/components/Node/NodeWrapper";
-import { NODE_RESIZER_GUTTER } from "src/components/Node/index.types";
 import MenuButton from "src/components/Button/MenuButton";
+import { NodeMenuInfo } from "src/components/Node/NodeMenu/Shared";
+import { useMedia } from "src/hooks/content/useMedia";
+import { IMAGE_ERROR_URL } from "src/types/image";
+import NodeWrapper from "src/components/Node/NodeWrapper";
+import { useNoteContext } from "src/hooks/notes/useNoteContext";
+import { NODE_RESIZER_GUTTER } from "src/components/Node/index.types";
 import {
-  LinkNodeContainer,
-  LinkNodeImage,
-  LinkNodeInput,
+  ImageNodeContainer,
+  ImageNodeImage,
+  ImageNodeInput,
 } from "./index.styles";
 
-const LinkNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
+const ImageNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
   const { id, data } = props;
-  const [previewLink, setPreviewLink] = useState<boolean>(
-    data.link?.isLoadable!! ? true : false
+  const [previewImage, setPreviewImage] = useState<boolean>(
+    data.inlineImage?.url!! ? true : false
   );
   const [resizing, setResizing] = useState<boolean>(false);
-  const [linkState, setLinkState] = useState<"error" | "loading" | null>(null);
-  const [linkInput, setLinkInput] = useState<string>("");
-  const { selectedNode } = useContext(NoteContext);
+  const [imageInput, setImageInput] = useState<string>("");
+  const [imageError, setImageError] = useState<string>("");
+  const { selectedNode } = useNoteContext();
   const {
     deleteNode,
     duplicateNode,
@@ -42,7 +36,7 @@ const LinkNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
     onResizeStart,
     onResizeEnd,
   } = useNodeEvents();
-  const { fetchLinkData, resetLinkData } = useLink();
+  const { handleMediaUrl } = useMedia();
   const { theme } = useTheme();
 
   return (
@@ -63,8 +57,8 @@ const LinkNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
         minHeight={200}
         shouldResize={() => true}
       />
-      <LinkNodeContainer
-        id={`link-node-${id}`}
+      <ImageNodeContainer
+        id={`image-node-${id}`}
         tabIndex={0}
         active={selectedNode?.id === id}
         background={data.node_styles.background_color}
@@ -76,13 +70,16 @@ const LinkNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
         margin={2}
         onClick={() => handleNodeClick(id)}
       >
-        {previewLink ? (
-          <LinkNodeImage>
+        {previewImage ? (
+          <ImageNodeImage>
             <Box data-node-image-overlay-buttons>
               <MenuButton
-                id={`link-node-undo-${id}`}
+                id={`image-node-undo-${id}`}
                 name={"color.label"}
-                onClick={() => resetLinkData(setLinkState, setPreviewLink)}
+                onClick={() => {
+                  setPreviewImage(false);
+                  setImageError("");
+                }}
                 disabled={false}
                 width="24px"
                 height="24px"
@@ -92,66 +89,31 @@ const LinkNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
               >
                 <CiUndo size={16} />
               </MenuButton>
-              <MenuButton
-                id={`link-node-launch-${id}`}
-                name={"color.label"}
-                onClick={() => window.open(data.link?.url!!)}
-                disabled={false}
-                width="24px"
-                height="24px"
-                hoverfill={theme?.colors.fg.default}
-                backgroundHoverFill={theme?.colors.bg.variant2}
-                borderradius="50%"
-              >
-                <CiGlobe size={16} />
-              </MenuButton>
             </Box>
             <img
-              id={`link-node-preview-img-${id}`}
+              id={`image-node-preview-${id}`}
               data-node-image
-              src={data.link?.image!!}
+              src={imageError || data.inlineImage?.url!!}
+              onError={() => setImageError(IMAGE_ERROR_URL)}
+              style={{
+                objectFit: imageError ? "cover" : "fill",
+              }}
             />
-            <Box data-node-image-text>
-              <Box>
-                <Text> {data.link?.title}</Text>
-              </Box>
-              <Box>
-                <Link
-                  sx={{
-                    fontSize: 0,
-                  }}
-                  href={data.link?.url}
-                  target="_blank"
-                >
-                  {data.link?.url}
-                </Link>
-              </Box>
-              <Box>
-                <Text
-                  sx={{
-                    fontSize: 0,
-                    lineHeight: 1.4,
-                    display: "block",
-                    color: theme?.colors.text.grayLight,
-                  }}
-                >
-                  {data.link?.description}
-                </Text>
-              </Box>
-            </Box>
-          </LinkNodeImage>
+          </ImageNodeImage>
         ) : (
-          <LinkNodeInput>
+          <ImageNodeInput>
             <Box data-node-icon>
-              <CiGlobe fill={theme?.colors.fg.variant3} size={24} />
+              <CiImageOn fill={theme?.colors.fg.variant3} size={24} />
             </Box>
             <Box data-node-input-container>
               <Box>
                 <FormControl>
-                  <FormControl.Label visuallyHidden>Link</FormControl.Label>
+                  <FormControl.Label visuallyHidden>
+                    Image Url
+                  </FormControl.Label>
                   <TextInput
-                    id={`link-node-input-${id}`}
-                    placeholder="https://www.example.com"
+                    id={`image-node-url-input-${id}`}
+                    placeholder="Type url and press enter"
                     autoCapitalize="off"
                     autoComplete="off"
                     autoCorrect="off"
@@ -163,9 +125,9 @@ const LinkNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
                     style={{
                       backgroundColor: theme?.colors.bg.variant2b,
                     }}
-                    value={linkInput}
+                    value={imageInput}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setLinkInput(() => e.target.value)
+                      setImageInput(() => e.target.value)
                     }
                     sx={{
                       fontSize: 0,
@@ -174,29 +136,22 @@ const LinkNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
                     size="medium"
                     onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                       if (e.key === "Enter") {
-                        fetchLinkData(linkInput, setLinkState, setPreviewLink);
+                        handleMediaUrl(imageInput, setPreviewImage);
                       }
                     }}
-                    validationStatus={
-                      linkState === "error" ? "error" : undefined
-                    }
                   />
                 </FormControl>
               </Box>
               <NodeMenuInfo
                 text={
-                  linkState === "error"
-                    ? "Something went wrong, please try again with a valid url"
-                    : linkState === "loading"
-                    ? "Checking url..."
-                    : "Paste a valid link to preview it and add to your flow"
+                  "Paste a valid image url to preview it and add to your flow"
                 }
-                type={linkState === "error" ? "error" : "info"}
+                type={"info"}
               />
             </Box>
-          </LinkNodeInput>
+          </ImageNodeInput>
         )}
-      </LinkNodeContainer>
+      </ImageNodeContainer>
       {selectedNode?.id === id && !resizing && (
         <NodeMenu
           node_props={props}
@@ -209,4 +164,4 @@ const LinkNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
   );
 };
 
-export default LinkNode;
+export default ImageNode;

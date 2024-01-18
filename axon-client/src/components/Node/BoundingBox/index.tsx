@@ -1,12 +1,10 @@
 import React, { useContext, useState } from "react";
+import { ResizeParams } from "reactflow";
 import { NoteContext } from "src/context/notes";
 import { CustomNodeProps, NodeDataProps } from "src/types/node";
 import NodeMenu from "src/components/Node/NodeMenu";
-import { Handle } from "src/components/Node/NodeHandles";
+import { NodeHandles } from "src/components/Node/NodeHandles";
 import { useNodeEvents } from "src/hooks/node/useNodeEvents";
-import { ThemeColors } from "src/shared/themes";
-import { Position } from "reactflow";
-import { ResizeParams } from "reactflow";
 import NodeWrapper from "src/components/Node/NodeWrapper";
 import { BoundingBoxWrapper } from "./index.styles";
 
@@ -26,7 +24,6 @@ const BoundingBox: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
   return (
     <>
       <NodeWrapper
-        color={ThemeColors.borderLight}
         isVisible={selectedNode?.id === id}
         keepAspectRatio={true}
         onResizeStart={(e: any, params: ResizeParams) => {
@@ -39,6 +36,7 @@ const BoundingBox: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
         }}
       />
       <BoundingBoxWrapper
+        id={`bounding-box-${id}`}
         onClick={() => handleNodeClick(id)}
         width={data?.width}
         height={data?.height}
@@ -53,54 +51,7 @@ const BoundingBox: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
           deleteNode={deleteNode}
         />
       )}
-      <Handle
-        type="source"
-        position={Position.Right}
-        id="right_handle"
-        borderradius={0}
-        background={"transparent"}
-        width={"10px"}
-        height={"100%"}
-        onMouseEnter={() => {
-          handleNodeInteraction(id);
-        }}
-      />
-      <Handle
-        type="source"
-        position={Position.Bottom}
-        id="bottom_handle"
-        borderradius={0}
-        background={"transparent"}
-        width={"100%"}
-        height={"10px"}
-        onMouseEnter={() => {
-          handleNodeInteraction(id);
-        }}
-      />
-      <Handle
-        type="target"
-        position={Position.Top}
-        id="top_handle"
-        borderradius={0}
-        background={"transparent"}
-        width={"100%"}
-        height={"10px"}
-        onMouseEnter={() => {
-          handleNodeInteraction(id);
-        }}
-      />
-      <Handle
-        type="target"
-        id="left_handle"
-        position={Position.Left}
-        borderradius={0}
-        background={"transparent"}
-        width={"10px"}
-        height={"100%"}
-        onMouseEnter={() => {
-          handleNodeInteraction(id);
-        }}
-      />
+      <NodeHandles node_id={id} handleNodeInteraction={handleNodeInteraction} />
     </>
   );
 };

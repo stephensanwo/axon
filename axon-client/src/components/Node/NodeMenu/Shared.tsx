@@ -1,10 +1,11 @@
-import { ThemeColors } from "src/shared/themes";
+import { useTheme } from "@primer/react";
 
 export const NodeMenuInfo: React.FC<{
   text: string;
   type: "error" | "warning" | "info";
 }> = (props) => {
   const { text, type } = props;
+  const { theme } = useTheme();
   return (
     <div
       style={{
@@ -17,10 +18,10 @@ export const NodeMenuInfo: React.FC<{
         style={{
           color:
             type === "error"
-              ? ThemeColors.dangerAction
+              ? theme?.colors.danger.default
               : type === "warning"
-              ? ThemeColors.warning
-              : ThemeColors.textDark,
+              ? theme?.colors.warning.default
+              : theme?.colors.text.gray,
           fontSize: "8px",
           fontStyle: "italic",
         }}

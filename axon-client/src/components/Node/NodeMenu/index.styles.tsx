@@ -1,5 +1,5 @@
-import { ThemeColors } from "src/shared/themes";
 import styled from "styled-components";
+import { ThemeColors } from "src/shared/themes";
 
 export const NodeMenuWrapper = styled.div`
   background-color: ${ThemeColors.bgDark2};
@@ -59,7 +59,7 @@ export const NodeMenuSubHeaders = styled.small`
 
 export const RadioGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(24px, 8px));
+  grid-template-columns: repeat(auto-fill, minmax(20px, 8px));
   gap: 8px;
   grid-auto-flow: row;
 `;

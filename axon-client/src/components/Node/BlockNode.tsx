@@ -1,18 +1,19 @@
-import React, { useContext, useState } from "react";
-import { NoteContext } from "../../context/notes";
-import { CustomNodeProps, NodeDataProps } from "src/types/node";
-import NodeMenu from "./NodeMenu";
-import { Handle } from "./NodeHandles";
-import { useNodeEvents } from "src/hooks/node/useNodeEvents";
-import { Position } from "reactflow";
+import React, { useState } from "react";
+import { Box } from "@primer/react";
 import { ResizeParams } from "reactflow";
-import { ThemeColors } from "src/shared/themes";
+import { CustomNodeProps, NodeDataProps } from "src/types/node";
+import { useNodeEvents } from "src/hooks/node/useNodeEvents";
 import { BlockNoteEditor as AxonBlockNoteEditor } from "src/components/BlockNoteEditor";
+import { useNoteContext } from "src/hooks/notes/useNoteContext";
 import NodeWrapper from "./NodeWrapper";
+import NodeMenu from "./NodeMenu";
+import { NodeHandles } from "./NodeHandles";
+import { NODE_RESIZER_GUTTER } from "./index.types";
+
 const BlockNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
-  const { id, data, type } = props;
+  const { id, data } = props;
   const [resizing, setResizing] = useState<boolean>(false);
-  const { selectedNode } = useContext(NoteContext);
+  const { selectedNode } = useNoteContext();
   const contentRef = React.createRef<any>();
   const {
     deleteNode,
@@ -21,14 +22,12 @@ const BlockNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
     onResizeEnd,
     handleNodeClick,
     handleNodeInteraction,
-    handleNodeContentChange,
   } = useNodeEvents();
 
   return (
     <>
       <NodeWrapper
         nodeId={id}
-        color={ThemeColors.borderLight}
         isVisible={selectedNode?.id === id}
         keepAspectRatio={false}
         onResizeStart={(e: any, params: ResizeParams) => {
@@ -41,7 +40,8 @@ const BlockNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
         }}
         shouldResize={() => true}
       />
-      <div
+      <Box
+        id={`block-node-${id}`}
         ref={contentRef}
         onClick={() => handleNodeClick(id)}
         onFocus={() => handleNodeClick(id)}
@@ -49,13 +49,13 @@ const BlockNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
         onMouseEnter={() => {
           handleNodeInteraction(data.node_id);
         }}
-        style={{
-          width: data?.width - 4,
-          height: data?.height - 4,
+        sx={{
+          width: data?.width - NODE_RESIZER_GUTTER,
+          height: data?.height - NODE_RESIZER_GUTTER,
         }}
       >
         <AxonBlockNoteEditor namespace={`inline-${selectedNode?.id!!}`} />
-      </div>
+      </Box>
 
       {selectedNode?.id === id && !resizing && (
         <NodeMenu
@@ -64,66 +64,7 @@ const BlockNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
           duplicateNode={duplicateNode}
         />
       )}
-      <Handle
-        type="source"
-        position={Position.Right}
-        id="right_handle"
-        borderradius={0}
-        background={"transparent"}
-        width={"10px"}
-        height={"100%"}
-        onMouseEnter={() => {
-          handleNodeInteraction(id);
-        }}
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        id="right_handle"
-        borderradius={0}
-        background={"transparent"}
-        width={"10px"}
-        height={"100%"}
-        onMouseEnter={() => {
-          handleNodeInteraction(id);
-        }}
-      />
-      <Handle
-        type="source"
-        position={Position.Bottom}
-        id="bottom_handle"
-        borderradius={0}
-        background={"transparent"}
-        width={"100%"}
-        height={"10px"}
-        onMouseEnter={() => {
-          handleNodeInteraction(id);
-        }}
-      />
-      <Handle
-        type="target"
-        position={Position.Top}
-        id="top_handle"
-        borderradius={0}
-        background={"transparent"}
-        width={"100%"}
-        height={"10px"}
-        onMouseEnter={() => {
-          handleNodeInteraction(id);
-        }}
-      />
-      <Handle
-        type="target"
-        id="left_handle"
-        position={Position.Left}
-        borderradius={0}
-        background={"transparent"}
-        width={"10px"}
-        height={"100%"}
-        onMouseEnter={() => {
-          handleNodeInteraction(id);
-        }}
-      />
+      <NodeHandles node_id={id} handleNodeInteraction={handleNodeInteraction} />
     </>
   );
 };

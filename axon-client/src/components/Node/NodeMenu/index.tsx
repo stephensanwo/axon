@@ -1,18 +1,21 @@
 import React, { useState } from "react";
-import IconButton from "src/components/Button/IconButton";
+import MenuButton from "src/components/Button/MenuButton";
 import { useNodeMenuEvents } from "src/hooks/node/useNodeMenuEvents";
-import { NodeMenuSelectorContainer, NodeMenuSelectorWrapper } from "./styles";
-import { NodeMenuDropdown } from "./Router";
 import {
   CustomNodeProps,
   NodeDataProps,
   NodeMenuEvents,
   NodeTypes,
 } from "src/types/node";
-import { DefaultMenuButtons, ActionMenuButtons } from "./NodeMenuButtons";
-import { ThemeColors } from "src/shared/themes";
 import { useNodeEvents } from "src/hooks/node/useNodeEvents";
 import { useNoteMenuEvents } from "src/hooks/notes/useNoteMenuEvents";
+import { HorizontalDivider } from "src/components/Divider";
+import { DefaultMenuButtons, ActionMenuButtons } from "./NodeMenuButtons";
+import { NodeMenuDropdown } from "./Router";
+import {
+  NodeMenuSelectorContainer,
+  NodeMenuSelectorWrapper,
+} from "./index.styles";
 
 const NodeMenu: React.FC<{
   node_props: CustomNodeProps<NodeDataProps>;
@@ -30,10 +33,10 @@ const NodeMenu: React.FC<{
   const { setDefaultStyles } = useNodeEvents();
 
   return (
-    <NodeMenuSelectorWrapper>
+    <NodeMenuSelectorWrapper id={`node-menu-${id}`}>
       <NodeMenuSelectorContainer>
         {ActionMenuButtons.map((button) => (
-          <IconButton
+          <MenuButton
             key={button.id}
             id={button.id}
             name={button.name}
@@ -52,22 +55,14 @@ const NodeMenu: React.FC<{
             hideTooltip={true}
           >
             {button.icon}
-          </IconButton>
+          </MenuButton>
         ))}
-        <div
-          style={{
-            background: ThemeColors.bgHighlight2,
-            width: "1px",
-            height: "32px",
-            marginLeft: "8px",
-            marginRight: "8px",
-          }}
-        ></div>
+        <HorizontalDivider margin={8} height={32} />
         {DefaultMenuButtons.map((button) => {
           const disabledState = nodeMenuState(button.id, type!!);
           if (!disabledState) {
             return (
-              <IconButton
+              <MenuButton
                 key={button.id}
                 id={button.id}
                 name={button.name}
@@ -83,7 +78,7 @@ const NodeMenu: React.FC<{
                 disabled={nodeMenuState(button.id, type!!)}
               >
                 {button.icon}
-              </IconButton>
+              </MenuButton>
             );
           }
         })}

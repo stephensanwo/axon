@@ -7,6 +7,7 @@ import NoteContext from "src/context/notes";
 import { ThemeColors } from "src/shared/themes";
 import { TextArea } from "src/components/Input/TextArea";
 import NodeWrapper from "src/components/Node/NodeWrapper";
+import { NODE_RESIZER_GUTTER } from "./index.types";
 
 const CustomText: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
   const { id, data } = props;
@@ -23,8 +24,6 @@ const CustomText: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
     handleNodeContentChange,
   } = useNodeEvents();
 
-  const NODE_RESIZER_GUTTER: number = 4;
-
   return (
     <>
       <NodeWrapper
@@ -40,6 +39,7 @@ const CustomText: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
         }}
       />
       <TextArea
+        id={`custon-text-node-${id}`}
         ref={contentRef}
         disabled={false}
         onChange={(e: any) => handleNodeContentChange(e)}
