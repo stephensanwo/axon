@@ -14,8 +14,8 @@ function Blank(props: {
   const { heading, type, description, action } = props;
   const { theme } = useTheme();
   const Icon = {
-    error: <AlertIcon size={32} fill={theme?.colors.danger.default} />,
-    info: <InfoIcon size={32} fill={theme?.colors.text.gray} />,
+    error: <AlertIcon size={24} fill={theme?.colors.danger.default} />,
+    info: <InfoIcon size={24} fill={theme?.colors.text.gray} />,
   };
   return (
     <Box
@@ -32,6 +32,7 @@ function Blank(props: {
           <Text
             sx={{
               fontSize: 2,
+              color: theme?.colors.text.gray,
             }}
           >
             {heading}
