@@ -9,3 +9,12 @@ export const Divider = styled.hr`
   margin-top: ${(props: { margin: number }) => `${props.margin}px`};
   margin-bottom: ${(props: { margin: number }) => `${props.margin}px`};
 `;
+
+
+export const HorizontalDivider = styled.div`
+  width: 1px;
+  background-color: ${themeGet("colors.border.variant1")};
+  height: ${(props: { height: number }) => `${props.height}px`};
+  margin-left: ${(props: { margin: number }) => `${props.margin}px`};
+  margin-right: ${(props: { margin: number }) => `${props.margin}px`};
+`;
