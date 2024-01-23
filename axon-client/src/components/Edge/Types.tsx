@@ -1,6 +1,10 @@
 import { EdgeTypes } from "src/types/edge";
-import CustomEdge from "./CustomEdge";
+import CurveEdge from "./CurveEdge";
+import StepEdge from "./StepEdge";
+import StraightEdge from "./StraightEdge";
 
 export const edgeTypes: Record<EdgeTypes, any> = {
-  buttonedge: CustomEdge,
+  curveEdge: CurveEdge,
+  stepEdge: StepEdge,
+  straightEdge: StraightEdge,
 };

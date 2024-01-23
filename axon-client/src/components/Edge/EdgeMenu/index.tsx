@@ -1,109 +1,273 @@
-import { useContext } from "react";
-import { ModalHeader, ModalBody, ComposedModal } from "@carbon/react";
-import { Toggle } from "@carbon/react";
-import { CircleSolid, TrashCan } from "@carbon/icons-react";
-import EdgeContext from "src/context/edge";
+import { useState } from "react";
+import { PiTrashSimpleLight } from "react-icons/pi";
+import { EdgeProps } from "reactflow";
 import {
-  EdgeMenuItem,
-  EdgeMenuItemBodyGrid,
-  EdgeMenuItemHeader,
-} from "./styles";
-import { ColorPalette, ThemeColors } from "src/shared/themes";
-import IconButton from "src/components/Button/IconButton";
+  Box,
+  Checkbox,
+  FormControl,
+  Radio,
+  Text,
+  TextInput,
+  ToggleSwitch,
+  useTheme,
+} from "@primer/react";
 import { useEdgeEvents } from "src/hooks/edge/useEdgeEvents";
-import { ModalFooter } from "@carbon/react";
-import { AxonButton } from "src/components/Button";
+import MenuButton from "src/components/Button/MenuButton";
+import { useNoteContext } from "src/hooks/notes/useNoteContext";
+import { applyOpacity } from "src/utils/styles";
 
-const EdgeMenu = () => {
-  const { edgeMenu, setEdgeMenu, selectedEdge } = useContext(EdgeContext);
-  const { edge, updateEdgeColor, updateEdgeAnimation, removeEdgeOnClick } =
-    useEdgeEvents();
+const EdgeMenu = (props: EdgeProps) => {
+  const { animated, id, data, label, markerStart, markerEnd } = props;
+  const { noteTheme } = useNoteContext();
+  const {
+    updateEdgeColor,
+    updateEdgeAnimation,
+    handleEdgeLabelContentChange,
+    removeEdge,
+    updateConnectionLineType,
+    updateEdgeMarkers,
+  } = useEdgeEvents({ ...props });
+  const [edgeLabel, setEdgeLabel] = useState<string>(label as string);
+  const { theme } = useTheme();
+  const saveEdgeMenuChanges = () => {
+    handleEdgeLabelContentChange(edgeLabel);
+  };
 
   return (
-    <ComposedModal
-      size="xs"
-      open={edgeMenu === "edge-options"}
-      onClose={() => setEdgeMenu(() => null)}
-      preventCloseOnClickOutside={true}
+    <Box
+      sx={{
+        width: "100%",
+        height: "100%",
+        marginBottom: "8px",
+        padding: "12px",
+        display: "flex",
+        flexDirection: "column",
+        gap: 4,
+      }}
+      onBlur={() => saveEdgeMenuChanges()}
     >
-      <ModalHeader
-        title="Edge Options"
-        label={`Edge ${selectedEdge?.data?.semantic_number!!}`}
-      />
-      <ModalBody
-        style={{
-          marginTop: "16px",
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
-        <EdgeMenuItem>
-          <div
-            style={{
-              display: "flex",
-              gap: "64px",
+        <Text fontWeight="bold">Edge Options</Text>
+        <MenuButton
+          id={"delete-edge"}
+          name={"Delete Edge"}
+          onClick={() => {
+            removeEdge(id);
+          }}
+          width="24px"
+          height="24px"
+          hoverfill={theme?.colors.fg.default}
+          backgroundHoverFill={theme?.colors.danger.default}
+          background={theme?.colors.bg.variant2}
+        >
+          {<PiTrashSimpleLight size={16} />}
+        </MenuButton>
+      </Box>
+      <Box>
+        <FormControl>
+          <FormControl.Label visuallyHidden>Label Text</FormControl.Label>
+          <TextInput
+            name="edge_label"
+            placeholder="Label Text"
+            sx={{
+              backgroundColor: theme?.colors.bg.variant2,
+              border: "none",
             }}
-          >
-            <Toggle
-              size="sm"
-              aria-label="toggle animation button"
-              labelText="Edge Animation"
-              labelA="Off"
-              labelB="On"
-              id="toggle-animation"
-              onToggle={() => updateEdgeAnimation()}
-              toggled={edge?.animated}
-            />
-          </div>
-        </EdgeMenuItem>
-        <EdgeMenuItem>
-          <EdgeMenuItemHeader>
-            <small>Edge Color</small>
-          </EdgeMenuItemHeader>
-          <EdgeMenuItemBodyGrid>
-            {Object.values(ColorPalette).map((color, index) => {
-              return (
-                <IconButton
-                  key={index}
-                  id={`node-color-${color.label}`}
-                  name={color.label}
-                  onClick={(e: React.MouseEvent) => updateEdgeColor(color.hex)}
-                  width="24px"
-                  height="24px"
-                  background={ThemeColors.bgHighlight2}
-                  fill={color.hex}
-                >
-                  <CircleSolid
-                    size={14}
-                    style={{
-                      margin: 0, // svg has an unknown margin
-                    }}
-                  />
-                </IconButton>
-              );
-            })}
-          </EdgeMenuItemBodyGrid>
-        </EdgeMenuItem>
-      </ModalBody>
-      <ModalFooter>
-        <div
-          style={{
-            width: "100%",
+            block
+            size="small"
+            value={edgeLabel}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setEdgeLabel(e.target.value)
+            }
+          />
+        </FormControl>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Text fontSize={0}>Edge Animation</Text>
+        <ToggleSwitch
+          aria-labelledby="toggle edge animation"
+          onClick={() => updateEdgeAnimation()}
+          checked={animated}
+          defaultChecked={animated}
+          statusLabelPosition="end"
+          size="small"
+        />
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
+        }}
+      >
+        <Text fontSize={0}>Arrows</Text>
+        <Box
+          sx={{
+            display: "flex",
+            gap: "16px",
           }}
         >
-          <AxonButton
-            id="remove-edge"
-            kind="secondary"
-            renderIcon={() => <TrashCan size="16" />}
-            iconDescription={"Remove Edge"}
-            size="md"
-            onClick={() => {
-              removeEdgeOnClick(edge?.data?.semantic_number!!, edge?.id!!);
+          <FormControl>
+            <Checkbox
+              value="default"
+              onChange={() => updateEdgeMarkers("start")}
+              checked={markerStart === "url(#)" ? false : true}
+            />
+            <FormControl.Label>
+              <Text
+                sx={{
+                  fontSize: 0,
+                  fontWeight: 400,
+                }}
+              >
+                Edge Start
+              </Text>
+            </FormControl.Label>
+          </FormControl>
+          <FormControl>
+            <Checkbox
+              value="default"
+              onChange={() => updateEdgeMarkers("end")}
+              checked={markerEnd === "url(#)" ? false : true}
+            />
+            <FormControl.Label>
+              <Text
+                sx={{
+                  fontSize: 0,
+                  fontWeight: 400,
+                }}
+              >
+                Edge End
+              </Text>
+            </FormControl.Label>
+          </FormControl>
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
+        }}
+      >
+        <Text fontSize={0}>Connection Line Styles</Text>
+        <Box
+          sx={{
+            display: "flex",
+            gap: "16px",
+          }}
+        >
+          <FormControl>
+            <Radio
+              name="curveEdge"
+              value={"curveEdge"}
+              onChange={() => updateConnectionLineType("curveEdge")}
+              checked={data.type === "curveEdge"}
+              disabled={false}
+            />
+            <FormControl.Label>
+              <Text
+                sx={{
+                  fontSize: 0,
+                  fontWeight: 400,
+                }}
+              >
+                Curve
+              </Text>
+            </FormControl.Label>
+          </FormControl>
+          <FormControl>
+            <Radio
+              name="straightEdge"
+              value={"straightEdge"}
+              onChange={() => updateConnectionLineType("straightEdge")}
+              checked={data.type === "straightEdge"}
+              disabled={false}
+            />
+            <FormControl.Label>
+              <Text
+                sx={{
+                  fontSize: 0,
+                  fontWeight: 400,
+                }}
+              >
+                Straight
+              </Text>
+            </FormControl.Label>
+          </FormControl>
+          <FormControl>
+            <Radio
+              name="stepEdge"
+              value={"stepEdge"}
+              onChange={() => updateConnectionLineType("stepEdge")}
+              checked={data.type === "stepEdge"}
+              disabled={false}
+            />
+            <FormControl.Label>
+              <Text
+                sx={{
+                  fontSize: 0,
+                  fontWeight: 400,
+                }}
+              >
+                Step
+              </Text>
+            </FormControl.Label>
+          </FormControl>
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
+        }}
+      >
+        <Text fontSize={0}>Edge & Label Color</Text>
+        <Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "wrap",
+              flex: 1,
+              gap: 1,
             }}
           >
-            Remove Edge
-          </AxonButton>
-        </div>
-      </ModalFooter>
-    </ComposedModal>
+            {noteTheme.colors.map((color, index) => {
+              return (
+                <Box
+                  name={color.label}
+                  sx={{
+                    backgroundColor: color.hex,
+                    width: "18px",
+                    height: "18px",
+                    borderRadius: 0,
+                    cursor: "pointer",
+                    ":hover": {
+                      backgroundColor: applyOpacity(color.hex, 0.8),
+                    },
+                  }}
+                  onClick={() => updateEdgeColor(color.hex)}
+                ></Box>
+              );
+            })}
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
