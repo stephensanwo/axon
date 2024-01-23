@@ -33,8 +33,8 @@ const StraightEdge: React.FC<EdgeProps> = (props) => {
   const { theme } = useTheme();
 
   const edgeMenuStyle = {
-    height: selected ? "350px" : "0px",
-    width: selected ? "270px" : "150px",
+    height: selected ? "400px" : "0px",
+    width: selected ? "250px" : "150px",
   };
 
   return (
