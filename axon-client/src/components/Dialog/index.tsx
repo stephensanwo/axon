@@ -53,7 +53,7 @@ export function DialogBody({ children }: { children?: React.ReactNode }) {
 
 export function DialogFooter({ children }: { children?: React.ReactNode }) {
   return (
-    <Box display="flex" mt={4} justifyContent="flex-end">
+    <Box display="flex" mt={1} p={3} justifyContent="flex-end">
       {children}
     </Box>
   );
