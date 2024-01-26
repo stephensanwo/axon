@@ -1,12 +1,10 @@
 import { useState, useContext, useMemo } from "react";
-import { isValidURL } from "src/components/Content/ContentTypes/Link/utils";
 import { JSON_LINK_API_KEY } from "src/config";
 import NoteContext from "src/context/notes";
 import { INode, INodeLinkContent } from "src/types/node";
 
 export const useLink = (): {
   link: INodeLinkContent | undefined;
-  handleLinkChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   resetLinkData: (
     setLinkState: React.Dispatch<"error" | "loading" | null>,
     setPreviewLink: React.Dispatch<boolean>
@@ -25,38 +23,6 @@ export const useLink = (): {
     setLink(node?.data.link!!);
     return node;
   }, []);
-
-  const handleLinkChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const newUrl = e.target.value;
-
-    setLink((prevLink) => {
-      return {
-        ...prevLink,
-        url: newUrl,
-      } as INodeLinkContent;
-    });
-
-    setNodes((nds: INode[]) => {
-      const updatedNodes = nds.map((node) => {
-        if (node.id === selectedNode?.id) {
-          return {
-            ...node,
-            data: {
-              ...node.data,
-              link: {
-                ...node.data.link,
-                url: newUrl,
-                isLoadable: isValidURL(newUrl),
-              },
-            },
-          };
-        }
-        return node;
-      });
-
-      return updatedNodes;
-    });
-  };
 
   const resetLinkData = (
     setLinkState: React.Dispatch<"error" | "loading" | null>,
@@ -135,5 +101,5 @@ export const useLink = (): {
       });
   };
 
-  return { link, handleLinkChange, resetLinkData, fetchLinkData };
+  return { link, resetLinkData, fetchLinkData };
 };

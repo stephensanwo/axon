@@ -8,7 +8,7 @@ export const useMedia = (): {
     setPreviewImage: React.Dispatch<boolean>
   ) => void;
 } => {
-  const { selectedNode, nodes, setNodes } = useContext(NoteContext);
+  const { selectedNode, setNodes } = useContext(NoteContext);
 
   const handleMediaUrl = (
     imageInputUrl: string,
