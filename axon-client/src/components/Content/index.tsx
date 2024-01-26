@@ -1,7 +1,7 @@
 import { Fragment, useContext } from "react";
 import NoteContext from "src/context/notes";
-import { ContentState } from "./ContentTypes/Shared/ContentState";
 import { ContentComponent } from "./ContentTypes/Shared/Router";
+import Blank from "../Blank";
 
 const Content = () => {
   const { selectedNode } = useContext(NoteContext);
@@ -11,9 +11,10 @@ const Content = () => {
       {selectedNode?.data?.contentType ? (
         <ContentComponent contentType={selectedNode?.data?.contentType!!} />
       ) : (
-        <ContentState
-          state="empty"
+        <Blank
+          heading="No Content"
           description="Select a node to view content"
+          type="info"
         />
       )}
     </Fragment>
