@@ -1,90 +1,48 @@
-import React, { useEffect } from "react";
-import {
-  Tabs as CarbonTabs,
-  Tab as CarbonTab,
-  TabList as CarbonTabList,
-  TabPanels,
-  TabPanel,
-} from "@carbon/react";
-import IconButton from "src/components/Button/IconButton";
-import { ThemeColors } from "src/shared/themes";
-import { BiFullscreen } from "react-icons/bi";
+import { useState } from "react";
+import { Box, UnderlineNav, useTheme } from "@primer/react";
 
 interface ITabHeader {
   label: string;
   icon: React.ReactNode;
-  onClick?: () => void;
+  counter?: string;
 }
 
 interface ITabProps {
-  header: ITabHeader[];
+  name: string;
+  headers: ITabHeader[];
   content: React.ReactNode[];
 }
 
-const Tabs: React.FC<{
-  children: ITabProps;
-}> = (props) => {
-  const {
-    children: { header, content },
-  } = props;
-  const [parentWidth, setParentWidth] = React.useState<number>(0);
-  const [tabWidth, setTabWidth] = React.useState<number>(0);
-
-  useEffect(() => {
-    const parentWidth = document.getElementById(
-      "node-content-container"
-    )?.offsetWidth;
-    setTabWidth(parentWidth!! / header.length);
-    setParentWidth(parentWidth!!);
-  }, []);
-
+function Tabs({ name, headers, content }: ITabProps) {
+  const [activeTab, setActiveTab] = useState(0);
+  const { theme } = useTheme();
   return (
-    <CarbonTabs>
-      <CarbonTabList
-        aria-label="List of tabs"
-        activation="manual"
-        fullWidth
-        style={{
-          outline: "none",
-          border: "none",
-          borderBlockEnd: "none",
+    <>
+      <UnderlineNav
+        aria-label={name}
+        sx={{
           position: "fixed",
-          background: ThemeColors.bgDark,
-          width: parentWidth,
+          width: "100%",
+          backgroundColor: theme?.colors.bg.default,
         }}
       >
-        {header.map((tab, index) => (
-          <CarbonTab
+        {headers.map((header, index) => (
+          <UnderlineNav.Item
             key={index}
-            label={tab.label}
-            renderIcon={() => tab.icon}
-            style={{
-              outline: "none",
-              fontSize: "12px",
-              fontWeight: "bold",
-              height: "40px",
-              // width: tabWidth,
-            }}
-            onClick={tab.onClick}
+            icon={() => header.icon}
+            aria-current={index === activeTab ? "page" : undefined}
+            onSelect={() => setActiveTab(index)}
+            counter={header.counter}
           >
-            {tab.label}
-          </CarbonTab>
+            {header.label}
+          </UnderlineNav.Item>
         ))}
-      </CarbonTabList>
-      <TabPanels>
-        {content.map((tab, index) => (
-          <TabPanel
-            key={index}
-            style={{
-              padding: 0,
-            }}
-          >
-            {tab}
-          </TabPanel>
-        ))}
-      </TabPanels>
-    </CarbonTabs>
+      </UnderlineNav>
+      <Box sx={{ marginTop: "48px", overflow: "scroll" }}>
+        {content[activeTab]}
+      </Box>
+    </>
   );
-};
+}
 
 export default Tabs;
