@@ -4,7 +4,7 @@ import {
   ContentBody,
   ContentContainer,
 } from "src/components/Content/ContentTypes/Shared/styles";
-import Tabs from "src/components/Content/ContentTypes/Shared/Tabs";
+import Tabs from "src/components/Tabs";
 import {
   AxonMarkdownInput,
   AxonMarkdownPreview,
