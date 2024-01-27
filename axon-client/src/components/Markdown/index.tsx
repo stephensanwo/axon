@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { useTheme } from "@primer/react";
+import { Box, useTheme } from "@primer/react";
 import ReactMarkdown from "react-markdown";
 import Editor from "src/components/CodeEditor/Editor";
 import { useMarkdown } from "src/hooks/content/useMarkdown";
@@ -11,17 +11,19 @@ export const AxonMarkdownInput: React.FC<{}> = () => {
   const { markdown, handleMarkdownUpdate } = useMarkdown();
 
   return (
-    <Editor
-      defaultValue="Add Markdown here..."
-      language={"markdown"}
-      value={markdown?.data!!}
-      loading={"Loading Markdown..."}
-      onChange={(value, event) => handleMarkdownUpdate(value, event)}
-      overrideOptions={{
-        lineNumbers: "off",
-        renderLineHighlight: "none",
-      }}
-    />
+    <Box>
+      <Editor
+        defaultValue="Add Markdown here..."
+        language={"markdown"}
+        value={markdown?.data!!}
+        loading={"Loading Markdown..."}
+        onChange={(value, event) => handleMarkdownUpdate(value, event)}
+        overrideOptions={{
+          lineNumbers: "off",
+          renderLineHighlight: "none",
+        }}
+      />
+    </Box>
   );
 };
 

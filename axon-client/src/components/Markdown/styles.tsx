@@ -23,7 +23,7 @@ export const AxonSyntaxHighlighter = styled(SyntaxHighlighter)`
 `;
 
 export const MarkdownPreview = styled.div`
-  padding: 14px 14px 14px 14px;
+  padding: 0px 14px 14px 14px;
   width: 100%;
 `;
 
