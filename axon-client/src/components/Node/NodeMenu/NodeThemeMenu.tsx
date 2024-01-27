@@ -8,7 +8,6 @@ import {
   useTheme,
 } from "@primer/react";
 import { TbCircleFilled } from "react-icons/tb";
-import { ColorPalette } from "src/shared/themes";
 import { useNodeEvents } from "src/hooks/node/useNodeEvents";
 import MenuButton from "src/components/Button/MenuButton";
 import { CustomNodeProps, NodeDataProps } from "src/types/node";
@@ -23,11 +22,13 @@ import {
   NodeMenuItemLabel,
   RadioFlex,
 } from "./index.styles";
+import { useNoteContext } from "src/hooks/notes/useNoteContext";
 
 const NodeThemeMenu: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
   const { id, data, type } = props;
   const [customColor, setCustomColor] = React.useState<string>("");
   const { updateNodeColor, updateNodeTheme } = useNodeEvents();
+  const { noteTheme } = useNoteContext();
   const { theme } = useTheme();
 
   return (
@@ -127,7 +128,7 @@ const NodeThemeMenu: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
         <NodeMenuItem>
           <NodeMenuItemLabel>Select Color</NodeMenuItemLabel>
           <RadioGrid id={`select-theme-${id}`}>
-            {Object.values(ColorPalette).map((color, index) => {
+            {noteTheme.colors.map((color, index) => {
               return (
                 <MenuButton
                   key={index}

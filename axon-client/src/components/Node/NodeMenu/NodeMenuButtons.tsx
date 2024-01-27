@@ -1,30 +1,30 @@
-import { NodeMenuButtonProps } from "src/types/node";
 import {
-  TrashCan,
-  ColorPalette,
-  Replicate,
-  TextFont,
-  Star,
-  FaceAdd,
-  NotebookReference,
-} from "@carbon/icons-react";
+  PiTrashSimpleLight,
+  PiCopySimpleLight,
+  PiStarLight,
+  PiPalette,
+  PiTextAUnderline,
+  PiNotebookLight,
+  PiSmileyLight,
+} from "react-icons/pi";
 import { BiBorderRadius } from "react-icons/bi";
+import { NodeMenuButtonProps } from "src/types/node";
 
 export const ActionMenuButtons: NodeMenuButtonProps[] = [
   {
     id: "delete-node",
     name: "Delete Node",
-    icon: <TrashCan size={16} />,
+    icon: <PiTrashSimpleLight size={18} />,
   },
   {
     id: "duplicate-node",
     name: "Duplicate Node",
-    icon: <Replicate size={16} />,
+    icon: <PiCopySimpleLight size={18} />,
   },
   {
     id: "set-default",
     name: "Set Default",
-    icon: <Star size={16} />,
+    icon: <PiStarLight size={18} />,
   },
 ];
 
@@ -32,12 +32,12 @@ export const DefaultMenuButtons: NodeMenuButtonProps[] = [
   {
     id: "node-theme",
     name: "Node Theme",
-    icon: <ColorPalette size={16} />,
+    icon: <PiPalette size={18} />,
   },
   {
     id: "text-formatting",
     name: "Text Formatting",
-    icon: <TextFont size={22} />,
+    icon: <PiTextAUnderline size={20} />,
   },
   {
     id: "node-formatting",
@@ -47,11 +47,11 @@ export const DefaultMenuButtons: NodeMenuButtonProps[] = [
   {
     id: "select-icon",
     name: "Select Icon",
-    icon: <FaceAdd size={16} />,
+    icon: <PiSmileyLight size={18} />,
   },
   {
     id: "node-content",
     name: "Node Content",
-    icon: <NotebookReference size={18} />,
+    icon: <PiNotebookLight size={18} />,
   },
 ];
