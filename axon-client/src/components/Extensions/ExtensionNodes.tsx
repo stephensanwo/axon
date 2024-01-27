@@ -1,7 +1,7 @@
-import { Code } from "@carbon/icons-react";
-import { NodeOptions } from "src/types/node";
+import { PiCodeSimpleLight } from "react-icons/pi";
 import { BsFillMarkdownFill } from "react-icons/bs";
 import { VscJson } from "react-icons/vsc";
+import { NodeOptions } from "src/types/node";
 
 export const ExtensionNodes: NodeOptions[] = [
   {
@@ -10,7 +10,7 @@ export const ExtensionNodes: NodeOptions[] = [
     description: "Embed code snippets in your flow",
     nodeType: "code",
     nodeContentType: "code",
-    icon: <Code size={18} />,
+    icon: <PiCodeSimpleLight size={18} />,
   },
   {
     id: "json-editor-node",
