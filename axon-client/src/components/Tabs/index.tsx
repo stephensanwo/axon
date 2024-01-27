@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, UnderlineNav, useTheme } from "@primer/react";
+import { Box, UnderlineNav } from "@primer/react";
 
 interface ITabHeader {
   label: string;
@@ -15,7 +15,6 @@ interface ITabProps {
 
 function Tabs({ name, headers, content }: ITabProps) {
   const [activeTab, setActiveTab] = useState(0);
-  const { theme } = useTheme();
   return (
     <>
       <UnderlineNav
@@ -23,7 +22,6 @@ function Tabs({ name, headers, content }: ITabProps) {
         sx={{
           position: "fixed",
           width: "100%",
-          backgroundColor: theme?.colors.bg.default,
         }}
       >
         {headers.map((header, index) => (
