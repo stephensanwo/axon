@@ -43,74 +43,68 @@ const PublishNote = forwardRef<HTMLButtonElement, NoteMenuDialogProps>(
           subheading={`Share your note with the world!`}
         />
         <DialogBody>
-          <Box>
-            <FormControl>
-              <FormControl.Label>Public Url</FormControl.Label>
-
-              <TextInput
-                ref={inputRef}
-                name="public-url"
-                value={
-                  publicId?.length!! > 0
-                    ? `${BASE_URL() + "public/note/" + publicId}`
-                    : "Click share to display url"
-                }
-                placeholder="Public Url"
-                sx={{
-                  backgroundColor: theme?.colors.bg.variant2,
-                }}
-                monospace
-                block
-                readOnly
-                size="large"
-                trailingAction={
-                  <Box
-                    onClick={copyToClipboard}
-                    sx={{
-                      marginLeft: "8px",
-                      marginRight: "16px",
-                      height: "100%",
-                      cursor: "pointer",
-                    }}
-                  >
-                    <CopyIcon size={16} />
-                  </Box>
-                }
-              />
-            </FormControl>
-            <DialogFooter>
-              <Box
-                sx={{
-                  dislay: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <Button
-                  variant="primary"
-                  onClick={() =>
-                    publishPublicNote.mutate("publish-public-note")
-                  }
-                  trailingVisual={publishPublicNote.isLoading ? Spinner : null}
-                  disabled={
-                    publicId || publishPublicNote.isLoading ? true : false
-                  }
+          <FormControl>
+            <FormControl.Label visuallyHidden>Public Url</FormControl.Label>
+            <TextInput
+              ref={inputRef}
+              name="public-url"
+              value={
+                publicId?.length!! > 0
+                  ? `${BASE_URL() + "public/note/" + publicId}`
+                  : "Click share to display url"
+              }
+              placeholder="Public Url"
+              sx={{
+                backgroundColor: theme?.colors.bg.variant2,
+              }}
+              monospace
+              block
+              readOnly
+              size="large"
+              trailingAction={
+                <Box
+                  onClick={copyToClipboard}
                   sx={{
-                    mb: "16px",
-                    width: "100%",
+                    marginLeft: "8px",
+                    marginRight: "16px",
+                    height: "100%",
+                    cursor: "pointer",
                   }}
                 >
-                  Publish Note
-                </Button>
-                <FormControl>
-                  <FormControl.Caption>
-                    ⚠️ Note that anyone with the public url will be able to view
-                    the note. Sharing notes privately is not yet supported.
-                  </FormControl.Caption>
-                </FormControl>
-              </Box>
-            </DialogFooter>
-          </Box>
+                  <CopyIcon size={16} />
+                </Box>
+              }
+            />
+          </FormControl>
         </DialogBody>
+        <DialogFooter>
+          <Box
+            sx={{
+              dislay: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Button
+              variant="primary"
+              onClick={() => publishPublicNote.mutate("publish-public-note")}
+              trailingVisual={publishPublicNote.isLoading ? Spinner : null}
+              disabled={publicId || publishPublicNote.isLoading ? true : false}
+              sx={{
+                mb: "16px",
+                width: "100%",
+              }}
+            >
+              Publish Note
+            </Button>
+            <FormControl>
+              <FormControl.Label visuallyHidden>Note</FormControl.Label>
+              <FormControl.Caption>
+                ⚠️ Note that anyone with the public url will be able to view the
+                note. Sharing notes privately is not yet supported.
+              </FormControl.Caption>
+            </FormControl>
+          </Box>
+        </DialogFooter>
       </DialogContainer>
     );
   }
