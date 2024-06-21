@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"axon-server/src/types"
+	"axon-server/lib/types"
 
 	axon_types "github.com/stephensanwo/axon-lib/types"
 

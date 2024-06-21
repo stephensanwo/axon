@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"axon-server/src/types"
+	"axon-server/lib/types"
 	"context"
 	"fmt"
 	"reflect"

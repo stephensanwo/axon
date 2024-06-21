@@ -20,7 +20,7 @@ test:
 	go test -v -cover ./...
 
 dev:
-	nodemon --watch './**/*.go' --signal SIGTERM --exec 'go' run bin/main.go -cmd server
+	nodemon --watch './**/*.go' --signal SIGTERM --exec 'go' run cmd/main.go -cmd server
 
 mongo_create_network:
 	docker network create mongo-network
@@ -54,6 +54,6 @@ install_swagger_globally:
 
 swagger:
 	export PATH=$PATH:$HOME/go/bin
-	swag init --output ./docs/swagger
-
+	swag init -g /bin/main.go -o ./docs/swagger --parseDependency true
+	
 .PHONY: postgres createdb dropdb migrateup migratedown sqlc

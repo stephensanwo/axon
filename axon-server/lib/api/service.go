@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	_ "axon-server/docs/swagger"
-	routes "axon-server/src/api/routes"
+	routes "axon-server/lib/api/routes"
 
 	log "github.com/sirupsen/logrus"
 	axon_types "github.com/stephensanwo/axon-lib/types"
@@ -76,13 +76,13 @@ func (a AxonService) CreateApi() {
 		}
 	}
 	r.HandleFunc("/docs/*", httpSwagger.Handler(
-		httpSwagger.URL("https://127.0.0.1:8100/docs/doc.json"),
+		httpSwagger.URL("http://127.0.0.1:8100/docs/doc.json"),
 	))
 	r.PathPrefix("/docs").Handler(httpSwagger.WrapHandler)
 
 	log.Println("Server running on port 8100")
-	log.Fatal(http.ListenAndServeTLS("127.0.0.1:8100", "./ssl/server.crt", "./ssl/server.key", handlers.CORS(ALLOWED_ORIGINS, ALLOWED_METHODS, ALLOWED_HEADERS,EXPOSED_HEADERS,ALLOWED_CREDENTIALS,MAX_AGE)(r) ))
-	// log.Fatal(http.ListenAndServe("127.0.0.1:8100", handlers.CORS(ALLOWED_ORIGINS, ALLOWED_METHODS, ALLOWED_HEADERS,EXPOSED_HEADERS,ALLOWED_CREDENTIALS,MAX_AGE)(r) ))
+	// log.Fatal(http.ListenAndServeTLS("127.0.0.1:8100", "./ssl/server.crt", "./ssl/server.key", handlers.CORS(ALLOWED_ORIGINS, ALLOWED_METHODS, ALLOWED_HEADERS,EXPOSED_HEADERS,ALLOWED_CREDENTIALS,MAX_AGE)(r) ))
+	log.Fatal(http.ListenAndServe("127.0.0.1:8100", handlers.CORS(ALLOWED_ORIGINS, ALLOWED_METHODS, ALLOWED_HEADERS,EXPOSED_HEADERS,ALLOWED_CREDENTIALS,MAX_AGE)(r) ))
 }
 
 func NewAxonService(settings *axon_types.Settings) {

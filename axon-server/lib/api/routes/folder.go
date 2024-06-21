@@ -1,13 +1,11 @@
 package routes
 
 import (
-	"axon-server/src/types"
-	"axon-server/src/utils"
+	"axon-server/lib/types"
+	"axon-server/lib/utils"
 	"context"
 	"encoding/json"
 	"net/http"
-
-	aws "axon-server/src/aws"
 
 	axon_core "github.com/stephensanwo/axon-lib/core"
 	axon_types "github.com/stephensanwo/axon-lib/types"
@@ -25,19 +23,21 @@ import (
 //	@Failure		401	{string}	string	"Unauthorized"
 //	@Router			/folder-list [get]
 func QueryFolderListHandler(w http.ResponseWriter, r *http.Request, a *axon_types.AxonContext) {
-	user := axon_core.User{
-		AwsSession: aws.CreateSession(),
-	}
+	user := axon_core.User{}
+
 	session, err := user.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
 	}
-	folder := axon_core.Folder{
-		Session: session,
-		AwsSession: aws.CreateSession(),
+
+	isSubsribed := user.GetAuthenticatedUserPaymentInfo(a, *session)
+	if !isSubsribed {
+		http.Error(w, "payment required", http.StatusPaymentRequired)
+		return
 	}
 
+	folder := axon_core.Folder{Session: *session}
 	folders, err := folder.GetFolderList(a)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -46,7 +46,6 @@ func QueryFolderListHandler(w http.ResponseWriter, r *http.Request, a *axon_type
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(folders)
-
 }
 
 // FoldersHandler godoc
@@ -61,19 +60,21 @@ func QueryFolderListHandler(w http.ResponseWriter, r *http.Request, a *axon_type
 //	@Failure		401	{string}	string	"Unauthorized"
 //	@Router			/folders [get]
 func QueryFoldersHandler(w http.ResponseWriter, r *http.Request, a *axon_types.AxonContext) {
-	user := axon_core.User{
-		AwsSession: aws.CreateSession(),
-	}
+	user := axon_core.User{}
+	
 	session, err := user.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
 	}
-	folder := axon_core.Folder{
-		Session: session,
-		AwsSession: aws.CreateSession(),
+
+	isSubsribed := user.GetAuthenticatedUserPaymentInfo(a, *session)
+	if !isSubsribed {
+		http.Error(w, "payment required", http.StatusPaymentRequired)
+		return
 	}
 
+	folder := axon_core.Folder{Session: *session}
 	folders, err := folder.GetFolders(a)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -82,7 +83,6 @@ func QueryFoldersHandler(w http.ResponseWriter, r *http.Request, a *axon_types.A
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(folders)
-
 }
 
 // QueryFolderHandler godoc
@@ -98,25 +98,27 @@ func QueryFoldersHandler(w http.ResponseWriter, r *http.Request, a *axon_types.A
 //	@Router			/folder [get]
 //	@Param			folder_id	query	string	true	"Folder ID"
 func QueryFolderHandler(w http.ResponseWriter, r *http.Request, a *axon_types.AxonContext) {
-	user := axon_core.User{
-		AwsSession: aws.CreateSession(),
-	}
+	user := axon_core.User{}
+	
 	session, err := user.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
 	}
+
+	isSubsribed := user.GetAuthenticatedUserPaymentInfo(a, *session)
+	if !isSubsribed {
+		http.Error(w, "payment required", http.StatusPaymentRequired)
+		return
+	}
+
 	query := r.URL.Query()
 	folderID := query.Get("folder_id")
 	if folderID == "" {
 		http.Error(w, "field folder_id is required in query", http.StatusBadRequest)
 		return
 	}
-	folder := axon_core.Folder{
-		Session: session,
-		AwsSession: aws.CreateSession(),
-	}
-
+	folder := axon_core.Folder{Session: *session}
 	res, err := folder.FindFolder(a, folderID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -141,14 +143,20 @@ func QueryFolderHandler(w http.ResponseWriter, r *http.Request, a *axon_types.Ax
 //	@Router			/folder [post]
 //	@Param			data	body	types.MutateFolder	true	"Folder Object"
 func PostFolderHandler(w http.ResponseWriter, r *http.Request, a *axon_types.AxonContext) {
-	user := axon_core.User{
-		AwsSession: aws.CreateSession(),
-	}
+	user := axon_core.User{}
+	
 	session, err := user.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
 	}
+
+	isSubsribed := user.GetAuthenticatedUserPaymentInfo(a, *session)
+	if !isSubsribed {
+		http.Error(w, "payment required", http.StatusPaymentRequired)
+		return
+	}
+
 	decoder := json.NewDecoder(r.Body)
 	var requestData types.MutateFolder
 	err = decoder.Decode(&requestData)
@@ -166,12 +174,7 @@ func PostFolderHandler(w http.ResponseWriter, r *http.Request, a *axon_types.Axo
 		json.NewEncoder(w).Encode(err)
 		return
 	}
-
-	folder := axon_core.Folder{
-		Session: session,
-		AwsSession: aws.CreateSession(),
-	}
-
+	folder := axon_core.Folder{Session: *session}
 	folderId, err := folder.CreateFolder(a, requestData.FolderName)
 	if err != nil {
 		http.Error(w, "could not create folder - "+err.Error(), http.StatusBadRequest)
@@ -180,7 +183,6 @@ func PostFolderHandler(w http.ResponseWriter, r *http.Request, a *axon_types.Axo
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(folderId)
-
 }
 
 // PatchFolderHandler godoc
@@ -197,25 +199,29 @@ func PostFolderHandler(w http.ResponseWriter, r *http.Request, a *axon_types.Axo
 //	@Param			folder_id	query	string				true	"Folder ID"
 //	@Param			data		body	types.MutateFolder	true	"Folder Object"
 func PatchFolderHandler(w http.ResponseWriter, r *http.Request, a *axon_types.AxonContext) {
-	user := axon_core.User{
-		AwsSession: aws.CreateSession(),
-	}
+	user := axon_core.User{}
+	
 	session, err := user.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
 	}
+
+	isSubsribed := user.GetAuthenticatedUserPaymentInfo(a, *session)
+	if !isSubsribed {
+		http.Error(w, "payment required", http.StatusPaymentRequired)
+		return
+	}
+
 	query := r.URL.Query()
 	folderID := query.Get("folder_id")
 	if folderID == "" {
 		http.Error(w, "foeld folder_id required in query", http.StatusBadRequest)
 		return
 	}
-
 	decoder := json.NewDecoder(r.Body)
 	var requestData types.MutateFolder
 	err = decoder.Decode(&requestData)
-
 	if err != nil {
 		http.Error(w, "field folder_name required in request body", http.StatusBadRequest)
 		return
@@ -230,12 +236,7 @@ func PatchFolderHandler(w http.ResponseWriter, r *http.Request, a *axon_types.Ax
 		json.NewEncoder(w).Encode(err)
 		return
 	}
-
-	folder := axon_core.Folder{
-		Session: session,
-		AwsSession: aws.CreateSession(),
-	}
-
+	folder := axon_core.Folder{Session: *session}
 	updatedData, err := folder.UpdateFolder(a, requestData.FolderName, folderID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -244,7 +245,6 @@ func PatchFolderHandler(w http.ResponseWriter, r *http.Request, a *axon_types.Ax
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(updatedData)
-
 }
 
 // DeleteFolderHandler godoc
@@ -260,27 +260,27 @@ func PatchFolderHandler(w http.ResponseWriter, r *http.Request, a *axon_types.Ax
 //	@Router			/folder [delete]
 //	@Param			folder_id	query	string	true	"Folder ID"
 func DeleteFolderHandler(w http.ResponseWriter, r *http.Request, a *axon_types.AxonContext) {
-	user := axon_core.User{
-		AwsSession: aws.CreateSession(),
-	}
+	user := axon_core.User{}
+	
 	session, err := user.GetAuthenticatedUserData(a)
 	if err != nil {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
 	}
+
+	isSubsribed := user.GetAuthenticatedUserPaymentInfo(a, *session)
+	if !isSubsribed {
+		http.Error(w, "payment required", http.StatusPaymentRequired)
+		return
+	}
+	
 	query := r.URL.Query()
 	folderID := query.Get("folder_id")
-
-	folder := axon_core.Folder{
-		Session: session,
-		AwsSession: aws.CreateSession(),
-	}
-
+	folder := axon_core.Folder{Session: *session}
 	if folderID == "" {
 		http.Error(w, "field folder_id required in query", http.StatusBadRequest)
 		return
 	}
-
 	res, err := folder.DeleteFolder(a, folderID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)

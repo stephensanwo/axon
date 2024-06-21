@@ -1,8 +1,8 @@
 package main
 
 import (
-	cli "axon-server/bin/cli"
-	axonserver "axon-server/src/api"
+	cli "axon-server/cmd/cli"
+	axonserver "axon-server/lib/api"
 
 	axon_types "github.com/stephensanwo/axon-lib/types"
 
@@ -21,7 +21,7 @@ import (
 //	@contact.email	stephen.sanwo@icloud.com
 //	@license.name	MIT
 //	@license.url	https://mit-license.org
-//	@host			192.168.1.101:8100
+//	@host			127.0.0.1:8100
 //	@BasePath		/
 func Axon() {
 	run, cdkCmd := cli.ParseArgs()

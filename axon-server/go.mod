@@ -3,10 +3,9 @@ module axon-server
 go 1.19
 
 require (
-	github.com/aws/aws-sdk-go v1.44.314
 	github.com/go-playground/validator/v10 v10.11.2
 	github.com/sirupsen/logrus v1.9.3
-	github.com/stephensanwo/axon-lib v1.0.8
+	github.com/stephensanwo/axon-lib v1.0.12
 	github.com/stephensanwo/handlers v0.0.0-20230303154204-9d71aa8e977c
 	github.com/stephensanwo/mux v0.0.0-20230217121723-5d30f4525e65
 )
@@ -14,6 +13,7 @@ require (
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/Masterminds/semver/v3 v3.2.1 // indirect
+	github.com/aws/aws-sdk-go v1.44.314 // indirect
 	github.com/aws/jsii-runtime-go v1.86.1 // indirect
 	github.com/fatih/color v1.15.0 // indirect
 	github.com/felixge/httpsnoop v1.0.1 // indirect
@@ -35,7 +35,7 @@ require (
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
 	golang.org/x/mod v0.12.0 // indirect
 	golang.org/x/net v0.13.0 // indirect
-	golang.org/x/sys v0.10.0 // indirect
+	golang.org/x/sys v0.11.0 // indirect
 	golang.org/x/text v0.11.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
@@ -48,7 +48,9 @@ require (
 	github.com/swaggo/files v1.0.0 // indirect
 	github.com/swaggo/http-swagger v1.3.3
 	github.com/swaggo/swag v1.16.1
-	golang.org/x/oauth2 v0.10.0
+	golang.org/x/oauth2 v0.10.0 // indirect
 	golang.org/x/tools v0.11.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1
 )
+
+replace github.com/stephensanwo/axon-lib => ../axon-lib

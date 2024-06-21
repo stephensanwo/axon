@@ -51,12 +51,11 @@ func GetRoutes() []axon_types.Route {
 			Method:  http.MethodDelete,
 		},
 		{
-			Path:    "/note-detail",
+			Path:    "/note-summary",
 			Auth:    axon_types.PrivateRoute,
-			Handler: QueryNoteDetail,
+			Handler: QueryNoteSummaryHandler,
 			Method:  http.MethodGet,
 		},
-
 		{
 			Path:    "/notes",
 			Auth:    axon_types.PrivateRoute,
@@ -86,6 +85,30 @@ func GetRoutes() []axon_types.Route {
 			Auth:    axon_types.PrivateRoute,
 			Handler: DeleteNoteHandler,
 			Method:  http.MethodDelete,
+		}, 
+		{
+			Path:    "/publish-public-note",
+			Auth:    axon_types.PrivateRoute,
+			Handler: PublishPublicNoteHandler,
+			Method:  http.MethodPost,
+		}, 
+		{
+			Path:    "/get-shared-note",
+			Auth:    axon_types.PublicRoute,
+			Handler: QuerySharedNoteHandler,
+			Method:  http.MethodGet,
+		}, 
+		{
+			Path:    "/get-public-note",
+			Auth:    axon_types.PublicRoute,
+			Handler: QueryPublicNoteHandler,
+			Method:  http.MethodGet,
+		}, 
+		{
+			Path:    "/upload-media",
+			Auth:    axon_types.PrivateRoute,
+			Handler: UploadMediaHandler,
+			Method:  http.MethodPost,
 		},
 	}
 
