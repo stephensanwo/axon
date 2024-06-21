@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	_ "axon-auth/src/types"
+	_ "axon-auth/lib/types"
 
 	axon_core "github.com/stephensanwo/axon-lib/core"
 	axon_session "github.com/stephensanwo/axon-lib/session"

@@ -1,8 +1,8 @@
 package main
 
 import (
-	cli "axon-auth/bin/cli"
-	axonauth "axon-auth/src/api"
+	cli "axon-auth/cmd/cli"
+	axonauth "axon-auth/lib/api"
 
 	axon_types "github.com/stephensanwo/axon-lib/types"
 

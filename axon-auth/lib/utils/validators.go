@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"axon-auth/src/types"
+	"axon-auth/lib/types"
 	"context"
 	"fmt"
 	"reflect"

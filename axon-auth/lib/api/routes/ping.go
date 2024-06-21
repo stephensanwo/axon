@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"axon-auth/src/types"
+	"axon-auth/lib/types"
 
 	axon_types "github.com/stephensanwo/axon-lib/types"
 
