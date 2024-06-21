@@ -1,24 +1,29 @@
-import React, { useContext, useState } from "react";
-import { Launch, Link } from "@carbon/icons-react";
-import { Reset } from "@carbon/icons-react";
-import { ArrowRight } from "@carbon/icons-react";
+import React, { useState } from "react";
 import { ResizeParams } from "reactflow";
-import { NoteContext } from "src/context/notes";
+import {
+  Box,
+  FormControl,
+  Link,
+  Text,
+  TextInput,
+  useTheme,
+} from "@primer/react";
+import { CiGlobe, CiUndo } from "react-icons/ci";
 import { CustomNodeProps, NodeDataProps } from "src/types/node";
 import NodeMenu from "src/components/Node/NodeMenu";
 import { NodeHandles } from "src/components/Node/NodeHandles";
 import { useNodeEvents } from "src/hooks/node/useNodeEvents";
-import { ThemeColors } from "src/shared/themes";
 import { useLink } from "src/hooks/content/useLink";
-import { TextInput } from "src/components/Input/TextInput";
-import IconButton from "src/components/Button/IconButton";
 import { NodeMenuInfo } from "src/components/Node/NodeMenu/Shared";
 import NodeWrapper from "src/components/Node/NodeWrapper";
+import { NODE_RESIZER_GUTTER } from "src/components/Node/index.types";
+import MenuButton from "src/components/Button/MenuButton";
 import {
   LinkNodeContainer,
   LinkNodeImage,
   LinkNodeInput,
 } from "./index.styles";
+import { useNoteContext } from "src/hooks/notes/useNoteContext";
 
 const LinkNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
   const { id, data } = props;
@@ -28,7 +33,7 @@ const LinkNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
   const [resizing, setResizing] = useState<boolean>(false);
   const [linkState, setLinkState] = useState<"error" | "loading" | null>(null);
   const [linkInput, setLinkInput] = useState<string>("");
-  const { selectedNode } = useContext(NoteContext);
+  const { selectedNode } = useNoteContext();
   const {
     deleteNode,
     duplicateNode,
@@ -38,12 +43,12 @@ const LinkNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
     onResizeEnd,
   } = useNodeEvents();
   const { fetchLinkData, resetLinkData } = useLink();
+  const { theme } = useTheme();
 
   return (
     <>
       <NodeWrapper
         nodeId={id}
-        color={ThemeColors.borderLight}
         isVisible={selectedNode?.id === id}
         keepAspectRatio={false}
         onResizeStart={(e: any, params: ResizeParams) => {
@@ -56,104 +61,128 @@ const LinkNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
         }}
         minWidth={280}
         minHeight={200}
-        lineStyle={{
-          border: "0.9px dashed",
-          borderSpacing: "10 10",
-        }}
         shouldResize={() => true}
       />
       <LinkNodeContainer
+        id={`link-node-${id}`}
         tabIndex={0}
         active={selectedNode?.id === id}
         background={data.node_styles.background_color}
         borderradius={`${data.node_styles.border_radius}px`}
         borderstyle={data.node_styles.border_style}
         border={data.node_styles.border_color}
-        width={data.width - 4}
-        height={data.height - 4}
+        width={data.width - NODE_RESIZER_GUTTER}
+        height={data.height - NODE_RESIZER_GUTTER}
         margin={2}
         onClick={() => handleNodeClick(id)}
       >
         {previewLink ? (
           <LinkNodeImage>
-            <div data-node-image-overlay-buttons>
-              <IconButton
-                id={`node-color-custom`}
+            <Box data-node-image-overlay-buttons>
+              <MenuButton
+                id={`link-node-undo-${id}`}
                 name={"color.label"}
                 onClick={() => resetLinkData(setLinkState, setPreviewLink)}
                 disabled={false}
                 width="24px"
                 height="24px"
-                background={ThemeColors.bgHighlight2}
+                hoverfill={theme?.colors.fg.default}
+                backgroundHoverFill={theme?.colors.bg.variant2}
                 borderradius="50%"
               >
-                <Reset size={16} />
-              </IconButton>
-              <IconButton
-                id={`node-color-custom`}
+                <CiUndo size={16} />
+              </MenuButton>
+              <MenuButton
+                id={`link-node-launch-${id}`}
                 name={"color.label"}
                 onClick={() => window.open(data.link?.url!!)}
                 disabled={false}
                 width="24px"
                 height="24px"
-                background={ThemeColors.bgHighlight2}
+                hoverfill={theme?.colors.fg.default}
+                backgroundHoverFill={theme?.colors.bg.variant2}
                 borderradius="50%"
               >
-                <Launch size={16} />
-              </IconButton>
-            </div>
-            <img data-node-image src={data.link?.image!!} />
-            <div data-node-image-text>
-              <p data-node-image-title> {data.link?.title}</p>
-              <a data-node-image-href href={data.link?.url} target="_blank">
-                {data.link?.url}
-              </a>
-              <small data-node-image-meta> {data.link?.description}</small>
-            </div>
+                <CiGlobe size={16} />
+              </MenuButton>
+            </Box>
+            <img
+              id={`link-node-preview-img-${id}`}
+              data-node-image
+              src={data.link?.image!!}
+            />
+            <Box data-node-image-text>
+              <Box>
+                <Text>{data.link?.title}</Text>
+              </Box>
+              <Box>
+                <Link
+                  sx={{
+                    fontSize: 0,
+                  }}
+                  href={data.link?.url}
+                  target="_blank"
+                >
+                  {data.link?.url}
+                </Link>
+              </Box>
+              <Box>
+                <Text
+                  sx={{
+                    fontSize: 0,
+                    lineHeight: 1.4,
+                    display: "block",
+                    color: theme?.colors.text.grayLight,
+                  }}
+                >
+                  {data.link?.description}
+                </Text>
+              </Box>
+            </Box>
           </LinkNodeImage>
         ) : (
           <LinkNodeInput>
-            <div data-node-icon>
-              <Link fill={ThemeColors.textDark} size={24} />
-            </div>
-            <div data-node-input-container>
-              <div data-node-input>
-                <TextInput
-                  labelText={""}
-                  id="code-file-name"
-                  placeholder="https://www.example.com"
-                  autoCapitalize="off"
-                  autoComplete="off"
-                  autoCorrect="off"
-                  spellCheck={false}
-                  autoSave="off"
-                  autoFocus={false}
-                  warn={linkState === "error"}
-                  style={{
-                    backgroundColor: ThemeColors.bgHighlight1,
-                  }}
-                  value={linkInput}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setLinkInput(() => e.target.value)
-                  }
-                />
-                <IconButton
-                  id={`node-color-custom`}
-                  name={"color.label"}
-                  onClick={() =>
-                    fetchLinkData(linkInput, setLinkState, setPreviewLink)
-                  }
-                  disabled={false}
-                  width="24px"
-                  height="24px"
-                  background={ThemeColors.bgHighlight1}
-                  borderradius="4px"
-                  fill={ThemeColors.textDark}
-                  hoverfill={ThemeColors.primary}
-                >
-                  <ArrowRight size={16} />
-                </IconButton>
-              </div>
+            <Box data-node-icon>
+              <CiGlobe fill={theme?.colors.fg.variant3} size={24} />
+            </Box>
+            <Box data-node-input-container>
+              <Box>
+                <FormControl>
+                  <FormControl.Label visuallyHidden>Link</FormControl.Label>
+                  <TextInput
+                    id={`link-node-input-${id}`}
+                    placeholder="https://www.example.com"
+                    autoCapitalize="off"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    spellCheck={false}
+                    autoSave="off"
+                    autoFocus={false}
+                    monospace
+                    block
+                    style={{
+                      backgroundColor: theme?.colors.bg.variant2b,
+                    }}
+                    value={linkInput}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setLinkInput(() => e.target.value)
+                    }
+                    sx={{
+                      fontSize: 0,
+                      flex: 1,
+                    }}
+                    size="medium"
+                    onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                      if (e.key === "Enter") {
+                        fetchLinkData(linkInput, setLinkState, setPreviewLink);
+                      }
+                    }}
+                    validationStatus={
+                      linkState === "error" ? "error" : undefined
+                    }
+                  />
+                </FormControl>
+              </Box>
               <NodeMenuInfo
                 text={
                   linkState === "error"
@@ -164,7 +193,7 @@ const LinkNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
                 }
                 type={linkState === "error" ? "error" : "info"}
               />
-            </div>
+            </Box>
           </LinkNodeInput>
         )}
       </LinkNodeContainer>

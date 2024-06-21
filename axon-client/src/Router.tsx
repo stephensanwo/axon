@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { Notes, Terms, DownTime, Error, Layout, Privacy } from "src/pages";
 import PersistAuth from "src/pages/Auth/PersistAuth";
 import RequireAuth from "src/pages/Auth/RequireAuth";
-import PublicNotes from "./pages/Notes/PublicNotes";
+import PublicNotes from "./pages/App/PublicNotes";
 import { PublicNoteProvider } from "./context/public";
 import { NoteProvider } from "./context/notes";
 import { AppProvider } from "./context/app";

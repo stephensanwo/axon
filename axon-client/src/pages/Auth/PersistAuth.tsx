@@ -2,7 +2,7 @@ import { Fragment, useContext } from "react";
 import { useLocation, Navigate } from "react-router-dom";
 import AxonLoader from "src/components/Loader/Loader";
 import AuthContext from "src/context/auth";
-import Notes from "../Notes";
+import Notes from "../App";
 
 const PersistAuth = () => {
   const { user, userQuery } = useContext(AuthContext);

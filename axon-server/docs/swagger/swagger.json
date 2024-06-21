@@ -1,62 +1,22 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "Axon Core API",
+        "title": "Axon Core API",
+        "termsOfService": "stephen.sanwo@icloud.com",
+        "contact": {
+            "name": "Stephen Sanwo",
+            "email": "stephen.sanwo@icloud.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://mit-license.org"
+        },
+        "version": "1.0"
     },
+    "host": "127.0.0.1:8100",
+    "basePath": "/",
     "paths": {
-        "/auth-user": {
-            "get": {
-                "description": "Query Authenticated User",
-                "tags": [
-                    "User"
-                ],
-                "summary": "Query Authenticated User",
-                "operationId": "get-auth-user",
-                "responses": {
-                    "200": {
-                        "description": "User",
-                        "schema": {
-                            "$ref": "#/definitions/types.Folder"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/callback": {
-            "get": {
-                "description": "AuthCallback",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Auth"
-                ],
-                "summary": "AuthCallback",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/types.BaseResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/folder": {
             "get": {
                 "description": "Query Folder",
@@ -121,7 +81,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/types.MutateFolder"
+                            "$ref": "#/definitions/axon-server_lib_types.MutateFolder"
                         }
                     }
                 ],
@@ -147,7 +107,7 @@
                     "422": {
                         "description": "Unprocessible Entity",
                         "schema": {
-                            "$ref": "#/definitions/types.FieldErrors"
+                            "$ref": "#/definitions/axon-server_lib_types.FieldErrors"
                         }
                     }
                 }
@@ -178,7 +138,7 @@
                     "200": {
                         "description": "Records Deleted",
                         "schema": {
-                            "type": "int"
+                            "type": "string"
                         }
                     },
                     "400": {
@@ -222,7 +182,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/types.MutateFolder"
+                            "$ref": "#/definitions/axon-server_lib_types.MutateFolder"
                         }
                     }
                 ],
@@ -230,7 +190,7 @@
                     "200": {
                         "description": "Update Response",
                         "schema": {
-                            "$ref": "#/definitions/types.UpdateDataResponse"
+                            "$ref": "#/definitions/axon-server_lib_types.UpdateDataResponse"
                         }
                     },
                     "401": {
@@ -242,7 +202,7 @@
                     "422": {
                         "description": "Unprocessible Entity",
                         "schema": {
-                            "$ref": "#/definitions/types.FieldErrors"
+                            "$ref": "#/definitions/axon-server_lib_types.FieldErrors"
                         }
                     }
                 }
@@ -309,6 +269,96 @@
                             "items": {
                                 "$ref": "#/definitions/types.Folder"
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/get-public-note": {
+            "get": {
+                "description": "Query Public Note",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Public Note"
+                ],
+                "summary": "Query Public Note",
+                "operationId": "get-public-note",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Public Note ID",
+                        "name": "public_note_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Public Note",
+                        "schema": {
+                            "$ref": "#/definitions/types.Note"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/get-shared-note": {
+            "get": {
+                "description": "Query Shared Note",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Note"
+                ],
+                "summary": "Query Shared Note",
+                "operationId": "get-shared-note",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Note ID",
+                        "name": "note_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Public Note ID",
+                        "schema": {
+                            "type": "string"
                         }
                     },
                     "400": {
@@ -397,7 +447,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/types.MutateNote"
+                            "$ref": "#/definitions/axon-server_lib_types.MutateNote"
                         }
                     }
                 ],
@@ -423,7 +473,7 @@
                     "422": {
                         "description": "Unprocessible Entity",
                         "schema": {
-                            "$ref": "#/definitions/types.FieldErrors"
+                            "$ref": "#/definitions/axon-server_lib_types.FieldErrors"
                         }
                     }
                 }
@@ -461,7 +511,7 @@
                     "200": {
                         "description": "Records Deleted",
                         "schema": {
-                            "type": "int"
+                            "type": "string"
                         }
                     },
                     "400": {
@@ -512,7 +562,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/types.PatchNote"
+                            "$ref": "#/definitions/axon-server_lib_types.PatchNote"
                         }
                     }
                 ],
@@ -520,7 +570,7 @@
                     "200": {
                         "description": "Update Response",
                         "schema": {
-                            "$ref": "#/definitions/types.UpdateDataResponse"
+                            "$ref": "#/definitions/axon-server_lib_types.UpdateDataResponse"
                         }
                     },
                     "401": {
@@ -532,15 +582,15 @@
                     "422": {
                         "description": "Unprocessible Entity",
                         "schema": {
-                            "$ref": "#/definitions/types.FieldErrors"
+                            "$ref": "#/definitions/axon-server_lib_types.FieldErrors"
                         }
                     }
                 }
             }
         },
-        "/note-detail": {
+        "/note-summary": {
             "get": {
-                "description": "Query Note Detail",
+                "description": "Query Note Summary",
                 "consumes": [
                     "application/json"
                 ],
@@ -550,8 +600,8 @@
                 "tags": [
                     "Note"
                 ],
-                "summary": "Query Note Detail",
-                "operationId": "get-note",
+                "summary": "Query Note Summary",
+                "operationId": "get-note-summary",
                 "parameters": [
                     {
                         "type": "string",
@@ -570,9 +620,9 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "NoteDetail",
+                        "description": "NoteSummary",
                         "schema": {
-                            "$ref": "#/definitions/types.NoteDetail"
+                            "$ref": "#/definitions/types.NoteSummary"
                         }
                     },
                     "400": {
@@ -592,7 +642,7 @@
         },
         "/notes": {
             "get": {
-                "description": "Publish Messages to Channel",
+                "description": "Query all notes",
                 "consumes": [
                     "application/json"
                 ],
@@ -602,8 +652,8 @@
                 "tags": [
                     "Note"
                 ],
-                "summary": "Publish Messages to Channel",
-                "operationId": "publish",
+                "summary": "Query all notes",
+                "operationId": "get-notes",
                 "parameters": [
                     {
                         "type": "string",
@@ -652,7 +702,105 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/types.BaseResponse"
+                            "$ref": "#/definitions/axon-server_lib_types.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/publish-public-note": {
+            "post": {
+                "description": "Create New Public Note",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Note"
+                ],
+                "summary": "Create New Public Note",
+                "operationId": "publish-public-note",
+                "parameters": [
+                    {
+                        "description": "Public Note Request Object",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/axon-server_lib_types.PostPublicNote"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Public Note Id",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessible Entity",
+                        "schema": {
+                            "$ref": "#/definitions/axon-server_lib_types.FieldErrors"
+                        }
+                    }
+                }
+            }
+        },
+        "/upload-media": {
+            "post": {
+                "description": "Upload a media file",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Note"
+                ],
+                "summary": "Upload media file",
+                "operationId": "upload-media",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Media file to upload",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "File uploaded successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -660,10 +808,104 @@
         }
     },
     "definitions": {
-        "types.BaseResponse": {
+        "axon-server_lib_types.BaseResponse": {
             "type": "object",
             "properties": {
                 "message": {}
+            }
+        },
+        "axon-server_lib_types.FieldErrors": {
+            "type": "object",
+            "properties": {
+                "fields": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "msg": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "axon-server_lib_types.MutateFolder": {
+            "type": "object",
+            "required": [
+                "folder_name"
+            ],
+            "properties": {
+                "folder_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "axon-server_lib_types.MutateNote": {
+            "type": "object",
+            "required": [
+                "description",
+                "folder_id",
+                "note_name"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "folder_id": {
+                    "type": "string"
+                },
+                "note_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "axon-server_lib_types.PatchNote": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "note_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "axon-server_lib_types.PostPublicNote": {
+            "type": "object",
+            "required": [
+                "folder_id",
+                "note_id",
+                "public_note_id"
+            ],
+            "properties": {
+                "folder_id": {
+                    "type": "string"
+                },
+                "note_id": {
+                    "type": "string"
+                },
+                "public_note_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "axon-server_lib_types.UpdateDataResponse": {
+            "type": "object",
+            "properties": {
+                "MatchedCount": {
+                    "type": "integer"
+                },
+                "ModifiedCount": {
+                    "type": "integer"
+                },
+                "UpsertedCount": {
+                    "type": "integer"
+                },
+                "UpsertedID": {
+                    "type": "string"
+                }
             }
         },
         "types.Edge": {
@@ -701,23 +943,6 @@
                 }
             }
         },
-        "types.FieldErrors": {
-            "type": "object",
-            "properties": {
-                "fields": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "string"
-                    }
-                },
-                "msg": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "integer"
-                }
-            }
-        },
         "types.Folder": {
             "type": "object",
             "properties": {
@@ -727,10 +952,10 @@
                 "folder_id": {
                     "type": "string"
                 },
-                "last_edited": {
+                "folder_name": {
                     "type": "string"
                 },
-                "name": {
+                "last_edited": {
                     "type": "string"
                 },
                 "user_id": {
@@ -747,16 +972,16 @@
                 "folder_id": {
                     "type": "string"
                 },
-                "last_edited": {
+                "folder_name": {
                     "type": "string"
                 },
-                "name": {
+                "last_edited": {
                     "type": "string"
                 },
                 "notes": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/types.Note"
+                        "$ref": "#/definitions/types.NoteSummary"
                     }
                 },
                 "user_id": {
@@ -764,72 +989,130 @@
                 }
             }
         },
-        "types.MutateFolder": {
-            "type": "object",
-            "required": [
-                "folder_name"
-            ],
-            "properties": {
-                "folder_name": {
-                    "type": "string"
-                }
-            }
-        },
-        "types.MutateNote": {
-            "type": "object",
-            "required": [
-                "folder_id",
-                "note_description",
-                "note_name"
-            ],
-            "properties": {
-                "folder_id": {
-                    "type": "string"
-                },
-                "note_description": {
-                    "type": "string"
-                },
-                "note_name": {
-                    "type": "string"
-                }
-            }
-        },
         "types.Node": {
             "type": "object",
             "properties": {
+                "arialLabel": {
+                    "type": "string"
+                },
+                "className": {
+                    "type": "string"
+                },
+                "connectable": {
+                    "type": "boolean"
+                },
+                "content": {
+                    "$ref": "#/definitions/types.NodeContent"
+                },
                 "data": {
                     "$ref": "#/definitions/types.NodeData"
                 },
+                "deletable": {
+                    "type": "boolean"
+                },
+                "dragHandle": {
+                    "type": "string"
+                },
+                "dragging": {
+                    "type": "boolean"
+                },
+                "expandParent": {
+                    "type": "boolean"
+                },
+                "extent": {
+                    "type": "string"
+                },
+                "focusable": {
+                    "type": "boolean"
+                },
                 "folder_id": {
+                    "type": "string"
+                },
+                "height": {
+                    "type": "number"
+                },
+                "hidden": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "description": "Same as node id",
                     "type": "string"
                 },
                 "last_edited": {
                     "type": "string"
                 },
-                "node_content": {
-                    "$ref": "#/definitions/types.NodeContent"
-                },
                 "node_id": {
                     "type": "string"
-                },
-                "node_styles": {
-                    "$ref": "#/definitions/types.NodeStyles"
                 },
                 "note_id": {
                     "type": "string"
                 },
+                "parentNode": {
+                    "type": "string"
+                },
                 "position": {
-                    "$ref": "#/definitions/types.Position"
+                    "$ref": "#/definitions/types.NodePosition"
+                },
+                "positionAbsolute": {
+                    "type": "boolean"
+                },
+                "selectable": {
+                    "type": "boolean"
+                },
+                "selected": {
+                    "type": "boolean"
+                },
+                "sourcePosition": {
+                    "$ref": "#/definitions/types.NodePosition"
+                },
+                "style": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "targetPosition": {
+                    "$ref": "#/definitions/types.NodePosition"
+                },
+                "type": {
+                    "type": "string"
                 },
                 "user_id": {
                     "type": "string"
+                },
+                "width": {
+                    "type": "number"
+                },
+                "zIndex": {
+                    "type": "integer"
+                }
+            }
+        },
+        "types.NodeCodeContent": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "fileName": {
+                    "type": "string"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "validLanguage": {
+                    "type": "boolean"
                 }
             }
         },
         "types.NodeContent": {
             "type": "object",
             "properties": {
-                "markdown": {
+                "content_data": {
+                    "type": "string"
+                },
+                "content_header": {
+                    "type": "string"
+                },
+                "content_type": {
                     "type": "string"
                 }
             }
@@ -837,61 +1120,137 @@
         "types.NodeData": {
             "type": "object",
             "properties": {
+                "code": {
+                    "$ref": "#/definitions/types.NodeCodeContent"
+                },
+                "contentType": {
+                    "type": "string"
+                },
                 "description": {
                     "type": "string"
                 },
-                "label": {
+                "icon": {
                     "type": "string"
                 },
-                "node_category": {
+                "link": {
+                    "$ref": "#/definitions/types.NodeLinkContent"
+                },
+                "markdown": {
+                    "$ref": "#/definitions/types.NodeMarkdownContent"
+                },
+                "media": {
+                    "$ref": "#/definitions/types.NodeMediaContent"
+                },
+                "node_id": {
                     "type": "string"
+                },
+                "node_styles": {
+                    "$ref": "#/definitions/types.NodeStyles"
+                },
+                "node_theme": {
+                    "$ref": "#/definitions/types.NodeThemes"
+                },
+                "table": {
+                    "$ref": "#/definitions/types.NodeTableContent"
                 },
                 "title": {
                     "type": "string"
                 }
             }
         },
+        "types.NodeLinkContent": {
+            "type": "object",
+            "properties": {
+                "isLoadable": {
+                    "type": "boolean"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.NodeMarkdownContent": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "string"
+                },
+                "showPreview": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "types.NodeMediaContent": {
+            "type": "object",
+            "properties": {
+                "fileName": {
+                    "type": "string"
+                },
+                "remoteUrl": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.NodePosition": {
+            "type": "object",
+            "properties": {
+                "x": {
+                    "type": "number"
+                },
+                "y": {
+                    "type": "number"
+                }
+            }
+        },
         "types.NodeStyles": {
             "type": "object",
             "properties": {
-                "background_styles": {
-                    "type": "object"
+                "background_color": {
+                    "type": "string"
                 },
-                "description_styles": {
-                    "type": "object"
+                "border_color": {
+                    "type": "string"
                 },
-                "label_styles": {
-                    "type": "object"
+                "font_alignment": {
+                    "type": "string"
+                },
+                "font_color": {
+                    "type": "string"
+                },
+                "font_weight": {
+                    "type": "integer"
+                }
+            }
+        },
+        "types.NodeTableContent": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "string"
+                },
+                "renderTable": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "types.NodeThemes": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string"
+                },
+                "style": {
+                    "type": "string"
                 }
             }
         },
         "types.Note": {
-            "type": "object",
-            "properties": {
-                "date_created": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "folder_id": {
-                    "type": "string"
-                },
-                "last_edited": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "note_id": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "types.NoteDetail": {
             "type": "object",
             "properties": {
                 "date_created": {
@@ -912,9 +1271,6 @@
                 "last_edited": {
                     "type": "string"
                 },
-                "name": {
-                    "type": "string"
-                },
                 "nodes": {
                     "type": "array",
                     "items": {
@@ -924,50 +1280,36 @@
                 "note_id": {
                     "type": "string"
                 },
+                "note_name": {
+                    "type": "string"
+                },
                 "user_id": {
                     "type": "string"
                 }
             }
         },
-        "types.PatchNote": {
+        "types.NoteSummary": {
             "type": "object",
-            "required": [
-                "note_description",
-                "note_name"
-            ],
             "properties": {
-                "note_description": {
+                "date_created": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "folder_id": {
+                    "type": "string"
+                },
+                "last_edited": {
+                    "type": "string"
+                },
+                "note_id": {
                     "type": "string"
                 },
                 "note_name": {
                     "type": "string"
-                }
-            }
-        },
-        "types.Position": {
-            "type": "object",
-            "properties": {
-                "x": {
-                    "type": "integer"
                 },
-                "y": {
-                    "type": "integer"
-                }
-            }
-        },
-        "types.UpdateDataResponse": {
-            "type": "object",
-            "properties": {
-                "MatchedCount": {
-                    "type": "integer"
-                },
-                "ModifiedCount": {
-                    "type": "integer"
-                },
-                "UpsertedCount": {
-                    "type": "integer"
-                },
-                "UpsertedID": {
+                "user_id": {
                     "type": "string"
                 }
             }

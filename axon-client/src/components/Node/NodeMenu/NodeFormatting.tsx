@@ -1,5 +1,14 @@
 import React from "react";
-import { ThemeColors } from "src/shared/themes";
+import {
+  CgBorderStyleDashed,
+  CgBorderStyleSolid,
+  CgBorderStyleDotted,
+} from "react-icons/cg";
+import { Box, useTheme } from "@primer/react";
+import { useNodeEvents } from "src/hooks/node/useNodeEvents";
+import { CustomNodeProps, NodeDataProps } from "src/types/node";
+import NumberInput from "src/components/Input/NumberInput";
+import MenuButton from "src/components/Button/MenuButton";
 import {
   NodeMenuHeader,
   NodeMenuWrapper,
@@ -7,20 +16,11 @@ import {
   NodeMenuSubHeaders,
   NodeMenuBody,
   NodeMenuItemLabel,
-  RadioFlex,
-} from "./styles";
-import { useNodeEvents } from "src/hooks/node/useNodeEvents";
-import IconButton from "src/components/Button/IconButton";
-import { CustomNodeProps, NodeDataProps } from "src/types/node";
-import NumberInput from "src/components/Input/NumberInput";
-import {
-  CgBorderStyleDashed,
-  CgBorderStyleSolid,
-  CgBorderStyleDotted,
-} from "react-icons/cg";
+} from "./index.styles";
 
 const NodeFormatting: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
   const { type, id, data } = props;
+  const { theme } = useTheme();
   const { updateNodeBorderRadius, updateNodeBorderStyle } = useNodeEvents();
   return (
     <NodeMenuWrapper>
@@ -29,17 +29,18 @@ const NodeFormatting: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
       </NodeMenuHeader>
       <NodeMenuBody>
         <NodeMenuItem>
-          <div
-            style={{
+          <Box
+            sx={{
               display: "flex",
-              gap: "2rem",
+              gap: 4,
             }}
           >
-            <div
-              style={{
+            <Box
+              sx={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "1rem",
+                alignItems: "center",
+                gap: 2,
               }}
             >
               <NodeMenuItemLabel>Border Radius</NodeMenuItemLabel>
@@ -53,52 +54,65 @@ const NodeFormatting: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
                 setValue={updateNodeBorderRadius}
                 disabled={type === "paragraph"}
               />
-            </div>
-            <div
-              style={{
+            </Box>
+            <Box
+              sx={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "1rem",
+                alignItems: "center",
+                gap: 2,
               }}
             >
               <NodeMenuItemLabel>Border Style</NodeMenuItemLabel>
-              <RadioFlex id={`select-border-style-${id}`}>
-                <IconButton
+              <Box
+                id={`select-border-style-${id}`}
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 2,
+                }}
+              >
+                <MenuButton
                   id={`node-border-solid-${id}`}
                   name="Solid"
                   onClick={() => updateNodeBorderStyle("solid")}
-                  width="24px"
-                  height="24px"
-                  background={ThemeColors.bgHighlight2}
+                  width="28px"
+                  height="28px"
+                  hoverfill={theme?.colors.fg.default}
+                  backgroundHoverFill={theme?.colors.bg.variant2}
                   disabled={type === "paragraph"}
                 >
                   <CgBorderStyleSolid size={14} />
-                </IconButton>
-                <IconButton
+                </MenuButton>
+                <MenuButton
                   id={`node-border-dashed-${id}`}
                   name="Dashed"
                   onClick={() => updateNodeBorderStyle("dashed")}
-                  width="24px"
-                  height="24px"
-                  background={ThemeColors.bgHighlight2}
+                  width="28px"
+                  height="28px"
+                  hoverfill={theme?.colors.fg.default}
+                  backgroundHoverFill={theme?.colors.bg.variant2}
                   disabled={type === "paragraph"}
                 >
                   <CgBorderStyleDashed size={14} />
-                </IconButton>
-                <IconButton
+                </MenuButton>
+                <MenuButton
                   id={`node-border-dotted-${id}`}
                   name="Dotted"
                   onClick={() => updateNodeBorderStyle("dotted")}
-                  width="24px"
-                  height="24px"
-                  background={ThemeColors.bgHighlight2}
+                  width="28px"
+                  height="28px"
+                  hoverfill={theme?.colors.fg.default}
+                  backgroundHoverFill={theme?.colors.bg.variant2}
                   disabled={type === "paragraph"}
                 >
                   <CgBorderStyleDotted size={14} />
-                </IconButton>
-              </RadioFlex>
-            </div>
-          </div>
+                </MenuButton>
+              </Box>
+            </Box>
+          </Box>
         </NodeMenuItem>
       </NodeMenuBody>
     </NodeMenuWrapper>

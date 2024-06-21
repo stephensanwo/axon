@@ -1,17 +1,19 @@
 import React, { useContext, useState } from "react";
 import { ResizeParams } from "reactflow";
+import { Box, useTheme } from "@primer/react";
 import { NoteContext } from "src/context/notes";
 import { CustomNodeProps, NodeDataProps } from "src/types/node";
 import NodeMenu from "src/components/Node/NodeMenu";
 import { NodeHandles } from "src/components/Node/NodeHandles";
 import { useNodeEvents } from "src/hooks/node/useNodeEvents";
-import RenderIcon from "src/components/EditableLabels/RenderIcon";
-import { ThemeColors } from "src/shared/themes";
+import RenderIcon from "src/components/Icon/RenderIcon";
+import NodeWrapper from "src/components/Node/NodeWrapper";
+import { NODE_RESIZER_GUTTER } from "src/components/Node/index.types";
 import { IconNodeContainer, IconNodeContent } from "./index.styles";
-import NodeWrapper from "../NodeWrapper";
 
 const IconNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
   const { id, data } = props;
+  const { theme } = useTheme();
   const [resizing, setResizing] = useState<boolean>(false);
   const { selectedNode } = useContext(NoteContext);
   const {
@@ -26,7 +28,6 @@ const IconNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
   return (
     <>
       <NodeWrapper
-        color={ThemeColors.borderLight}
         isVisible={selectedNode?.id === id}
         onResizeStart={(e: any, params: ResizeParams) => {
           setResizing(() => true);
@@ -44,14 +45,15 @@ const IconNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
         shouldResize={() => true}
       />
       <IconNodeContainer
+        id={`icon-node-${id}`}
         tabIndex={0}
         active={selectedNode?.id === id}
         background={data.node_styles.background_color}
         borderradius={`${data.node_styles.border_radius}px`}
         borderstyle={data.node_styles.border_style}
         border={data.node_styles.border_color}
-        width={data.width - 4}
-        height={data.height - 4}
+        width={data.width - NODE_RESIZER_GUTTER}
+        height={data.height - NODE_RESIZER_GUTTER}
         margin={2}
       >
         <IconNodeContent>
@@ -66,20 +68,20 @@ const IconNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
                   ? data.node_styles.border_color
                   : data.node_theme.style === "none"
                   ? data.node_theme.color
-                  : ThemeColors.white
+                  : theme?.colors.fg.default
               }
             />
           )}
           {/* Overlay */}
-          <div
+          <Box
             onClick={() => handleNodeClick(id)}
-            style={{
+            sx={{
               backgroundColor: "transparent",
               position: "absolute",
               width: "100%",
               height: "100%",
             }}
-          ></div>
+          ></Box>
         </IconNodeContent>
       </IconNodeContainer>
       {selectedNode?.id === id && !resizing && (

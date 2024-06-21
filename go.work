@@ -1,9 +1,10 @@
-go 1.20
+go 1.22.0
 
 use (
-    ./axon-auth
-    ./axon-background
-    ./axon-cdk
-    ./axon-events
-    ./axon-server
+	./axon-auth
+	./axon-background
+	./axon-cdk
+	./axon-events
+	./axon-server
+	./auth-service
 )

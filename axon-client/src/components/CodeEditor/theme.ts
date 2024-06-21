@@ -1,39 +1,41 @@
 import { editor } from "monaco-editor";
-import { ThemeColors } from "src/shared/themes";
+import { Theme } from "src/types/theme";
 
-export const CustomEditorTheme = {
-  base: "vs-dark",
-  inherit: true,
-  colors: {
-    "editor.background": ThemeColors.bgDark,
-    "editorStickScrollbar.background": ThemeColors.bgDark,
-    "breadcrumb.background": ThemeColors.bgDark,
-    "editorGutter.background": ThemeColors.bgDark,
-    "editorMarkerNavigation.background": ThemeColors.bgDark,
+export function getCustomEditorTheme(theme: Theme) {
+  return {
+    base: "vs-dark",
+    inherit: true,
+    colors: {
+      "editor.background": theme?.colors.bg.default,
+      "editorStickScrollbar.background": theme?.colors.bg.default,
+      "breadcrumb.background": theme?.colors.bg.default,
+      "editorGutter.background": theme?.colors.bg.default,
+      "editorMarkerNavigation.background": theme?.colors.bg.default,
 
-    // Input
-    "input.background": ThemeColors.bgDark2,
-    "input.foreground": ThemeColors.textLight,
-    "inputOption.activeBorder": ThemeColors.primary,
-    "inputOption.hoverBackground": ThemeColors.primaryVariant1,
+      // Input
+      "input.background": theme?.colors.bg.default,
+      "input.foreground": theme?.colors.text.grayLight,
+      "inputOption.activeBorder": theme?.colors.primary.default,
+      "inputOption.hoverBackground": theme?.colors.primary.variant1,
 
-    // List
-    "list.activeSelectionBackground": ThemeColors.primaryVariant1,
+      // List
+      "list.activeSelectionBackground": theme?.colors.primary.variant1,
 
-    "dropdown.background": ThemeColors.bgDark2,
-    "dropdown.border": ThemeColors.bgDark2,
-    "checkbox.background": ThemeColors.bgDark2,
-    "checkbox.border": ThemeColors.bgDark2,
-    "menu.background": ThemeColors.bgDark2,
+      "dropdown.background": theme?.colors.bg.default,
+      "dropdown.border": theme?.colors.bg.default,
+      "checkbox.background": theme?.colors.bg.default,
+      "checkbox.border": theme?.colors.bg.default,
+      "menu.background": theme?.colors.bg.default,
 
-    "menu.selectionBackground": ThemeColors.primaryVariant1,
+      "menu.selectionBackground": theme?.colors.primary.variant1,
 
-    // Scrollbar
-    "scrollbar.shadow": ThemeColors.bgDark2,
-    "scrollbarSlider.activeBackground": ThemeColors.bgHighlight2,
-    "scrollbarSlider.background": ThemeColors.bgDark2,
-    "scrollbarSlider.hoverBackground": ThemeColors.bgHighlight2,
-  },
-  encodedTokensColors: [],
-  rules: [],
-} satisfies editor.IStandaloneThemeData;
+      // Scrollbar
+      "scrollbar.shadow": theme?.colors.bg.default,
+      "scrollbarSlider.activeBackground": theme?.colors.bg.variant2,
+      "scrollbarSlider.background": theme?.colors.bg.default,
+      "scrollbarSlider.hoverBackground": theme?.colors.bg.variant2,
+    },
+    encodedTokensColors: [],
+    rules: [],
+  } satisfies editor.IStandaloneThemeData;
+}

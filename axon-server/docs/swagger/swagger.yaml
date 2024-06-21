@@ -1,7 +1,70 @@
+basePath: /
 definitions:
-  types.BaseResponse:
+  axon-server_lib_types.BaseResponse:
     properties:
       message: {}
+    type: object
+  axon-server_lib_types.FieldErrors:
+    properties:
+      fields:
+        additionalProperties:
+          type: string
+        type: object
+      msg:
+        type: string
+      status:
+        type: integer
+    type: object
+  axon-server_lib_types.MutateFolder:
+    properties:
+      folder_name:
+        type: string
+    required:
+    - folder_name
+    type: object
+  axon-server_lib_types.MutateNote:
+    properties:
+      description:
+        type: string
+      folder_id:
+        type: string
+      note_name:
+        type: string
+    required:
+    - description
+    - folder_id
+    - note_name
+    type: object
+  axon-server_lib_types.PatchNote:
+    properties:
+      description:
+        type: string
+      note_name:
+        type: string
+    type: object
+  axon-server_lib_types.PostPublicNote:
+    properties:
+      folder_id:
+        type: string
+      note_id:
+        type: string
+      public_note_id:
+        type: string
+    required:
+    - folder_id
+    - note_id
+    - public_note_id
+    type: object
+  axon-server_lib_types.UpdateDataResponse:
+    properties:
+      MatchedCount:
+        type: integer
+      ModifiedCount:
+        type: integer
+      UpsertedCount:
+        type: integer
+      UpsertedID:
+        type: string
     type: object
   types.Edge:
     properties:
@@ -26,26 +89,15 @@ definitions:
       user_id:
         type: string
     type: object
-  types.FieldErrors:
-    properties:
-      fields:
-        additionalProperties:
-          type: string
-        type: object
-      msg:
-        type: string
-      status:
-        type: integer
-    type: object
   types.Folder:
     properties:
       date_created:
         type: string
       folder_id:
         type: string
-      last_edited:
+      folder_name:
         type: string
-      name:
+      last_edited:
         type: string
       user_id:
         type: string
@@ -56,101 +108,189 @@ definitions:
         type: string
       folder_id:
         type: string
-      last_edited:
+      folder_name:
         type: string
-      name:
+      last_edited:
         type: string
       notes:
         items:
-          $ref: '#/definitions/types.Note'
+          $ref: '#/definitions/types.NoteSummary'
         type: array
       user_id:
         type: string
     type: object
-  types.MutateFolder:
-    properties:
-      folder_name:
-        type: string
-    required:
-    - folder_name
-    type: object
-  types.MutateNote:
-    properties:
-      folder_id:
-        type: string
-      note_description:
-        type: string
-      note_name:
-        type: string
-    required:
-    - folder_id
-    - note_description
-    - note_name
-    type: object
   types.Node:
     properties:
+      arialLabel:
+        type: string
+      className:
+        type: string
+      connectable:
+        type: boolean
+      content:
+        $ref: '#/definitions/types.NodeContent'
       data:
         $ref: '#/definitions/types.NodeData'
+      deletable:
+        type: boolean
+      dragHandle:
+        type: string
+      dragging:
+        type: boolean
+      expandParent:
+        type: boolean
+      extent:
+        type: string
+      focusable:
+        type: boolean
       folder_id:
+        type: string
+      height:
+        type: number
+      hidden:
+        type: boolean
+      id:
+        description: Same as node id
         type: string
       last_edited:
         type: string
-      node_content:
-        $ref: '#/definitions/types.NodeContent'
       node_id:
         type: string
-      node_styles:
-        $ref: '#/definitions/types.NodeStyles'
       note_id:
         type: string
+      parentNode:
+        type: string
       position:
-        $ref: '#/definitions/types.Position'
+        $ref: '#/definitions/types.NodePosition'
+      positionAbsolute:
+        type: boolean
+      selectable:
+        type: boolean
+      selected:
+        type: boolean
+      sourcePosition:
+        $ref: '#/definitions/types.NodePosition'
+      style:
+        additionalProperties: true
+        type: object
+      targetPosition:
+        $ref: '#/definitions/types.NodePosition'
+      type:
+        type: string
       user_id:
         type: string
+      width:
+        type: number
+      zIndex:
+        type: integer
+    type: object
+  types.NodeCodeContent:
+    properties:
+      code:
+        type: string
+      fileName:
+        type: string
+      language:
+        type: string
+      validLanguage:
+        type: boolean
     type: object
   types.NodeContent:
     properties:
-      markdown:
+      content_data:
+        type: string
+      content_header:
+        type: string
+      content_type:
         type: string
     type: object
   types.NodeData:
     properties:
+      code:
+        $ref: '#/definitions/types.NodeCodeContent'
+      contentType:
+        type: string
       description:
         type: string
-      label:
+      icon:
         type: string
-      node_category:
+      link:
+        $ref: '#/definitions/types.NodeLinkContent'
+      markdown:
+        $ref: '#/definitions/types.NodeMarkdownContent'
+      media:
+        $ref: '#/definitions/types.NodeMediaContent'
+      node_id:
         type: string
+      node_styles:
+        $ref: '#/definitions/types.NodeStyles'
+      node_theme:
+        $ref: '#/definitions/types.NodeThemes'
+      table:
+        $ref: '#/definitions/types.NodeTableContent'
       title:
         type: string
     type: object
+  types.NodeLinkContent:
+    properties:
+      isLoadable:
+        type: boolean
+      url:
+        type: string
+    type: object
+  types.NodeMarkdownContent:
+    properties:
+      data:
+        type: string
+      showPreview:
+        type: boolean
+    type: object
+  types.NodeMediaContent:
+    properties:
+      fileName:
+        type: string
+      remoteUrl:
+        type: string
+      size:
+        type: integer
+      type:
+        type: string
+    type: object
+  types.NodePosition:
+    properties:
+      x:
+        type: number
+      "y":
+        type: number
+    type: object
   types.NodeStyles:
     properties:
-      background_styles:
-        type: object
-      description_styles:
-        type: object
-      label_styles:
-        type: object
+      background_color:
+        type: string
+      border_color:
+        type: string
+      font_alignment:
+        type: string
+      font_color:
+        type: string
+      font_weight:
+        type: integer
+    type: object
+  types.NodeTableContent:
+    properties:
+      data:
+        type: string
+      renderTable:
+        type: boolean
+    type: object
+  types.NodeThemes:
+    properties:
+      color:
+        type: string
+      style:
+        type: string
     type: object
   types.Note:
-    properties:
-      date_created:
-        type: string
-      description:
-        type: string
-      folder_id:
-        type: string
-      last_edited:
-        type: string
-      name:
-        type: string
-      note_id:
-        type: string
-      user_id:
-        type: string
-    type: object
-  types.NoteDetail:
     properties:
       date_created:
         type: string
@@ -164,83 +304,47 @@ definitions:
         type: string
       last_edited:
         type: string
-      name:
-        type: string
       nodes:
         items:
           $ref: '#/definitions/types.Node'
         type: array
       note_id:
         type: string
+      note_name:
+        type: string
       user_id:
         type: string
     type: object
-  types.PatchNote:
+  types.NoteSummary:
     properties:
-      note_description:
+      date_created:
+        type: string
+      description:
+        type: string
+      folder_id:
+        type: string
+      last_edited:
+        type: string
+      note_id:
         type: string
       note_name:
         type: string
-    required:
-    - note_description
-    - note_name
-    type: object
-  types.Position:
-    properties:
-      x:
-        type: integer
-      "y":
-        type: integer
-    type: object
-  types.UpdateDataResponse:
-    properties:
-      MatchedCount:
-        type: integer
-      ModifiedCount:
-        type: integer
-      UpsertedCount:
-        type: integer
-      UpsertedID:
+      user_id:
         type: string
     type: object
+host: 127.0.0.1:8100
 info:
-  contact: {}
+  contact:
+    email: stephen.sanwo@icloud.com
+    name: Stephen Sanwo
+  description: Axon Core API
+  license:
+    name: MIT
+    url: https://mit-license.org
+  termsOfService: stephen.sanwo@icloud.com
+  title: Axon Core API
+  version: "1.0"
 paths:
-  /auth-user:
-    get:
-      description: Query Authenticated User
-      operationId: get-auth-user
-      responses:
-        "200":
-          description: User
-          schema:
-            $ref: '#/definitions/types.Folder'
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-        "401":
-          description: Unauthorized
-          schema:
-            type: string
-      summary: Query Authenticated User
-      tags:
-      - User
-  /callback:
-    get:
-      consumes:
-      - application/json
-      description: AuthCallback
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/types.BaseResponse'
-      summary: AuthCallback
-      tags:
-      - Auth
   /folder:
     delete:
       consumes:
@@ -259,7 +363,7 @@ paths:
         "200":
           description: Records Deleted
           schema:
-            type: int
+            type: string
         "400":
           description: Bad Request
           schema:
@@ -316,14 +420,14 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/types.MutateFolder'
+          $ref: '#/definitions/axon-server_lib_types.MutateFolder'
       produces:
       - application/json
       responses:
         "200":
           description: Update Response
           schema:
-            $ref: '#/definitions/types.UpdateDataResponse'
+            $ref: '#/definitions/axon-server_lib_types.UpdateDataResponse'
         "401":
           description: Unauthorized
           schema:
@@ -331,7 +435,7 @@ paths:
         "422":
           description: Unprocessible Entity
           schema:
-            $ref: '#/definitions/types.FieldErrors'
+            $ref: '#/definitions/axon-server_lib_types.FieldErrors'
       summary: Patch Folder
       tags:
       - Folder
@@ -346,7 +450,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/types.MutateFolder'
+          $ref: '#/definitions/axon-server_lib_types.MutateFolder'
       produces:
       - application/json
       responses:
@@ -365,7 +469,7 @@ paths:
         "422":
           description: Unprocessible Entity
           schema:
-            $ref: '#/definitions/types.FieldErrors'
+            $ref: '#/definitions/axon-server_lib_types.FieldErrors'
       summary: Create New Folder
       tags:
       - Folder
@@ -421,6 +525,66 @@ paths:
       summary: Query all folders
       tags:
       - Folder
+  /get-public-note:
+    get:
+      consumes:
+      - application/json
+      description: Query Public Note
+      operationId: get-public-note
+      parameters:
+      - description: Public Note ID
+        in: query
+        name: public_note_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Public Note
+          schema:
+            $ref: '#/definitions/types.Note'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Query Public Note
+      tags:
+      - Public Note
+  /get-shared-note:
+    get:
+      consumes:
+      - application/json
+      description: Query Shared Note
+      operationId: get-shared-note
+      parameters:
+      - description: Note ID
+        in: query
+        name: note_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Public Note ID
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Query Shared Note
+      tags:
+      - Note
   /note:
     delete:
       consumes:
@@ -444,7 +608,7 @@ paths:
         "200":
           description: Records Deleted
           schema:
-            type: int
+            type: string
         "400":
           description: Bad Request
           schema:
@@ -511,14 +675,14 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/types.PatchNote'
+          $ref: '#/definitions/axon-server_lib_types.PatchNote'
       produces:
       - application/json
       responses:
         "200":
           description: Update Response
           schema:
-            $ref: '#/definitions/types.UpdateDataResponse'
+            $ref: '#/definitions/axon-server_lib_types.UpdateDataResponse'
         "401":
           description: Unauthorized
           schema:
@@ -526,7 +690,7 @@ paths:
         "422":
           description: Unprocessible Entity
           schema:
-            $ref: '#/definitions/types.FieldErrors'
+            $ref: '#/definitions/axon-server_lib_types.FieldErrors'
       summary: Patch Note
       tags:
       - Note
@@ -541,7 +705,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/types.MutateNote'
+          $ref: '#/definitions/axon-server_lib_types.MutateNote'
       produces:
       - application/json
       responses:
@@ -560,16 +724,16 @@ paths:
         "422":
           description: Unprocessible Entity
           schema:
-            $ref: '#/definitions/types.FieldErrors'
+            $ref: '#/definitions/axon-server_lib_types.FieldErrors'
       summary: Create New Note
       tags:
       - Note
-  /note-detail:
+  /note-summary:
     get:
       consumes:
       - application/json
-      description: Query Note Detail
-      operationId: get-note
+      description: Query Note Summary
+      operationId: get-note-summary
       parameters:
       - description: Folder ID
         in: query
@@ -585,9 +749,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: NoteDetail
+          description: NoteSummary
           schema:
-            $ref: '#/definitions/types.NoteDetail'
+            $ref: '#/definitions/types.NoteSummary'
         "400":
           description: Bad Request
           schema:
@@ -596,15 +760,15 @@ paths:
           description: Unauthorized
           schema:
             type: string
-      summary: Query Note Detail
+      summary: Query Note Summary
       tags:
       - Note
   /notes:
     get:
       consumes:
       - application/json
-      description: Publish Messages to Channel
-      operationId: publish
+      description: Query all notes
+      operationId: get-notes
       parameters:
       - description: Folder ID
         in: query
@@ -628,7 +792,7 @@ paths:
           description: Unauthorized
           schema:
             type: string
-      summary: Publish Messages to Channel
+      summary: Query all notes
       tags:
       - Note
   /ping:
@@ -640,8 +804,73 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/types.BaseResponse'
+            $ref: '#/definitions/axon-server_lib_types.BaseResponse'
       summary: Ping the server
       tags:
       - Ping
+  /publish-public-note:
+    post:
+      consumes:
+      - application/json
+      description: Create New Public Note
+      operationId: publish-public-note
+      parameters:
+      - description: Public Note Request Object
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/axon-server_lib_types.PostPublicNote'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Public Note Id
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "422":
+          description: Unprocessible Entity
+          schema:
+            $ref: '#/definitions/axon-server_lib_types.FieldErrors'
+      summary: Create New Public Note
+      tags:
+      - Note
+  /upload-media:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload a media file
+      operationId: upload-media
+      parameters:
+      - description: Media file to upload
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: File uploaded successfully
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+      summary: Upload media file
+      tags:
+      - Note
 swagger: "2.0"

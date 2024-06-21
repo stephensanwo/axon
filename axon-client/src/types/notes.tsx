@@ -42,6 +42,23 @@ export type INoteAction =
       payload: IEdge[];
     };
 
+export type NoteMenuTypes =
+  | "content"
+  | "tree"
+  | "publish"
+  | "settings"
+  | "extensions"
+  | "fullscreen";
+
+export type NoteMenuProps = {
+  id: string;
+  name: string;
+  description: string;
+  menuType: NoteMenuTypes;
+  icon: React.ReactNode;
+  disabled?: boolean;
+};
+
 export interface IMutateNote
   extends Omit<INoteSummary, "user_id" | "date_created" | "last_edited"> {}
 
@@ -67,9 +84,32 @@ export interface IDefaultNodeSettings {
   node_type: NodeTypes;
 }
 
-export type NoteMenuEvents =
-  | "toggle-content"
-  | "toggle-publish"
-  | "toggle-settings"
-  | "toggle-user"
-  | "toggle-extensions";
+export type NoteMenuDialogProps = {
+  note: INoteSummary;
+  noteMenuDialog: NoteMenuTypes | null;
+  closeNoteMenuDialog: React.Dispatch<
+    React.SetStateAction<NoteMenuTypes | null>
+  >;
+};
+
+export interface IColor{
+  label: string
+  hex: string
+}
+
+export interface INoteTheme {
+  colors: IColor[]
+}
+
+export interface INoteSettingsOptions {
+  grid: boolean;
+  default_node_settings: IDefaultNodeSettings;
+}
+
+
+// export type NoteMenuEvents =
+//   | "toggle-content"
+//   | "toggle-publish"
+//   | "toggle-settings"
+//   | "toggle-user"
+//   | "toggle-extensions";

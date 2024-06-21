@@ -1,17 +1,15 @@
-import { ThemeColors } from "src/shared/themes";
+import { Box, themeGet } from "@primer/react";
 import styled from "styled-components";
 
-export const NodePanelWrapper = styled.div`
+export const NodePanelWrapper = styled(Box)`
   position: absolute;
   min-height: 150px;
-  width: 45px;
-  top: 100px;
+  width: 40px;
+  top: 120px;
   left: 10px;
-  background-color: ${ThemeColors.bgDark2};
-  border-radius: 8px;
-  z-index: 100;
-  padding-left: 12px;
-  padding-right: 12px;
+  background-color: ${themeGet("colors.bg.variant1")};
+  border-radius: 6px;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;

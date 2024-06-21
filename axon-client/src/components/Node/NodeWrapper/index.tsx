@@ -1,6 +1,6 @@
+import { useTheme } from "@primer/react";
 import React, { CSSProperties } from "react";
 import { NodeResizer, NodeResizerProps } from "reactflow";
-import { ThemeColors } from "src/shared/themes";
 
 export interface INodeWrapperProps extends NodeResizerProps {}
 
@@ -11,7 +11,7 @@ export const DefaultWrapperStyle: CSSProperties = {
 
 const NodeWrapper: React.FC<INodeWrapperProps> = ({
   nodeId,
-  color = ThemeColors.borderLight,
+  color,
   isVisible = true,
   keepAspectRatio = false,
   onResizeStart,
@@ -20,10 +20,11 @@ const NodeWrapper: React.FC<INodeWrapperProps> = ({
   shouldResize = () => true,
   ...props
 }) => {
+  const { theme } = useTheme();
   return (
     <NodeResizer
       nodeId={nodeId}
-      color={color}
+      color={color ?? theme?.colors.border.variant2}
       isVisible={isVisible}
       keepAspectRatio={keepAspectRatio}
       onResizeStart={onResizeStart}

@@ -21,7 +21,7 @@ import {
   LexicalCommand,
 } from "lexical";
 import { useEffect } from "react";
-import IconButton from "src/components/Button/IconButton";
+import IconButton from "src/components/Button/MenuButton";
 import { ThemeColors } from "src/shared/themes";
 
 export const INSERT_YOUTUBE_COMMAND: LexicalCommand<string> = createCommand(

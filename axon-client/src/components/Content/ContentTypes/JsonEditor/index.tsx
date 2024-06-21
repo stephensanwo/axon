@@ -1,7 +1,10 @@
 import { languages } from "monaco-editor";
 import Editor from "src/components/CodeEditor/Editor";
 import { useJson } from "src/hooks/content/useJson";
-import { ContentBody, ContentContainer } from "../Shared/styles";
+import {
+  ContentBody,
+  ContentContainer,
+} from "src/components/Content/index.styles";
 
 const JsonEditor = () => {
   const { json, handleJsonUpdate } = useJson();

@@ -16,7 +16,7 @@ import {
   createCommand,
 } from "lexical";
 import { $setBlocksType } from "@lexical/selection";
-import IconButton from "src/components/Button/IconButton";
+import IconButton from "src/components/Button/MenuButton";
 import { StateColors, ThemeColors } from "src/shared/themes";
 import { PiArticleFill } from "react-icons/pi";
 

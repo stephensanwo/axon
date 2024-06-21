@@ -1,9 +1,9 @@
 import { Fragment, useContext, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import { Theme } from "@carbon/react";
 import AppContext from "src/context/app";
 import { MobileWarningDiv } from "src/shared/layout";
 import Header from "src/components/Header";
+import AppIcon from "src/components/AppIcon";
 
 const Layout = () => {
   const { showMobileWarning, setShowMobileWarning } = useContext(AppContext);
@@ -13,8 +13,7 @@ const Layout = () => {
   }, []);
 
   return (
-    <Theme theme="g100">
-      <Header />
+    <>
       {showMobileWarning ? (
         <MobileWarningDiv dark>
           <p>
@@ -27,7 +26,7 @@ const Layout = () => {
           <Outlet />
         </Fragment>
       )}
-    </Theme>
+    </>
   );
 };
 

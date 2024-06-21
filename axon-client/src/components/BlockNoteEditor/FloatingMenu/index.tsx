@@ -30,8 +30,8 @@ import {
   setFloatingElemPosition,
 } from "../utils";
 import { FloatingMenuWrapper } from "./style";
-import IconButton from "src/components/Button/IconButton";
-import { ThemeColors } from "src/shared/themes";
+import IconButton from "src/components/Button/MenuButton";
+// import { ThemeColors } from "src/shared/themes";
 import {
   PiTextB,
   PiTextItalic,
@@ -46,7 +46,7 @@ import {
 } from "react-icons/pi";
 import { RiSubscript, RiSuperscript } from "react-icons/ri";
 import IconDropdownButton from "src/components/Button/IconDropdownButton";
-import { FloatingMenuDropdownTypes } from "../interface";
+import { FloatingMenuDropdownTypes } from "../index.types";
 import { FloatingMenuDropdown } from "./Dropdown";
 import { sanitizeUrl } from "src/utils/url";
 // import {INSERT_INLINE_COMMAND} from '../CommentPlugin';
@@ -233,7 +233,7 @@ function TextFormatFloatingToolbar({
           className="floating-text-format-popup"
           showDropdown={showDropdown}
         >
-          <div data-floating-menu>
+          {/* <div data-floating-menu>
             {editor.isEditable() && (
               <>
                 <IconButton
@@ -395,7 +395,7 @@ function TextFormatFloatingToolbar({
                 </IconButton>
               </>
             )}
-          </div>
+          </div> */}
           <FloatingMenuDropdown
             dropDownType={showDropdown}
             namespace={namespace}

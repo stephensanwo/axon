@@ -18,5 +18,6 @@ export function applyOpacity(
 }
 
 export function validateHexColor(hexColor: string): boolean {
-  return /^#[0-9A-F]{6}$/i.test(hexColor);
+  return /^#[0-9A-F]{6}([0-9A-F]{2})?$/i.test(hexColor);
 }
+

@@ -1,3 +1,2 @@
-import "./style.scss";
-export { default as InlineLoader } from "./InlineLoader";
+export { Spinner } from "./Spinner";
 export { default as Loader } from "./Loader";

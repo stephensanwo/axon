@@ -1,3 +1,4 @@
+import { JSONContent } from "@tiptap/react";
 import { EditorState } from "lexical";
 import { Node, Position, XYPosition } from "reactflow";
 
@@ -43,6 +44,10 @@ export interface INodeJsonEditorContent {
 }
 
 export interface INodeBlockEditorContent extends EditorState {}
+
+export const BLOCK_EDITOR_INITIAL_STATE =
+  '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"root","version":1}}';
+
 export interface NodeDataProps {
   user_id: string;
   folder_id: string;
@@ -54,13 +59,13 @@ export interface NodeDataProps {
   title: string;
   description: string;
   contentType: NodeContentTypes | null;
-  block?: INodeBlockEditorContent;
+  block?: string;
   code?: INodeCodeContent;
   json?: INodeJsonEditorContent;
   link?: INodeLinkContent;
   inlineImage?: INodeInlineImage;
   markdown?: INodeMarkdownContent;
-  block_note?: EditorState | null;
+  block_note?: JSONContent;
   icon?: INodeIcon;
   node_theme: NodeThemes;
   node_styles: NodeStyleProps;
@@ -86,12 +91,7 @@ export type DefaultNodeTypes =
 
 export type ExtendedNodeTypes = "link" | "image" | "code" | "json" | "markdown";
 
-export type NodeContentTypes =
-  | "markdown"
-  | "link"
-  | "json_editor"
-  | "code"
-  | "block_editor";
+export type NodeContentTypes = "markdown" | "json_editor" | "code" | "block_editor";
 
 export interface NodeOptions {
   id: string;

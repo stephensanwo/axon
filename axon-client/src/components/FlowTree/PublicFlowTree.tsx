@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import ReactFlow, { ReactFlowProvider } from "reactflow";
-import CustomEdge from "../Edge/CustomEdge";
+import CustomEdge from "../Edge/CurveEdge";
 import { edgeTypes } from "../Edge/Types";
 import { AxonControls } from "./Controls";
 import { nodeTypes } from "../Node/NodeTypes";

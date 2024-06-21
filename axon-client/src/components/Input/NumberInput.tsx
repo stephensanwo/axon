@@ -1,8 +1,6 @@
 import React from "react";
-import IconButton from "../Button/IconButton";
-import { ThemeColors } from "src/shared/themes";
-import { Subtract } from "@carbon/icons-react";
-import { Add } from "@carbon/icons-react";
+import { IconButton, useTheme } from "@primer/react";
+import { RiAddFill, RiSubtractFill } from "react-icons/ri";
 
 const NumberInput: React.FC<{
   id: string;
@@ -16,6 +14,7 @@ const NumberInput: React.FC<{
 }> = (props) => {
   const { id, value, setValue, step, suffix, minValue, maxValue, disabled } =
     props;
+  const { theme } = useTheme();
   const increaseFn = () => {
     if (value + step <= maxValue) {
       setValue(value + step);
@@ -32,21 +31,21 @@ const NumberInput: React.FC<{
       id={`number-input-${id}`}
       style={{
         display: "flex",
-        gap: "8px",
+        gap: 8,
         alignItems: "center",
+        height: "28px",
       }}
     >
       <IconButton
         id={`decrease-${id}`}
         name="Decrease"
-        width="24px"
-        height="24px"
-        background={ThemeColors.bgHighlight2}
+        size="small"
         onClick={() => decreaseFn()}
         disabled={disabled}
-      >
-        <Subtract size={14} />
-      </IconButton>
+        icon={RiSubtractFill}
+        aria-label="Decrease"
+      />
+
       <div
         id={`number-input-value-${id}`}
         style={{
@@ -57,21 +56,19 @@ const NumberInput: React.FC<{
       >
         <p
           style={{
-            color: disabled ? ThemeColors.textDark : ThemeColors.white,
+            color: disabled ? theme?.colors.gray : theme?.colors.gray,
           }}
         >{`${value}${suffix || ""}`}</p>
       </div>
       <IconButton
         id={`increase-${id}`}
         name="Increase"
-        width="24px"
-        height="24px"
-        background={ThemeColors.bgHighlight2}
         onClick={() => increaseFn()}
         disabled={disabled}
-      >
-        <Add size={14} />
-      </IconButton>
+        size="small"
+        aria-label="Increase"
+        icon={RiAddFill}
+      />
     </div>
   );
 };

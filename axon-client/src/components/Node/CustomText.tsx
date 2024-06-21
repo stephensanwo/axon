@@ -1,18 +1,20 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { ResizeParams } from "reactflow";
+import { useTheme } from "@primer/react";
 import { CustomNodeProps, NodeDataProps } from "src/types/node";
 import { useNodeEvents } from "src/hooks/node/useNodeEvents";
 import NodeMenu from "src/components/Node/NodeMenu";
-import NoteContext from "src/context/notes";
-import { ThemeColors } from "src/shared/themes";
 import { TextArea } from "src/components/Input/TextArea";
 import NodeWrapper from "src/components/Node/NodeWrapper";
+import { useNoteContext } from "src/hooks/notes/useNoteContext";
+import { NODE_RESIZER_GUTTER } from "./index.types";
 
 const CustomText: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
   const { id, data } = props;
   const [resizing, setResizing] = useState<boolean>(false);
-  const { selectedNode } = useContext(NoteContext);
+  const { selectedNode } = useNoteContext();
   const contentRef = React.createRef<any>();
+  const { theme } = useTheme();
   const {
     duplicateNode,
     deleteNode,
@@ -22,9 +24,6 @@ const CustomText: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
     handleNodeInteraction,
     handleNodeContentChange,
   } = useNodeEvents();
-
-  const NODE_RESIZER_GUTTER: number = 4;
-
   return (
     <>
       <NodeWrapper
@@ -40,6 +39,7 @@ const CustomText: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
         }}
       />
       <TextArea
+        id={`custon-text-node-${id}`}
         ref={contentRef}
         disabled={false}
         onChange={(e: any) => handleNodeContentChange(e)}
@@ -52,7 +52,7 @@ const CustomText: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
         selected={selectedNode?.id === id}
         fontSize={data.node_styles.font_size}
         fontWeight={data.node_styles.font_weight}
-        color={data.node_styles.font_color ?? ThemeColors.white}
+        color={data.node_styles.font_color ?? theme?.colors.text.primary}
         textalign={data.node_styles.font_alignment}
         padding={8}
         width={data?.width - NODE_RESIZER_GUTTER}

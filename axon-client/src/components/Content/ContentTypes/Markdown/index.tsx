@@ -1,7 +1,10 @@
-import { ContentBody, ContentContainer } from "../Shared/styles";
-import Tabs from "../Shared/Tabs";
-import { PiCodeBold } from "react-icons/pi";
+import { PiCodeLight } from "react-icons/pi";
 import { BsFillMarkdownFill } from "react-icons/bs";
+import {
+  ContentBody,
+  ContentContainer,
+} from "src/components/Content/index.styles";
+import Tabs from "src/components/Tabs";
 import {
   AxonMarkdownInput,
   AxonMarkdownPreview,
@@ -12,20 +15,19 @@ const Markdown = () => {
     <ContentContainer id="node-content-container">
       <ContentBody>
         <Tabs
-          children={{
-            header: [
-              {
-                label: "Edit Markdown",
-                icon: <PiCodeBold size={18} />,
-              },
-              {
-                label: "Preview Markdown",
-                icon: <BsFillMarkdownFill size={18} />,
-              },
-            ],
-            content: [<AxonMarkdownInput />, <AxonMarkdownPreview />],
-          }}
-        />
+          name="Markdown"
+          headers={[
+            {
+              label: "Edit Markdown",
+              icon: <PiCodeLight size={18} />,
+            },
+            {
+              label: "Preview Markdown",
+              icon: <BsFillMarkdownFill size={18} />,
+            },
+          ]}
+          content={[<AxonMarkdownInput />, <AxonMarkdownPreview />]}
+        ></Tabs>
       </ContentBody>
     </ContentContainer>
   );

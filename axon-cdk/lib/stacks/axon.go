@@ -2,6 +2,7 @@ package cdk_stacks
 
 import (
 	cdk_constructs "axon-cdk/lib/constructs"
+	"fmt"
 
 	"axon-cdk/lib/types"
 
@@ -23,13 +24,15 @@ func AxonStack(scope constructs.Construct, id string, props *CdkStackProps) awsc
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
 	// Create the DynamoDB table
-	cdk_constructs.Table(stack, "AxonTable", &cdk_constructs.CdkDynamoDBTableProps{
-		TableName: "axon",
-		PrimaryKey: "partition_key",
-		SortKey: "sort_key",
-		SecondarySortKeys: []string{"date_created"},
-		// Add any secondary indexes here if needed
-	})
+	for _, table := range props.AxonCdkContext.DDB {
+		cdk_constructs.Table(stack, fmt.Sprintf("AxonTable-%s", table), &cdk_constructs.CdkDynamoDBTableProps{
+			TableName: table,
+			PrimaryKey: "partition_key",
+			SortKey: "sort_key",
+			SecondarySortKeys: []string{"date_created"},
+			// Add any secondary indexes here if needed
+		})
+	}
 
 	// Create the User Session DAX table
 	cdk_constructs.Table(stack, "AxonUserSessionTable", &cdk_constructs.CdkDynamoDBTableProps{
@@ -46,14 +49,14 @@ func AxonStack(scope constructs.Construct, id string, props *CdkStackProps) awsc
 	// userSessionTable.Node().AddDependency(daxCluster)
 
 	// Create an SQS Queues
-	for _, queue := range props.AxonCdkContext.Settings.Queues {
+	for _, queue := range props.AxonCdkContext.Queues {
 		cdk_constructs.Queue(stack, queue, &cdk_constructs.SqsQueueProps{
 			QueueName: queue,
 		})
 	}
 	
 	// Create a CloudWatch Log Groups
-	for _, logGroup := range props.AxonCdkContext.Settings.LogGroups {
+	for _, logGroup := range props.AxonCdkContext.LogGroups {
 		cdk_constructs.LogGroup(stack, logGroup, &cdk_constructs.LogGroupProps{
 			LogGroupName: logGroup,
 		})
@@ -64,7 +67,12 @@ func AxonStack(scope constructs.Construct, id string, props *CdkStackProps) awsc
 	// 	Value: dynamoDBTable.TableName(),
 	// 	Description: jsii.String("DynamoDB Table Name"),
 	// })
-	
+	cdk_constructs.CognitoStack(stack, "AxonCognito", &cdk_constructs.CognitoProps{
+		UserPoolName: "axon-user-pool",
+		UserPoolId:"axon123",
+		AmplifyAuthAppId: "amplify-app",
+		AmplifyAuthAppName: "amplify-app-name",
+	})
 		
 
 	return stack

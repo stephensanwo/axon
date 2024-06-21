@@ -1,18 +1,18 @@
-import React, { useContext, useState } from "react";
-import { NoteContext } from "../../context/notes";
+import React, { useState } from "react";
+import { ResizeParams } from "reactflow";
 import { CustomNodeProps, NodeDataProps } from "src/types/node";
+import { useNodeEvents } from "src/hooks/node/useNodeEvents";
+import { TextArea } from "src/components/Input/TextArea";
+import { useNoteContext } from "src/hooks/notes/useNoteContext";
 import NodeMenu from "./NodeMenu";
 import { NodeHandles } from "./NodeHandles";
-import { useNodeEvents } from "src/hooks/node/useNodeEvents";
-import { ResizeParams } from "reactflow";
-import { TextArea } from "../Input/TextArea";
 import NodeWrapper from "./NodeWrapper";
-import { ThemeColors } from "src/shared/themes";
+import { NODE_RESIZER_GUTTER } from "./index.types";
 
 const TextNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
   const { id, data } = props;
   const [resizing, setResizing] = useState<boolean>(false);
-  const { selectedNode } = useContext(NoteContext);
+  const { selectedNode } = useNoteContext();
   const contentRef = React.createRef<any>();
   const {
     deleteNode,
@@ -24,13 +24,10 @@ const TextNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
     handleNodeContentChange,
   } = useNodeEvents();
 
-  const NODE_RESIZER_GUTTER: number = 8;
-
   return (
     <>
       <NodeWrapper
         nodeId={id}
-        color={ThemeColors.borderLight}
         isVisible={selectedNode?.id === id}
         keepAspectRatio={false}
         onResizeStart={(e: any, params: ResizeParams) => {
@@ -44,6 +41,7 @@ const TextNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
         shouldResize={() => true}
       />
       <TextArea
+        id={`text-node-${id}`}
         ref={contentRef}
         disabled={false}
         onChange={(e: any) => handleNodeContentChange(e)}

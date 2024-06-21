@@ -2,23 +2,23 @@ import styled from "styled-components";
 import { device } from "./media";
 
 export const PageContainer = styled.div`
-  margin-top: 35px;
+  /* margin-top: 35px;
   overflow-y: scroll;
   height: calc(100vh - 35px);
   max-height: 100vh;
   width: 100%;
-  background-color: ${(props: any) => (props.dark ? "#161616" : "#f4f4f4")};
-  @media (max-width: 1080px) {
+  background-color: ${(props: any) => (props.dark ? "#161616" : "#f4f4f4")}; */
+  /* @media (max-width: 1080px) {
     display: none;
-  }
+  } */
 
   /* Hide scrollbar for Chrome, Safari and Opera */
-  ::-webkit-scrollbar {
+  /* ::-webkit-scrollbar {
     display: none;
-  }
+  } */
   /* Hide scrollbar for IE, Edge and Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  //-ms-overflow-style: none; /* IE and Edge */
+  //scrollbar-width: none; /* Firefox */
 `;
 
 export const PageHeaderContainer = styled.h2`

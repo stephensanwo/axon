@@ -1,8 +1,8 @@
 import Editor, { EditorProps } from "@monaco-editor/react";
-import { CustomEditorTheme } from "./theme";
-import React from "react";
-import { BASE_EDITOR_OPTIONS } from "./options";
 import { editor } from "monaco-editor";
+import { useTheme } from "@primer/react";
+import { getCustomEditorTheme } from "./theme";
+import { BASE_EDITOR_OPTIONS } from "./options";
 
 interface CodeEditorProps extends EditorProps {
   // Custom props
@@ -16,16 +16,14 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   theme = "customEditorTheme",
   language,
   value,
-  line = 1,
+  line = 0,
   loading = "Loading Code Editor...",
   onMount,
   onChange,
   options = BASE_EDITOR_OPTIONS,
-  beforeMount = (monaco) => {
-    monaco.editor.defineTheme("customEditorTheme", CustomEditorTheme);
-  },
   overrideOptions,
 }): JSX.Element => {
+  const { theme: axonTheme } = useTheme();
   return (
     <Editor
       height={height}
@@ -42,7 +40,12 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
         ...options, // Spread the base options
         ...overrideOptions, // Apply specific overrides
       }}
-      beforeMount={beforeMount}
+      beforeMount={(monaco) => {
+        monaco.editor.defineTheme(
+          "customEditorTheme",
+          getCustomEditorTheme(axonTheme!!)
+        );
+      }}
     />
   );
 };

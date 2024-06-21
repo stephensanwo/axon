@@ -1,5 +1,5 @@
 {
-  "app": "go mod download && go run bin/cdk.go",
+  "app": "go mod download && go run cmd/cdk.go",
   "watch": {
     "include": [
       "**"
@@ -41,6 +41,41 @@
     "@aws-cdk/aws-apigateway:authorizerChangeDeploymentLogicalId": true,
     "@aws-cdk/aws-ec2:launchTemplateDefaultUserData": true,
     "@aws-cdk/aws-secretsmanager:useAttachedSecretResourcePolicyForSecretTargetAttachments": true,
-    "@aws-cdk/aws-redshift:columnId": true
+    "@aws-cdk/aws-redshift:columnId": true,
+    "stage": "dev",
+    "dev":{
+      "account": "stephensanwo",
+      "region": "us-east-1",
+      "log_groups": [
+        "axon_dev_event_logs",
+        "axon_dev_background_logs",
+        "axon_dev_server_logs",
+        "axon_dev_client_logs",
+        "axon_dev_auth_logs"
+      ],
+      "queues": [
+        "axon_dev_event_queue"
+      ],
+      "ddb_tables": [
+        "axon_dev"
+      ]
+    },
+    "prod":{
+      "account": "stephensanwo",
+      "region": "us-east-1",
+      "log_groups": [
+        "axon_prod_event_logs",
+        "axon_prod_background_logs",
+        "axon_prod_server_logs",
+        "axon_prod_client_logs",
+        "axon_prod_auth_logs"
+      ],
+      "queues": [
+        "axon_prod_event_queue"
+      ],
+      "ddb_tables": [
+        "axon_prod"
+      ]
+    }
   }
 }

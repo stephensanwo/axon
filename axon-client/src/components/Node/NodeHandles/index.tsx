@@ -1,8 +1,7 @@
-import { Handle as ReactFlowHandle } from "reactflow";
+import { Handle as ReactFlowHandle, Position } from "reactflow";
 import styled from "styled-components";
-import { Position } from "reactflow";
 
-export const Handle = styled(ReactFlowHandle)`
+const Handle = styled(ReactFlowHandle)`
   background-color: ${(props: { background: string }) =>
     `${props.background} !important`};
   width: ${(props: { width: string }) => props.width};
@@ -25,7 +24,7 @@ export const NodeHandles: React.FC<{
         borderradius={0}
         background={"transparent"}
         width={"10px"}
-        height={"100%"}
+        height={"25%"}
         onMouseEnter={() => {
           handleNodeInteraction(node_id);
         }}
@@ -36,7 +35,7 @@ export const NodeHandles: React.FC<{
         id="bottom_handle"
         borderradius={0}
         background={"transparent"}
-        width={"100%"}
+        width={"25%"}
         height={"10px"}
         onMouseEnter={() => {
           handleNodeInteraction(node_id);
@@ -48,7 +47,7 @@ export const NodeHandles: React.FC<{
         id="top_handle"
         borderradius={0}
         background={"transparent"}
-        width={"100%"}
+        width={"25%"}
         height={"10px"}
         onMouseEnter={() => {
           handleNodeInteraction(node_id);
@@ -61,7 +60,7 @@ export const NodeHandles: React.FC<{
         borderradius={0}
         background={"transparent"}
         width={"10px"}
-        height={"100%"}
+        height={"25%"}
         onMouseEnter={() => {
           handleNodeInteraction(node_id);
         }}

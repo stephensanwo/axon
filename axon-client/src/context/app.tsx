@@ -1,13 +1,7 @@
 import { useSet } from "@uidotdev/usehooks";
-import React, { createContext, useState } from "react";
-import { ColorPalette, ThemeColors } from "src/shared/themes";
-import { IAppSettings } from "src/types/app";
-import {
-  ExtendedNodeTypes,
-  NodeStyleProps,
-  NodeThemes,
-  NodeTypes,
-} from "src/types/node";
+import React, { createContext, useRef, useState } from "react";
+import { IAppPanelDirections, IAppPanels } from "src/types/app";
+import { NodeTypes } from "src/types/node";
 
 interface AppProviderProps {
   children: React.ReactNode;
@@ -20,43 +14,87 @@ interface AppContextProps {
   setShowMobileWarning: React.Dispatch<React.SetStateAction<boolean>>;
   isOnline: boolean;
   setIsOnline: React.Dispatch<React.SetStateAction<boolean>>;
-  appSettings: IAppSettings;
-  setAppSettings: React.Dispatch<React.SetStateAction<IAppSettings>>;
-  defaultNodeStyles: NodeStyleProps;
-  setDefaultNodeStyles: React.Dispatch<React.SetStateAction<NodeStyleProps>>;
-  defaultNodeTheme: NodeThemes;
-  setDefaultNodeTheme: React.Dispatch<React.SetStateAction<NodeThemes>>;
   extensions: Set<NodeTypes>;
+  panel: IAppPanels;
+  openPanel: (direction: IAppPanelDirections) => void;
+  closePanel: (direction: IAppPanelDirections) => void;
+  togglePanel: (direction: IAppPanelDirections) => void;
+  panelButtonRef: React.RefObject<HTMLButtonElement>;
+  panelConfirmButtonRef: React.RefObject<HTMLButtonElement>;
+  panelAnchroRef: React.RefObject<HTMLDivElement>;
 }
 
 const AppContext = createContext({} as AppContextProps);
 
 export const AppProvider = ({ children }: AppProviderProps) => {
+  const [panel, setPanel] = useState<IAppPanels>({
+    left: false,
+    right: false,
+  });
+  const panelButtonRef = useRef<HTMLButtonElement>(null);
+  const panelConfirmButtonRef = useRef<HTMLButtonElement>(null);
+  const panelAnchroRef = useRef<HTMLDivElement>(null);
+
+  // const openPanel = (direction: IAppPanelDirections) => {
+  //   switch (direction) {
+  //     case "left":
+  //       setPanel({ ...panel, left: true });
+  //       break;
+  //     case "right":
+  //       setPanel({ ...panel, right: true });
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
+
+  // const closePanel = (direction: IAppPanelDirections) => {
+  //   switch (direction) {
+  //     case "left":
+  //       setPanel({ ...panel, left: false });
+  //       break;
+  //     case "right":
+  //       setPanel({ ...panel, right: false });
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
+
+  const openPanel = (direction: IAppPanelDirections) => {
+    setPanel((prevPanel) => {
+      switch (direction) {
+        case "left":
+          return { ...prevPanel, left: true };
+        case "right":
+          return { ...prevPanel, right: true };
+        default:
+          return prevPanel;
+      }
+    });
+  };
+  const closePanel = (direction: IAppPanelDirections) => {
+    setPanel((prevPanel) => {
+      switch (direction) {
+        case "left":
+          return { ...prevPanel, left: false };
+        case "right":
+          return { ...prevPanel, right: false };
+        default:
+          return prevPanel;
+      }
+    });
+  };
+  const togglePanel = (direction: IAppPanelDirections) => {
+    setPanel((prevPanel) => ({
+      ...prevPanel,
+      [direction]: !prevPanel[direction],
+    }));
+  };
+
   const [isSideNavExpanded, onClickSideNavExpand] = useState(false);
   const [showMobileWarning, setShowMobileWarning] = useState(false);
   const [isOnline, setIsOnline] = useState(false);
-  const [appSettings, setAppSettings] = useState<IAppSettings>({
-    grid: false,
-    default_node_settings: {
-      node_type: "text",
-    },
-  });
-
-  const [defaultNodeStyles, setDefaultNodeStyles] = useState<NodeStyleProps>({
-    background_color: ColorPalette.YELLOW3.hex,
-    border_color: "",
-    font_color: ThemeColors.textBlack,
-    font_weight: 400,
-    font_alignment: "left",
-    font_size: 16,
-    border_style: "solid",
-    border_radius: 8,
-  });
-
-  const [defaultNodeTheme, setDefaultNodeTheme] = useState<NodeThemes>({
-    style: "background-fill",
-    color: ColorPalette.YELLOW3.hex,
-  });
 
   // TODO: Get Installed Node Types from Settings
   const extensions = useSet<NodeTypes>([]);
@@ -64,18 +102,19 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   return (
     <AppContext.Provider
       value={{
+        panel,
+        openPanel,
+        closePanel,
+        togglePanel,
+        panelButtonRef,
+        panelConfirmButtonRef,
+        panelAnchroRef,
         isSideNavExpanded,
         onClickSideNavExpand,
         showMobileWarning,
         setShowMobileWarning,
         isOnline,
         setIsOnline,
-        appSettings,
-        setAppSettings,
-        defaultNodeStyles,
-        setDefaultNodeStyles,
-        defaultNodeTheme,
-        setDefaultNodeTheme,
         extensions,
       }}
     >
