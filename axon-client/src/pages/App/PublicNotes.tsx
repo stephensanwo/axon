@@ -1,11 +1,10 @@
 import { Fragment, useContext } from "react";
 import { PageContainer } from "src/shared/layout";
 import styled from "styled-components";
-import { Alert } from "src/components/Alert";
 import { NoteRenderState } from "./NoteRenderState";
 import PublicNoteContext from "src/context/public";
 import PublicFlowTree from "src/components/FlowTree/PublicFlowTree";
-import PublicNoteMenu from "../NoteMenu/PublicNoteMenu";
+// import PublicNoteMenu from "../NoteMenu/PublicNoteMenu";
 
 const FlowItemContainer = styled.div`
   display: flex;
@@ -44,17 +43,17 @@ const PublicNotes: React.FC = () => {
           {noteQuery.status === "error" && (
             <>
               <NoteRenderState state="public-error" />
-              <Alert
+              {/* <Alert
                 title={"Error Loading Note"}
                 subtitle="The note does not exist or you do not have permission to view it."
                 kind={"error"}
                 hideCloseButton={false}
                 lowContrast={true}
-              />
+              /> */}
             </>
           )}
         </FlowItemContainer>
-        {noteQuery.status === "success" && <PublicNoteMenu />}
+        {/* {noteQuery.status === "success" && <PublicNoteMenu />} */}
       </PageContainer>
     </Fragment>
   );
