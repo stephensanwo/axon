@@ -7,16 +7,15 @@ import {
   useState,
 } from "react";
 import { CarbonIcons, CommomCarbonIcons } from "src/assets/carbon_icons";
-import AppContext from "src/context/app";
 import NodeContext from "src/context/node";
 import NoteContext from "src/context/notes";
 import { ThemeColors } from "src/shared/themes";
 import { EdgeTypes, IEdge } from "src/types/edge";
 import {
+  BLOCK_EDITOR_INITIAL_STATE,
   BorderStyles,
   FontAlignments,
   FontWeights,
-  INodeBlockEditorContent,
   INodeCodeContent,
   INodeIcon,
   INodeInlineImage,
@@ -41,6 +40,9 @@ import {
   XYPosition,
   useReactFlow,
 } from "reactflow";
+import { useNoteContext } from "../notes/useNoteContext";
+import { SerializedEditor } from "lexical";
+import { JSONContent } from "@tiptap/react";
 
 export const useNodeEvents = (): {
   node: INode | undefined;
@@ -105,12 +107,13 @@ export const useNodeEvents = (): {
   } = useContext(NoteContext);
 
   const {
+    noteSettingsOptions,
     defaultNodeTheme,
     defaultNodeStyles,
-    appSettings,
     setDefaultNodeStyles,
     setDefaultNodeTheme,
-  } = useContext(AppContext);
+  } = useNoteContext();
+
   const [iconSearchResult, setIconSearchResult] = useState<string>();
   const [icons, setIcons] = useState<string[]>(CommomCarbonIcons);
   const { setNodeMenu } = useContext(NodeContext);
@@ -129,12 +132,12 @@ export const useNodeEvents = (): {
         type: "UPDATE_NODES",
         payload: nodes,
       });
-      noteDispatch({
-        type: "UPDATE_EDGES",
-        payload: edges,
-      });
+      // noteDispatch({
+      //   type: "UPDATE_EDGES",
+      //   payload: edges,
+      // });
     }
-  }, [nodes, edges]);
+  }, [nodes]);
 
   /**
    * Create new node
@@ -155,7 +158,8 @@ export const useNodeEvents = (): {
       ? lastNode.position.x + 100 + 280
       : window.innerWidth / 2.5;
     const newY = lastNode ? lastNode.position.y + 0 : window.outerHeight / 2.5;
-    const type = node_type ?? appSettings.default_node_settings.node_type;
+    const type =
+      node_type ?? noteSettingsOptions.default_node_settings.node_type;
     const { nodeWidth, nodeHeight } = getNodeDimensions(type);
     newNode = {
       id: id,
@@ -176,7 +180,7 @@ export const useNodeEvents = (): {
           code: "",
           language: "typescript",
         } as INodeCodeContent,
-        block: {} as INodeBlockEditorContent,
+        block: BLOCK_EDITOR_INITIAL_STATE,
         json: {
           code: "",
         } as INodeJsonEditorContent,
@@ -190,7 +194,7 @@ export const useNodeEvents = (): {
         inlineImage: {
           url: "",
         } as INodeInlineImage,
-        block_note: null,
+        block_note: {} as JSONContent,
         markdown: {
           data: "",
         } as INodeMarkdownContent,
@@ -409,7 +413,7 @@ export const useNodeEvents = (): {
 
     if (!isEdgeAlreadyExists) {
       createNewEdge(
-        "buttonedge",
+        "curveEdge",
         source!!,
         sourceHandle!!,
         target!!,
@@ -459,7 +463,7 @@ export const useNodeEvents = (): {
               );
 
               createNewEdge(
-                "buttonedge",
+                "curveEdge",
                 placement.sourceNodeId,
                 placement.sourceHandlePosition,
                 placement.targetNodeId,
@@ -486,7 +490,7 @@ export const useNodeEvents = (): {
               interactiveNode.current.parentNode
             );
             createNewEdge(
-              "buttonedge",
+              "curveEdge",
               placement.sourceNodeId,
               placement.sourceHandlePosition,
               placement.targetNodeId,

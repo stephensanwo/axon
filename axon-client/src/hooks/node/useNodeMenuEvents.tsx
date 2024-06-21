@@ -22,7 +22,32 @@ export const useNodeMenuEvents = (): {
       return true;
     }
 
-    // Disable Node themes Node text formatting ans Node formatting for link nodes
+    // Disable node formatting toggle for text-formatting nodes
+    if (id === "node-formatting" && type === "paragraph") {
+      return true;
+    }
+
+    // Disable node formatting, node text formatting, and node theme for image nodes and link nodes
+    if (
+      (id === "node-formatting" ||
+        id === "text-formatting" ||
+        id === "node-theme") &&
+      (type === "image" || type === "link")
+    ) {
+      return true;
+    }
+
+    // Disable node formatting, node text formatting, and node theme for block nodes
+    if (
+      (id === "node-formatting" ||
+        id === "text-formatting" ||
+        id === "node-theme") &&
+      type === "block"
+    ) {
+      return true;
+    }
+
+    // Disable Node themes Node text formatting and Node formatting for link nodes
     if (
       (id === "node-theme" ||
         id === "text-formatting" ||
