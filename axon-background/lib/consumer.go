@@ -50,7 +50,7 @@ func (a *AxonBackgroundService) CreateService() {
 		// Process messages
 		for _, msg := range msgs.Messages {
 			fmt.Printf("Processing event %s \n", *msg.MessageId)
-
+			
 			var event axon_types.AxonEvent
 		
 			if err := json.Unmarshal([]byte(*msg.Body), &event); err != nil {
