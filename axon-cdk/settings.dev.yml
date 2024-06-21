@@ -11,3 +11,8 @@ log_groups:
 
 queues:
   - axon_events_queue
+
+ddb_tables:
+  - axon_dev
+  - axon_prod
+  - axon_test
