@@ -14,5 +14,6 @@ declare module "socket.io-client";
 declare module "react-table";
 declare module "@floating-ui/react";
 declare module "lodash";
+declare module "@primer/primitives";
 declare let module: any;
 

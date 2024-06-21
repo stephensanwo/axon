@@ -11,13 +11,4 @@ export interface EdgeDataProps {
 
 export type IEdge = Edge<EdgeDataProps>;
 
-export type EdgeTypes = "buttonedge";
-
-// export interface IEdgeConnectParams {
-//   source: string;
-//   sourceHandle: string;
-//   target: string;
-//   targetHandle: string;
-// }
-
-export type EdgeMenuEvents = "edge-options";
+export type EdgeTypes = "curveEdge" | "stepEdge" | "straightEdge";
