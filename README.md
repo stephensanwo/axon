@@ -1,3 +1,4 @@
 AXON
  
-Mind mapping for technies
+Mind mapping with super powers
+
