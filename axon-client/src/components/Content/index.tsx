@@ -1,6 +1,6 @@
 import { Fragment, useContext } from "react";
 import NoteContext from "src/context/notes";
-import { ContentComponent } from "./ContentTypes/Shared/Router";
+import { ContentComponent } from "./Router";
 import Blank from "../Blank";
 
 const Content = () => {

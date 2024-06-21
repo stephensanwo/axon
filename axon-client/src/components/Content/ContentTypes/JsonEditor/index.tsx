@@ -4,7 +4,7 @@ import { useJson } from "src/hooks/content/useJson";
 import {
   ContentBody,
   ContentContainer,
-} from "src/components/Content/ContentTypes/Shared/styles";
+} from "src/components/Content/index.styles";
 
 const JsonEditor = () => {
   const { json, handleJsonUpdate } = useJson();

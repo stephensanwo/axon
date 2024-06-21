@@ -1,14 +1,14 @@
 import { NodeContentTypes } from "src/types/node";
-import Markdown from "../Markdown";
-import Code from "../Code";
-import JsonEditor from "../JsonEditor";
-import BlockNoteEditor from "../BlockNoteEditor";
+import Markdown from "./ContentTypes/Markdown";
+import Code from "./ContentTypes/Code";
+import JsonEditor from "./ContentTypes/JsonEditor";
+import Block from "./ContentTypes/Block";
 
 export const ContentRouter: Record<NodeContentTypes, React.FC> = {
   markdown: Markdown,
   code: Code,
   json_editor: JsonEditor,
-  block_editor: BlockNoteEditor,
+  block_editor: Block,
 };
 
 export const ContentComponent: React.FC<{ contentType: NodeContentTypes }> = (

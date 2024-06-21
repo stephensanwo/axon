@@ -3,7 +3,7 @@ import { BsFillMarkdownFill } from "react-icons/bs";
 import {
   ContentBody,
   ContentContainer,
-} from "src/components/Content/ContentTypes/Shared/styles";
+} from "src/components/Content/index.styles";
 import Tabs from "src/components/Tabs";
 import {
   AxonMarkdownInput,
