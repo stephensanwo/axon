@@ -1,6 +1,6 @@
 import { UNDO_COMMAND, REDO_COMMAND } from "lexical";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import IconButton from "src/components/Button/IconButton";
+import IconButton from "src/components/Button/MenuButton";
 import { PiArrowCounterClockwise, PiArrowClockwise } from "react-icons/pi";
 import { ThemeColors } from "src/shared/themes";
 

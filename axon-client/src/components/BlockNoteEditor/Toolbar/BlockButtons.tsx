@@ -1,5 +1,5 @@
 import React from "react";
-import IconButton from "../../Button/IconButton";
+import IconButton from "../../Button/MenuButton";
 import { ThemeColors } from "src/shared/themes";
 import { Add } from "@carbon/icons-react";
 import { Draggable } from "@carbon/icons-react";

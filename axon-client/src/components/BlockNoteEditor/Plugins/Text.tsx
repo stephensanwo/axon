@@ -1,5 +1,5 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import IconButton from "src/components/Button/IconButton";
+import IconButton from "src/components/Button/MenuButton";
 import { ThemeColors } from "src/shared/themes";
 import {
   PiTextHOne,

@@ -5,7 +5,7 @@ import {
   OUTDENT_CONTENT_COMMAND,
   INDENT_CONTENT_COMMAND,
 } from "lexical";
-import IconButton from "src/components/Button/IconButton";
+import IconButton from "src/components/Button/MenuButton";
 import { ThemeColors } from "src/shared/themes";
 import {
   PiTextAlignLeft,

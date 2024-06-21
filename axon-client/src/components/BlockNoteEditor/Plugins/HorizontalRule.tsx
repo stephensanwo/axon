@@ -6,7 +6,7 @@ import {
   $getRoot,
   $getSelection,
 } from "lexical";
-import IconButton from "src/components/Button/IconButton";
+import IconButton from "src/components/Button/MenuButton";
 import { RxDividerHorizontal } from "react-icons/rx";
 import { ThemeColors } from "src/shared/themes";
 

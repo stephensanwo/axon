@@ -1,12 +1,12 @@
-import { TextInputWithIcon } from "src/components/Input/TextInput";
+// import { TextInputWithIcon } from "src/components/Input/TextInput";
 import { useAlignActionsPlugin } from "../Plugins/Alignment";
 import { useTextActionsPlugin } from "../Plugins/Text";
-import { FloatingMenuDropdownTypes } from "../interface";
+import { FloatingMenuDropdownTypes } from "../index.types";
 import { useState } from "react";
 import { validateUrl } from "src/utils/url";
-import { ThemeColors } from "src/shared/themes";
+// import { ThemeColors } from "src/shared/themes";
 import { CheckmarkOutline } from "@carbon/icons-react";
-import IconButton from "src/components/Button/IconButton";
+import IconButton from "src/components/Button/MenuButton";
 import { Reset } from "@carbon/icons-react";
 
 export const FloatingMenuDropdown: React.FC<{
@@ -45,7 +45,7 @@ export const FloatingMenuDropdown: React.FC<{
       {dropDownType === "link" && (
         <div data-floating-menu-dropdown={dropDownType === "link" && "visible"}>
           <div>
-            <TextInputWithIcon
+            {/* <TextInputWithIcon
               labelText={""}
               id={`link-input-${namespace}`}
               placeholder="https://www.example.com"
@@ -88,7 +88,7 @@ export const FloatingMenuDropdown: React.FC<{
                   )}
                 </IconButton>
               }
-            />
+            /> */}
           </div>
         </div>
       )}
