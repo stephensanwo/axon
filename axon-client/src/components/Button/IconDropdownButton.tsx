@@ -1,5 +1,5 @@
 import React from "react";
-import IconButton from "./IconButton";
+import IconButton from "./MenuButton";
 import { ThemeColors } from "src/shared/themes";
 import { RxChevronDown, RxChevronUp } from "react-icons/rx";
 

@@ -65,4 +65,12 @@ export const DefaultNodes: NodeOptions[] = [
     nodeContentType: "block_editor",
     icon: <CiGlobe size={18} />,
   },
+  {
+    id: "markdown-editor-node",
+    name: "Markdown Editor",
+    description: "Embed markdown content in your flow",
+    nodeType: "json",
+    nodeContentType: "json_editor",
+    icon: <CiGlobe size={18} />,
+  },
 ];

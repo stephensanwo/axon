@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { ResizeParams } from "reactflow";
 import {
   Box,
@@ -9,7 +9,6 @@ import {
   useTheme,
 } from "@primer/react";
 import { CiGlobe, CiUndo } from "react-icons/ci";
-import { NoteContext } from "src/context/notes";
 import { CustomNodeProps, NodeDataProps } from "src/types/node";
 import NodeMenu from "src/components/Node/NodeMenu";
 import { NodeHandles } from "src/components/Node/NodeHandles";
@@ -24,6 +23,7 @@ import {
   LinkNodeImage,
   LinkNodeInput,
 } from "./index.styles";
+import { useNoteContext } from "src/hooks/notes/useNoteContext";
 
 const LinkNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
   const { id, data } = props;
@@ -33,7 +33,7 @@ const LinkNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
   const [resizing, setResizing] = useState<boolean>(false);
   const [linkState, setLinkState] = useState<"error" | "loading" | null>(null);
   const [linkInput, setLinkInput] = useState<string>("");
-  const { selectedNode } = useContext(NoteContext);
+  const { selectedNode } = useNoteContext();
   const {
     deleteNode,
     duplicateNode,
@@ -113,7 +113,7 @@ const LinkNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
             />
             <Box data-node-image-text>
               <Box>
-                <Text> {data.link?.title}</Text>
+                <Text>{data.link?.title}</Text>
               </Box>
               <Box>
                 <Link

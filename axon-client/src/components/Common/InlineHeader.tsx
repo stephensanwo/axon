@@ -3,10 +3,11 @@ import { Box, Text, useTheme } from "@primer/react";
 type InlineHeaderProps = {
   title?: string;
   subtitle?: string;
+  styles?: React.CSSProperties;
 };
 
 export function InlineHeader(props: InlineHeaderProps) {
-  const { title, subtitle } = props;
+  const { title, subtitle, styles } = props;
   const { theme } = useTheme();
   return (
     <Box
@@ -15,6 +16,7 @@ export function InlineHeader(props: InlineHeaderProps) {
         display: "flex",
         alignItems: "center",
         gap: 2,
+        ...styles,
       }}
     >
       {title && (

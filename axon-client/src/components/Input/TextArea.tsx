@@ -1,7 +1,6 @@
 import { forwardRef } from "react";
-import { BorderStyles } from "src/types/node";
 import styled from "styled-components";
-
+import { BorderStyles } from "src/types/node";
 export interface ITextAreaProps
   extends React.HTMLAttributes<HTMLTextAreaElement> {
   disabled?: boolean;
@@ -58,11 +57,6 @@ export const STextArea = styled.textarea`
   margin-top: ${(props: { margin: number }) => `${props.margin}px`};
   margin-bottom: ${(props: { margin: number }) => `${props.margin}px`};
   margin-right: ${(props: { margin: number }) => `${props.margin}px`};
-
-  :disabled {
-  }
-  :hover {
-  }
 
   // Disable scrollbars
   overflow-x: auto;

@@ -1,70 +1,52 @@
-import { useContext } from "react";
-import { Header as CarbonHeader, HeaderMenuButton } from "@carbon/react";
-import AppContext from "../../context/app";
-import axonLogoSmall from "../../assets/icons/axon-logo-small.svg";
-import AuthContext from "src/context/auth";
-import PageHeader from "./PageHeader";
-import NoteContext from "src/context/notes";
+import { Header as PrimerHeader } from "@primer/react";
+import HeaderContext from "./HeaderContext";
+import HeaderIcon from "./HeaderIcon";
+import { IHeader } from "./index.types";
+import HeaderBreadcrumbs from "./HeaderBreadcrumbs";
+import HeaderMenus from "./HeaderMenus";
 
-const Header: React.FC<{
-  isPublic?: boolean;
-}> = ({ isPublic }) => {
-  const { isSideNavExpanded, onClickSideNavExpand } = useContext(AppContext);
-  const { isSignedIn } = useContext(AuthContext);
-
-  const handleSideNav = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    event.stopPropagation(); // stop the event propagation for the outside click
-    if (isSideNavExpanded === true) {
-      onClickSideNavExpand(false);
-    } else {
-      onClickSideNavExpand(true);
-    }
-  };
-
+function Header({
+  headerIcon,
+  togglePanel,
+  panelButtonRef,
+  breadcrumbs,
+  menus,
+}: IHeader) {
   return (
-    <CarbonHeader
-      aria-label=""
-      style={{
-        height: "35px",
+    <HeaderContext.Provider
+      value={{
+        togglePanel,
+        panelButtonRef,
+        headerIcon,
       }}
     >
-      <div
-        style={{
-          // width: "377.5px",
-          width: "250px",
-          display: "flex",
-          gap: "15px",
-          alignItems: "center",
+      <PrimerHeader
+        ref={panelButtonRef}
+        sx={{
+          height: "48px",
+          position: "absolute",
+          width: "100vw",
+          backgroundColor: "transparent",
         }}
       >
-        {!isPublic && isSignedIn ? (
-          <HeaderMenuButton
-            aria-label="Open menu"
-            isCollapsible
-            onClick={handleSideNav}
-            isActive={isSideNavExpanded}
-            style={{
-              width: "40px",
-              height: "35px",
-            }}
-          />
-        ) : (
-          !isPublic && (
-            <div
-              style={{
-                width: "40px",
-                height: "35px",
-              }}
-            ></div>
-          )
-        )}
-        <div>
-          <img src={axonLogoSmall} alt="axon-logo" />
-        </div>
-      </div>
-      {!isPublic && isSignedIn && <PageHeader />}
-    </CarbonHeader>
+        <HeaderIcon></HeaderIcon>
+        <PrimerHeader.Item
+          full
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginLeft: "300px",
+          }}
+        >
+          <HeaderBreadcrumbs>{breadcrumbs}</HeaderBreadcrumbs>
+          <HeaderMenus>{menus}</HeaderMenus>
+        </PrimerHeader.Item>
+      </PrimerHeader>
+    </HeaderContext.Provider>
   );
-};
+}
 
+Header.Breadcrumb = HeaderBreadcrumbs;
+Header.Menus = HeaderMenus;
 export default Header;

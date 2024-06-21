@@ -63,22 +63,20 @@ const NewFolder = forwardRef<HTMLButtonElement, unknown>((ref) => {
               </FormControl.Validation>
             )}
           </FormControl>
-          <DialogFooter>
-            <Button
-              variant="primary"
-              onClick={() => createFolder.mutate("folder")}
-              trailingVisual={
-                createFolder.status === "loading"
-                  ? Spinner
-                  : CheckCircleFillIcon
-              }
-              disabled={newFolder.folder_name.length > 0 ? false : true}
-            >
-              Create Folder
-            </Button>
-          </DialogFooter>
         </Box>
       </DialogBody>
+      <DialogFooter>
+        <Button
+          variant="primary"
+          onClick={() => createFolder.mutate("folder")}
+          trailingVisual={
+            createFolder.status === "loading" ? Spinner : CheckCircleFillIcon
+          }
+          disabled={newFolder.folder_name.length > 0 ? false : true}
+        >
+          Create Folder
+        </Button>
+      </DialogFooter>
     </DialogContainer>
   );
 });

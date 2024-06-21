@@ -66,43 +66,41 @@ const EditFolder = forwardRef<HTMLButtonElement, IFolderList>((folder, ref) => {
               </FormControl.Validation>
             )}
           </FormControl>
-          <DialogFooter>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                width: "100%",
-              }}
-            >
-              <Button
-                variant="danger"
-                onClick={() =>
-                  deleteFolder.mutate(`folder?folder_id=${folder.folder_id}`)
-                }
-                trailingVisual={
-                  deleteFolder.status === "loading" ? Spinner : XCircleFillIcon
-                }
-              >
-                Delete Folder
-              </Button>
-
-              <Button
-                variant="primary"
-                onClick={() =>
-                  editFolder.mutate(`folder?folder_id=${folder.folder_id}`)
-                }
-                trailingVisual={
-                  editFolder.status === "loading"
-                    ? Spinner
-                    : CheckCircleFillIcon
-                }
-              >
-                Confirm Changes
-              </Button>
-            </Box>
-          </DialogFooter>
         </Box>
       </DialogBody>
+      <DialogFooter>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <Button
+            variant="danger"
+            onClick={() =>
+              deleteFolder.mutate(`folder?folder_id=${folder.folder_id}`)
+            }
+            trailingVisual={
+              deleteFolder.status === "loading" ? Spinner : XCircleFillIcon
+            }
+          >
+            Delete Folder
+          </Button>
+
+          <Button
+            variant="primary"
+            onClick={() =>
+              editFolder.mutate(`folder?folder_id=${folder.folder_id}`)
+            }
+            trailingVisual={
+              editFolder.status === "loading" ? Spinner : CheckCircleFillIcon
+            }
+          >
+            Confirm Changes
+          </Button>
+        </Box>
+      </DialogFooter>
     </DialogContainer>
   );
 });

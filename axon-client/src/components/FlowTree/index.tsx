@@ -16,6 +16,7 @@ import { nodeTypes } from "../Node/NodeTypes";
 import { ReactFlowInstance } from "reactflow";
 import { FlowTreeDiv } from "./styles";
 import "reactflow/dist/style.css";
+import { useNoteContext } from "src/hooks/notes/useNoteContext";
 
 const FlowTree = () => {
   return (
@@ -27,7 +28,7 @@ const FlowTree = () => {
 };
 
 const Flow = () => {
-  const { appSettings } = useContext(AppContext);
+  const { noteSettingsOptions } = useNoteContext();
   const { nodes, edges, onNodesChange, onEdgesChange, setSelectedNode } =
     useContext(NoteContext);
   const { globalNodeMutex } = useContext(NodeContext);
@@ -79,7 +80,7 @@ const Flow = () => {
       zoomOnDoubleClick={false}
       // onDoubleClickCapture={() => setSelectedNode(null)}
     >
-      {appSettings.grid && (
+      {noteSettingsOptions.grid && (
         <Background
           id="2"
           gap={50}

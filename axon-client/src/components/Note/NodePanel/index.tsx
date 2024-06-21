@@ -1,8 +1,7 @@
 import { IconButton, Tooltip } from "@primer/react";
 import { useAppContext } from "src/hooks/app";
-import { ThemeColors } from "src/shared/themes";
 import { useNodeEvents } from "src/hooks/node/useNodeEvents";
-import { ExtendedNodes } from "src/components/Note/Extensions/options";
+import { ExtensionNodes } from "src/components/Extensions/ExtensionNodes";
 import { NodePanelWrapper } from "./styles";
 import { DefaultNodes } from "./options";
 
@@ -29,16 +28,7 @@ const NodePanel = () => {
       ))}
       {Array.from(extensions).length > 0 && (
         <>
-          <div
-            style={{
-              background: ThemeColors.bgHighlight2,
-              width: "35px",
-              height: "1px",
-              marginTop: "8px",
-              marginBottom: "8px",
-            }}
-          ></div>
-          {ExtendedNodes.map(
+          {ExtensionNodes.map(
             (node, index) =>
               extensions.has(node.nodeType) && (
                 <IconButton

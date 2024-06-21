@@ -12,6 +12,8 @@ import {
   FolderDialogProps,
   FolderProps,
 } from "./index.types";
+import SharedNotes from "../SharedNotes";
+import AppOptions from "../AppOptions";
 
 function Folders({ folders, theme }: FolderProps) {
   const { selectedNote } = useFolderContext();
@@ -48,6 +50,10 @@ function Folders({ folders, theme }: FolderProps) {
             ))}
           </Box>
         </Box>
+        <Divider margin={36} />
+        <SharedNotes />
+        <Divider margin={36} />
+        <AppOptions />
       </FolderTreeContainer>
     </FolderMenuContext.Provider>
   );

@@ -98,20 +98,20 @@ const NewNote = forwardRef<HTMLButtonElement, IFolderList>((folder, ref) => {
               )}
             </FormControl>
           </Box>
-          <DialogFooter>
-            <Button
-              variant="primary"
-              onClick={() => createNote.mutate("note")}
-              trailingVisual={
-                createNote.status === "loading" ? Spinner : CheckCircleFillIcon
-              }
-              //   disabled={newFolder.folder_name.length > 0 ? false : true}
-            >
-              Create Note
-            </Button>
-          </DialogFooter>
         </Box>
       </DialogBody>
+      <DialogFooter>
+        <Button
+          variant="primary"
+          onClick={() => createNote.mutate("note")}
+          trailingVisual={
+            createNote.status === "loading" ? Spinner : CheckCircleFillIcon
+          }
+          //   disabled={newFolder.folder_name.length > 0 ? false : true}
+        >
+          Create Note
+        </Button>
+      </DialogFooter>
     </DialogContainer>
   );
 });

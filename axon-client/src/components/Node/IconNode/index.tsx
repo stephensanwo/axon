@@ -6,7 +6,7 @@ import { CustomNodeProps, NodeDataProps } from "src/types/node";
 import NodeMenu from "src/components/Node/NodeMenu";
 import { NodeHandles } from "src/components/Node/NodeHandles";
 import { useNodeEvents } from "src/hooks/node/useNodeEvents";
-import RenderIcon from "src/components/EditableLabels/RenderIcon";
+import RenderIcon from "src/components/Icon/RenderIcon";
 import NodeWrapper from "src/components/Node/NodeWrapper";
 import { NODE_RESIZER_GUTTER } from "src/components/Node/index.types";
 import { IconNodeContainer, IconNodeContent } from "./index.styles";
