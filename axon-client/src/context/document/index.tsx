@@ -26,6 +26,9 @@ const DocumentProvider = ({ children }: DocumentProviderProps) => {
   >(documentReducer, {
     documents: [],
     query: query,
+    documentPage: {
+      panel: { left: false, right: false },
+    },
   });
 
   useEffect(() => {
