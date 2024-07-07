@@ -5,13 +5,14 @@ export interface IPage {
   leftPanel: React.ReactNode;
   rightPanel: React.ReactNode;
   main: React.ReactNode;
+  footer?: React.ReactNode;
   panel: IAppPanels;
   openPanel: (direction: IAppPanelDirections) => void;
   closePanel: (direction: IAppPanelDirections) => void;
   togglePanel: (direction: IAppPanelDirections) => void;
   panelButtonRef: React.RefObject<HTMLButtonElement>;
   panelConfirmButtonRef: React.RefObject<HTMLButtonElement>;
-  panelAnchroRef: React.RefObject<HTMLDivElement>;
+  panelAnchorRef: React.RefObject<HTMLDivElement>;
   theme: Theme | undefined;
 }
 

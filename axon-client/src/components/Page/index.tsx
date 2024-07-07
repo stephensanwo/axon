@@ -4,17 +4,19 @@ import RightPanel from "src/components/Page/RightPanel";
 import PageContext from "./PageContext";
 import PageMain from "./PageMain";
 import { IPage } from "./index.types";
+import PageFooter from "./PageFooter";
 
 function Page({
   leftPanel,
   rightPanel,
   main,
+  footer,
   openPanel,
   closePanel,
   panel,
   panelButtonRef,
   panelConfirmButtonRef,
-  panelAnchroRef,
+  panelAnchorRef,
   theme,
 }: IPage) {
   return (
@@ -26,7 +28,7 @@ function Page({
         theme,
       }}
     >
-      <Box ref={panelAnchroRef}>
+      <Box ref={panelAnchorRef}>
         {panel.left && (
           <Overlay
             initialFocusRef={panelConfirmButtonRef}
@@ -54,8 +56,8 @@ function Page({
             returnFocusRef={panelButtonRef}
             ignoreClickRefs={[panelButtonRef]}
             onEscape={() => closePanel("right")}
-            // onClickOutside={() => closePanel("right")}
-            onClickOutside={() => {}}
+            onClickOutside={() => closePanel("right")}
+            // onClickOutside={() => {}}
             width="auto"
             anchorSide={"inside-left"}
             right={0}
@@ -72,6 +74,7 @@ function Page({
         )}
       </Box>
       <PageMain>{main}</PageMain>
+      {footer && <PageFooter>{footer}</PageFooter>}
     </PageContext.Provider>
   );
 }
@@ -79,5 +82,6 @@ function Page({
 Page.Left = LeftPanel;
 Page.Right = RightPanel;
 Page.Main = PageMain;
+Page.Footer = PageFooter;
 
 export default Page;
