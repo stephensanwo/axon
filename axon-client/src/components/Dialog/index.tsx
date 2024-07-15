@@ -8,7 +8,17 @@ import {
 } from "@primer/react";
 
 export function DialogContainer(props: DialogProps) {
-  return <Dialog {...props}>{props.children}</Dialog>;
+  const { theme } = useTheme();
+  return (
+    <Dialog
+      {...props}
+      sx={{
+        border: `1px solid ${theme?.colors.border.default}`,
+      }}
+    >
+      {props.children}
+    </Dialog>
+  );
 }
 
 export function DialogHeader({
@@ -30,7 +40,15 @@ export function DialogHeader({
         }}
       >
         <Truncate maxWidth={350} expandable={false} title={header}>
-          {header}
+          <Text
+            sx={{
+              fontSize: 0,
+              fontWeight: 600,
+              color: theme?.colors.text,
+            }}
+          >
+            {header}
+          </Text>
         </Truncate>
         <Truncate maxWidth={350} expandable={false} title={header}>
           <Text
