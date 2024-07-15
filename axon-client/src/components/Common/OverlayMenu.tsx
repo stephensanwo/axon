@@ -10,31 +10,41 @@ import { Text } from "./Text";
 type OverlayMenuProps = {
   anchorComponent: React.ReactNode;
   width: number;
-  height: number;
+  minHeight: number;
   alignmentOffset: AnchoredOverlayProps["alignmentOffset"];
   anchorOffset: AnchoredOverlayProps["anchorOffset"];
   side: AnchoredOverlayProps["side"];
   children: React.ReactNode;
   heading: React.ReactNode;
+  onOpenCallback?: () => void;
+  onCloseCallback?: () => void;
 };
 
 function OverlayMenu({
   anchorComponent,
   width,
-  height,
+  minHeight,
   alignmentOffset,
   anchorOffset,
   side,
   children,
   heading,
+  onOpenCallback,
+  onCloseCallback,
 }: OverlayMenuProps) {
   const [open, setOpen] = useState(false);
   const { theme } = useTheme();
   return (
     <AnchoredOverlay
       open={open}
-      onOpen={() => setOpen(true)}
-      onClose={() => setOpen(false)}
+      onOpen={() => {
+        setOpen(true);
+        if (onOpenCallback) onOpenCallback();
+      }}
+      onClose={() => {
+        setOpen(false);
+        if (onCloseCallback) onCloseCallback();
+      }}
       renderAnchor={(props) => <Box {...props}>{anchorComponent}</Box>}
       alignmentOffset={alignmentOffset}
       side={side}
@@ -45,16 +55,18 @@ function OverlayMenu({
           backgroundColor: theme?.colors.bg.overlay,
           borderRadius: 6,
           width: `${width}px`,
-          height: `${height}px`,
+          minHeight: `${minHeight}px`,
         },
       }}
     >
       <Box
         sx={{
-          height: "48px",
+          minHeight: "24px",
           display: "flex",
           alignItems: "center",
-          padding: 2,
+          p: 2,
+          pl: 3,
+          pr: 3,
           borderBottom: `1px solid ${theme?.colors.border.default}`,
         }}
       >
