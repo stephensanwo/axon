@@ -1,5 +1,14 @@
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
 
+interface DataQueryProps<T> {
+  queryKey: string[];
+  queryFn: () => Promise<T>;
+  staleTime?: number;
+  refetchOnMount?: boolean;
+  refetchOnWindowFocus?: boolean;
+  refetchOnReconnect?: boolean;
+  gcTime?: number;
+}
 /**
  * Custom hook to fetch data from the server
  * @param queryKey - The key to identify the query
@@ -22,14 +31,15 @@ import { UseQueryResult, useQuery } from "@tanstack/react-query";
  * @category Hooks
  * @module useDataQuery
  */
-export function useDataQuery<T>(
-  queryKey: string[],
-  queryFn: () => Promise<T>,
-  staleTime = 5 * 1000,
-  refetchOnMount = false,
-  refetchOnWindowFocus = false,
-  refetchOnReconnect = false
-): UseQueryResult<T, unknown> {
+export function useDataQuery<T>({
+  queryKey,
+  queryFn,
+  staleTime = 1000 * 60 * 5,
+  refetchOnMount = true,
+  refetchOnWindowFocus = true,
+  refetchOnReconnect = true,
+  gcTime,
+}: DataQueryProps<T>): UseQueryResult<T, unknown> {
   const query = useQuery<T>({
     queryKey: [...queryKey],
     queryFn: () => queryFn(),
@@ -37,6 +47,7 @@ export function useDataQuery<T>(
     refetchOnMount: refetchOnMount,
     refetchOnWindowFocus: refetchOnWindowFocus,
     refetchOnReconnect: refetchOnReconnect,
+    gcTime: gcTime,
   });
   return query;
 }
