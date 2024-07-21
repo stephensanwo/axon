@@ -1,0 +1,21 @@
+.TableCellSkeletonItem::before {
+    background-color: var(--black-90) !important;
+}
+
+.TableCell {
+    background-color: transparent !important;
+}
+
+tbody tr.TableRow[role="row"]:hover {
+    background-color: transparent !important;
+}
+
+thead.TableHead {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1 !important;
+}
+
+.Table {
+    max-height: calc(100vh - 48px - 80px - 32px - 24px) !important;
+}

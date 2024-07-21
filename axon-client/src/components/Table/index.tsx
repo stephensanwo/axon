@@ -1,4 +1,4 @@
-import { Box, Text, useTheme } from "@primer/react";
+import { Box, useTheme } from "@primer/react";
 import { Table as PrimerTable } from "@primer/react/drafts";
 import {
   DataTable as PrimerDataTable,
@@ -6,10 +6,14 @@ import {
 } from "@primer/react/experimental";
 import { UniqueRow } from "@primer/react/lib/DataTable/row";
 import React from "react";
+import "./style.css";
+import { TableSortDirection, TableState } from "./index.types";
 
 function Table<T extends UniqueRow>({
   id,
+  state,
   data,
+  cellPadding,
   columns,
   title,
   subtitle,
@@ -18,21 +22,13 @@ function Table<T extends UniqueRow>({
   initialSortDirection = "DESC",
 }: DataTableProps<T> & {
   id: string;
+  state: TableState;
   title?: string;
   subtitle?: string;
-  emptyStateMessage?: string;
+  emptyStateMessage?: React.ReactNode;
   initialSortColumn?: string;
-  initialSortDirection?: "ASC" | "DESC";
+  initialSortDirection?: TableSortDirection;
 }) {
-  const pageSize = 10;
-  const [pageIndex, setPageIndex] = React.useState(0);
-  const start = pageIndex * pageSize;
-  const end = start + pageSize;
-  const rows = Array.from(data.slice(start, end));
-
-  // const rows = Array.from(data.slice(start, end)).sort((a, b) => {
-  //   return a.id.localeCompare(b.id);
-  // });
   const { theme } = useTheme();
   return (
     <>
@@ -47,30 +43,42 @@ function Table<T extends UniqueRow>({
             {subtitle}
           </PrimerTable.Subtitle>
         )}
-        <PrimerDataTable
-          aria-labelledby={title}
-          aria-describedby={subtitle || title}
-          data={rows}
-          columns={columns}
-          initialSortColumn={initialSortColumn}
-          initialSortDirection={initialSortDirection}
-        />
-        {data.length > 0 && (
-          <PrimerTable.Pagination
-            aria-label="Table Pagination"
-            defaultPageIndex={0}
-            pageSize={pageSize}
-            totalCount={data.length}
-            onChange={({ pageIndex }) => {
-              setPageIndex(pageIndex);
-            }}
+        {state === "loading" && (
+          <PrimerTable.Skeleton
+            aria-labelledby={title}
+            aria-describedby={subtitle || title}
+            columns={columns}
+            rows={10}
+            cellPadding={cellPadding}
+          />
+        )}
+        {state === "empty" && (
+          <PrimerDataTable
+            aria-labelledby={title}
+            aria-describedby={subtitle || title}
+            data={[]}
+            columns={columns}
+            initialSortColumn={initialSortColumn}
+            initialSortDirection={initialSortDirection}
+            cellPadding={cellPadding}
+          />
+        )}
+        {state === "data" && data.length > 0 && (
+          <PrimerDataTable
+            aria-labelledby={title}
+            aria-describedby={subtitle || title}
+            data={data}
+            columns={columns}
+            initialSortColumn={initialSortColumn}
+            initialSortDirection={initialSortDirection}
+            cellPadding={cellPadding}
           />
         )}
       </PrimerTable.Container>
-      {data.length === 0 && (
+      {state === "empty" && (
         <Box
           sx={{
-            minHeight: "150px",
+            minHeight: `calc(41px * 10)`,
             borderLeft: `1px solid ${theme?.colors.border.default}`,
             borderRight: `1px solid ${theme?.colors.border.default}`,
             borderBottom: `1px solid ${theme?.colors.border.default}`,
@@ -80,14 +88,7 @@ function Table<T extends UniqueRow>({
             justifyContent: "center",
           }}
         >
-          <Text
-            sx={{
-              color: theme?.colors.text.gray,
-              fontSize: 0,
-            }}
-          >
-            {emptyStateMessage}
-          </Text>
+          {emptyStateMessage}
         </Box>
       )}
     </>
