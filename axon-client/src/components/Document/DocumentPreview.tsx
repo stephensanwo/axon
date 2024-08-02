@@ -1,46 +1,46 @@
-import { Box, Text, Truncate, useTheme } from "@primer/react";
+import { Box, Truncate, useTheme } from "@primer/react";
 import { Stack } from "@primer/react/drafts";
-import { useDocumentContext } from "src/hooks/document/useDocumentContext";
-import { DocumentIcon } from "./Components/DocumentIcon";
+import { DocumentIcon } from "./components/DocumentIcon";
 import { formatDateToRelativeTime } from "src/common/date";
-import { convertFileSize } from "src/common/file";
+import { convertFileSize, getContentType } from "src/common/file";
+import { DocumentState } from "src/context/document/document.types";
+import { Text } from "../Common/Text";
 
-function DocumentPreview() {
-  const { documentState } = useDocumentContext();
+function DocumentPreview(documentState: DocumentState) {
   const { theme } = useTheme();
 
   const documentInfo: Record<string, string>[] = [
     {
-      name: "Name",
-      value: documentState.documentPage.selectedDocument?.name || "",
+      name: "File Name",
+      value:
+        documentState.documentFolderFiles.selectedDocumentFilePreview?.name ||
+        "",
     },
     {
-      name: "Type",
-      value: documentState.documentPage.selectedDocument?.content_type || "",
+      name: "Extension",
+      value:
+        getContentType(
+          documentState.documentFolderFiles.selectedDocumentFilePreview
+            ?.content_type!!
+        ) || "",
     },
     {
       name: "Size",
-      value: convertFileSize(2000) || "",
+      value:
+        convertFileSize({
+          size: documentState.documentFolderFiles.selectedDocumentFilePreview
+            ?.file_size!!,
+        }) || "",
     },
     {
       name: "Created",
       value:
         formatDateToRelativeTime(
-          documentState.documentPage.selectedDocument?.created!!
-        ) || "",
-    },
-    {
-      name: "Updated",
-      value:
-        formatDateToRelativeTime(
-          documentState.documentPage.selectedDocument?.updated!!
+          documentState.documentFolderFiles.selectedDocumentFilePreview
+            ?.created!!
         ) || "",
     },
   ];
-  console.log(
-    "selectedDocument===>",
-    documentState.documentPage.selectedDocument
-  );
 
   return (
     <Box
@@ -51,13 +51,14 @@ function DocumentPreview() {
         alignItems: "center",
         padding: 8,
         paddingTop: "25%",
-        gap: 4,
+        gap: 8,
       }}
     >
       <Box>
         {DocumentIcon({
           content_type:
-            documentState.documentPage.selectedDocument?.content_type || "",
+            documentState.documentFolderFiles.selectedDocumentFilePreview
+              ?.content_type || "",
           size: 250,
           color: theme?.colors.border.variant1,
         })}
@@ -69,6 +70,9 @@ function DocumentPreview() {
           width: "100%",
         }}
       >
+        <Box>
+          <Text.Heading5Secondary>Placeholder</Text.Heading5Secondary>
+        </Box>
         {documentInfo.map((info, index) => (
           <Box
             key={index}
@@ -82,27 +86,16 @@ function DocumentPreview() {
               paddingBottom: 2,
             }}
           >
-            <Text
+            <Text.ParagraphSecondary>{info.name}</Text.ParagraphSecondary>
+            <Text.ParagraphSecondary
               sx={{
-                fontWeight: 600,
-                fontSize: 1,
-                color: theme?.colors.text.gray,
-              }}
-            >
-              {info.name}
-            </Text>
-            <Text
-              sx={{
-                fontWeight: 400,
-                fontSize: 1,
-                color: theme?.colors.text.gray,
                 textAlign: "right",
               }}
             >
               <Truncate title={info.value} maxWidth={300}>
                 {info.value}
               </Truncate>
-            </Text>
+            </Text.ParagraphSecondary>
           </Box>
         ))}
       </Stack>

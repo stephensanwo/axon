@@ -1,28 +1,29 @@
-import { Box } from "@primer/react";
-import DocumentHeader from "./DocumentHeader";
-import DocumentList from "./DocumentList";
-import { DocumentState } from "src/context/document/document.types";
+import DocumentEmpty from "./DocumentEmpty";
+import DocumentFooter from "./DocumentFooter";
+import DocumentHeader from "./Header/DocumentFileHeader";
+import DocumentList from "./List/DocumentFileList";
+import { DocumentMain } from "./DocumentMain";
+import DocumentNav from "./Nav";
+import DocumentPreview from "./DocumentPreview";
+import DocumentFolderList from "./List/DocumentFolderList";
+import DocumentFolderHeader from "./Header/DocumentFolderHeader";
+import DocumentFileHeader from "./Header/DocumentFileHeader";
+import DocumentFileList from "./List/DocumentFileList";
 
-export function Document(documentState: DocumentState) {
-  const { documents } = documentState;
-  console.log("documents in page===>", documents);
-  return (
-    <Box
-      sx={{
-        height: "100%",
-        width: "100%",
-        pl: 3,
-        pr: 3,
-      }}
-    >
-      <DocumentHeader />
-      {documentState.query.isLoading ? (
-        <>Loading</>
-      ) : documentState.documents.length > 0 ? (
-        <DocumentList documents={documents} />
-      ) : (
-        <>Blank</>
-      )}
-    </Box>
-  );
-}
+export const Document = {
+  Main: DocumentMain,
+  Nav: DocumentNav,
+  Footer: DocumentFooter,
+  Preview: DocumentPreview,
+  Empty: DocumentEmpty,
+};
+
+export const DocumentFolder = {
+  Header: DocumentFolderHeader,
+  List: DocumentFolderList,
+};
+
+export const DocumentFile = {
+  Header: DocumentFileHeader,
+  List: DocumentFileList,
+};
