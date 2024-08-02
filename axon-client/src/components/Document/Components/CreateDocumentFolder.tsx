@@ -13,18 +13,12 @@ import { zodValidator } from "@tanstack/zod-form-adapter";
 import { formValidation } from "src/common/forms/forms.validation";
 import { InlineSpinner } from "../../Common/Spinner";
 import { useDocument } from "src/context/document/hooks/useDocument";
-import {
-  DocumentAction,
-  DocumentState,
-} from "src/context/document/document.types";
+import { BaseDocumentProps } from "../index.types";
 
 function CreateDocumentFolder({
   documentState,
   documentStateDispatch,
-}: {
-  documentState: DocumentState;
-  documentStateDispatch: React.Dispatch<DocumentAction>;
-}) {
+}: BaseDocumentProps) {
   const {
     documentFolders: { createDocumentFolderForm },
   } = documentState;
@@ -51,7 +45,8 @@ function CreateDocumentFolder({
       minHeight={300}
       side="outside-top"
       anchorOffset={10}
-      alignmentOffset={-150}
+      alignmentOffset={0}
+      align="center"
       anchorComponent={
         <IconButton
           variant="default"

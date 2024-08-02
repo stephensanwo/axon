@@ -54,7 +54,8 @@ function UpdateDocumentFolder({
       minHeight={150}
       side="outside-top"
       anchorOffset={10}
-      alignmentOffset={-150}
+      alignmentOffset={0}
+      align="center"
       anchorComponent={
         <IconButton
           variant="default"
