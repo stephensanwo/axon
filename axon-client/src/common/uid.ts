@@ -1,5 +1,7 @@
 import { ulid } from "ulidx";
 
-export function uid(prefix: string) {
-  return `${prefix}_${ulid().toLocaleLowerCase()}`;
+export function uid(prefix?: string) {
+  return prefix
+    ? `${prefix}_${ulid().toLocaleLowerCase()}`
+    : ulid().toLocaleLowerCase();
 }

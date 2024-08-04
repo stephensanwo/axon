@@ -1,9 +1,11 @@
-export function convertFileSize(size: number): string {
-  const units = ["B", "KB", "MB", "GB", "TB"];
-  let unitIndex = 0;
-  while (size > 1024) {
-    size /= 1024;
-    unitIndex++;
-  }
-  return `${size.toFixed(2)} ${units[unitIndex]}`;
+import mime from "mime-types";
+import { filesize } from "filesize";
+
+export function convertFileSize({ size = 1 }: { size: number }): string {
+  return filesize(size, { standard: "jedec" });
+}
+
+export function getContentType(fullContentTypeString: string): string {
+  const extension = mime.extension(fullContentTypeString);
+  return extension ? extension.toLocaleUpperCase() : "FILE";
 }
