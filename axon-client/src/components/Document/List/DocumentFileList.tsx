@@ -41,10 +41,6 @@ function DocumentFileList({
           payload: data,
         });
         togglePanel("right");
-        // documentStateDispatch({
-        //   type: "OPEN_DOCUMENT_PAGE_PANEL",
-        //   payload: "right",
-        // });
       },
     },
     {

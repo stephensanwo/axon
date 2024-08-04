@@ -134,7 +134,6 @@ function DocumentFileStatus({
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                    height: tabContainerHeight - 24,
                     gap: 4,
                   }}
                 >
