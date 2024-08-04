@@ -4,8 +4,9 @@ import axonLogoSmall from "../../assets/icons/axon-logo-small-dark.svg";
 
 const AxonLoaderWrapper = styled.div`
   background-color: ${themeGet("colors.bg.black")};
-  width: 100%;
-  height: 100%;
+  height: calc(100vh - 35px);
+  width: 100vw;
+  margin-top: 35px;
   display: flex;
   justify-content: center;
   align-items: center;
