@@ -1,17 +1,22 @@
 import { ActionList, ActionMenu, IconButton, useTheme } from "@primer/react";
+import { VariantType } from "@primer/react/lib/Button/types";
 import { useState } from "react";
 import { PiDotsThreeBold } from "react-icons/pi";
 import { TbEyeDiscount } from "react-icons/tb";
+import { Text } from "./Text";
 
 export type SelectMenuItem = {
   id: string;
   name: string;
   description?: string;
-  onClick: (itemId: string) => void;
+  onClick: (data: any) => void;
+  variant?: "danger" | "default" | undefined;
+  leadingVisual?: React.ReactNode;
+  trailingVisual?: React.ReactNode;
 };
 
-export type SelectProps = {
-  title: string;
+export type SelectProps<T> = {
+  title: string | React.ReactNode;
   menuItems: SelectMenuItem[];
   anchor?: "icon" | "text";
   width?:
@@ -22,12 +27,30 @@ export type SelectProps = {
     | "xlarge"
     | "xxlarge"
     | undefined;
-  itemId: string;
+  data: T;
+  textProps?: {
+    variant?: VariantType;
+    leadingVisual?: React.ElementType;
+    trailingVisual?: React.ElementType;
+    trailingAction?: React.ElementType;
+  };
 };
 
-function Select(props: SelectProps) {
+function Select<T>(props: SelectProps<T>) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { title, menuItems, anchor = "text", width = "auto", itemId } = props;
+  const {
+    title,
+    menuItems,
+    anchor = "text",
+    width = "auto",
+    data,
+    textProps = {
+      variant: "invisible",
+      leadingVisual: undefined,
+      trailingVisual: undefined,
+      trailingAction: undefined,
+    },
+  } = props;
   const { theme } = useTheme();
   return (
     <>
@@ -42,12 +65,20 @@ function Select(props: SelectProps) {
           </ActionMenu.Anchor>
         ) : (
           <ActionMenu.Button
-            leadingVisual={TbEyeDiscount}
+            leadingVisual={textProps?.leadingVisual}
+            trailingAction={textProps?.trailingAction}
+            trailingVisual={textProps?.trailingVisual}
+            variant={textProps?.variant}
+            size="small"
             sx={{
               width: "100%",
             }}
           >
-            {title}
+            {typeof title === "string" ? (
+              <Text.SmallSecondary>{title}</Text.SmallSecondary>
+            ) : (
+              title
+            )}
           </ActionMenu.Button>
         )}
         <ActionMenu.Overlay
@@ -56,20 +87,32 @@ function Select(props: SelectProps) {
           sx={{ border: `1px solid ${theme?.colors.border.default}` }}
         >
           <ActionList>
-            {menuItems.map((item) => (
+            {menuItems.map((item, index) => (
               <ActionList.Item
-                key={item.name}
+                key={index}
                 onClick={() => {
-                  item.onClick(itemId);
+                  item.onClick(data);
                   setMenuOpen(false);
                 }}
-                variant={item.id === "delete" ? "danger" : "default"}
+                variant={item.variant}
+                aria-label={item.name}
+                id={item.id}
               >
                 {item.name}
                 {item.description && (
                   <ActionList.Description>
                     {item.description}
                   </ActionList.Description>
+                )}
+                {item.leadingVisual && (
+                  <ActionList.LeadingVisual>
+                    {item.leadingVisual}
+                  </ActionList.LeadingVisual>
+                )}
+                {item.trailingVisual && (
+                  <ActionList.TrailingVisual>
+                    {item.trailingVisual}
+                  </ActionList.TrailingVisual>
                 )}
               </ActionList.Item>
             ))}

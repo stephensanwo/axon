@@ -16,14 +16,15 @@ function Checkbox({
   htmlFor,
   type,
   visuallyHiddenLabel = false,
+  checked,
 }: {
   label: string;
   error: string | null;
   required?: boolean;
   caption?: string;
   placeholder?: string;
-  value: string;
-  onChange: (updater: Updater<string>) => void;
+  value?: boolean;
+  onChange: React.ChangeEventHandler<HTMLInputElement> | undefined;
   onBlur?: () => void;
   leadingVisual?: React.ReactNode;
   trailingVisual?: React.ReactNode;
@@ -36,6 +37,7 @@ function Checkbox({
   htmlFor: string;
   type: React.HTMLInputTypeAttribute | undefined;
   visuallyHiddenLabel?: boolean;
+  checked: boolean;
 }) {
   return (
     <FormControl
@@ -54,7 +56,7 @@ function Checkbox({
       >
         {label}
       </FormControl.Label>
-      <PrimerCheckbox />
+      <PrimerCheckbox checked={checked} value={"default"} onChange={onChange} />
       {error && (
         <FormControl.Validation
           variant={"error"}
