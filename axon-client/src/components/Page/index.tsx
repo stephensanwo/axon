@@ -1,41 +1,46 @@
-import { Box, Overlay } from "@primer/react";
-import LeftPanel from "src/components/Page/LeftPanel";
-import RightPanel from "src/components/Page/RightPanel";
-import PageContext from "./PageContext";
-import PageMain from "./PageMain";
-import { IPage } from "./index.types";
-import PageFooter from "./PageFooter";
+import { Box, Overlay, useTheme } from "@primer/react";
+import LeftPanel from "src/components/Page/components/LeftPanel";
+import PageMain from "./components/PageMain";
+// import { IPage } from "./index.types";
+import PageFooter from "./components/PageFooter";
+import RightPanel from "./components/RightPanel";
+import { useRef, useState } from "react";
+import AppIcon from "../AppIcon";
+import HeaderBreadcrumbs from "../Header/HeaderBreadcrumbs";
+import Header from "./components/Header";
+import { PageProps } from "./index.types";
 
 function Page({
   leftPanel,
   rightPanel,
   main,
   footer,
-  openPanel,
-  closePanel,
+  header: { breadcrumb, menu },
   panel,
-  panelButtonRef,
-  panelConfirmButtonRef,
-  panelAnchorRef,
-  theme,
-}: IPage) {
+  togglePanel,
+  initialFocusRef,
+  returnFocusRef,
+  ignoreClickRefs,
+}: PageProps) {
+  const { theme } = useTheme();
+  console.log("panel", panel);
   return (
-    <PageContext.Provider
-      value={{
-        panel,
-        openPanel,
-        closePanel,
-        theme,
-      }}
-    >
-      <Box ref={panelAnchorRef}>
+    <>
+      <Header
+        togglePanel={togglePanel}
+        panelButtonRef={returnFocusRef}
+        headerIcon={<AppIcon />}
+        breadcrumbs={<HeaderBreadcrumbs>{breadcrumb}</HeaderBreadcrumbs>}
+        menus={menu}
+      ></Header>
+      <Box>
         {panel.left && (
           <Overlay
-            initialFocusRef={panelConfirmButtonRef}
-            returnFocusRef={panelButtonRef}
-            ignoreClickRefs={[panelButtonRef]}
-            onEscape={() => closePanel("left")}
-            onClickOutside={() => closePanel("left")}
+            initialFocusRef={initialFocusRef}
+            returnFocusRef={returnFocusRef}
+            ignoreClickRefs={ignoreClickRefs}
+            onEscape={() => togglePanel("left", "close")}
+            onClickOutside={() => togglePanel("left", "close")}
             width="auto"
             anchorSide="inside-right"
             sx={{
@@ -52,11 +57,11 @@ function Page({
         )}
         {panel.right && (
           <Overlay
-            initialFocusRef={panelConfirmButtonRef}
-            returnFocusRef={panelButtonRef}
-            ignoreClickRefs={[panelButtonRef]}
-            onEscape={() => closePanel("right")}
-            onClickOutside={() => closePanel("right")}
+            initialFocusRef={initialFocusRef}
+            returnFocusRef={returnFocusRef}
+            ignoreClickRefs={ignoreClickRefs}
+            onEscape={() => togglePanel("right", "close")}
+            onClickOutside={() => togglePanel("right", "close")}
             // onClickOutside={() => {}}
             width="auto"
             anchorSide={"inside-left"}
@@ -75,7 +80,7 @@ function Page({
       </Box>
       <PageMain>{main}</PageMain>
       {footer && <PageFooter>{footer}</PageFooter>}
-    </PageContext.Provider>
+    </>
   );
 }
 

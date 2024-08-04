@@ -1,24 +1,22 @@
-import { IAppPanelDirections, IAppPanels } from "src/types/app";
-import { Theme } from "src/types/theme";
-
-export interface IPage {
+export interface PageProps {
   leftPanel: React.ReactNode;
   rightPanel: React.ReactNode;
   main: React.ReactNode;
   footer?: React.ReactNode;
-  panel: IAppPanels;
-  openPanel: (direction: IAppPanelDirections) => void;
-  closePanel: (direction: IAppPanelDirections) => void;
-  togglePanel: (direction: IAppPanelDirections) => void;
-  panelButtonRef: React.RefObject<HTMLButtonElement>;
-  panelConfirmButtonRef: React.RefObject<HTMLButtonElement>;
-  panelAnchorRef: React.RefObject<HTMLDivElement>;
-  theme: Theme | undefined;
+  header: {
+    breadcrumb: React.ReactNode;
+    menu: React.ReactNode;
+  };
+  panel: PagePanels;
+  togglePanel: (
+    direction: PagePanelDirections,
+    action?: PagePanelActions
+  ) => void;
+  initialFocusRef: React.RefObject<HTMLButtonElement> | undefined;
+  returnFocusRef: React.RefObject<HTMLButtonElement>;
+  ignoreClickRefs: React.RefObject<HTMLDivElement>[];
 }
 
-export type PageContextProps = {
-  panel: IAppPanels;
-  openPanel: (direction: IAppPanelDirections) => void;
-  closePanel: (direction: IAppPanelDirections) => void;
-  theme: Theme | undefined;
-};
+export type PagePanelDirections = "left" | "right";
+export type PagePanelActions = "open" | "close";
+export type PagePanels = Record<PagePanelDirections, boolean>;
