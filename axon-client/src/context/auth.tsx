@@ -9,7 +9,6 @@ import {
 } from "react";
 import { useAuthQuery } from "src/hooks/auth/useAuthQuery";
 import { IUser } from "src/types/user";
-import Session from "supertokens-web-js/recipe/session";
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -39,21 +38,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, [userData]);
 
   user.current = useMemo(() => getUser(), [getUser]);
-
-  useEffect(() => {
-    doesSessionExist();
-  }, []);
-
-  async function doesSessionExist() {
-    if (await Session.doesSessionExist()) {
-      console.log("Session exists", await Session.getUserId());
-      // user is logged in
-    } else {
-      console.log("Session does not exist");
-      window.location.assign("/");
-      // user has not logged in yet
-    }
-  }
 
   return (
     <AuthContext.Provider

@@ -21,7 +21,7 @@ interface AppContextProps {
   togglePanel: (direction: IAppPanelDirections) => void;
   panelButtonRef: React.RefObject<HTMLButtonElement>;
   panelConfirmButtonRef: React.RefObject<HTMLButtonElement>;
-  panelAnchroRef: React.RefObject<HTMLDivElement>;
+  panelAnchorRef: React.RefObject<HTMLDivElement>;
 }
 
 const AppContext = createContext({} as AppContextProps);
@@ -33,7 +33,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   });
   const panelButtonRef = useRef<HTMLButtonElement>(null);
   const panelConfirmButtonRef = useRef<HTMLButtonElement>(null);
-  const panelAnchroRef = useRef<HTMLDivElement>(null);
+  const panelAnchorRef = useRef<HTMLDivElement>(null);
 
   // const openPanel = (direction: IAppPanelDirections) => {
   //   switch (direction) {
@@ -108,7 +108,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         togglePanel,
         panelButtonRef,
         panelConfirmButtonRef,
-        panelAnchroRef,
+        panelAnchorRef,
         isSideNavExpanded,
         onClickSideNavExpand,
         showMobileWarning,
