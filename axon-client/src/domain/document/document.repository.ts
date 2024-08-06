@@ -1,0 +1,76 @@
+import searchService from "../search/search.service";
+import { foldersDb, filesDb } from "./document.db";
+import { DocumentFileEntity, DocumentFolderEntity } from "./document.entity";
+
+interface IDocumentRepository {}
+
+export class DocumentRepository implements IDocumentRepository {
+  foldersDb = foldersDb;
+  filesDb = filesDb;
+
+  constructor() {
+    this.foldersDb.client.createIndex({
+      index: { fields: ["name"] },
+    });
+    this.setupChangeListener();
+  }
+
+  async findDocumentMatchByName(
+    name: string
+  ): Promise<PouchDB.Find.FindResponse<{}>> {
+    const doc = await this.foldersDb.client.find({
+      selector: {
+        name: { $regex: `^${name}` },
+      },
+      sort: ["name"],
+    });
+    return doc;
+  }
+
+  async findDocumentIdByName(name: string): Promise<string> {
+    const doc = await this.foldersDb.client.find({
+      selector: {
+        name: { $eq: name },
+      },
+      sort: ["name"],
+      limit: 1,
+    });
+    return doc.docs[0]?._id || "";
+  }
+
+  // Method to setup changes listener
+  public setupChangeListener() {
+    this.foldersDb.client
+      .changes<DocumentFolderEntity>({
+        since: "now",
+        live: true,
+        include_docs: true,
+      })
+      .on("change", (change) => {
+        console.log("Change detected:", change);
+        // Handle the change event
+        searchService.addDocumentFolderToIndex(
+          change.doc as DocumentFolderEntity
+        );
+      })
+      .on("error", (err) => {
+        console.error("Error in changes listener:", err);
+      });
+
+    this.filesDb.client
+      .changes<DocumentFileEntity>({
+        since: "now",
+        live: true,
+        include_docs: true,
+      })
+      .on("change", (change) => {
+        console.log("Change detected:", change);
+        // Handle the change event
+      })
+      .on("error", (err) => {
+        console.error("Error in changes listener:", err);
+      });
+  }
+}
+
+export const documentRepository = new DocumentRepository();
