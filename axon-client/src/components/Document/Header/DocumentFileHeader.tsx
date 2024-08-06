@@ -2,7 +2,7 @@ import { Box } from "@primer/react";
 import { Text } from "../../Common/Text";
 import SyncDocumentStatus from "../Sync/DocumentFileStatus";
 import UploadDocumentFile from "../Sync/UploadDocumentFile";
-import SelectDocumentOptions from "../components/SelectDocumentOptions";
+import SelectDocumentOptions from "../Common/SelectDocumentOptions";
 import { BaseDocumentProps } from "../index.types";
 
 function DocumentFileHeader({

@@ -1,13 +1,11 @@
-import { Box, Button, IconButton } from "@primer/react";
-import { PiCloudArrowDown, PiFoldersBold } from "react-icons/pi";
-import { Text } from "src/components/Common/Text";
+import { Box } from "@primer/react";
 import {
   DocumentAction,
   DocumentLevels,
   DocumentState,
 } from "src/context/document/document.types";
 import DeleteDocumentFolder from "../Delete/DeleteDocumentFolder";
-import UpdateDocumentFolder from "./UpdateDocumentFolder";
+import UpdateDocumentFolder from "../Form/UpdateDocumentFolder";
 import DeleteDocumentFile from "../Delete/DeleteDocumentFile";
 import { useEffect } from "react";
 import DownloadDocumentFile from "../Sync/DownloadDocumentFile";

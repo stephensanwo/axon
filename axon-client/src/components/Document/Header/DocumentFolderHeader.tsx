@@ -1,7 +1,7 @@
 import { Box } from "@primer/react";
 import { Text } from "../../Common/Text";
-import CreateDocumentFolder from "./../components/CreateDocumentFolder";
-import SelectDocumentOptions from "../components/SelectDocumentOptions";
+import CreateDocumentFolder from "../Form/CreateDocumentFolder";
+import SelectDocumentOptions from "../Common/SelectDocumentOptions";
 import { BaseDocumentProps } from "../index.types";
 
 function DocumentFolderHeader({

@@ -1,6 +1,6 @@
 import { Box, Truncate, useTheme } from "@primer/react";
 import { Stack } from "@primer/react/drafts";
-import { DocumentIcon } from "./components/DocumentIcon";
+import { DocumentIcon } from "./Common/DocumentIcon";
 import { formatDateToRelativeTime } from "src/common/date";
 import { convertFileSize, getContentType } from "src/common/file";
 import { DocumentState } from "src/context/document/document.types";
