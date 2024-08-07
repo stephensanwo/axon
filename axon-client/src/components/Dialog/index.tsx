@@ -9,12 +9,14 @@ import {
 
 export function DialogContainer(props: DialogProps) {
   const { theme } = useTheme();
+  const { sx, ...rest } = props;
   return (
     <Dialog
-      {...props}
       sx={{
+        ...sx,
         border: `1px solid ${theme?.colors.border.default}`,
       }}
+      {...rest}
     >
       {props.children}
     </Dialog>
@@ -42,7 +44,7 @@ export function DialogHeader({
         <Truncate maxWidth={350} expandable={false} title={header}>
           <Text
             sx={{
-              fontSize: 0,
+              fontSize: 1,
               fontWeight: 600,
               color: theme?.colors.text,
             }}

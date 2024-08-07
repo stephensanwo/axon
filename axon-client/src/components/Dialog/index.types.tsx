@@ -1,4 +1,4 @@
-export type DialogProps = {
-  toggle: boolean;
-  setToggle: React.Dispatch<React.SetStateAction<boolean>>;
+export type BaseDialogProps = {
+  openModal: boolean;
+  closeModalFn: React.Dispatch<React.SetStateAction<boolean>>;
 };
