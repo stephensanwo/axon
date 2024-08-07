@@ -1,14 +1,28 @@
-import BaseSkeleton, { SkeletonTheme } from "react-loading-skeleton";
+import BaseSkeleton, {
+  SkeletonStyleProps,
+  SkeletonTheme,
+  SkeletonThemeProps,
+} from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
-function Skeleton() {
+function Skeleton({
+  count = 4,
+  height = 20,
+  width = "100%",
+  baseColor = "#f0f0f0",
+  highlightColor = "#e0e0e0",
+}: {
+  count?: number;
+} & SkeletonStyleProps) {
   return (
-    <BaseSkeleton
-      count={3}
-      baseColor="red"
-      highlightColor="blue"
-      width="100px"
-      height={"20px"}
-    />
+    <SkeletonTheme
+      baseColor={baseColor}
+      highlightColor={highlightColor}
+      width={width}
+      height={height}
+    >
+      <BaseSkeleton count={count} style={{ marginBottom: "4px" }} />
+    </SkeletonTheme>
   );
 }
 
