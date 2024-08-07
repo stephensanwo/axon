@@ -19,6 +19,7 @@ export interface AttachmentEntity {
 
 export interface AttachmentRecord extends BaseEntity {
   parentId: string;
+  parentName: string;
   name: string;
   content_type: string;
   file_size: number;

@@ -8,8 +8,9 @@ export interface BaseSearchSchema {
   name: string;
   description: string;
   content: string;
-  path: string;
+  path: string | string[];
 }
+export const MAX_SEARCH_RESULTS = 20;
 
 export enum SearchIndexTypes {
   DOCUMENT_FOLDER = "folder",

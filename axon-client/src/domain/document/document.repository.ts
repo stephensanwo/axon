@@ -38,38 +38,49 @@ export class DocumentRepository implements IDocumentRepository {
     return doc.docs[0]?._id || "";
   }
 
+  async findDocumentFilesByFolderId(
+    folderId: string
+  ): Promise<PouchDB.Core.ExistingDocument<DocumentFileEntity>[]> {
+    const doc = await this.filesDb.client.find({
+      selector: {
+        parentId: { $eq: folderId },
+      },
+    });
+    return doc.docs as PouchDB.Core.ExistingDocument<DocumentFileEntity>[];
+  }
+
   // Method to setup changes listener
   public setupChangeListener() {
-    this.foldersDb.client
-      .changes<DocumentFolderEntity>({
-        since: "now",
-        live: true,
-        include_docs: true,
-      })
-      .on("change", (change) => {
-        console.log("Change detected:", change);
-        // Handle the change event
-        searchService.addDocumentFolderToIndex(
-          change.doc as DocumentFolderEntity
-        );
-      })
-      .on("error", (err) => {
-        console.error("Error in changes listener:", err);
-      });
-
-    this.filesDb.client
-      .changes<DocumentFileEntity>({
-        since: "now",
-        live: true,
-        include_docs: true,
-      })
-      .on("change", (change) => {
-        console.log("Change detected:", change);
-        // Handle the change event
-      })
-      .on("error", (err) => {
-        console.error("Error in changes listener:", err);
-      });
+    // TODO Setup indexing for search
+    // this.foldersDb.client
+    //   .changes<DocumentFolderEntity>({
+    //     since: "now",
+    //     live: true,
+    //     include_docs: true,
+    //   })
+    //   .on("change", (change) => {
+    //     console.log("Change detected:", change);
+    //     // Handle the change event
+    //     searchService.addDocumentFolderToIndex(
+    //       change.doc as DocumentFolderEntity
+    //     );
+    //   })
+    //   .on("error", (err) => {
+    //     console.error("Error in changes listener:", err);
+    //   });
+    // this.filesDb.client
+    //   .changes<DocumentFileEntity>({
+    //     since: "now",
+    //     live: true,
+    //     include_docs: true,
+    //   })
+    //   .on("change", (change) => {
+    //     console.log("Change detected:", change);
+    //     // Handle the change event
+    //   })
+    //   .on("error", (err) => {
+    //     console.error("Error in changes listener:", err);
+    //   });
   }
 }
 

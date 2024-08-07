@@ -1,0 +1,166 @@
+import { useTheme } from "@primer/react";
+import { PiFolder } from "react-icons/pi";
+import Blank from "src/components/Blank";
+import { ComponentState } from "src/components/Common/ComponentState";
+import { Document, DocumentFolder } from "src/components/Document";
+import DocumentNav from "src/components/Document/Nav";
+import Folders from "src/components/Folders";
+import AxonLoader from "src/components/Loader/Loader";
+import Page from "src/components/Page";
+import { useDocumentContext } from "src/context/document/hooks/useDocumentContext";
+import { useFolderContext } from "src/hooks/folders/useFolderContext";
+import { usePage } from "src/context/page/hooks/usePage";
+import { useRef } from "react";
+import Search from "src/components/Search";
+
+function DocumentFolderPage() {
+  const { folders } = useFolderContext();
+  const { documentState, documentStateDispatch } = useDocumentContext();
+  const { theme } = useTheme();
+
+  const { panel, togglePanel } = usePage();
+  const initialFocusRef = useRef<HTMLButtonElement>(null);
+  const returnFocusRef = useRef<HTMLButtonElement>(null);
+
+  const page: ComponentState = {
+    // error and loading states are rendered within the DocumentFileList component
+    empty: <></>,
+    loading: <AxonLoader />,
+    error: (
+      <Page
+        panel={panel}
+        togglePanel={togglePanel}
+        initialFocusRef={initialFocusRef}
+        returnFocusRef={returnFocusRef}
+        ignoreClickRefs={[]}
+        header={{
+          breadcrumb: (
+            <DocumentNav
+              level="folder"
+              isLoading={documentState.documentFolders.query.isLoading}
+              documentState={documentState}
+              documentStateDispatch={documentStateDispatch}
+            />
+          ),
+          menu: (
+            <>
+              <Search.Button type={"icon"} />
+            </>
+          ),
+        }}
+        leftPanel={
+          <Page.Left>{<Folders folders={folders} theme={theme} />}</Page.Left>
+        }
+        rightPanel={
+          <Page.Right>
+            <Document.Preview {...documentState} />
+          </Page.Right>
+        }
+        main={
+          <Page.Main>
+            {
+              <Document.Main>
+                <Blank
+                  heading="Unable to load documents"
+                  description={`An error occurred while loading documents\n Please try again later.`}
+                  type="error"
+                  action={{
+                    label: "Try again",
+                    href: "/documents",
+                  }}
+                />
+              </Document.Main>
+            }
+          </Page.Main>
+        }
+        footer={
+          <Page.Footer>{<Document.Footer {...documentState} />}</Page.Footer>
+        }
+      />
+    ),
+    success: (
+      <Page
+        panel={panel}
+        togglePanel={togglePanel}
+        initialFocusRef={initialFocusRef}
+        returnFocusRef={returnFocusRef}
+        ignoreClickRefs={[]}
+        header={{
+          breadcrumb: (
+            <DocumentNav
+              level="folder"
+              isLoading={documentState.documentFolders.query.isLoading}
+              documentState={documentState}
+              documentStateDispatch={documentStateDispatch}
+            />
+          ),
+          menu: (
+            <>
+              <Search.Button type={"icon"} />
+            </>
+          ),
+        }}
+        leftPanel={
+          <Page.Left>{<Folders folders={folders} theme={theme} />}</Page.Left>
+        }
+        rightPanel={<></>}
+        main={
+          <Page.Main>
+            {
+              <Document.Main>
+                <DocumentFolder.Header
+                  title="Documents"
+                  subtitle="Manage document folders"
+                  documentState={documentState}
+                  documentStateDispatch={documentStateDispatch}
+                />
+                <DocumentFolder.List
+                  documentState={documentState}
+                  documentStateDispatch={documentStateDispatch}
+                  isLoading={documentState.documentFolders.query.isLoading}
+                  initialSortColumn={
+                    documentState.documentFolders.data.length > 0
+                      ? "created"
+                      : ""
+                  }
+                  initialSortDirection={
+                    documentState.documentFolders.data.length > 0
+                      ? "DESC"
+                      : undefined
+                  }
+                  emptyDocumentMessage={
+                    <Document.Empty
+                      message={
+                        "You have no folders \n Create a new folder to get started"
+                      }
+                      icon={PiFolder}
+                    ></Document.Empty>
+                  }
+                />
+              </Document.Main>
+            }
+          </Page.Main>
+        }
+        footer={
+          <Page.Footer>{<Document.Footer {...documentState} />}</Page.Footer>
+        }
+      />
+    ),
+  };
+
+  if (
+    !documentState.documentFolders.query.isFetchedAfterMount &&
+    documentState.documentFolders.data === null
+  ) {
+    return page["loading"];
+  }
+  if (
+    documentState.documentFolders.query.isFetchedAfterMount &&
+    documentState.documentFolders.data === null
+  ) {
+    return page["error"];
+  }
+  return page["success"];
+}
+
+export default DocumentFolderPage;

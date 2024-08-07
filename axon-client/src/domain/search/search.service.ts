@@ -22,7 +22,7 @@ export class SearchService {
       name: "string",
       description: "string",
       content: "string",
-      path: "string",
+      path: "string[]",
     } satisfies BaseSearchSchema);
   }
 
@@ -38,7 +38,7 @@ export class SearchService {
           name: folder.name,
           description: folder.description,
           content: "",
-          path: `documents/${folder.name}`,
+          path: ["documents", `${folder.name}`],
         }) satisfies BaseSearchSchema
     );
 
@@ -49,19 +49,15 @@ export class SearchService {
           identifier: file.id,
           type: SearchIndexTypes.DOCUMENT_FILE,
           name: file.name,
-          description: `${file.name} File Type: ${getContentType(file.content_type)!!} File Size: ${convertFileSize({ size: file.file_size })!!}`,
+          description: `File Type: ${getContentType(file.content_type)!!}, File Size: ${convertFileSize({ size: file.file_size })!!}`,
           content: "",
-          path: `documents/${file.name}`,
+          path: ["documents", `${file.parentName!!}`],
         }) satisfies BaseSearchSchema
     );
 
     const allIndexRecords = concat(folderIndexRecords, fileIndexRecords);
     search.insertMultipleIndexes(allIndexRecords);
-    // console.log("Initializing Search Records:", allIndexRecords);
-    // const res = await search.searchIndex({
-    //   term: "Test",
-    // });
-    // console.log("Search Results:", res);
+
   }
 
   public addDocumentFolderToIndex(dto: DocumentFolderEntity) {
@@ -72,7 +68,7 @@ export class SearchService {
       name: dto.name,
       description: dto.description,
       content: "",
-      path: `document/${dto.name}`,
+      path: ["documents", `${dto.name}`],
     } satisfies BaseSearchSchema);
   }
 
@@ -81,9 +77,9 @@ export class SearchService {
       identifier: dto.id,
       type: SearchIndexTypes.DOCUMENT_FILE,
       name: dto.name,
-      description: `${dto.name} ${dto.content_type} ${dto.file_size} bytes`,
+      description: `File Type: ${getContentType(dto.content_type)!!}, File Size: ${convertFileSize({ size: dto.file_size })!!}`,
       content: "",
-      path: `document/${dto.name}`,
+      path: ["documents", `${dto.parentName}`],
     } satisfies BaseSearchSchema);
   }
 

@@ -106,6 +106,7 @@ export type DocumentUploadEventPayload = {
   eventId: string;
   file: File;
   folderId: string;
+  folderName: string;
 };
 
 export type DocumentEventTypes = "document:upload";

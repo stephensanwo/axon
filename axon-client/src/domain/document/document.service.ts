@@ -76,27 +76,27 @@ export class DocumentService {
   public async uploadFile({
     file,
     folderId,
+    folderName,
     eventId,
   }: {
     file: File;
     folderId: string;
+    folderName: string;
     eventId: string;
   }): Promise<DocumentEventResponse> {
     try {
       if (file && folderId) {
-        console.log("Uploading file", file);
-        console.log("Uploading file", folderId);
         const attachmentName = file.name;
         const content = await this.readFile(file);
         const attachment = new Blob([content], { type: file.type });
-        console.log("Uploading file", attachmentName, attachment, file.type);
         await this.filesDb.createAttachmentRecord(
           {
             name: attachmentName,
             content_type: file.type,
             data: attachment,
           },
-          folderId
+          folderId,
+          folderName
         );
       }
       return {
@@ -117,13 +117,13 @@ export class DocumentService {
   public async processDocumentEvent(
     event: DocumentEventPayload
   ): Promise<DocumentEventResponse | null> {
-    console.log("Processing document event in service", event);
     const uploadEvent = event["document:upload"];
     if (uploadEvent) {
       const eventResponse = await this.uploadFile({
         file: uploadEvent.file,
         folderId: uploadEvent.folderId,
         eventId: uploadEvent.eventId,
+        folderName: uploadEvent.folderName,
       });
       return eventResponse;
     }
@@ -153,7 +153,6 @@ export class DocumentService {
     entity: UpdateDocumentFolderDto
   ): Promise<boolean> {
     try {
-      console.log("Updating document folder", entity);
       await this.foldersDb.updateRecord<UpdateDocumentFolderDto>(entity);
       return true;
     } catch (error) {
@@ -200,17 +199,9 @@ export class DocumentService {
         } as GetDocumentFilesResponseDto;
       }
 
-      const files = await this.filesDb.getAllRecords<DocumentFileEntity>(
-        {
-          descending: true,
-        },
-        folderId
-      );
+      const files =
+        await documentRepository.findDocumentFilesByFolderId(folderId);
 
-      console.log("Files", {
-        folderId,
-        files: files || [],
-      });
       return {
         folderId,
         files: files || [],
@@ -249,13 +240,11 @@ export class DocumentService {
 
       const base64String =
         attachment instanceof Blob && (await this.blobToBase64(attachment));
-      console.log("Reader", base64String);
       if (typeof base64String === "string") {
         const blob = new Blob([base64String], {
           type: "application/octet-stream",
         });
         const url = URL.createObjectURL(blob);
-        console.log("Downloading file", file[0].name, url);
         const a = document.createElement("a");
         a.href = url;
         a.download = `${file[0].name}`;

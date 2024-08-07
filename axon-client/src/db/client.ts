@@ -67,7 +67,8 @@ export class DBClient {
    */
   public async createAttachmentRecord(
     entity: AttachmentEntity,
-    parentId: string
+    parentId: string,
+    parentName: string
   ): Promise<BaseEntity & AttachmentEntity> {
     try {
       const prefix = parentId
@@ -83,6 +84,7 @@ export class DBClient {
         content_type: entity.content_type,
         file_size: entity.data.size,
         parentId: parentId,
+        parentName: parentName,
         _attachments: {
           [entity.name]: {
             content_type: entity.content_type,

@@ -18,7 +18,7 @@ import { uid } from "src/common/uid";
 import { useDocumentFileRoute } from "./useDocumentRoute";
 
 export function useDocument(): {
-  uploadDocument: (folderId: string) => void;
+  uploadDocument: (folderId: string, folderName: string) => void;
   createDocumentFolder: UseMutationResult<
     DocumentFolderEntity,
     unknown,
@@ -39,13 +39,14 @@ export function useDocument(): {
   const { documentStateDispatch, documentState } = useDocumentContext();
   const { documentFolderName } = useDocumentFileRoute();
 
-  async function uploadDocument(folderId: string) {
+  async function uploadDocument(folderId: string, folderName: string) {
     const documentFile = await documentService.buildDocumentUploadFile();
     if (!documentFile) return;
     const documentEvent: DocumentEventPayload = {
       "document:upload": {
         file: documentFile,
         folderId,
+        folderName,
         eventId: uid(),
       } as DocumentUploadEventPayload,
     };
