@@ -21,7 +21,10 @@ function UploadDocumentFile({
       icon={PiCloudArrowUp}
       disabled={false}
       onClick={() =>
-        uploadDocument(documentState.documentFolderFiles.folder?.id!!)
+        uploadDocument(
+          documentState.documentFolderFiles.folder?.id!!,
+          documentState.documentFolderFiles.folder?.name!!
+        )
       }
       aria-label="Upload New Document"
       sx={{
@@ -33,7 +36,10 @@ function UploadDocumentFile({
       variant={variant}
       disabled={false}
       onClick={() =>
-        uploadDocument(documentState.documentFolderFiles.folder?.id!!)
+        uploadDocument(
+          documentState.documentFolderFiles.folder?.id!!,
+          documentState.documentFolderFiles.folder?.name!!
+        )
       }
       aria-label="Upload New Document"
       sx={{

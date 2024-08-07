@@ -25,7 +25,10 @@ function DocumentFileNav({
       id: "upload-document",
       name: "Upload Document",
       onClick: () => {
-        uploadDocument(documentState.documentFolderFiles.folder?.id!!);
+        uploadDocument(
+          documentState.documentFolderFiles.folder?.id!!,
+          documentState.documentFolderFiles.folder?.name!!
+        );
       },
     },
   ];
