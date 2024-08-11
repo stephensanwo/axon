@@ -1,4 +1,5 @@
 import { Box, FormControl, TextInput } from "@primer/react";
+import { TextInputSizes } from "@primer/react/lib/internal/components/TextInputWrapper";
 import { Updater } from "@tanstack/react-form";
 
 function Text({
@@ -16,6 +17,10 @@ function Text({
   htmlFor,
   type,
   visuallyHiddenLabel = false,
+  inputSize = "medium",
+  disabled = false,
+  inputStyle,
+  inputClassName,
 }: {
   label: string;
   error: string | null;
@@ -36,6 +41,10 @@ function Text({
   htmlFor: string;
   type: React.HTMLInputTypeAttribute | undefined;
   visuallyHiddenLabel?: boolean;
+  inputSize?: TextInputSizes;
+  disabled?: boolean;
+  inputStyle?: React.CSSProperties;
+  inputClassName?: string;
 }) {
   return (
     <FormControl
@@ -59,8 +68,10 @@ function Text({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
+        className={inputClassName}
         sx={{
           fontSize: 1,
+          ...inputStyle,
         }}
         onBlur={onBlur}
         leadingVisual={
@@ -82,8 +93,9 @@ function Text({
           </Box>
         }
         trailingAction={trailingAction}
-        size="medium"
+        size={inputSize}
         type={type}
+        disabled={disabled}
       />
       {error && (
         <FormControl.Validation
