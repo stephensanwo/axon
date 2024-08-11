@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, UnderlineNav } from "@primer/react";
+import { Box, SxProp, UnderlineNav } from "@primer/react";
 
 interface ITabHeader {
   label: string;
@@ -11,17 +11,26 @@ interface ITabProps {
   name: string;
   headers: ITabHeader[];
   content: React.ReactNode[];
+  tabContainerStyle?: SxProp["sx"];
+  tabHeaderStyle?: SxProp["sx"];
+  tabBodyContainerStyle?: SxProp["sx"];
 }
 
-function Tabs({ name, headers, content }: ITabProps) {
+function Tabs({
+  name,
+  headers,
+  content,
+  tabContainerStyle,
+  tabHeaderStyle,
+  tabBodyContainerStyle,
+}: ITabProps) {
   const [activeTab, setActiveTab] = useState(0);
   return (
     <>
       <UnderlineNav
         aria-label={name}
         sx={{
-          position: "fixed",
-          width: "100%",
+          ...tabContainerStyle,
         }}
       >
         {headers.map((header, index) => (
@@ -31,12 +40,19 @@ function Tabs({ name, headers, content }: ITabProps) {
             aria-current={index === activeTab ? "page" : undefined}
             onSelect={() => setActiveTab(index)}
             counter={header.counter}
+            sx={{
+              ...tabHeaderStyle,
+            }}
           >
             {header.label}
           </UnderlineNav.Item>
         ))}
       </UnderlineNav>
-      <Box sx={{ marginTop: "48px", overflow: "scroll" }}>
+      <Box
+        sx={{
+          ...tabBodyContainerStyle,
+        }}
+      >
         {content[activeTab]}
       </Box>
     </>
