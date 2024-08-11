@@ -135,6 +135,7 @@ function DocumentFileStatus({
                     alignItems: "center",
                     justifyContent: "center",
                     gap: 4,
+                    paddingTop: 6,
                   }}
                 >
                   <Text.ParagraphSecondary>No Uploads</Text.ParagraphSecondary>
