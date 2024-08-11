@@ -7,7 +7,6 @@ import {
 import { BaseDialogProps } from "../Dialog/index.types";
 import SearchInput from "./SearchInput";
 import {
-  MAX_SEARCH_RESULTS,
   SearchIndexProps,
   SearchIndexTypes,
   SearchResults,
@@ -18,8 +17,6 @@ import capitalize from "lodash/capitalize";
 import { PiArrowSquareUpRight } from "react-icons/pi";
 import { formatReadablePath, formatUrlPath } from "src/common/file";
 import { useNavigate } from "react-router-dom";
-import Blank from "../Blank";
-import Skeleton from "../Skeleton";
 import searchService from "src/domain/search/search.service";
 
 const SearchDialog = forwardRef(
@@ -45,7 +42,7 @@ const SearchDialog = forwardRef(
         buttonRef={ref}
         isOpen={openModal}
         onDismiss={closeModalFn}
-        aria-labelledby="Global search dialog"
+        aria-labelledby="Global Search Dialog"
         wide
         sx={{
           width: "60%",
@@ -152,73 +149,6 @@ const SearchDialog = forwardRef(
   }
 );
 
-export const SearchDialogErrorFallback = forwardRef(
-  ({ openModal, closeModalFn }: BaseDialogProps, ref) => {
-    return (
-      <DialogContainer
-        buttonRef={ref}
-        isOpen={openModal}
-        onDismiss={closeModalFn}
-        aria-labelledby="Global search dialog"
-        wide
-        sx={{
-          width: "60%",
-          minHeight: "10vh",
-          maxHeight: "50vh",
-          overflowY: "hidden",
-        }}
-      >
-        <DialogHeader
-          id={"global-search-dialog-header"}
-          header={"Axon Search"}
-          subheading={`Find a document, folder, note, component, etc...`}
-        />
-        <DialogBody>
-          <Box
-            sx={{
-              mt: 3,
-              mb: 3,
-            }}
-          >
-            <Blank
-              heading="Error Loading Search"
-              description="Unable to load search. Please try again later."
-              type="error"
-            />
-          </Box>
-        </DialogBody>
-      </DialogContainer>
-    );
-  }
-);
 
-export const SearchDialogLoadingFallback = forwardRef(
-  ({ openModal, closeModalFn }: BaseDialogProps, ref) => {
-    return (
-      <DialogContainer
-        buttonRef={ref}
-        isOpen={openModal}
-        onDismiss={closeModalFn}
-        aria-labelledby="Global search dialog"
-        wide
-        sx={{
-          width: "60%",
-          minHeight: "10vh",
-          maxHeight: "50vh",
-          overflowY: "hidden",
-        }}
-      >
-        <DialogHeader
-          id={"global-search-dialog-header"}
-          header={"Axon Search"}
-          subheading={`Find a document, folder, note, component, etc...`}
-        />
-        <DialogBody>
-          <Skeleton count={1} height={40} />
-        </DialogBody>
-      </DialogContainer>
-    );
-  }
-);
 
 export default SearchDialog;

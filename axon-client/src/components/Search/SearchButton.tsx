@@ -2,12 +2,11 @@ import { Box, Button, IconButton, Tooltip } from "@primer/react";
 import { Suspense, useState } from "react";
 import { PiMagnifyingGlassBold } from "react-icons/pi";
 import { lazy } from "react";
-import {
-  SearchDialogErrorFallback,
-  SearchDialogLoadingFallback,
-} from "./SearchDialog";
+import { SearchDialogFallback } from "./SearchFallback";
 import ErrorBoundary from "../Common/ErrorBoundary";
 import { Text } from "../Common/Text";
+import Blank from "../Blank";
+import Skeleton from "../Skeleton";
 
 const SearchDialog = lazy(() => import("./SearchDialog"));
 
@@ -32,7 +31,7 @@ function SearchButton({ type }: { type: "icon" | "button" }) {
         <IconButton
           variant="invisible"
           size="medium"
-          icon={PiMagnifyingGlassBold}
+          icon={() => <PiMagnifyingGlassBold size={16} />}
           disabled={false}
           aria-label="Global Search"
           sx={{
@@ -43,18 +42,23 @@ function SearchButton({ type }: { type: "icon" | "button" }) {
       </Tooltip>
       <ErrorBoundary
         fallback={
-          <SearchDialogErrorFallback
-            openModal={menuOpen}
-            closeModalFn={setMenuOpen}
-          />
+          <SearchDialogFallback openModal={menuOpen} closeModalFn={setMenuOpen}>
+            <Blank
+              heading="Error Loading Search"
+              description="Unable to load search. Please try again later."
+              type="error"
+            />
+          </SearchDialogFallback>
         }
       >
         <Suspense
           fallback={
-            <SearchDialogLoadingFallback
+            <SearchDialogFallback
               openModal={menuOpen}
               closeModalFn={setMenuOpen}
-            />
+            >
+              <Skeleton count={1} height={40} />
+            </SearchDialogFallback>
           }
         >
           <SearchDialog openModal={menuOpen} closeModalFn={setMenuOpen} />
