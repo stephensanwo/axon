@@ -11,18 +11,6 @@ export function settingsReducer(
         ...action.payload,
       };
     }
-    case "NEW_COLOR": {
-      return {
-        ...state,
-        settings: {
-          ...state.settings,
-          data: {
-            ...state.settings.data,
-            colors: [...state.settings.data.colors, action.payload],
-          },
-        },
-      };
-    }
     default: {
       throw Error("Unknown action: " + action);
     }
