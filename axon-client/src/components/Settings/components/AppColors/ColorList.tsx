@@ -5,18 +5,13 @@ import { PiCheckCircle, PiDotsThree, PiMagicWand, PiX } from "react-icons/pi";
 import { nameUid } from "src/common/uid";
 import { InlineHeader } from "src/components/Common";
 import { Input } from "src/components/Common/Input";
-import {
-  ColorEntity,
-  ColorViews,
-  SettingsQueryKeys,
-} from "src/domain/settings/settings.entity";
+import { ColorEntity, ColorViews } from "src/domain/settings/settings.entity";
 import ColorSwatchDialog from "./ColorSwatchDialog";
 import { FaRegCircleDot } from "react-icons/fa6";
 import { Color } from "src/components/ColorPicker/index.types";
 import { colorToString } from "src/common/color";
 import { CreateColorDto } from "src/domain/settings/settings.dto";
 import { InlineSpinner } from "src/components/Common/Spinner";
-import settingsService from "src/domain/settings/settings.service";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { formValidation } from "src/common/forms/forms.validation";
 import { SettingsState } from "src/context/settings/settings.types";
@@ -25,7 +20,7 @@ import {
   TableListHeaderData,
   TableListRowDataProps,
 } from "src/components/TableList/index.types";
-import { useQueryClient } from "@tanstack/react-query";
+import { useSettings } from "src/context/settings/hooks/useSettings";
 
 const gridTemplateColumns = "3fr 2fr auto";
 
@@ -86,6 +81,7 @@ function ColorList({ settingsState }: { settingsState: SettingsState }) {
 
 function ColorListItem({ color }: { color: ColorEntity }) {
   const { theme } = useTheme();
+  const { deleteColor } = useSettings();
   const rowData: TableListRowDataProps = [
     {
       id: "label",
@@ -166,6 +162,7 @@ function ColorListItem({ color }: { color: ColorEntity }) {
               flexShrink: 0,
               borderRadius: 0,
             }}
+            onClick={() => deleteColor.mutate([color.id])}
           />
         </Box>
       ),
@@ -182,7 +179,7 @@ function ColorListItem({ color }: { color: ColorEntity }) {
 function NewColorItem() {
   const { theme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
-  const queryClient = useQueryClient();
+  const { createColor } = useSettings();
 
   const formOpts = useMemo(
     () =>
@@ -199,16 +196,8 @@ function NewColorItem() {
   const Form = useForm({
     ...formOpts,
     onSubmit: async ({ value, formApi }) => {
-      console.log("NewColorItem -> value", value);
-      try {
-        await settingsService.createColor(value);
-        queryClient.invalidateQueries({
-          queryKey: [...SettingsQueryKeys.SETTINGS],
-        });
-        formApi.reset();
-      } catch (error) {
-        // Handle the error
-      }
+      createColor.mutate(value);
+      formApi.reset();
     },
   });
 
@@ -358,7 +347,12 @@ function NewColorItem() {
                     <PiCheckCircle size={16} />
                   )
                 }
-                disabled={isSubmitting}
+                disabled={
+                  isSubmitting ||
+                  !Form.state.values.label ||
+                  !Form.state.values.value.hex ||
+                  !Form.state.values.view
+                }
                 onClick={Form.handleSubmit}
                 aria-label="Confirm Color"
                 sx={{
