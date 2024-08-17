@@ -1,31 +1,33 @@
-import { forwardRef, useCallback } from "react";
+import { forwardRef } from "react";
 import {
   DialogBody,
   DialogContainer,
   DialogFooter,
   DialogHeader,
 } from "src/components/Dialog";
-import { AppOptionsDialogProps } from "src/types/app";
-
 import Tabs from "../Tabs";
 import { CiPalette } from "react-icons/ci";
-import AppTheme from "./AppTheme";
+import { BaseDialogProps } from "../Dialog/index.types";
+import AppTheme from "./components/AppTheme";
+import AppColors from "./components/AppColors";
 
-const AppSettings = forwardRef<HTMLButtonElement, AppOptionsDialogProps>(
-  (props, ref) => {
-    const { appOptionsDialog, setAppOptionsDialog } = props;
-    const onDialogClose = useCallback(() => setAppOptionsDialog(null), []);
-
+const SettingsDialog = forwardRef(
+  ({ openModal, closeModalFn }: BaseDialogProps, ref) => {
     return (
       <DialogContainer
         buttonRef={ref}
-        isOpen={appOptionsDialog}
-        onDismiss={onDialogClose}
-        aria-labelledby="Axon settings dialog"
+        isOpen={openModal}
+        onDismiss={closeModalFn}
+        aria-labelledby="Axon Settings Dialog"
         wide
+        sx={{
+          width: "60%",
+          overflowY: "hidden",
+          minHeight: "50vh",
+        }}
       >
         <DialogHeader
-          id={"axon-settings-heading"}
+          id={"axon-settings-dialog-header"}
           header={"Axon Settings"}
           subheading={`Change default settings`}
         />
@@ -36,16 +38,19 @@ const AppSettings = forwardRef<HTMLButtonElement, AppOptionsDialogProps>(
               label: "Theme",
               icon: <CiPalette size={18} />,
             },
+            {
+              label: "Colors",
+              icon: <CiPalette size={18} />,
+            },
           ]}
           content={[
             <DialogBody>
               <AppTheme />
             </DialogBody>,
+            <DialogBody>
+              <AppColors />
+            </DialogBody>,
           ]}
-          tabContainerStyle={{
-            position: "fixed",
-            width: "100%",
-          }}
         ></Tabs>
         <DialogFooter></DialogFooter>
       </DialogContainer>
@@ -53,4 +58,4 @@ const AppSettings = forwardRef<HTMLButtonElement, AppOptionsDialogProps>(
   }
 );
 
-export default AppSettings;
+export default SettingsDialog;

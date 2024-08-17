@@ -29,7 +29,7 @@ function Colors(): JSX.Element {
           title="Colors"
           subtitle="(Select default color and create custom colors)"
         />
-        <ColorPickerPanel />
+        {/* <ColorPickerPanel /> */}
       </Box>
       <Box>
         <InlineHeader subtitle="Select color token to make default or delete" />

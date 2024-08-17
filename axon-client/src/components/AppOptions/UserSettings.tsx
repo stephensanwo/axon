@@ -50,6 +50,10 @@ const UserSettings = forwardRef<HTMLButtonElement, AppOptionsDialogProps>(
               <Subscription />
             </DialogBody>,
           ]}
+          tabContainerStyle={{
+            position: "fixed",
+            width: "100%",
+          }}
         ></Tabs>
         <DialogFooter></DialogFooter>
       </DialogContainer>
