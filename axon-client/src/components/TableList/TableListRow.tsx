@@ -1,4 +1,4 @@
-import { createElement } from "react";
+import React from "react";
 import { TableListRowProps } from "./index.types";
 import { Box } from "@primer/react";
 
@@ -12,9 +12,9 @@ function TableListRow({ gridTemplateColumns, data }: TableListRowProps) {
         gap: "1px",
       }}
     >
-      {data.map((item, index) =>
-        createElement(() => item.renderCell, { key: index })
-      )}
+      {data.map((item, index) => (
+        <Box key={index}>{item.renderCell}</Box>
+      ))}
     </Box>
   );
 }

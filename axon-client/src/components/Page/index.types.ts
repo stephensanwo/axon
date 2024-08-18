@@ -5,7 +5,7 @@ export interface PageProps {
   footer?: React.ReactNode;
   header: {
     breadcrumb: React.ReactNode;
-    menu: React.ReactNode;
+    menus: React.ReactNode[];
   };
   panel: PagePanels;
   togglePanel: (

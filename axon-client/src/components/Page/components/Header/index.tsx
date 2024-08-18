@@ -11,7 +11,7 @@ export interface IHeader {
   togglePanel: (direction: PagePanelDirections) => void;
   panelButtonRef: React.RefObject<HTMLButtonElement>;
   breadcrumbs: React.ReactNode;
-  menus: React.ReactNode;
+  menus: React.ReactNode[];
 }
 
 function Header({
@@ -48,7 +48,7 @@ function Header({
         }}
       >
         <HeaderBreadcrumbs>{breadcrumbs}</HeaderBreadcrumbs>
-        <HeaderMenus>{menus}</HeaderMenus>
+        <HeaderMenus>{menus.map((menu) => menu)}</HeaderMenus>
       </PrimerHeader.Item>
     </PrimerHeader>
   );

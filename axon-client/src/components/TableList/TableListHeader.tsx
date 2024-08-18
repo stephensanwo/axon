@@ -102,6 +102,7 @@ function TableListHeader({
                 backgroundColor: theme?.colors.bg.default,
                 width: "32px",
               }}
+              key={index}
             >
               {action}
             </Box>

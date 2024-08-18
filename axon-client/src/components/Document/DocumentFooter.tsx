@@ -36,6 +36,7 @@ function DocumentFooter(documentState: DocumentState) {
             width={400}
             minHeight={500}
             side="outside-top"
+            align="center"
             anchorOffset={10}
             alignmentOffset={16}
             anchorComponent={

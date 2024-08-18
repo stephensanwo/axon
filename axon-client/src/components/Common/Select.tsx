@@ -84,7 +84,10 @@ function Select<T>(props: SelectProps<T>) {
         <ActionMenu.Overlay
           width={width}
           align="center"
-          sx={{ border: `1px solid ${theme?.colors.border.default}` }}
+          sx={{
+            border: `1px solid ${theme?.colors.border.default}`,
+            zIndex: 10050,
+          }}
         >
           <ActionList>
             {menuItems.map((item, index) => (

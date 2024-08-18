@@ -12,6 +12,8 @@ import { PiFile } from "react-icons/pi";
 import { useRef } from "react";
 import { usePage } from "src/context/page/hooks/usePage";
 import Search from "src/components/Search";
+import Settings from "src/components/Settings";
+import User from "src/components/User";
 
 function DocumentFilePage() {
   const { folders } = useFolderContext();
@@ -41,11 +43,11 @@ function DocumentFilePage() {
               documentStateDispatch={documentStateDispatch}
             />
           ),
-          menu: (
-            <>
-              <Search.Button type={"icon"} />
-            </>
-          ),
+          menus: [
+            <Search.Button type={"icon"} />,
+            <Settings.Button type="icon" />,
+            <User.Button type={"icon"} />,
+          ],
         }}
         leftPanel={
           <Page.Left>{<Folders folders={folders} theme={theme} />}</Page.Left>
@@ -87,11 +89,11 @@ function DocumentFilePage() {
               documentStateDispatch={documentStateDispatch}
             />
           ),
-          menu: (
-            <>
-              <Search.Button type={"icon"} />
-            </>
-          ),
+          menus: [
+            <Search.Button type={"icon"} />,
+            <Settings.Button type="icon" />,
+            <User.Button type={"icon"} />,
+          ],
         }}
         leftPanel={
           <Page.Left>{<Folders folders={folders} theme={theme} />}</Page.Left>

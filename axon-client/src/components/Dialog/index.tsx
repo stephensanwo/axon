@@ -15,6 +15,7 @@ export function DialogContainer(props: DialogProps) {
       sx={{
         ...sx,
         border: `1px solid ${theme?.colors.border.default}`,
+        zIndex: 10050,
       }}
       {...rest}
     >

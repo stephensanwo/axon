@@ -1,10 +1,8 @@
 import { Box, Overlay, useTheme } from "@primer/react";
 import LeftPanel from "src/components/Page/components/LeftPanel";
 import PageMain from "./components/PageMain";
-// import { IPage } from "./index.types";
 import PageFooter from "./components/PageFooter";
 import RightPanel from "./components/RightPanel";
-import { useRef, useState } from "react";
 import AppIcon from "../AppIcon";
 import HeaderBreadcrumbs from "../Header/HeaderBreadcrumbs";
 import Header from "./components/Header";
@@ -15,7 +13,7 @@ function Page({
   rightPanel,
   main,
   footer,
-  header: { breadcrumb, menu },
+  header: { breadcrumb, menus },
   panel,
   togglePanel,
   initialFocusRef,
@@ -23,7 +21,6 @@ function Page({
   ignoreClickRefs,
 }: PageProps) {
   const { theme } = useTheme();
-  console.log("panel", panel);
   return (
     <>
       <Header
@@ -31,7 +28,7 @@ function Page({
         panelButtonRef={returnFocusRef}
         headerIcon={<AppIcon />}
         breadcrumbs={<HeaderBreadcrumbs>{breadcrumb}</HeaderBreadcrumbs>}
-        menus={menu}
+        menus={menus}
       ></Header>
       <Box>
         {panel.left && (

@@ -12,7 +12,7 @@ export function InlineHeader(props: InlineHeaderProps) {
   return (
     <Box
       sx={{
-        mb: 3,
+        marginBottom: 3,
         display: "flex",
         alignItems: "center",
         gap: 2,

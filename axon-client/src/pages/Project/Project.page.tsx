@@ -14,12 +14,15 @@ import { useRef } from "react";
 import Search from "src/components/Search";
 import Settings from "src/components/Settings";
 import User from "src/components/User";
+import ProjectNav from "src/components/Project/components/ProjectNav";
+import { Text } from "src/components/Common/Text";
+import { Project } from "src/components/Project";
+import { useProjectContext } from "src/context/project/hooks/useProjectContext";
 
-function DocumentFolderPage() {
+function ProjectPage() {
   const { folders } = useFolderContext();
-  const { documentState, documentStateDispatch } = useDocumentContext();
+  const { projectState, projectStateDispatch } = useProjectContext();
   const { theme } = useTheme();
-
   const { panel, togglePanel } = usePage();
   const initialFocusRef = useRef<HTMLButtonElement>(null);
   const returnFocusRef = useRef<HTMLButtonElement>(null);
@@ -37,12 +40,14 @@ function DocumentFolderPage() {
         ignoreClickRefs={[]}
         header={{
           breadcrumb: (
-            <DocumentNav
-              level="folder"
-              isLoading={documentState.documentFolders.query.isLoading}
-              documentState={documentState}
-              documentStateDispatch={documentStateDispatch}
-            />
+            <>
+              <Project.Nav
+                navTitle="Projects"
+                projectState={projectState}
+                projectStateDispatch={projectStateDispatch}
+              />
+              <Text.SmallSecondary>/</Text.SmallSecondary>
+            </>
           ),
           menus: [
             <Search.Button type={"icon"} />,
@@ -53,30 +58,26 @@ function DocumentFolderPage() {
         leftPanel={
           <Page.Left>{<Folders folders={folders} theme={theme} />}</Page.Left>
         }
-        rightPanel={
-          <Page.Right>
-            <Document.Preview {...documentState} />
-          </Page.Right>
-        }
+        rightPanel={<Page.Right></Page.Right>}
         main={
           <Page.Main>
             {
-              <Document.Main>
+              <Project.Main>
                 <Blank
-                  heading="Unable to load documents"
-                  description={`An error occurred while loading documents\n Please try again later.`}
+                  heading="Unable to load projects"
+                  description={`An error occurred while loading projects\n Please try again later.`}
                   type="error"
                   action={{
                     label: "Try again",
-                    href: "/documents",
+                    href: "/projects",
                   }}
                 />
-              </Document.Main>
+              </Project.Main>
             }
           </Page.Main>
         }
         footer={
-          <Page.Footer>{<Document.Footer {...documentState} />}</Page.Footer>
+          <Page.Footer>{<Project.Footer {...projectState} />}</Page.Footer>
         }
       />
     ),
@@ -89,12 +90,14 @@ function DocumentFolderPage() {
         ignoreClickRefs={[]}
         header={{
           breadcrumb: (
-            <DocumentNav
-              level="folder"
-              isLoading={documentState.documentFolders.query.isLoading}
-              documentState={documentState}
-              documentStateDispatch={documentStateDispatch}
-            />
+            <>
+              <Project.Nav
+                navTitle="Projects"
+                projectState={projectState}
+                projectStateDispatch={projectStateDispatch}
+              />
+              <Text.SmallSecondary>/</Text.SmallSecondary>
+            </>
           ),
           menus: [
             <Search.Button type={"icon"} />,
@@ -109,60 +112,50 @@ function DocumentFolderPage() {
         main={
           <Page.Main>
             {
-              <Document.Main>
-                <DocumentFolder.Header
-                  title="Documents"
-                  subtitle="Manage document folders"
-                  documentState={documentState}
-                  documentStateDispatch={documentStateDispatch}
+              <Project.Main>
+                <Project.Header
+                  title="Projects"
+                  subtitle="Manage projects"
+                  projectState={projectState}
+                  projectStateDispatch={projectStateDispatch}
                 />
-                <DocumentFolder.List
-                  documentState={documentState}
-                  documentStateDispatch={documentStateDispatch}
-                  isLoading={documentState.documentFolders.query.isLoading}
+                <Project.List
+                  projectState={projectState}
+                  projectStateDispatch={projectStateDispatch}
+                  isLoading={projectState.query.isLoading}
                   initialSortColumn={
-                    documentState.documentFolders.data.length > 0
-                      ? "created"
-                      : ""
+                    projectState.data.length > 0 ? "created" : ""
                   }
                   initialSortDirection={
-                    documentState.documentFolders.data.length > 0
-                      ? "DESC"
-                      : undefined
+                    projectState.data.length > 0 ? "DESC" : undefined
                   }
                   emptyDocumentMessage={
                     <Document.Empty
                       message={
-                        "You have no folders \n Create a new folder to get started"
+                        "You have no projects \n Create a new project to get started"
                       }
                       icon={PiFolder}
                     ></Document.Empty>
                   }
                 />
-              </Document.Main>
+              </Project.Main>
             }
           </Page.Main>
         }
         footer={
-          <Page.Footer>{<Document.Footer {...documentState} />}</Page.Footer>
+          <Page.Footer>{<Project.Footer {...projectState} />}</Page.Footer>
         }
       />
     ),
   };
 
-  if (
-    !documentState.documentFolders.query.isFetchedAfterMount &&
-    documentState.documentFolders.data === null
-  ) {
+  if (!projectState.query.isFetchedAfterMount && projectState.data === null) {
     return page["loading"];
   }
-  if (
-    documentState.documentFolders.query.isFetchedAfterMount &&
-    documentState.documentFolders.data === null
-  ) {
+  if (projectState.query.isFetchedAfterMount && projectState.data === null) {
     return page["error"];
   }
   return page["success"];
 }
 
-export default DocumentFolderPage;
+export default ProjectPage;
