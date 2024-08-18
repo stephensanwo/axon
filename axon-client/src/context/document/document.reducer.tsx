@@ -234,5 +234,3 @@ export function documentReducer(
     }
   }
 }
-
-export function layerReducer() {}

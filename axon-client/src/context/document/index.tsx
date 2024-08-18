@@ -1,15 +1,8 @@
-import React, {
-  Reducer,
-  createContext,
-  useCallback,
-  useEffect,
-  useReducer,
-} from "react";
+import React, { Reducer, createContext, useEffect, useReducer } from "react";
 import { DocumentAction, DocumentState } from "./document.types";
 import { documentReducer } from "./document.reducer";
 import { useDataQuery } from "src/hooks/api/useDataQuery";
 import {
-  DocumentFileEntity,
   DocumentFolderEntity,
   DocumentQueryKeys,
 } from "src/domain/document/document.entity";
