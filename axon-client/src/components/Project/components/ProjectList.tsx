@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import { BaseProjectProps } from "../index.types";
 import { ProjectEntity } from "src/domain/project/project.entity";
 import ProjectRecents from "./ProjectRecents";
+import { useProject } from "src/context/project/hooks/useProject";
+import { UpdateProjectDto } from "src/domain/project/project.dto";
 
 function ProjectList({
   projectState,
@@ -24,12 +26,24 @@ function ProjectList({
   emptyDocumentMessage: React.ReactNode;
 } & BaseProjectProps) {
   const navigate = useNavigate();
+  const { updateProject } = useProject();
   const options: SelectMenuItem[] = [
     {
       id: "open",
       name: "Open",
       onClick: (data: ProjectEntity) => {
         navigate(`${data.name}`);
+      },
+    },
+    {
+      id: "pin",
+      name: "Pin Project",
+      onClick: (data: ProjectEntity) => {
+        const projectUpdateDto: UpdateProjectDto = {
+          ...data,
+          pinned: true,
+        };
+        updateProject.mutate(projectUpdateDto);
       },
     },
   ];
@@ -44,17 +58,16 @@ function ProjectList({
           <RowSelector
             rowId={row.id}
             onChangeCallback={(selected: boolean) => {
-              console.log("selected", selected);
               if (selected) {
-                //     documentStateDispatch({
-                //       type: "SELECT_DOCUMENT_FOLDER",
-                //       payload: row,
-                //     });
-                //   } else {
-                //     documentStateDispatch({
-                //       type: "REMOVE_SELECTED_DOCUMENT_FOLDER",
-                //       payload: row.id,
-                //     });
+                projectStateDispatch({
+                  type: "SELECT_PROJECT",
+                  payload: row,
+                });
+              } else {
+                projectStateDispatch({
+                  type: "REMOVE_SELECTED_PROJECT",
+                  payload: row.id,
+                });
               }
             }}
           />
@@ -131,10 +144,12 @@ function ProjectList({
 
   return (
     <>
-      <ProjectRecents
-        projectState={projectState}
-        projectStateDispatch={projectStateDispatch}
-      />
+      {projectState.pinnedProjects?.length > 0 && (
+        <ProjectRecents
+          projectState={projectState}
+          projectStateDispatch={projectStateDispatch}
+        />
+      )}
       <Table
         id="documents"
         state={tableState}

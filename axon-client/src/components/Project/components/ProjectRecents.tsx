@@ -1,69 +1,45 @@
-import React from "react";
 import { BaseProjectProps } from "../index.types";
-import { Box, Button, useTheme } from "@primer/react";
-import { Text } from "src/components/Common/Text";
-import { PiFolderSimpleFill, PiPlusLight } from "react-icons/pi";
+import { Box, useTheme } from "@primer/react";
+import { PiAppWindowFill } from "react-icons/pi";
+import { formatDateToRelativeTime } from "src/common/date";
+import Card from "src/components/Common/Card";
+import { useProject } from "src/context/project/hooks/useProject";
+import { UpdateProjectDto } from "src/domain/project/project.dto";
 
-function ProjectRecents({
-  projectState,
-  projectStateDispatch,
-}: BaseProjectProps) {
+function ProjectRecents({ projectState }: BaseProjectProps) {
   const { theme } = useTheme();
+  const { updateProject } = useProject();
   return (
     <Box
       sx={{
-        height: "240px",
+        height: "200px",
         display: "flex",
         alignItems: "center",
+        gap: 4,
+        overflowX: "scroll",
+        scrollbarWidth: "none",
       }}
     >
-      <Button
-        variant="invisible"
-        sx={{
-          height: "180px",
-          minWidth: "240px",
-          borderRadius: 2,
-          border: `1px solid ${theme?.colors.border.default}`,
-          ":hover": {
-            backgroundColor: "transparent",
-            border: `1px solid ${theme?.colors.border.default}`,
-          },
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
+      {projectState?.pinnedProjects?.map((project, index) => (
+        <Card.Button
+          key={index}
+          icon={
+            <PiAppWindowFill size={64} color={theme?.colors.primary.default} />
+          }
+          title={project.name}
+          subtitle={formatDateToRelativeTime(project.updated)}
+          border
+          trailingAction={() => {
+            // Unpin project
+            const projectUpdateDto: UpdateProjectDto = {
+              ...project,
+              pinned: false,
+            };
+            updateProject.mutate(projectUpdateDto);
           }}
-        >
-          <PiPlusLight size={64} color={theme?.colors.border.default} />
-          <Text.SmallSecondary>New Project</Text.SmallSecondary>
-        </Box>
-      </Button>
-
-      <Button
-        variant="invisible"
-        sx={{
-          height: "200px",
-          minWidth: "240px",
-          borderRadius: 2,
-
-          ":hover": {
-            backgroundColor: "transparent",
-            border: `1px solid ${theme?.colors.border.default}`,
-          },
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <PiFolderSimpleFill size={64} color={theme?.colors.border.default} />
-          <Text.SmallSecondary>Project Odin</Text.SmallSecondary>
-        </Box>
-      </Button>
+          onClick={() => console.log("click")}
+        ></Card.Button>
+      ))}
     </Box>
   );
 }

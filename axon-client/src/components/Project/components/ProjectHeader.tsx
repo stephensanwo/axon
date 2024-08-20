@@ -1,6 +1,8 @@
 import { Box } from "@primer/react";
 import { Text } from "../../Common/Text";
 import { BaseProjectProps } from "../index.types";
+import CreateProject from "../Form/CreateProject";
+import SelectProjectOptions from "./SelectProjectOptions";
 
 function ProjectHeader({
   title,
@@ -39,7 +41,16 @@ function ProjectHeader({
             alignItems: "center",
             gap: 2,
           }}
-        ></Box>
+        >
+          <SelectProjectOptions
+            projectState={projectState}
+            projectStateDispatch={projectStateDispatch}
+          />
+          <CreateProject
+            projectState={projectState}
+            projectStateDispatch={projectStateDispatch}
+          />
+        </Box>
       </Box>
     </>
   );

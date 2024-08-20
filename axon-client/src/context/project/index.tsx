@@ -33,6 +33,8 @@ const ProjectProvider = ({ children }: ProjectProviderProps) => {
   >(projectReducer, {
     data: [],
     query: projectQuery,
+    createProjectForm: null,
+    selectedProjects: [],
   });
 
   useEffect(() => {

@@ -1,20 +1,17 @@
 import { useTheme } from "@primer/react";
-import { PiFolder } from "react-icons/pi";
+import { PiAppWindowFill } from "react-icons/pi";
 import Blank from "src/components/Blank";
 import { ComponentState } from "src/components/Common/ComponentState";
-import { Document, DocumentFolder } from "src/components/Document";
-import DocumentNav from "src/components/Document/Nav";
+import { Document } from "src/components/Document";
 import Folders from "src/components/Folders";
 import AxonLoader from "src/components/Loader/Loader";
 import Page from "src/components/Page";
-import { useDocumentContext } from "src/context/document/hooks/useDocumentContext";
 import { useFolderContext } from "src/hooks/folders/useFolderContext";
 import { usePage } from "src/context/page/hooks/usePage";
 import { useRef } from "react";
 import Search from "src/components/Search";
 import Settings from "src/components/Settings";
 import User from "src/components/User";
-import ProjectNav from "src/components/Project/components/ProjectNav";
 import { Text } from "src/components/Common/Text";
 import { Project } from "src/components/Project";
 import { useProjectContext } from "src/context/project/hooks/useProjectContext";
@@ -134,7 +131,7 @@ function ProjectPage() {
                       message={
                         "You have no projects \n Create a new project to get started"
                       }
-                      icon={PiFolder}
+                      icon={PiAppWindowFill}
                     ></Document.Empty>
                   }
                 />
