@@ -1,4 +1,4 @@
-import { Header as PrimerHeader } from "@primer/react";
+import { Box, Header as PrimerHeader } from "@primer/react";
 import HeaderBreadcrumbs from "./HeaderBreadcrumbs";
 import HeaderMenus from "./HeaderMenus";
 import { PagePanelDirections } from "../../index.types";
@@ -48,7 +48,11 @@ function Header({
         }}
       >
         <HeaderBreadcrumbs>{breadcrumbs}</HeaderBreadcrumbs>
-        <HeaderMenus>{menus.map((menu) => menu)}</HeaderMenus>
+        <HeaderMenus>
+          {menus.map((menu, index) => (
+            <Box key={index}>{menu}</Box>
+          ))}
+        </HeaderMenus>
       </PrimerHeader.Item>
     </PrimerHeader>
   );

@@ -13,6 +13,7 @@ import {
 import concat from "lodash/concat";
 import map from "lodash/map";
 import { convertFileSize, getContentType } from "src/common/file";
+import projectService from "../project/project.service";
 
 export class SearchService {
   constructor() {
@@ -28,6 +29,7 @@ export class SearchService {
 
   public async initializeSearchRecords() {
     const { folders, files } = await documentService.getAllDocumentRecords();
+    const projects = await projectService.getProjects();
     console.log("Initializing Search Records:", folders, files);
     const folderIndexRecords = map(
       folders,
@@ -55,9 +57,25 @@ export class SearchService {
         }) satisfies BaseSearchSchema
     );
 
-    const allIndexRecords = concat(folderIndexRecords, fileIndexRecords);
-    search.insertMultipleIndexes(allIndexRecords);
+    const projectRecords = map(
+      projects,
+      (project) =>
+        ({
+          identifier: project.id,
+          type: SearchIndexTypes.PROJECT,
+          name: project.name,
+          description: project.description,
+          content: "",
+          path: ["projects", `${project.name}`],
+        }) satisfies BaseSearchSchema
+    );
 
+    const allIndexRecords = concat(
+      folderIndexRecords,
+      fileIndexRecords,
+      projectRecords
+    );
+    search.insertMultipleIndexes(allIndexRecords);
   }
 
   public addDocumentFolderToIndex(dto: DocumentFolderEntity) {

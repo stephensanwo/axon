@@ -36,7 +36,7 @@ export function useDocument(): {
   downloadDocumentFile: (file: DocumentFileEntity[]) => void;
 } {
   const { postMessage } = useDocumentWorker();
-  const { documentStateDispatch, documentState } = useDocumentContext();
+  const { documentStateDispatch } = useDocumentContext();
   const { documentFolderName } = useDocumentFileRoute();
 
   async function uploadDocument(folderId: string, folderName: string) {

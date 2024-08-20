@@ -5,23 +5,15 @@ import { Text } from "../../Common/Text";
 import { formOptions, useForm } from "@tanstack/react-form";
 import { InlineSpinner } from "../../Common/Spinner";
 import { useDocument } from "src/context/document/hooks/useDocument";
-import {
-  DocumentAction,
-  DocumentState,
-} from "src/context/document/document.types";
 import { UpdateDocumentFolderDto } from "src/domain/document/document.dto";
 import { DocumentFolderData } from "src/domain/document/document.entity";
 import { Input } from "src/components/Common/Input";
 import { formValidation } from "src/common/forms/forms.validation";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { PiFolderBold } from "react-icons/pi";
+import { BaseDocumentProps } from "../index.types";
 
-function UpdateDocumentFolder({
-  documentState,
-}: {
-  documentState: DocumentState;
-  documentStateDispatch: React.Dispatch<DocumentAction>;
-}) {
+function UpdateDocumentFolder({ documentState }: BaseDocumentProps) {
   const { updateDocumentFolder } = useDocument();
   const {
     documentFolders: { selectedDocumentFolders },

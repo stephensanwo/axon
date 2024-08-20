@@ -1,23 +1,18 @@
 import { Box } from "@primer/react";
-import {
-  DocumentAction,
-  DocumentLevels,
-  DocumentState,
-} from "src/context/document/document.types";
-import DeleteDocumentFolder from "../Delete/DeleteDocumentFolder";
+import { DocumentLevels } from "src/context/document/document.types";
+import DeleteDocumentFolder from "../Form/DeleteDocumentFolder";
 import UpdateDocumentFolder from "../Form/UpdateDocumentFolder";
-import DeleteDocumentFile from "../Delete/DeleteDocumentFile";
+import DeleteDocumentFile from "../Form/DeleteDocumentFile";
 import { useEffect } from "react";
 import DownloadDocumentFile from "../Sync/DownloadDocumentFile";
+import { BaseDocumentProps } from "../index.types";
 
 function SelectDocumentOptions({
   level,
   documentState,
   documentStateDispatch,
-}: {
+}: BaseDocumentProps & {
   level: DocumentLevels;
-  documentState: DocumentState;
-  documentStateDispatch: React.Dispatch<DocumentAction>;
 }) {
   const {
     documentFolders: { selectedDocumentFolders },

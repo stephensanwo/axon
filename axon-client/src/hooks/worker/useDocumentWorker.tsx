@@ -26,7 +26,6 @@ export function useDocumentWorker<T>(): {
             status: event.data.status,
           },
         });
-
         queryClient.invalidateQueries({
           queryKey: [...DocumentQueryKeys.DOCUMENT_FOLDERS, documentFolderName],
         });
