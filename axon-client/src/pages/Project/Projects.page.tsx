@@ -12,10 +12,11 @@ import { useRef } from "react";
 import Search from "src/components/Search";
 import Settings from "src/components/Settings";
 import User from "src/components/User";
+import { Text } from "src/components/Common/Text";
 import { Project } from "src/components/Project";
 import { useProjectContext } from "src/context/project/hooks/useProjectContext";
 
-function ProjectPage() {
+function ProjectsPage() {
   const { folders } = useFolderContext();
   const { projectState, projectStateDispatch } = useProjectContext();
   const { theme } = useTheme();
@@ -23,7 +24,6 @@ function ProjectPage() {
   const initialFocusRef = useRef<HTMLButtonElement>(null);
   const returnFocusRef = useRef<HTMLButtonElement>(null);
 
-  console.log("ProjectPage -> projectState", projectState);
   const page: ComponentState = {
     // error and loading states are rendered within the DocumentFileList component
     empty: <></>,
@@ -38,8 +38,8 @@ function ProjectPage() {
         header={{
           breadcrumb: (
             <Project.Nav
-              level="project"
-              isLoading={projectState.project.query.isLoading}
+              level="projects"
+              isLoading={projectState.projects.query.isLoading}
               projectState={projectState}
               projectStateDispatch={projectStateDispatch}
             />
@@ -59,11 +59,11 @@ function ProjectPage() {
             {
               <Project.Main>
                 <Blank
-                  heading="Project not found"
-                  description={`The project you are looking for does not exist\n or has been deleted.`}
+                  heading="Unable to load projects"
+                  description={`An error occurred while loading projects\n Please try again later.`}
                   type="error"
                   action={{
-                    label: "Go to Projects",
+                    label: "Try again",
                     href: "/projects",
                   }}
                 />
@@ -86,8 +86,8 @@ function ProjectPage() {
         header={{
           breadcrumb: (
             <Project.Nav
-              level="project"
-              isLoading={projectState.project.query.isLoading}
+              level="projects"
+              isLoading={projectState.projects.query.isLoading}
               projectState={projectState}
               projectStateDispatch={projectStateDispatch}
             />
@@ -115,18 +115,12 @@ function ProjectPage() {
                 <Project.List
                   projectState={projectState}
                   projectStateDispatch={projectStateDispatch}
-                  isLoading={projectState.project.query.isLoading}
+                  isLoading={projectState.projects.query.isLoading}
                   initialSortColumn={
-                    projectState.project.flows &&
-                    projectState.project.flows!!.length > 0
-                      ? "created"
-                      : ""
+                    projectState.projects.data.length > 0 ? "created" : ""
                   }
                   initialSortDirection={
-                    projectState.project.flows &&
-                    projectState.project.flows!!.length > 0
-                      ? "DESC"
-                      : undefined
+                    projectState.projects.data.length > 0 ? "DESC" : undefined
                   }
                   emptyDocumentMessage={
                     <Document.Empty
@@ -149,18 +143,18 @@ function ProjectPage() {
   };
 
   if (
-    !projectState.project.query.isFetchedAfterMount &&
-    projectState.project.project === null
+    !projectState.projects.query.isFetchedAfterMount &&
+    projectState.projects.data === null
   ) {
     return page["loading"];
   }
   if (
-    projectState.project.query.isFetchedAfterMount &&
-    projectState.project.project === null
+    projectState.projects.query.isFetchedAfterMount &&
+    projectState.projects.data === null
   ) {
     return page["error"];
   }
   return page["success"];
 }
 
-export default ProjectPage;
+export default ProjectsPage;
