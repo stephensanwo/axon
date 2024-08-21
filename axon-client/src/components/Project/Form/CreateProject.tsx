@@ -19,7 +19,9 @@ function CreateProject({
   projectState,
   projectStateDispatch,
 }: BaseProjectProps) {
-  const { createProjectForm } = projectState;
+  const {
+    projects: { createProjectForm },
+  } = projectState;
   const { createProject } = useProject();
 
   const formOpts = formOptions<CreateProjectDto>({

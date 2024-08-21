@@ -18,7 +18,7 @@ function ProjectFooter(projectState: ProjectState) {
     >
       <Box>
         <Text.SmallSecondary>
-          Documents: {projectState.data.length}
+          Documents: {projectState.projects.data.length}
         </Text.SmallSecondary>
       </Box>
       <Box

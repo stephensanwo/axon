@@ -2,7 +2,7 @@ import { Truncate, useTheme } from "@primer/react";
 import Select, { SelectMenuItem } from "src/components/Common/Select";
 import { BaseProjectProps } from "../index.types";
 
-function ProjectNav({
+function ProjectsListNav({
   navTitle,
 }: {
   navTitle: string;
@@ -44,4 +44,4 @@ function ProjectNav({
   );
 }
 
-export default ProjectNav;
+export default ProjectsListNav;

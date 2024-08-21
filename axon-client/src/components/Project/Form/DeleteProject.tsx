@@ -11,7 +11,9 @@ import { useProject } from "src/context/project/hooks/useProject";
 
 function DeleteProject({ projectState }: BaseProjectProps) {
   const { deleteProject } = useProject();
-  const { selectedProjects } = projectState;
+  const {
+    projects: { selectedProjects },
+  } = projectState;
   const isMultipleProjectsSelected = selectedProjects.length > 1;
 
   const selectedProjectIds = useMemo(

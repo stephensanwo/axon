@@ -20,7 +20,7 @@ function ProjectRecents({ projectState }: BaseProjectProps) {
         scrollbarWidth: "none",
       }}
     >
-      {projectState?.pinnedProjects?.map((project, index) => (
+      {projectState?.projects?.pinnedProjects?.map((project, index) => (
         <Card.Button
           key={index}
           icon={

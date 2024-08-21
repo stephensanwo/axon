@@ -15,7 +15,9 @@ import { useProject } from "src/context/project/hooks/useProject";
 
 function UpdateProject({ projectState }: BaseProjectProps) {
   const { updateProject } = useProject();
-  const { selectedProjects } = projectState;
+  const {
+    projects: { selectedProjects },
+  } = projectState;
 
   // UpdateDocumentFolder.tsx is only rendered when a single folder is selected
   const projectData = selectedProjects[0];

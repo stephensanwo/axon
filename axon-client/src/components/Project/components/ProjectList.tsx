@@ -136,15 +136,15 @@ function ProjectList({
   ];
 
   const tableState: TableState =
-    !isLoading && projectState.data.length === 0
+    !isLoading && projectState.projects.data.length === 0
       ? "empty"
-      : !isLoading && projectState.data.length > 0
+      : !isLoading && projectState.projects.data.length > 0
         ? "data"
         : "loading";
 
   return (
     <>
-      {projectState.pinnedProjects?.length > 0 && (
+      {projectState.projects.pinnedProjects?.length > 0 && (
         <ProjectRecents
           projectState={projectState}
           projectStateDispatch={projectStateDispatch}
@@ -153,7 +153,7 @@ function ProjectList({
       <Table
         id="documents"
         state={tableState}
-        data={projectState.data}
+        data={projectState.projects.data}
         columns={columns}
         emptyStateMessage={emptyDocumentMessage}
         initialSortColumn={initialSortColumn}

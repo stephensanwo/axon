@@ -8,7 +8,9 @@ function SelectProjectOptions({
   projectState,
   projectStateDispatch,
 }: BaseProjectProps) {
-  const { selectedProjects } = projectState;
+  const {
+    projects: { selectedProjects },
+  } = projectState;
 
   useEffect(() => {
     projectStateDispatch({
