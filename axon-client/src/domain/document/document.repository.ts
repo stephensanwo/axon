@@ -1,6 +1,5 @@
-import searchService from "../search/search.service";
 import { foldersDb, filesDb } from "./document.db";
-import { DocumentFileEntity, DocumentFolderEntity } from "./document.entity";
+import { DocumentFileEntity } from "./document.entity";
 
 interface IDocumentRepository {}
 

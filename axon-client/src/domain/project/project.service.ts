@@ -1,5 +1,10 @@
+import { flowsRepository } from "../flow/flow.repository";
 import { projectsDb } from "./project.db";
-import { CreateProjectDto, UpdateProjectDto } from "./project.dto";
+import {
+  CreateProjectDto,
+  GetProjectResponseDto,
+  UpdateProjectDto,
+} from "./project.dto";
 import { ProjectEntity } from "./project.entity";
 import projectRepository from "./project.repository";
 
@@ -55,6 +60,33 @@ export class ProjectService {
     } catch (err) {
       console.error(err);
       return [];
+    }
+  }
+
+  public async getProjectFiles(
+    projectName: string
+  ): Promise<null | GetProjectResponseDto> {
+    console.log("projectName", projectName);
+    try {
+      const projectId =
+        await projectRepository.findProjectIdByName(projectName);
+      console.log("projectId", projectId);
+      if (!projectId) {
+        return {
+          projectId: null,
+          flows: [],
+        } as GetProjectResponseDto;
+      }
+
+      const flows = await flowsRepository.findFlowsByProjectId(projectId);
+
+      return {
+        projectId,
+        flows: flows || [],
+      } as GetProjectResponseDto;
+    } catch (err) {
+      console.error(err);
+      throw new Error(`Error fetching project files`);
     }
   }
 }
