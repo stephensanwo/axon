@@ -126,7 +126,7 @@ export function documentReducer(
         ...state,
         documentFolderFiles: {
           ...state.documentFolderFiles,
-          data: action.payload.data,
+          data: action.payload.documentFiles,
           query: action.payload.query,
         },
       };

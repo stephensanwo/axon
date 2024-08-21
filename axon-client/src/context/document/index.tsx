@@ -84,7 +84,7 @@ const DocumentProvider = ({ children }: DocumentProviderProps) => {
       documentStateDispatch({
         type: "INIT_DOCUMENT_FOLDER_FILES",
         payload: {
-          data: documentFilesQuery.data.files || [],
+          documentFiles: documentFilesQuery.data.files || [],
           query: documentFilesQuery,
         },
       });
@@ -94,12 +94,9 @@ const DocumentProvider = ({ children }: DocumentProviderProps) => {
   }, [documentFilesQuery.data]);
 
   useEffect(() => {
-    console.log("docs", documentFolderName, documentFilesQuery.data);
     const folder = documentFoldersQuery.data?.find(
       (folder) => folder.id === documentFilesQuery.data?.folderId
     );
-
-    console.log("folder", folder);
 
     documentStateDispatch({
       type: "INIT_DOCUMENT_FOLDER_FILES_PARENT_FOLDER",

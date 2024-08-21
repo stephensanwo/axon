@@ -28,13 +28,9 @@ export type DocumentState = {
   };
 };
 
-export interface DocumentFolderRouteParams {
-  page: number;
-}
 
-export enum DocumentFileRouteParams {
+export enum DocumentFolderRouteParams {
   DOCUMENT_FOLDER_NAME = "documentFolderName",
-  TEST = "test",
 }
 
 export type DocumentFileStatus = {
@@ -99,7 +95,7 @@ export type DocumentAction =
   | {
       type: "INIT_DOCUMENT_FOLDER_FILES";
       payload: {
-        data: DocumentFileEntity[] | null;
+        documentFiles: DocumentFileEntity[] | null;
         query: UseQueryResult<GetDocumentFilesResponseDto | null, unknown>;
       };
     }
