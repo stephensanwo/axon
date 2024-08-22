@@ -24,7 +24,7 @@ const ProjectContext = createContext({} as ProjectContextProps);
 const ProjectProvider = ({ children }: ProjectProviderProps) => {
   const { projectName } = useProjectRoute();
 
-  const projectsQuery = useDataQuery<ProjectEntity[]>({
+  const projectFoldersQuery = useDataQuery<ProjectEntity[]>({
     queryKey: [...ProjectQueryKeys.PROJECTS],
     queryFn: async () => projectService.getProjects(),
     refetchOnMount: true,
@@ -32,7 +32,7 @@ const ProjectProvider = ({ children }: ProjectProviderProps) => {
     refetchOnWindowFocus: true,
   });
 
-  const projectQuery = useDataQuery<GetProjectResponseDto | null>({
+  const projectFilesQuery = useDataQuery<GetProjectResponseDto | null>({
     queryKey: [...ProjectQueryKeys.PROJECTS, projectName || "notfound"],
     queryFn: async () => projectService.getProjectFiles(projectName || ""),
     refetchOnMount: true,
@@ -43,57 +43,57 @@ const ProjectProvider = ({ children }: ProjectProviderProps) => {
   const [projectState, projectStateDispatch] = useReducer<
     Reducer<ProjectState, ProjectAction>
   >(projectReducer, {
-    projects: {
+    projectFolders: {
       data: [],
-      query: projectsQuery,
+      query: projectFoldersQuery,
       createProjectForm: null,
       selectedProjects: [],
       pinnedProjects: [],
     },
-    project: {
+    projectFiles: {
       project: null,
       flows: null,
-      query: projectQuery,
+      query: projectFilesQuery,
     },
   });
 
   useEffect(() => {
-    if (projectsQuery.data && projectsQuery.isFetched) {
+    if (projectFoldersQuery.data && projectFoldersQuery.isFetched) {
       projectStateDispatch({
-        type: "INIT_PROJECTS",
+        type: "INIT_PROJECT_FOLDERS",
         payload: {
-          projects: projectsQuery.data,
-          query: projectsQuery,
+          projectFolders: projectFoldersQuery.data,
+          query: projectFoldersQuery,
         },
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [projectQuery.data]);
+  }, [projectFoldersQuery.data]);
 
   useEffect(() => {
-    if (projectQuery.data && projectQuery.isFetched) {
+    if (projectFilesQuery.data && projectFilesQuery.isFetched) {
       projectStateDispatch({
         type: "INIT_PROJECT_FLOWS",
         payload: {
-          flows: projectQuery.data.flows || [],
-          query: projectQuery,
+          flows: projectFilesQuery.data.flows || [],
+          query: projectFilesQuery,
         },
       });
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [projectQuery.data]);
+  }, [projectFilesQuery.data]);
 
   useEffect(() => {
-    const project = projectsQuery.data?.find(
-      (project) => project.id === projectQuery.data?.projectId
+    const project = projectFoldersQuery.data?.find(
+      (project) => project.id === projectFilesQuery.data?.projectId
     );
 
     projectStateDispatch({
-      type: "INIT_PROJECT",
+      type: "INIT_PROJECT_FILES_PARENT",
       payload: project || null,
     });
-  }, [projectQuery.data]);
+  }, [projectFilesQuery.data]);
 
   return (
     <ProjectContext.Provider

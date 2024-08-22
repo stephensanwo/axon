@@ -5,43 +5,43 @@ export function projectReducer(
   action: ProjectAction
 ): ProjectState {
   switch (action.type) {
-    case "INIT_PROJECTS": {
+    case "INIT_PROJECT_FOLDERS": {
       return {
         ...state,
-        projects: {
-          ...state.projects,
-          data: action.payload.projects,
+        projectFolders: {
+          ...state.projectFolders,
+          data: action.payload.projectFolders,
           query: action.payload.query,
-          pinnedProjects: action.payload.projects.filter(
+          pinnedProjects: action.payload.projectFolders.filter(
             (project) => project.pinned
           ),
         },
       };
     }
-    case "INIT_PROJECT": {
-        return {
-          ...state,
-          project: {
-            ...state.project,
-            project: action.payload
-          },
-        };
-      }
+    case "INIT_PROJECT_FILES_PARENT": {
+      return {
+        ...state,
+        projectFiles: {
+          ...state.projectFiles,
+          project: action.payload,
+        },
+      };
+    }
     case "INIT_PROJECT_FLOWS": {
-        return {
-          ...state,
-          project: {
-            ...state.project,
-            flows: action.payload.flows,
-            query: action.payload.query,
-          },
-        };
+      return {
+        ...state,
+        projectFiles: {
+          ...state.projectFiles,
+          flows: action.payload.flows,
+          query: action.payload.query,
+        },
+      };
     }
     case "SET_CREATE_PROJECT_FORM": {
       return {
         ...state,
-        projects: {
-          ...state.projects,
+        projectFolders: {
+          ...state.projectFolders,
           createProjectForm: action.payload,
         },
       };
@@ -49,8 +49,8 @@ export function projectReducer(
     case "CLEAR_CREATE_PROJECT_FORM": {
       return {
         ...state,
-        projects: {
-          ...state.projects,
+        projectFolders: {
+          ...state.projectFolders,
           createProjectForm: null,
         },
       };
@@ -58,10 +58,10 @@ export function projectReducer(
     case "SELECT_PROJECT": {
       return {
         ...state,
-        projects: {
-          ...state.projects,
+        projectFolders: {
+          ...state.projectFolders,
           selectedProjects: [
-            ...state.projects.selectedProjects,
+            ...state.projectFolders.selectedProjects,
             action.payload,
           ],
         },
@@ -70,9 +70,9 @@ export function projectReducer(
     case "REMOVE_SELECTED_PROJECT": {
       return {
         ...state,
-        projects: {
-          ...state.projects,
-          selectedProjects: state.projects.selectedProjects.filter(
+        projectFolders: {
+          ...state.projectFolders,
+          selectedProjects: state.projectFolders.selectedProjects.filter(
             (project) => project.id !== action.payload
           ),
         },
@@ -81,8 +81,8 @@ export function projectReducer(
     case "CLEAR_SELECTED_PROJECTS": {
       return {
         ...state,
-        projects: {
-          ...state.projects,
+        projectFolders: {
+          ...state.projectFolders,
           selectedProjects: [],
         },
       };

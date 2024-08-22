@@ -7,14 +7,14 @@ import {
 import { ProjectEntity } from "src/domain/project/project.entity";
 
 export type ProjectState = {
-  projects: {
+  projectFolders: {
     data: ProjectEntity[];
     query: UseQueryResult<ProjectEntity[], unknown>;
     createProjectForm: CreateProjectDto | null;
     selectedProjects: ProjectEntity[];
     pinnedProjects: ProjectEntity[];
   };
-  project: {
+  projectFiles: {
     project: ProjectEntity | null;
     flows: FlowEntity[] | null;
     query: UseQueryResult<GetProjectResponseDto | null, unknown>;
@@ -29,14 +29,14 @@ export enum ProjectRouteParams {
 
 export type ProjectAction =
   | {
-      type: "INIT_PROJECTS";
+      type: "INIT_PROJECT_FOLDERS";
       payload: {
-        projects: ProjectEntity[];
+        projectFolders: ProjectEntity[];
         query: UseQueryResult<ProjectEntity[], unknown>;
       };
     }
   | {
-      type: "INIT_PROJECT";
+      type: "INIT_PROJECT_FILES_PARENT";
       payload: ProjectEntity | null;
     }
   | {
