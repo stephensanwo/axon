@@ -8,11 +8,11 @@ import Link from "src/components/Common/Link";
 import { useNavigate } from "react-router-dom";
 import { BaseProjectProps } from "../index.types";
 import { ProjectEntity } from "src/domain/project/project.entity";
-import ProjectRecents from "./ProjectRecents";
+import ProjectRecents from "../components/ProjectRecents";
 import { useProject } from "src/context/project/hooks/useProject";
 import { UpdateProjectDto } from "src/domain/project/project.dto";
 
-function ProjectList({
+function ProjectFilesList({
   projectState,
   projectStateDispatch,
   isLoading,
@@ -136,15 +136,15 @@ function ProjectList({
   ];
 
   const tableState: TableState =
-    !isLoading && projectState.projects.data.length === 0
+    !isLoading && projectState.projectFiles.flows!!.length === 0
       ? "empty"
-      : !isLoading && projectState.projects.data.length > 0
+      : !isLoading && projectState.projectFiles.flows!!.length > 0
         ? "data"
         : "loading";
 
   return (
     <>
-      {projectState.projects.pinnedProjects?.length > 0 && (
+      {projectState.projectFolders.pinnedProjects?.length > 0 && (
         <ProjectRecents
           projectState={projectState}
           projectStateDispatch={projectStateDispatch}
@@ -153,7 +153,7 @@ function ProjectList({
       <Table
         id="documents"
         state={tableState}
-        data={projectState.projects.data}
+        data={projectState.projectFiles.flows!!}
         columns={columns}
         emptyStateMessage={emptyDocumentMessage}
         initialSortColumn={initialSortColumn}
@@ -164,4 +164,4 @@ function ProjectList({
   );
 }
 
-export default ProjectList;
+export default ProjectFilesList;

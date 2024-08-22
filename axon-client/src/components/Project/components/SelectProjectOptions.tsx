@@ -9,7 +9,7 @@ function SelectProjectOptions({
   projectStateDispatch,
 }: BaseProjectProps) {
   const {
-    projects: { selectedProjects },
+    projectFolders: { selectedProjects },
   } = projectState;
 
   useEffect(() => {

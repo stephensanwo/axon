@@ -1,8 +1,8 @@
 import { Text } from "../../Common/Text";
 import { BaseProjectProps } from "../index.types";
 import { ProjectLevels } from "src/context/project/project.types";
-import ProjectsFolderNav from "./ProjectsFolderNav";
-import ProjectsListNav from "./ProjectsListNav";
+import ProjectsFolderNav from "./ProjectFoldersNav";
+import ProjectsListNav from "./ProjectFilesNav";
 
 function ProjectNav({
   level,
@@ -13,7 +13,7 @@ function ProjectNav({
   level: ProjectLevels;
   isLoading: boolean;
 } & BaseProjectProps) {
-  const projectNavTitle = `${isLoading ? "..." : projectState.project.project?.name}`;
+  const projectNavTitle = `${isLoading ? "..." : projectState.projectFiles.project?.name}`;
 
   return (
     <>

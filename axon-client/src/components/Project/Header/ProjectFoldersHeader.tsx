@@ -2,9 +2,9 @@ import { Box } from "@primer/react";
 import { Text } from "../../Common/Text";
 import { BaseProjectProps } from "../index.types";
 import CreateProject from "../Form/CreateProject";
-import SelectProjectOptions from "./SelectProjectOptions";
+import SelectProjectOptions from "../components/SelectProjectOptions";
 
-function ProjectHeader({
+function ProjectFoldersHeader({
   title,
   subtitle,
   projectState,
@@ -56,4 +56,4 @@ function ProjectHeader({
   );
 }
 
-export default ProjectHeader;
+export default ProjectFoldersHeader;

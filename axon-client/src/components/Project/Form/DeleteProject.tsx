@@ -12,7 +12,7 @@ import { useProject } from "src/context/project/hooks/useProject";
 function DeleteProject({ projectState }: BaseProjectProps) {
   const { deleteProject } = useProject();
   const {
-    projects: { selectedProjects },
+    projectFolders: { selectedProjects },
   } = projectState;
   const isMultipleProjectsSelected = selectedProjects.length > 1;
 

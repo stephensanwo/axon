@@ -20,7 +20,7 @@ function CreateProject({
   projectStateDispatch,
 }: BaseProjectProps) {
   const {
-    projects: { createProjectForm },
+    projectFolders: { createProjectForm },
   } = projectState;
   const { createProject } = useProject();
 
