@@ -12,10 +12,10 @@ import { useRef } from "react";
 import Search from "src/components/Search";
 import Settings from "src/components/Settings";
 import User from "src/components/User";
-import { Project } from "src/components/Project";
+import { Project, ProjectFolders } from "src/components/Project";
 import { useProjectContext } from "src/context/project/hooks/useProjectContext";
 
-function ProjectPage() {
+function ProjectFoldersPage() {
   const { folders } = useFolderContext();
   const { projectState, projectStateDispatch } = useProjectContext();
   const { theme } = useTheme();
@@ -23,7 +23,6 @@ function ProjectPage() {
   const initialFocusRef = useRef<HTMLButtonElement>(null);
   const returnFocusRef = useRef<HTMLButtonElement>(null);
 
-  console.log("ProjectPage -> projectState", projectState);
   const page: ComponentState = {
     // error and loading states are rendered within the DocumentFileList component
     empty: <></>,
@@ -38,8 +37,8 @@ function ProjectPage() {
         header={{
           breadcrumb: (
             <Project.Nav
-              level="project"
-              isLoading={projectState.project.query.isLoading}
+              level="projects"
+              isLoading={projectState.projectFolders.query.isLoading}
               projectState={projectState}
               projectStateDispatch={projectStateDispatch}
             />
@@ -59,11 +58,11 @@ function ProjectPage() {
             {
               <Project.Main>
                 <Blank
-                  heading="Project not found"
-                  description={`The project you are looking for does not exist\n or has been deleted.`}
+                  heading="Unable to load projects"
+                  description={`An error occurred while loading projects\n Please try again later.`}
                   type="error"
                   action={{
-                    label: "Go to Projects",
+                    label: "Try again",
                     href: "/projects",
                   }}
                 />
@@ -86,8 +85,8 @@ function ProjectPage() {
         header={{
           breadcrumb: (
             <Project.Nav
-              level="project"
-              isLoading={projectState.project.query.isLoading}
+              level="projects"
+              isLoading={projectState.projectFolders.query.isLoading}
               projectState={projectState}
               projectStateDispatch={projectStateDispatch}
             />
@@ -106,25 +105,21 @@ function ProjectPage() {
           <Page.Main>
             {
               <Project.Main>
-                <Project.Header
+                <ProjectFolders.Header
                   title="Projects"
                   subtitle="Manage projects"
                   projectState={projectState}
                   projectStateDispatch={projectStateDispatch}
                 />
-                <Project.List
+                <ProjectFolders.List
                   projectState={projectState}
                   projectStateDispatch={projectStateDispatch}
-                  isLoading={projectState.project.query.isLoading}
+                  isLoading={projectState.projectFolders.query.isLoading}
                   initialSortColumn={
-                    projectState.project.flows &&
-                    projectState.project.flows!!.length > 0
-                      ? "created"
-                      : ""
+                    projectState.projectFolders.data.length > 0 ? "created" : ""
                   }
                   initialSortDirection={
-                    projectState.project.flows &&
-                    projectState.project.flows!!.length > 0
+                    projectState.projectFolders.data.length > 0
                       ? "DESC"
                       : undefined
                   }
@@ -149,18 +144,18 @@ function ProjectPage() {
   };
 
   if (
-    !projectState.project.query.isFetchedAfterMount &&
-    projectState.project.project === null
+    !projectState.projectFolders.query.isFetchedAfterMount &&
+    projectState.projectFolders.data === null
   ) {
     return page["loading"];
   }
   if (
-    projectState.project.query.isFetchedAfterMount &&
-    projectState.project.project === null
+    projectState.projectFolders.query.isFetchedAfterMount &&
+    projectState.projectFolders.data === null
   ) {
     return page["error"];
   }
   return page["success"];
 }
 
-export default ProjectPage;
+export default ProjectFoldersPage;

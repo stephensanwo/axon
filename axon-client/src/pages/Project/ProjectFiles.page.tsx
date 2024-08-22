@@ -12,11 +12,10 @@ import { useRef } from "react";
 import Search from "src/components/Search";
 import Settings from "src/components/Settings";
 import User from "src/components/User";
-import { Text } from "src/components/Common/Text";
-import { Project } from "src/components/Project";
+import { Project, ProjectFiles } from "src/components/Project";
 import { useProjectContext } from "src/context/project/hooks/useProjectContext";
 
-function ProjectsPage() {
+function ProjectFilesPage() {
   const { folders } = useFolderContext();
   const { projectState, projectStateDispatch } = useProjectContext();
   const { theme } = useTheme();
@@ -38,8 +37,8 @@ function ProjectsPage() {
         header={{
           breadcrumb: (
             <Project.Nav
-              level="projects"
-              isLoading={projectState.projects.query.isLoading}
+              level="project"
+              isLoading={projectState.projectFiles.query.isLoading}
               projectState={projectState}
               projectStateDispatch={projectStateDispatch}
             />
@@ -59,11 +58,11 @@ function ProjectsPage() {
             {
               <Project.Main>
                 <Blank
-                  heading="Unable to load projects"
-                  description={`An error occurred while loading projects\n Please try again later.`}
+                  heading="Project not found"
+                  description={`The project you are looking for does not exist\n or has been deleted.`}
                   type="error"
                   action={{
-                    label: "Try again",
+                    label: "Go to Projects",
                     href: "/projects",
                   }}
                 />
@@ -86,8 +85,8 @@ function ProjectsPage() {
         header={{
           breadcrumb: (
             <Project.Nav
-              level="projects"
-              isLoading={projectState.projects.query.isLoading}
+              level="project"
+              isLoading={projectState.projectFiles.query.isLoading}
               projectState={projectState}
               projectStateDispatch={projectStateDispatch}
             />
@@ -106,26 +105,32 @@ function ProjectsPage() {
           <Page.Main>
             {
               <Project.Main>
-                <Project.Header
-                  title="Projects"
-                  subtitle="Manage projects"
+                <ProjectFiles.Header
+                  title={`Projects / ${projectState.projectFiles.query.isLoading ? "..." : projectState.projectFiles.project?.name}`}
+                  subtitle="Create, delete and manage flows"
                   projectState={projectState}
                   projectStateDispatch={projectStateDispatch}
                 />
-                <Project.List
+                <ProjectFiles.List
                   projectState={projectState}
                   projectStateDispatch={projectStateDispatch}
-                  isLoading={projectState.projects.query.isLoading}
+                  isLoading={projectState.projectFiles.query.isLoading}
                   initialSortColumn={
-                    projectState.projects.data.length > 0 ? "created" : ""
+                    projectState.projectFiles.flows &&
+                    projectState.projectFiles.flows!!.length > 0
+                      ? "created"
+                      : ""
                   }
                   initialSortDirection={
-                    projectState.projects.data.length > 0 ? "DESC" : undefined
+                    projectState.projectFiles.flows &&
+                    projectState.projectFiles.flows!!.length > 0
+                      ? "DESC"
+                      : undefined
                   }
                   emptyDocumentMessage={
                     <Document.Empty
                       message={
-                        "You have no projects \n Create a new project to get started"
+                        "You have no flows \n Create a new flow to get started"
                       }
                       icon={PiAppWindowFill}
                     ></Document.Empty>
@@ -143,18 +148,18 @@ function ProjectsPage() {
   };
 
   if (
-    !projectState.projects.query.isFetchedAfterMount &&
-    projectState.projects.data === null
+    !projectState.projectFiles.query.isFetchedAfterMount &&
+    projectState.projectFiles.project === null
   ) {
     return page["loading"];
   }
   if (
-    projectState.projects.query.isFetchedAfterMount &&
-    projectState.projects.data === null
+    projectState.projectFiles.query.isFetchedAfterMount &&
+    projectState.projectFiles.project === null
   ) {
     return page["error"];
   }
   return page["success"];
 }
 
-export default ProjectsPage;
+export default ProjectFilesPage;
