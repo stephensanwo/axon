@@ -27,13 +27,18 @@ export function projectReducer(
         },
       };
     }
-    case "INIT_PROJECT_FLOWS": {
+    case "INIT_PROJECT_BOARDS": {
       return {
         ...state,
         projectFiles: {
           ...state.projectFiles,
-          flows: action.payload.flows,
+          boards: action.payload.boards,
+          pinnedBoards: action.payload.boards.filter((board) => board.pinned),
           query: action.payload.query,
+          createBoardForm: {
+            ...state.projectFiles.createBoardForm!!,
+            projectId: action.payload.query.data?.projectId!!,
+          },
         },
       };
     }
@@ -84,6 +89,56 @@ export function projectReducer(
         projectFolders: {
           ...state.projectFolders,
           selectedProjects: [],
+        },
+      };
+    }
+    case "SET_CREATE_BOARD_FORM": {
+      return {
+        ...state,
+        projectFiles: {
+          ...state.projectFiles,
+          createBoardForm: action.payload,
+        },
+      };
+    }
+    case "CLEAR_CREATE_BOARD_FORM": {
+      return {
+        ...state,
+        projectFiles: {
+          ...state.projectFiles,
+          createBoardForm: null,
+        },
+      };
+    }
+    case "SELECT_BOARD": {
+      return {
+        ...state,
+        projectFiles: {
+          ...state.projectFiles,
+          selectedBoards: [
+            ...state.projectFiles.selectedBoards,
+            action.payload,
+          ],
+        },
+      };
+    }
+    case "REMOVE_SELECTED_BOARD": {
+      return {
+        ...state,
+        projectFiles: {
+          ...state.projectFiles,
+          selectedBoards: state.projectFiles.selectedBoards.filter(
+            (board) => board.id !== action.payload
+          ),
+        },
+      };
+    }
+    case "CLEAR_SELECTED_BOARDS": {
+      return {
+        ...state,
+        projectFiles: {
+          ...state.projectFiles,
+          selectedBoards: [],
         },
       };
     }

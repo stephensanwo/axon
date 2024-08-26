@@ -33,7 +33,7 @@ const ProjectProvider = ({ children }: ProjectProviderProps) => {
   });
 
   const projectFilesQuery = useDataQuery<GetProjectResponseDto | null>({
-    queryKey: [...ProjectQueryKeys.PROJECTS, projectName || "notfound"],
+    queryKey: [...ProjectQueryKeys.PROJECT_FILES, projectName || "notfound"],
     queryFn: async () => projectService.getProjectFiles(projectName || ""),
     refetchOnMount: true,
     refetchOnReconnect: true,
@@ -52,7 +52,10 @@ const ProjectProvider = ({ children }: ProjectProviderProps) => {
     },
     projectFiles: {
       project: null,
-      flows: null,
+      boards: [],
+      pinnedBoards: [],
+      selectedBoards: [],
+      createBoardForm: null,
       query: projectFilesQuery,
     },
   });
@@ -73,9 +76,9 @@ const ProjectProvider = ({ children }: ProjectProviderProps) => {
   useEffect(() => {
     if (projectFilesQuery.data && projectFilesQuery.isFetched) {
       projectStateDispatch({
-        type: "INIT_PROJECT_FLOWS",
+        type: "INIT_PROJECT_BOARDS",
         payload: {
-          flows: projectFilesQuery.data.flows || [],
+          boards: projectFilesQuery.data.boards || [],
           query: projectFilesQuery,
         },
       });

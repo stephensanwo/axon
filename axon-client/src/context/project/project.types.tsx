@@ -1,5 +1,6 @@
 import { UseQueryResult } from "@tanstack/react-query";
-import { FlowEntity } from "src/domain/flow/flow.entity";
+import { CreateBoardDto } from "src/domain/board/board.dto";
+import { BoardEntity } from "src/domain/board/board.entity";
 import {
   CreateProjectDto,
   GetProjectResponseDto,
@@ -16,7 +17,10 @@ export type ProjectState = {
   };
   projectFiles: {
     project: ProjectEntity | null;
-    flows: FlowEntity[] | null;
+    boards: BoardEntity[];
+    pinnedBoards: BoardEntity[];
+    selectedBoards: BoardEntity[];
+    createBoardForm: CreateBoardDto | null;
     query: UseQueryResult<GetProjectResponseDto | null, unknown>;
   };
 };
@@ -40,9 +44,9 @@ export type ProjectAction =
       payload: ProjectEntity | null;
     }
   | {
-      type: "INIT_PROJECT_FLOWS";
+      type: "INIT_PROJECT_BOARDS";
       payload: {
-        flows: FlowEntity[];
+        boards: BoardEntity[];
         query: UseQueryResult<GetProjectResponseDto | null, unknown>;
       };
     }
@@ -63,4 +67,24 @@ export type ProjectAction =
     }
   | {
       type: "CLEAR_SELECTED_PROJECTS";
+    }
+  | {
+      type: "SET_CREATE_BOARD_FORM";
+      payload: CreateBoardDto | null;
+    }
+  | {
+      type: "CLEAR_CREATE_BOARD_FORM";
+    }
+  | {
+      type: "SELECT_BOARD";
+      payload: BoardEntity;
+    }
+  | {
+      type: "REMOVE_SELECTED_BOARD";
+      payload: string;
+    }
+  | {
+      type: "CLEAR_SELECTED_BOARDS";
     };
+    
+
