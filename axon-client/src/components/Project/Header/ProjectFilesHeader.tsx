@@ -1,6 +1,8 @@
 import { Box } from "@primer/react";
 import { Text } from "../../Common/Text";
 import { BaseProjectProps } from "../index.types";
+import CreateBoard from "src/components/Board/Form/CreateBoard";
+import SelectBoardOptions from "src/components/Board/components/SelectBoardOptions";
 
 function ProjectFilesHeader({
   title,
@@ -11,6 +13,7 @@ function ProjectFilesHeader({
   title: string;
   subtitle: string;
 } & BaseProjectProps) {
+  // Could potentially support different types of project files (boards, actions etc...)
   return (
     <>
       <Box
@@ -39,7 +42,16 @@ function ProjectFilesHeader({
             alignItems: "center",
             gap: 2,
           }}
-        ></Box>
+        >
+          <SelectBoardOptions
+            projectState={projectState}
+            projectStateDispatch={projectStateDispatch}
+          />
+          <CreateBoard
+            projectState={projectState}
+            projectStateDispatch={projectStateDispatch}
+          />
+        </Box>
       </Box>
     </>
   );

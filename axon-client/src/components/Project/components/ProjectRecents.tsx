@@ -12,12 +12,13 @@ function ProjectRecents({ projectState }: BaseProjectProps) {
   return (
     <Box
       sx={{
-        height: "200px",
+        height: "150px",
         display: "flex",
         alignItems: "center",
         gap: 4,
         overflowX: "scroll",
         scrollbarWidth: "none",
+        mb: 4,
       }}
     >
       {projectState?.projectFolders?.pinnedProjects?.map((project, index) => (

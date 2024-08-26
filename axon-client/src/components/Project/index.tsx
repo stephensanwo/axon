@@ -6,6 +6,7 @@ import ProjectFilesList from "./List/ProjectFilesList";
 import ProjectFoldersList from "./List/ProjectFoldersList";
 import ProjectsList from "./List/ProjectFoldersList";
 import ProjectNav from "./Nav";
+import ProjectEmpty from "./ProjectEmpty";
 import { ProjectMain } from "./ProjectMain";
 
 export const Project = {
@@ -14,6 +15,7 @@ export const Project = {
   Header: ProjectHeader,
   Footer: ProjectFooter,
   List: ProjectsList,
+  Empty: ProjectEmpty,
 };
 
 export const ProjectFolders = {
