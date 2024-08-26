@@ -17,10 +17,15 @@ import { DocumentProvider } from "./context/document";
 import { WorkerProvider } from "./context/worker";
 import DocumentFolderPage from "./pages/Document/DocumentFolder.page";
 import DocumentFilePage from "./pages/Document/DocumentFile.page";
-import { DocumentFileRouteParams } from "./context/document/document.types";
+import { DocumentFolderRouteParams } from "./context/document/document.types";
 import { SettingsProvider } from "./context/settings";
-import ProjectPage from "./pages/Project/Project.page";
 import { ProjectProvider } from "./context/project";
+import { ProjectRouteParams } from "./context/project/project.types";
+import ProjectFoldersPage from "./pages/Project/ProjectFolders.page";
+import ProjectFilesPage from "./pages/Project/ProjectFiles.page";
+import { BoardRouteParams } from "./context/board/board.types";
+import BoardPage from "./pages/Board/board.page";
+import { BoardProvider } from "./context/board";
 
 const Router = () => {
   return (
@@ -44,22 +49,24 @@ const Router = () => {
             <SettingsProvider>
               <AppProvider>
                 <ProjectProvider>
-                  <FolderProvider>
-                    {/* React flow provider is added at the note level */}
-                    <ReactFlowProvider>
-                      <DocumentProvider>
-                        <NoteProvider>
-                          <NodeProvider>
-                            <EdgeProvider>
-                              <WorkerProvider>
-                                <Layout />
-                              </WorkerProvider>
-                            </EdgeProvider>
-                          </NodeProvider>
-                        </NoteProvider>
-                      </DocumentProvider>
-                    </ReactFlowProvider>
-                  </FolderProvider>
+                  <BoardProvider>
+                    <FolderProvider>
+                      {/* React flow provider is added at the note level */}
+                      <ReactFlowProvider>
+                        <DocumentProvider>
+                          <NoteProvider>
+                            <NodeProvider>
+                              <EdgeProvider>
+                                <WorkerProvider>
+                                  <Layout />
+                                </WorkerProvider>
+                              </EdgeProvider>
+                            </NodeProvider>
+                          </NoteProvider>
+                        </DocumentProvider>
+                      </ReactFlowProvider>
+                    </FolderProvider>
+                  </BoardProvider>
                 </ProjectProvider>
               </AppProvider>
             </SettingsProvider>
@@ -68,10 +75,18 @@ const Router = () => {
       >
         {/* <Route element={<PersistAuth />}>
           <Route element={<RequireAuth />}> */}
-        <Route path="/projects" element={<ProjectPage />} />
+        <Route path="/projects" element={<ProjectFoldersPage />} />
+        <Route
+          path={`/projects/:${ProjectRouteParams.PROJECT_NAME}`}
+          element={<ProjectFilesPage />}
+        />
+        <Route
+          path={`/projects/:${ProjectRouteParams.PROJECT_NAME}/:${BoardRouteParams.BOARD_NAME}`}
+          element={<BoardPage />}
+        />
         <Route path="/documents" element={<DocumentFolderPage />} />
         <Route
-          path={`/documents/:${DocumentFileRouteParams.DOCUMENT_FOLDER_NAME}`}
+          path={`/documents/:${DocumentFolderRouteParams.DOCUMENT_FOLDER_NAME}`}
           element={<DocumentFilePage />}
         />
         {/* <Route path="/notes" element={<Notes />} /> */}

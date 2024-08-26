@@ -1,5 +1,4 @@
 import { useTheme } from "@primer/react";
-import { PiFolder } from "react-icons/pi";
 import Blank from "src/components/Blank";
 import { ComponentState } from "src/components/Common/ComponentState";
 import { Document, DocumentFolder } from "src/components/Document";
@@ -14,6 +13,7 @@ import { useRef } from "react";
 import Search from "src/components/Search";
 import Settings from "src/components/Settings";
 import User from "src/components/User";
+import Icon from "src/components/Common/Icon";
 
 function DocumentFolderPage() {
   const { folders } = useFolderContext();
@@ -135,7 +135,7 @@ function DocumentFolderPage() {
                       message={
                         "You have no folders \n Create a new folder to get started"
                       }
-                      icon={PiFolder}
+                      icon={Icon.DocumentFolder}
                     ></Document.Empty>
                   }
                 />

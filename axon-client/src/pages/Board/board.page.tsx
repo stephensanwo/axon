@@ -10,15 +10,16 @@ import { useRef } from "react";
 import Search from "src/components/Search";
 import Settings from "src/components/Settings";
 import User from "src/components/User";
-import { Project, ProjectFiles } from "src/components/Project";
+import { Project } from "src/components/Project";
 import { useProjectContext } from "src/context/project/hooks/useProjectContext";
-import Flow from "src/components/Board";
 import Board from "src/components/Board";
-import { PiAppWindowFill } from "react-icons/pi";
+import { Text } from "src/components/Common/Text";
+import { useBoardContext } from "src/context/board/hooks/useBoardContext";
 
-function ProjectFilesPage() {
+function BoardPage() {
   const { folders } = useFolderContext();
   const { projectState, projectStateDispatch } = useProjectContext();
+  const { boardState, boardStateDispatch } = useBoardContext();
   const { theme } = useTheme();
   const { panel, togglePanel } = usePage();
   const initialFocusRef = useRef<HTMLButtonElement>(null);
@@ -37,12 +38,20 @@ function ProjectFilesPage() {
         ignoreClickRefs={[]}
         header={{
           breadcrumb: (
-            <Project.Nav
-              level="project"
-              isLoading={projectState.projectFiles.query.isLoading}
-              projectState={projectState}
-              projectStateDispatch={projectStateDispatch}
-            />
+            <>
+              <Project.Nav
+                level="project"
+                isLoading={projectState.projectFiles.query.isLoading}
+                projectState={projectState}
+                projectStateDispatch={projectStateDispatch}
+              />
+              <Text.SmallSecondary>/</Text.SmallSecondary>
+              <Board.Nav
+                isLoading={boardState.query.isLoading}
+                boardState={boardState}
+                boardStateDispatch={boardStateDispatch}
+              />
+            </>
           ),
           menus: [
             <Search.Button type={"icon"} />,
@@ -85,12 +94,20 @@ function ProjectFilesPage() {
         ignoreClickRefs={[]}
         header={{
           breadcrumb: (
-            <Project.Nav
-              level="project"
-              isLoading={projectState.projectFiles.query.isLoading}
-              projectState={projectState}
-              projectStateDispatch={projectStateDispatch}
-            />
+            <>
+              <Project.Nav
+                level="project"
+                isLoading={projectState.projectFiles.query.isLoading}
+                projectState={projectState}
+                projectStateDispatch={projectStateDispatch}
+              />
+              <Text.SmallSecondary>/</Text.SmallSecondary>
+              <Board.Nav
+                isLoading={boardState.query.isLoading}
+                boardState={boardState}
+                boardStateDispatch={boardStateDispatch}
+              />
+            </>
           ),
           menus: [
             <Search.Button type={"icon"} />,
@@ -106,16 +123,7 @@ function ProjectFilesPage() {
           <Page.Main>
             {
               <Project.Main>
-                <ProjectFiles.Header
-                  title={`Projects / ${projectState.projectFiles.query.isLoading ? "..." : projectState.projectFiles.project?.name}`}
-                  subtitle="Create, delete and manage boards"
-                  projectState={projectState}
-                  projectStateDispatch={projectStateDispatch}
-                />
-                <ProjectFiles.List
-                  projectState={projectState}
-                  projectStateDispatch={projectStateDispatch}
-                />
+                <></>
               </Project.Main>
             }
           </Page.Main>
@@ -127,19 +135,13 @@ function ProjectFilesPage() {
     ),
   };
 
-  if (
-    !projectState.projectFiles.query.isFetchedAfterMount &&
-    projectState.projectFiles.project === null
-  ) {
+  if (!boardState.query.isFetchedAfterMount && boardState.data === null) {
     return page["loading"];
   }
-  if (
-    projectState.projectFiles.query.isFetchedAfterMount &&
-    projectState.projectFiles.project === null
-  ) {
+  if (boardState.query.isFetchedAfterMount && boardState.data === null) {
     return page["error"];
   }
   return page["success"];
 }
 
-export default ProjectFilesPage;
+export default BoardPage;

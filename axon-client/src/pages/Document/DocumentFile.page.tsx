@@ -8,12 +8,12 @@ import AxonLoader from "src/components/Loader/Loader";
 import Page from "src/components/Page";
 import { useDocumentContext } from "src/context/document/hooks/useDocumentContext";
 import { useFolderContext } from "src/hooks/folders/useFolderContext";
-import { PiFile } from "react-icons/pi";
 import { useRef } from "react";
 import { usePage } from "src/context/page/hooks/usePage";
 import Search from "src/components/Search";
 import Settings from "src/components/Settings";
 import User from "src/components/User";
+import Icon from "src/components/Common/Icon";
 
 function DocumentFilePage() {
   const { folders } = useFolderContext();
@@ -130,7 +130,7 @@ function DocumentFilePage() {
                       message={
                         "No files in this folder \n Create a new file to get started"
                       }
-                      icon={PiFile}
+                      icon={Icon.DocumentFile}
                     ></Document.Empty>
                   }
                   togglePanel={togglePanel}
