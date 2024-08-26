@@ -1,4 +1,4 @@
-import { flowsRepository } from "../flow/flow.repository";
+import { boardRepository } from "../board/board.repository";
 import { projectsDb } from "./project.db";
 import {
   CreateProjectDto,
@@ -66,27 +66,35 @@ export class ProjectService {
   public async getProjectFiles(
     projectName: string
   ): Promise<null | GetProjectResponseDto> {
-    console.log("projectName", projectName);
     try {
       const projectId =
         await projectRepository.findProjectIdByName(projectName);
-      console.log("projectId", projectId);
       if (!projectId) {
         return {
           projectId: null,
-          flows: [],
+          boards: [],
         } as GetProjectResponseDto;
       }
 
-      const flows = await flowsRepository.findFlowsByProjectId(projectId);
+      const boards = await boardRepository.findBoardByProjectId(projectId);
 
       return {
         projectId,
-        flows: flows || [],
+        boards: boards || [],
       } as GetProjectResponseDto;
     } catch (err) {
       console.error(err);
       throw new Error(`Error fetching project files`);
+    }
+  }
+
+  public async getProject(projectId: string): Promise<ProjectEntity | null> {
+    try {
+      const project = await this.projectsDb.getRecord<ProjectEntity>(projectId);
+      return project;
+    } catch (err) {
+      console.error(err);
+      return null;
     }
   }
 }

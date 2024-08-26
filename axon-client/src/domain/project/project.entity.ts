@@ -9,5 +9,5 @@ export type ProjectEntity = BaseEntity & ProjectData;
 
 export const ProjectQueryKeys = {
   PROJECTS: ["projects"],
-  FLOWS: ["projects", "flows"],
+  PROJECT_FILES: ["projects", "files"],
 } satisfies Record<string, string[]>;
