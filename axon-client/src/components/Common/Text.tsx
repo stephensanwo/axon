@@ -15,7 +15,9 @@ function SmallSecondary(props: TextProps) {
 }
 
 function Paragraph(props: TextProps) {
-  return <PrimerText {...props} sx={{ fontSize: 1, ...props.sx }} />;
+  return (
+    <PrimerText {...props} sx={{ fontSize: 1, fontWeight: 400, ...props.sx }} />
+  );
 }
 
 function ParagraphSecondary(props: TextProps) {
@@ -23,7 +25,12 @@ function ParagraphSecondary(props: TextProps) {
   return (
     <PrimerText
       {...props}
-      sx={{ fontSize: 1, color: theme?.colors.text.gray, ...props.sx }}
+      sx={{
+        fontSize: 1,
+        color: theme?.colors.text.gray,
+        fontWeight: 400,
+        ...props.sx,
+      }}
     />
   );
 }

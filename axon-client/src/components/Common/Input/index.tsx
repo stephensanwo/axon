@@ -1,5 +1,6 @@
 import Box from "./Box";
 import Checkbox from "./Checkbox";
+import Number from "./Number";
 import Text from "./Text";
 import TextArea from "./TextArea";
 
@@ -8,4 +9,5 @@ export const Input = {
   TextArea,
   Checkbox,
   Box,
+  Number: Number,
 };

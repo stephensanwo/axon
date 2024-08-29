@@ -93,9 +93,12 @@ const SearchDialog = forwardRef(
                       marginBottom: 2,
                     }}
                     onClick={() =>
+                    {
                       navigate(
                         `/${formatUrlPath(result.document.path as string[])}`
-                      )
+                      );
+                      closeModalFn(true);
+                    }
                     }
                   >
                     <ActionList.LeadingVisual>

@@ -181,25 +181,26 @@ export class DBClient {
     }
   }
 
+  /**
+   *
+   * Note: if descending is true, the order of the records will be reversed so the order or startkey and endkey should be reversed
+   */
   public async getAllRecords<T>(
     options?:
       | PouchDB.Core.AllDocsWithKeyOptions
       | PouchDB.Core.AllDocsWithKeysOptions
       | PouchDB.Core.AllDocsOptions
       | PouchDB.Core.AllDocsWithinRangeOptions
-      | undefined,
-    parentId?: string
+      | undefined
   ) {
     try {
-      const prefix = parentId
-        ? `${this.basePrefix}_${parentId}`
-        : `${this.basePrefix}`;
-      const result = await this.client.allDocs<T>({
-        ...options,
+      const defaultOptions = {
         include_docs: true,
         attachments: false,
-        endkey: prefix,
-      });
+      };
+      const mergedOptions = { ...defaultOptions, ...options };
+      const result = await this.client.allDocs<T>(mergedOptions);
+
       return result.rows.map((row) => row.doc) as T[];
     } catch (err) {
       console.log(err);
@@ -272,6 +273,8 @@ export class DBClient {
       const updatedDoc = {
         ...doc,
         ...entity,
+        _id: doc._id,
+        _rev: doc._rev,
         updated: new Date().toISOString(),
       };
       await this.client.put(updatedDoc);

@@ -1,0 +1,43 @@
+.rcp {
+    background-color: transparent;
+}
+.rcp {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.rcp-body {
+    padding: 0
+}
+
+.rcp-section {
+    width: 100%;
+}
+
+.rcp-saturation {
+    border-radius: 10px;
+    height: 228.5px !important;
+}
+
+.rcp-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+}
+
+.rcp-field-input {
+    border: 1px solid var(--black-90);
+}
+
+.rcp-field-label {
+    font-family: 'IBM Plex Sans';
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.rcp-field-input {
+    font-family: 'IBM Plex Sans';
+    font-size: 14px;
+}
