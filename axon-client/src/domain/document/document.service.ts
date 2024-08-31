@@ -173,6 +173,8 @@ export class DocumentService {
     try {
       const folders = await this.foldersDb.getAllRecords<DocumentFolderEntity>({
         descending: true,
+        endkey: "folder_",
+        startkey: "folder_\ufff0",
       });
       if (folders) {
         return folders;
@@ -279,9 +281,13 @@ export class DocumentService {
   }> {
     const folders = await this.foldersDb.getAllRecords<DocumentFolderEntity>({
       descending: true,
+      endkey: "folder_",
+      startkey: "folder_\ufff0",
     });
     const files = await this.filesDb.getAllRecords<DocumentFileEntity>({
       descending: true,
+      endkey: "file_",
+      startkey: "file_\ufff0",
     });
     return { folders, files };
   }

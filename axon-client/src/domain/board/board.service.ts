@@ -68,6 +68,18 @@ export class BoardService {
       throw new Error(`Board not found - ${error}`);
     }
   }
+
+  public async getAllBoards(): Promise<BoardEntity[]> {
+    try {
+      const boards = await this.boardsDb.getAllRecords<BoardEntity>({
+        descending: true,
+      });
+      return boards;
+    } catch (err) {
+      console.error(err);
+      return [];
+    }
+  }
 }
 
 const boardService = new BoardService();

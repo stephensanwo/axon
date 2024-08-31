@@ -14,6 +14,7 @@ import concat from "lodash/concat";
 import map from "lodash/map";
 import { convertFileSize, getContentType } from "src/common/file";
 import projectService from "../project/project.service";
+import boardService from "../board/board.service";
 
 export class SearchService {
   constructor() {
@@ -30,6 +31,7 @@ export class SearchService {
   public async initializeSearchRecords() {
     const { folders, files } = await documentService.getAllDocumentRecords();
     const projects = await projectService.getProjects();
+    const boards = await boardService.getAllBoards();
     console.log("Initializing Search Records:", folders, files);
     const folderIndexRecords = map(
       folders,
@@ -44,18 +46,19 @@ export class SearchService {
         }) satisfies BaseSearchSchema
     );
 
-    const fileIndexRecords = map(
-      files,
-      (file) =>
-        ({
-          identifier: file.id,
-          type: SearchIndexTypes.DOCUMENT_FILE,
-          name: file.name,
-          description: `File Type: ${getContentType(file.content_type)!!}, File Size: ${convertFileSize({ size: file.file_size })!!}`,
-          content: "",
-          path: ["documents", `${file.parentName!!}`],
-        }) satisfies BaseSearchSchema
-    );
+    const fileIndexRecords = map(files, (file) => {
+      const documentFolderName = folders.find(
+        (folder) => folder.id === file.parentId
+      )?.name;
+      return {
+        identifier: file.id,
+        type: SearchIndexTypes.DOCUMENT_FILE,
+        name: file.name,
+        description: `File Type: ${getContentType(file.content_type)!!}, File Size: ${convertFileSize({ size: file.file_size })!!}`,
+        content: "",
+        path: ["documents", `${documentFolderName}`, `${file.parentName!!}`],
+      } satisfies BaseSearchSchema;
+    });
 
     const projectRecords = map(
       projects,
@@ -70,10 +73,25 @@ export class SearchService {
         }) satisfies BaseSearchSchema
     );
 
+    const boardRecords = map(boards, (board) => {
+      const boardProjectName = projects.find(
+        (project) => project.id === board.projectId
+      )?.name;
+      return {
+        identifier: board.id,
+        type: SearchIndexTypes.BOARD,
+        name: board.name,
+        description: board.description,
+        content: "",
+        path: ["projects", `${boardProjectName}`, `${board.name}`],
+      } satisfies BaseSearchSchema;
+    });
+
     const allIndexRecords = concat(
       folderIndexRecords,
       fileIndexRecords,
-      projectRecords
+      projectRecords,
+      boardRecords
     );
     search.insertMultipleIndexes(allIndexRecords);
   }

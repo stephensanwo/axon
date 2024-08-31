@@ -51,6 +51,8 @@ export class ProjectService {
     try {
       const projects = await this.projectsDb.getAllRecords<ProjectEntity>({
         descending: true,
+        endkey: "project_",
+        startkey: "project_\ufff0",
       });
       if (projects) {
         return projects;

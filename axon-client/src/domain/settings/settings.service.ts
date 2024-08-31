@@ -1,3 +1,7 @@
+import { EdgeStyleEntity } from "../edge/edge.entity";
+import edgeService from "../edge/edge.service";
+import { NodeStyleEntity } from "../node/node.entity";
+import nodeService from "../node/node.service";
 import { colorsDb } from "./settings.db";
 import { CreateColorDto } from "./settings.dto";
 import { ColorEntity, SettingsEntity } from "./settings.entity";
@@ -11,6 +15,8 @@ export class SettingsService {
     try {
       const colors = await this.colorsDb.getAllRecords<ColorEntity>({
         descending: true,
+        startkey: "colors_\uffff",
+        endkey: "colors_",
       });
       return colors;
     } catch (err) {
@@ -22,12 +28,24 @@ export class SettingsService {
   public async getSettings(): Promise<SettingsEntity> {
     let settings: SettingsEntity = {
       colors: [],
+      nodeStyles: {} as NodeStyleEntity,
+      edgeStyles: {} as EdgeStyleEntity,
     };
+
     try {
       // Get Colors
       const colors = await this.getColors();
+      // Get Node Styles
+      await nodeService.createDefaultNodeStyles();
+      const nodeStyles = await nodeService.getNodeStyles();
+      // Get Edge Styles
+      await edgeService.createDefaultEdgeStyles();
+      const edgeStyles = await edgeService.getEdgeStyles();
+
       settings = {
         colors: colors,
+        nodeStyles: nodeStyles,
+        edgeStyles: edgeStyles,
       };
 
       return settings;

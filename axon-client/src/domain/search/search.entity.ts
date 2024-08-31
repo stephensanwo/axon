@@ -1,6 +1,6 @@
 import { Results } from "@orama/orama";
 import React from "react";
-import { PiAppWindowFill, PiFile, PiFolder } from "react-icons/pi";
+import Icon from "src/components/Common/Icon";
 
 export interface BaseSearchSchema {
   identifier: string;
@@ -16,6 +16,7 @@ export enum SearchIndexTypes {
   DOCUMENT_FOLDER = "folder",
   DOCUMENT_FILE = "file",
   PROJECT = "project",
+  BOARD = "board",
 }
 
 export type SearchResults = Results<BaseSearchSchema>;
@@ -29,14 +30,18 @@ export const SearchIndexProps: Record<
 > = {
   [SearchIndexTypes.DOCUMENT_FOLDER]: {
     color: "blue",
-    icon: PiFolder,
+    icon: Icon.DocumentFolder,
   },
   [SearchIndexTypes.DOCUMENT_FILE]: {
     color: "green",
-    icon: PiFile,
+    icon: Icon.DocumentFile,
   },
   [SearchIndexTypes.PROJECT]: {
     color: "red",
-    icon: PiAppWindowFill,
+    icon: Icon.Project,
+  },
+  [SearchIndexTypes.BOARD]: {
+    color: "red",
+    icon: Icon.BoardAlt,
   },
 };
