@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Box, LabelGroup, Token, useTheme } from "@primer/react";
 import { PiStarLight, PiStarFill } from "react-icons/pi";
 import { useNoteContext } from "src/hooks/notes/useNoteContext";
-import ColorPickerPanel from "src/components/ColorPicker/ColorPickerPanel";
+import ColorPickerPanel from "src/components/Color/ColorPickerPanel";
 import { InlineHeader } from "src/components/Common";
 
 function Colors(): JSX.Element {

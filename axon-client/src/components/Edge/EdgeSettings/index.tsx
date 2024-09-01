@@ -1,15 +1,12 @@
-import { Box, Button } from "@primer/react";
+import { Box } from "@primer/react";
 import { formOptions, useForm } from "@tanstack/react-form";
 import { InlineHeader } from "src/components/Common";
-import Icon from "src/components/Common/Icon";
 import { BaseSettingsProps } from "src/components/Settings/index.types";
 import TableList from "src/components/TableList";
 import { TableListHeaderData } from "src/components/TableList/index.types";
 import EdgeSetting from "./EdgeSetting";
-import { Text } from "src/components/Common/Text";
 import { useSettings } from "src/context/settings/hooks/useSettings";
-import { useCallback, useEffect, useMemo } from "react";
-import { InlineSpinner } from "src/components/Common/Spinner";
+import { useMemo } from "react";
 import { EdgeStyle, EdgeStyleData } from "src/domain/edge/edge.entity";
 import { UpdateEdgeStyleDto } from "src/domain/edge/edge.dto";
 
@@ -37,13 +34,12 @@ function EdgeSettings({ settingsState }: BaseSettingsProps): JSX.Element {
 
   const Form = useForm({
     ...formOpts,
-    onSubmit: async ({ value, formApi }) => {
+    onSubmit: async ({ value }) => {
       const dto: UpdateEdgeStyleDto = {
         ...edgeStyles,
         ...value,
       };
       updateEdgeStyles.mutate(dto);
-      formApi.reset();
     },
   });
 
@@ -84,26 +80,6 @@ function EdgeSettings({ settingsState }: BaseSettingsProps): JSX.Element {
             alignItems: "flex-start",
           }}
         />
-        {/* <Form.Subscribe
-          selector={({ isSubmitting }) => [isSubmitting]}
-          children={([isSubmitting]) => (
-            <Button
-              variant={"primary"}
-              size="small"
-              trailingVisual={() =>
-                isSubmitting ? (
-                  <InlineSpinner size={16} />
-                ) : (
-                  <Icon.CircleCheck size={16} />
-                )
-              }
-              onClick={Form.handleSubmit}
-              disabled={isSubmitting}
-            >
-              <Text.Paragraph>Save</Text.Paragraph>
-            </Button>
-          )}
-        /> */}
       </Box>
       <TableList.Header
         data={headerData}

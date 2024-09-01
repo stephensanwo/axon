@@ -5,26 +5,29 @@ import { PiCheckCircle, PiDotsThree, PiMagicWand, PiX } from "react-icons/pi";
 import { nameUid } from "src/common/uid";
 import { InlineHeader } from "src/components/Common";
 import { Input } from "src/components/Common/Input";
-import { ColorEntity, ColorViews } from "src/domain/settings/settings.entity";
-import ColorSwatchDialog from "./ColorSwatchDialog";
+import { ColorEntity } from "src/domain/settings/settings.entity";
 import { FaRegCircleDot } from "react-icons/fa6";
-import { Color } from "src/components/ColorPicker/index.types";
+import {
+  Color as ColorProps,
+  ColorViews,
+} from "src/components/Color/index.types";
+import Color from "src/components/Color";
 import { colorToString } from "src/common/color";
 import { CreateColorDto } from "src/domain/settings/settings.dto";
 import { InlineSpinner } from "src/components/Common/Spinner";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { formValidation } from "src/common/forms/forms.validation";
-import { SettingsState } from "src/context/settings/settings.types";
 import TableList from "src/components/TableList";
 import {
   TableListHeaderData,
   TableListRowDataProps,
 } from "src/components/TableList/index.types";
 import { useSettings } from "src/context/settings/hooks/useSettings";
+import { BaseSettingsProps } from "../../index.types";
 
 const gridTemplateColumns = "3fr 2fr auto";
 
-function ColorList({ settingsState }: { settingsState: SettingsState }) {
+function ColorList({ settingsState }: BaseSettingsProps) {
   const { theme } = useTheme();
   const colorList = settingsState.settings.data?.colors?.toReversed();
   const headerData: TableListHeaderData = [
@@ -54,7 +57,7 @@ function ColorList({ settingsState }: { settingsState: SettingsState }) {
       >
         <InlineHeader
           title="Colors"
-          subtitle="(Select default color and create custom colors)"
+          subtitle="Select default color and create custom colors"
           styles={{
             marginBottom: 0,
             display: "flex",
@@ -130,7 +133,6 @@ function ColorListItem({ color }: { color: ColorEntity }) {
               gap: 2,
             }}
           >
-            {color.value.hex && <FaRegCircleDot fill={color.value.hex} />}
             <Text
               sx={{
                 color: theme?.colors.text.gray,
@@ -140,6 +142,7 @@ function ColorListItem({ color }: { color: ColorEntity }) {
             >
               {color.value.hex ? colorToString(color.value, color.view) : null}
             </Text>
+            {color.value.hex && <FaRegCircleDot fill={color.value.hex} />}
           </Box>
         </Box>
       ),
@@ -186,7 +189,7 @@ function NewColorItem() {
       formOptions<CreateColorDto>({
         defaultValues: {
           label: "",
-          value: {} as Color,
+          value: {} as ColorProps,
           view: "hex",
         },
       }),
@@ -201,7 +204,7 @@ function NewColorItem() {
     },
   });
 
-  const updateColor = useCallback((color: Color, view: ColorViews) => {
+  const updateColor = useCallback((color: ColorProps, view: ColorViews) => {
     Form.setFieldValue("value", color);
     Form.setFieldValue("view", view);
   }, []);
@@ -278,7 +281,6 @@ function NewColorItem() {
           >
             {Form.state.values.value.hex ? (
               <>
-                <FaRegCircleDot fill={Form.state.values.value.hex} />
                 <Text
                   sx={{
                     color: theme?.colors.text.gray,
@@ -291,6 +293,7 @@ function NewColorItem() {
                     Form.state.values.view
                   )}
                 </Text>
+                <FaRegCircleDot fill={Form.state.values.value.hex} />
               </>
             ) : (
               <Text
@@ -315,7 +318,7 @@ function NewColorItem() {
             }}
             onClick={() => setMenuOpen(true)}
           />
-          <ColorSwatchDialog
+          <Color.Dialog
             openModal={menuOpen}
             closeModalFn={setMenuOpen}
             colorLabel={Form.state.values.label}

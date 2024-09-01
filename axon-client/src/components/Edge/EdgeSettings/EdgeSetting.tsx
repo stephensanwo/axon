@@ -1,6 +1,6 @@
 import { Box, FormControl, IconButton, Radio, useTheme } from "@primer/react";
 import { FormApi } from "@tanstack/react-form";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { TableListRowDataProps } from "src/components/TableList/index.types";
 import TableList from "src/components/TableList";
 import startCase from "lodash/startCase";
@@ -102,18 +102,23 @@ const CellComponents = {
     switch (component) {
       case "color": {
         const [menuOpen, setMenuOpen] = useState(false);
-        const formValue = Form.state.values[id].value as ColorData;
-        const updateColor = useCallback(
-          (color: ColorProps, view: ColorViews) => {
+        const [formValue, setFormValue] = useState(
+          Form.state.values[id].value as ColorData
+        );
+        const updateColor = (color: ColorProps, view: ColorViews) => {
+          flushSync(() => {
+            setFormValue({ label, value: color, view });
+          });
+          flushSync(() => {
             Form.setFieldValue(id, {
               label,
               value: { value: color, view, label },
               component,
             });
-            Form.handleSubmit();
-          },
-          []
-        );
+          });
+          Form.handleSubmit();
+        };
+
         return (
           <>
             <Box
@@ -155,26 +160,39 @@ const CellComponents = {
                 onClick={() => setMenuOpen(true)}
               />
             </Box>
-            {DialogComponents.switchComponent(
-              component,
-              label,
-              id,
-              menuOpen,
-              setMenuOpen,
-              Form,
-              updateColor
-            )}
+            <ColorDialog
+              menuOpen={menuOpen}
+              setMenuOpen={setMenuOpen}
+              formValue={formValue}
+              updateColor={updateColor}
+            />
           </>
         );
       }
       case "select": {
         const [menuOpen, setMenuOpen] = useState(false);
-        const formValue =
+        const [formValue, setFormValue] = useState(
           id === "type"
             ? (Form.state.values[id].value as EdgeTypes)
             : id === "marker"
               ? (Form.state.values[id].value as EdgeMarkerDirection)
-              : null;
+              : null
+        );
+
+        const updateRadio = (option: EdgeTypes | EdgeMarkerDirection) => {
+          flushSync(() => {
+            setFormValue(option);
+          });
+          flushSync(() => {
+            Form.setFieldValue(id, {
+              label,
+              value: option,
+              component,
+            });
+          });
+          Form.handleSubmit();
+        };
+
         return (
           <>
             <Box
@@ -198,7 +216,7 @@ const CellComponents = {
                 variant="invisible"
                 icon={PiDotsThree}
                 disabled={false}
-                aria-label="Color Options"
+                aria-label="Select Options"
                 sx={{
                   flexShrink: 0,
                   borderRadius: 0,
@@ -206,14 +224,16 @@ const CellComponents = {
                 onClick={() => setMenuOpen(true)}
               />
             </Box>
-            {DialogComponents.switchComponent(
-              component,
-              label,
-              id,
-              menuOpen,
-              setMenuOpen,
-              Form
-            )}
+            {
+              <RadioDialog
+                id={id}
+                label={label}
+                menuOpen={menuOpen}
+                setMenuOpen={setMenuOpen}
+                formValue={formValue!!}
+                updateRadio={updateRadio}
+              />
+            }
           </>
         );
       }
@@ -308,7 +328,7 @@ const CellComponents = {
                 variant="invisible"
                 icon={RiSubtractFill}
                 disabled={false}
-                aria-label="Color Options"
+                aria-label="Decrease Button"
                 sx={{
                   flexShrink: 0,
                   borderRadius: 0,
@@ -319,7 +339,7 @@ const CellComponents = {
                 variant="invisible"
                 icon={RiAddFill}
                 disabled={false}
-                aria-label="Color Options"
+                aria-label="Increase Button"
                 sx={{
                   flexShrink: 0,
                   borderRadius: 0,
@@ -334,96 +354,97 @@ const CellComponents = {
   },
 };
 
-const DialogComponents = {
-  switchComponent(
-    component: EdgeStyleComponentTypes,
-    label: string,
-    id: keyof EdgeStyleData,
-    menuOpen: boolean,
-    setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>,
-    Form: FormApi<EdgeStyle, undefined>,
-    updateColor?: (color: ColorProps, view: ColorViews) => void
-  ) {
-    switch (component) {
-      case "color": {
-        const formValue = Form.state.values[id].value as ColorData;
-        return (
-          <Color.Dialog
-            openModal={menuOpen}
-            closeModalFn={setMenuOpen}
-            colorLabel={formValue.label}
-            defaultColor={formValue.value.hex}
-            defaultView={formValue.view}
-            updateColor={updateColor!!}
-          />
-        );
-      }
-      case "select":
-        const [formValue, setFormValue] = useState(
-          id === "type"
-            ? (Form.state.values[id].value as EdgeTypes)
-            : id === "marker"
-              ? (Form.state.values[id].value as EdgeMarkerDirection)
-              : null
-        );
+function ColorDialog({
+  menuOpen,
+  setMenuOpen,
+  formValue,
+  updateColor,
+}: {
+  menuOpen: boolean;
+  setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  formValue: ColorData;
+  updateColor?: (color: ColorProps, view: ColorViews) => void;
+}) {
+  return (
+    <Color.Dialog
+      openModal={menuOpen}
+      closeModalFn={() => {
+        setMenuOpen(false);
+      }}
+      colorLabel={formValue.label}
+      defaultColor={formValue.value.hex}
+      defaultView={formValue.view}
+      updateColor={updateColor!!}
+    />
+  );
+}
 
-        const radioOptions =
-          id === "type"
-            ? (["curveEdge", "stepEdge", "straightEdge"] as EdgeTypes[])
-            : id === "marker"
-              ? (["start", "end"] as EdgeMarkerDirection[])
-              : [];
+function RadioDialog({
+  id,
+  label,
+  menuOpen,
+  setMenuOpen,
+  formValue,
+  updateRadio,
+}: {
+  id: keyof EdgeStyleData;
+  label: string;
+  menuOpen: boolean;
+  setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  formValue: EdgeTypes | EdgeMarkerDirection;
+  updateRadio: (option: EdgeTypes | EdgeMarkerDirection) => void;
+}) {
+  const data =
+    id === "type"
+      ? (formValue as EdgeTypes)
+      : id === "marker"
+        ? (formValue as EdgeMarkerDirection)
+        : null;
 
-        const handleSelect = (option: EdgeTypes | EdgeMarkerDirection) => {
-          setFormValue(option);
-          flushSync(() => {
-            Form.setFieldValue(id, {
-              label: label,
-              value: option,
-              component,
-            });
-          });
-          Form.handleSubmit();
-        };
+  const radioOptions =
+    id === "type"
+      ? (["curveEdge", "stepEdge", "straightEdge"] as EdgeTypes[])
+      : id === "marker"
+        ? (["start", "end"] as EdgeMarkerDirection[])
+        : [];
 
-        return (
-          <CustomDialog
-            header={label!!}
-            subheading="Set node default styles"
-            id="node-border-radius"
-            openModal={menuOpen}
-            closeModalFn={setMenuOpen}
-            size="narrow"
-          >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                gap: 4,
+  return (
+    <CustomDialog
+      header={label}
+      subheading="Set edge default styles"
+      id={`edge-settings-dialog-${id}`}
+      openModal={menuOpen}
+      closeModalFn={() => {
+        setMenuOpen(false);
+      }}
+      size={id === "type" ? "wide" : "narrow"}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          gap: 4,
+        }}
+      >
+        {radioOptions.map((option, index) => (
+          <FormControl key={index}>
+            <Radio
+              name={option}
+              value={data!!}
+              checked={data === option}
+              onChange={() => {
+                updateRadio(option);
               }}
-            >
-              {radioOptions.map((option, index) => (
-                <FormControl key={index}>
-                  <Radio
-                    name={option}
-                    value={formValue!!}
-                    checked={formValue === option}
-                    onChange={() => handleSelect(option)}
-                    disabled={false}
-                  />
-                  <FormControl.Label>
-                    <Text.SmallSecondary>
-                      {startCase(option)}
-                    </Text.SmallSecondary>
-                  </FormControl.Label>
-                </FormControl>
-              ))}
-            </Box>
-          </CustomDialog>
-        );
-      default:
-        return null;
-    }
-  },
-};
+              disabled={false}
+            />
+            <FormControl.Label>
+              <Text.SmallSecondary>{startCase(option)}</Text.SmallSecondary>
+            </FormControl.Label>
+          </FormControl>
+        ))}
+      </Box>
+    </CustomDialog>
+  );
+}
 export default EdgeSetting;
+

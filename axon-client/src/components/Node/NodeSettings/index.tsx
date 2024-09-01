@@ -5,12 +5,13 @@ import Icon from "src/components/Common/Icon";
 import { BaseSettingsProps } from "src/components/Settings/index.types";
 import TableList from "src/components/TableList";
 import { TableListHeaderData } from "src/components/TableList/index.types";
-import { UpdateNodeStyleDto } from "src/domain/settings/settings.dto";
 import NodeSetting from "./NodeSetting";
 import { Text } from "src/components/Common/Text";
-import { NodeStyle, NodeStyleData } from "src/domain/settings/settings.entity";
 import { useSettings } from "src/context/settings/hooks/useSettings";
 import { useMemo } from "react";
+import { InlineSpinner } from "src/components/Common/Spinner";
+import { NodeStyle, NodeStyleData } from "src/domain/node/node.entity";
+import { UpdateNodeStyleDto } from "src/domain/node/node.dto";
 
 const gridTemplateColumns = "3fr 2fr";
 
@@ -38,9 +39,7 @@ function NodeSettings({ settingsState }: BaseSettingsProps): JSX.Element {
 
   const Form = useForm({
     ...formOpts,
-    onSubmit: async ({ value, formApi }) => {
-      console.log("value", value);
-      console.log("formApi", formApi);
+    onSubmit: async ({ value }) => {
       const dto: UpdateNodeStyleDto = {
         ...nodeStyles,
         ...value,
@@ -85,19 +84,6 @@ function NodeSettings({ settingsState }: BaseSettingsProps): JSX.Element {
             gap: 0,
             alignItems: "flex-start",
           }}
-        />
-        <Form.Subscribe
-          selector={({ isSubmitting }) => [isSubmitting]}
-          children={([isSubmitting]) => (
-            <Button
-              variant="default"
-              size="small"
-              trailingVisual={Icon.CircleCheck}
-              onClick={Form.handleSubmit}
-            >
-              <Text.SmallSecondary>Save</Text.SmallSecondary>
-            </Button>
-          )}
         />
       </Box>
       <TableList.Header

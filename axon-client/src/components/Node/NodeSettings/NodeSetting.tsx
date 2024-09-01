@@ -1,16 +1,10 @@
 import { Box, FormControl, IconButton, Radio, useTheme } from "@primer/react";
 import { FormApi } from "@tanstack/react-form";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { TableListRowDataProps } from "src/components/TableList/index.types";
 import TableList from "src/components/TableList";
 import startCase from "lodash/startCase";
-import {
-  ColorData,
-  FontAlignments,
-  NodeStyle,
-  NodeStyleComponentTypes,
-  NodeStyleData,
-} from "src/domain/settings/settings.entity";
+import { ColorData } from "src/domain/settings/settings.entity";
 import Color from "src/components/Color";
 import {
   ColorViews,
@@ -23,8 +17,15 @@ import CustomDialog from "src/components/Dialog/CustomDialog";
 import { getStyleRange, getStyleSteps } from "src/common/styles";
 import { RiAddFill, RiSubtractFill } from "react-icons/ri";
 import { useNumberInput } from "src/components/Common/Input/Number/hooks/useNumberInput";
-import { BorderStyles } from "src/types/node";
 import { Text } from "src/components/Common/Text";
+import {
+  NodeBorderStyles,
+  NodeFontAlignments,
+  NodeStyle,
+  NodeStyleComponentTypes,
+  NodeStyleData,
+} from "src/domain/node/node.entity";
+import { flushSync } from "react-dom";
 
 const gridTemplateColumns = "3fr 2fr";
 
@@ -101,17 +102,23 @@ const CellComponents = {
     switch (component) {
       case "color": {
         const [menuOpen, setMenuOpen] = useState(false);
-        const formValue = Form.state.values[id].value as ColorData;
-        const updateColor = useCallback(
-          (color: ColorProps, view: ColorViews) => {
+        const [formValue, setFormValue] = useState(
+          Form.state.values[id].value as ColorData
+        );
+        const updateColor = (color: ColorProps, view: ColorViews) => {
+          flushSync(() => {
+            setFormValue({ label, value: color, view });
+          });
+          flushSync(() => {
             Form.setFieldValue(id, {
               label,
               value: { value: color, view, label },
               component,
             });
-          },
-          []
-        );
+          });
+          Form.handleSubmit();
+        };
+
         return (
           <>
             <Box
@@ -153,26 +160,39 @@ const CellComponents = {
                 onClick={() => setMenuOpen(true)}
               />
             </Box>
-            {DialogComponents.switchComponent(
-              component,
-              label,
-              id,
-              menuOpen,
-              setMenuOpen,
-              Form,
-              updateColor
-            )}
+            <ColorDialog
+              menuOpen={menuOpen}
+              setMenuOpen={setMenuOpen}
+              formValue={formValue}
+              updateColor={updateColor}
+            />
           </>
         );
       }
       case "select": {
         const [menuOpen, setMenuOpen] = useState(false);
-        const formValue =
+        const [formValue, setFormValue] = useState(
           id === "border_style"
-            ? (Form.state.values[id].value as BorderStyles)
+            ? (Form.state.values[id].value as NodeBorderStyles)
             : id === "font_alignment"
-              ? (Form.state.values[id].value as FontAlignments)
-              : null;
+              ? (Form.state.values[id].value as NodeFontAlignments)
+              : null
+        );
+
+        const updateRadio = (option: NodeBorderStyles | NodeFontAlignments) => {
+          flushSync(() => {
+            setFormValue(option);
+          });
+          flushSync(() => {
+            Form.setFieldValue(id, {
+              label,
+              value: option,
+              component,
+            });
+          });
+          Form.handleSubmit();
+        };
+
         return (
           <>
             <Box
@@ -189,14 +209,14 @@ const CellComponents = {
                     fontFamily: theme?.fonts.mono,
                   }}
                 >
-                  {formValue}
+                  {startCase(formValue as string)}
                 </Text.ParagraphSecondary>
               </Box>
               <IconButton
                 variant="invisible"
                 icon={PiDotsThree}
                 disabled={false}
-                aria-label="Color Options"
+                aria-label="Select Options"
                 sx={{
                   flexShrink: 0,
                   borderRadius: 0,
@@ -204,14 +224,14 @@ const CellComponents = {
                 onClick={() => setMenuOpen(true)}
               />
             </Box>
-            {DialogComponents.switchComponent(
-              component,
-              label,
-              id,
-              menuOpen,
-              setMenuOpen,
-              Form
-            )}
+            <RadioDialog
+              id={id}
+              label={label}
+              menuOpen={menuOpen}
+              setMenuOpen={setMenuOpen}
+              formValue={formValue!!}
+              updateRadio={updateRadio}
+            />
           </>
         );
       }
@@ -219,22 +239,18 @@ const CellComponents = {
         const formValue = Form.state.values[id].value as number;
         const { minRange, maxRange } = getStyleRange(id);
         const step = getStyleSteps(id);
-        const {
-          value: FormItemData,
-          increase,
-          decrease,
-        } = useNumberInput({
-          id: `node-border-radius`,
+        const { value, handleIncrease, handleDecrease } = useNumberInput({
           initialValue: formValue,
-          step: step,
+          step,
           minValue: minRange,
           maxValue: maxRange,
-          onChange: (value) => {
+          onChange: (newValue) => {
             Form.setFieldValue(id, {
               label,
-              value: value,
+              value: newValue,
               component,
             });
+            Form.handleSubmit();
           },
         });
 
@@ -252,30 +268,30 @@ const CellComponents = {
                 fontFamily: theme?.fonts.mono,
               }}
             >
-              {FormItemData}px
+              {value}px
             </Text.ParagraphSecondary>
             <Box>
               <IconButton
                 variant="invisible"
                 icon={RiSubtractFill}
                 disabled={false}
-                aria-label="Color Options"
+                aria-label="Decrease Button"
                 sx={{
                   flexShrink: 0,
                   borderRadius: 0,
                 }}
-                onClick={() => decrease()}
+                onClick={handleDecrease}
               />
               <IconButton
                 variant="invisible"
                 icon={RiAddFill}
                 disabled={false}
-                aria-label="Color Options"
+                aria-label="Increase Button"
                 sx={{
                   flexShrink: 0,
                   borderRadius: 0,
                 }}
-                onClick={() => increase()}
+                onClick={handleIncrease}
               />
             </Box>
           </Box>
@@ -285,91 +301,97 @@ const CellComponents = {
   },
 };
 
-const DialogComponents = {
-  switchComponent(
-    component: NodeStyleComponentTypes,
-    label: string,
-    id: keyof NodeStyleData,
-    menuOpen: boolean,
-    setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>,
-    Form: FormApi<NodeStyle, undefined>,
-    updateColor?: (color: ColorProps, view: ColorViews) => void
-  ) {
-    switch (component) {
-      case "color": {
-        const formValue = Form.state.values[id].value as ColorData;
-        return (
-          <Color.Dialog
-            openModal={menuOpen}
-            closeModalFn={setMenuOpen}
-            colorLabel={formValue.label}
-            defaultColor={formValue.value.hex}
-            defaultView={formValue.view}
-            updateColor={updateColor!!}
-          />
-        );
-      }
-      case "select":
-        const [formValue, setFormValue] = useState(
-          id === "border_style"
-            ? (Form.state.values[id].value as BorderStyles)
-            : id === "font_alignment"
-              ? (Form.state.values[id].value as FontAlignments)
-              : null
-        );
+function ColorDialog({
+  menuOpen,
+  setMenuOpen,
+  formValue,
+  updateColor,
+}: {
+  menuOpen: boolean;
+  setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  formValue: ColorData;
+  updateColor?: (color: ColorProps, view: ColorViews) => void;
+}) {
+  return (
+    <Color.Dialog
+      openModal={menuOpen}
+      closeModalFn={() => {
+        setMenuOpen(false);
+      }}
+      colorLabel={formValue.label}
+      defaultColor={formValue.value.hex}
+      defaultView={formValue.view}
+      updateColor={updateColor!!}
+    />
+  );
+}
 
-        const radioOptions =
-          id === "border_style"
-            ? (["dashed", "solid", "dotted"] as BorderStyles[])
-            : id === "font_alignment"
-              ? (["center", "left"] as FontAlignments[])
-              : [];
+function RadioDialog({
+  id,
+  label,
+  menuOpen,
+  setMenuOpen,
+  formValue,
+  updateRadio,
+}: {
+  id: keyof NodeStyleData;
+  label: string;
+  menuOpen: boolean;
+  setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  formValue: NodeBorderStyles | NodeFontAlignments;
+  updateRadio: (option: NodeBorderStyles | NodeFontAlignments) => void;
+}) {
+  const data =
+    id === "border_style"
+      ? (formValue as NodeBorderStyles)
+      : id === "font_alignment"
+        ? (formValue as NodeFontAlignments)
+        : null;
 
-        return (
-          <CustomDialog
-            header={label!!}
-            subheading="Set node default styles"
-            id="node-border-radius"
-            openModal={menuOpen}
-            closeModalFn={setMenuOpen}
-            size="narrow"
-          >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                gap: 4,
+  const radioOptions =
+    id === "border_style"
+      ? (["dashed", "solid", "dotted"] as NodeBorderStyles[])
+      : id === "font_alignment"
+        ? (["center", "left"] as NodeFontAlignments[])
+        : [];
+
+  return (
+    <CustomDialog
+      header={label}
+      subheading="Set node default styles"
+      id={`node-settings-dialog-${id}`}
+      openModal={menuOpen}
+      closeModalFn={() => {
+        setMenuOpen(false);
+      }}
+      size="narrow"
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          gap: 4,
+        }}
+      >
+        {radioOptions.map((option, index) => (
+          <FormControl key={index}>
+            <Radio
+              name={option}
+              value={data!!}
+              checked={data === option}
+              onChange={() => {
+                updateRadio(option);
               }}
-            >
-              {radioOptions.map((option, index) => (
-                <FormControl key={index}>
-                  <Radio
-                    name={option}
-                    value={formValue!!}
-                    checked={formValue === option}
-                    onChange={() => {
-                      setFormValue(option);
-                      Form.setFieldValue(id, {
-                        label: label,
-                        value: option,
-                        component,
-                      });
-                    }}
-                    disabled={false}
-                  />
-                  <FormControl.Label>
-                    <Text.SmallSecondary>
-                      {startCase(option)}
-                    </Text.SmallSecondary>
-                  </FormControl.Label>
-                </FormControl>
-              ))}
-            </Box>
-          </CustomDialog>
-        );
-      default:
-        return null;
-    }
-  },
-};
+              disabled={false}
+            />
+            <FormControl.Label>
+              <Text.SmallSecondary>{startCase(option)}</Text.SmallSecondary>
+            </FormControl.Label>
+          </FormControl>
+        ))}
+      </Box>
+    </CustomDialog>
+  );
+}
+
 export default NodeSetting;

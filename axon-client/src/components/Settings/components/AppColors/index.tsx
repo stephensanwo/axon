@@ -1,9 +1,11 @@
 import { Box } from "@primer/react";
 import ColorList from "./ColorList";
-import { useSettingsContext } from "src/context/settings/hooks/useSettingsContext";
+import { BaseSettingsProps } from "../../index.types";
 
-function AppColors(): JSX.Element {
-  const { settingsState } = useSettingsContext();
+function AppColors({
+  settingsState,
+  settingsStateDispatch,
+}: BaseSettingsProps): JSX.Element {
   return (
     <Box
       sx={{
@@ -11,7 +13,10 @@ function AppColors(): JSX.Element {
         flexDirection: "column",
       }}
     >
-      <ColorList settingsState={settingsState} />
+      <ColorList
+        settingsState={settingsState}
+        settingsStateDispatch={settingsStateDispatch}
+      />
     </Box>
   );
 }

@@ -10,9 +10,13 @@ import { CiPalette } from "react-icons/ci";
 import { BaseDialogProps } from "../Dialog/index.types";
 import AppTheme from "./components/AppTheme";
 import AppColors from "./components/AppColors";
+import NodeSettings from "../Node/NodeSettings";
+import { useSettingsContext } from "src/context/settings/hooks/useSettingsContext";
+import EdgeSettings from "../Edge/EdgeSettings";
 
 const SettingsDialog = forwardRef(
   ({ openModal, closeModalFn }: BaseDialogProps, ref) => {
+    const { settingsState, settingsStateDispatch } = useSettingsContext();
     return (
       <DialogContainer
         buttonRef={ref}
@@ -42,17 +46,39 @@ const SettingsDialog = forwardRef(
               label: "Colors",
               icon: <CiPalette size={18} />,
             },
+            {
+              label: "Nodes",
+              icon: <CiPalette size={18} />,
+            },
+            {
+              label: "Edges",
+              icon: <CiPalette size={18} />,
+            },
           ]}
           content={[
             <DialogBody>
               <AppTheme />
             </DialogBody>,
             <DialogBody>
-              <AppColors />
+              <AppColors
+                settingsState={settingsState}
+                settingsStateDispatch={settingsStateDispatch}
+              />
+            </DialogBody>,
+            <DialogBody>
+              <NodeSettings
+                settingsState={settingsState}
+                settingsStateDispatch={settingsStateDispatch}
+              />
+            </DialogBody>,
+            <DialogBody>
+              <EdgeSettings
+                settingsState={settingsState}
+                settingsStateDispatch={settingsStateDispatch}
+              />
             </DialogBody>,
           ]}
         ></Tabs>
-        <DialogFooter></DialogFooter>
       </DialogContainer>
     );
   }
