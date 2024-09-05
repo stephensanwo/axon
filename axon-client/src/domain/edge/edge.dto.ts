@@ -1,4 +1,9 @@
 import { BaseEntity } from "src/db/db.types";
-import { EdgeStyle } from "./edge.entity";
+import { EdgeEntity, EdgeStyle } from "./edge.entity";
 
 export type UpdateEdgeStyleDto = BaseEntity & EdgeStyle;
+
+export type GetEdgesResponseDto = {
+  board_id: string | null;
+  edges: EdgeEntity[];
+};

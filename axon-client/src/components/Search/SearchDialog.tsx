@@ -97,7 +97,7 @@ const SearchDialog = forwardRef(
                       navigate(
                         `/${formatUrlPath(result.document.path as string[])}`
                       );
-                      closeModalFn(true);
+                      closeModalFn();
                     }
                     }
                   >

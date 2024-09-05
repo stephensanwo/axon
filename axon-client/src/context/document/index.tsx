@@ -8,7 +8,10 @@ import {
 } from "src/domain/document/document.entity";
 import { useDocumentFileRoute } from "./hooks/useDocumentRoute";
 import documentService from "src/domain/document/document.service";
-import { GetDocumentFilesResponseDto } from "src/domain/document/document.dto";
+import {
+  GetDocumentFilesResponseDto,
+  GetDocumentFoldersResponseDto,
+} from "src/domain/document/document.dto";
 
 interface DocumentProviderProps {
   children: React.ReactNode;
@@ -24,7 +27,7 @@ const DocumentContext = createContext({} as DocumentContextProps);
 const DocumentProvider = ({ children }: DocumentProviderProps) => {
   const { documentFolderName } = useDocumentFileRoute();
 
-  const documentFoldersQuery = useDataQuery<DocumentFolderEntity[]>({
+  const documentFoldersQuery = useDataQuery<GetDocumentFoldersResponseDto>({
     queryKey: [...DocumentQueryKeys.DOCUMENT_FOLDERS],
     queryFn: async () => documentService.getDocumentFolders(),
     refetchOnMount: true,
@@ -48,16 +51,17 @@ const DocumentProvider = ({ children }: DocumentProviderProps) => {
     Reducer<DocumentState, DocumentAction>
   >(documentReducer, {
     documentFolders: {
-      data: [],
+      folders: [],
       query: documentFoldersQuery,
       selectedDocumentFolders: [],
       createDocumentFolderForm: null,
+      folderTree: {},
     },
     documentPage: {
       panel: { left: false, right: false },
     },
     documentFolderFiles: {
-      data: null,
+      files: null,
       query: documentFilesQuery,
       folder: null,
       fileStatus: null,
@@ -71,7 +75,7 @@ const DocumentProvider = ({ children }: DocumentProviderProps) => {
       documentStateDispatch({
         type: "INIT_DOCUMENT_FOLDERS",
         payload: {
-          documentFolders: documentFoldersQuery.data,
+          data: documentFoldersQuery.data,
           query: documentFoldersQuery,
         },
       });
@@ -94,7 +98,7 @@ const DocumentProvider = ({ children }: DocumentProviderProps) => {
   }, [documentFilesQuery.data]);
 
   useEffect(() => {
-    const folder = documentFoldersQuery.data?.find(
+    const folder = documentFoldersQuery.data?.folders.find(
       (folder) => folder.id === documentFilesQuery.data?.folderId
     );
 

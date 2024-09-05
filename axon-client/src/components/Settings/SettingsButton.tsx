@@ -1,4 +1,4 @@
-import { ActionList, Box, Button, IconButton, Tooltip } from "@primer/react";
+import { ActionList, Button, IconButton, Tooltip } from "@primer/react";
 import { Suspense, useState } from "react";
 import { PiGear } from "react-icons/pi";
 import { lazy } from "react";
@@ -12,53 +12,55 @@ const SettingsDialog = lazy(() => import("./SettingsDialog"));
 
 function SettingsButton({ type }: { type: "icon" | "button" | "action-list" }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  return type === "button" ? (
-    <Button
-      variant="invisible"
-      leadingVisual={() => <PiGear size={18} />}
-      disabled={false}
-      aria-label="Settings"
-      sx={{
-        flexShrink: 0,
-      }}
-      onClick={() => setMenuOpen(true)}
-    >
-      <Text.Heading5Secondary>Settings</Text.Heading5Secondary>
-    </Button>
-  ) : type === "action-list" ? (
-    <ActionList.Item
-      sx={{
-        margin: 0,
-        width: "100%",
-        display: "flex",
-      }}
-      onClick={() => setMenuOpen(true)}
-    >
-      <ActionList.LeadingVisual>
-        <PiGear size={18} />
-      </ActionList.LeadingVisual>
-      <Text.Heading5Secondary>Settings</Text.Heading5Secondary>
-    </ActionList.Item>
-  ) : (
-    <Box>
-      <Tooltip aria-label={"Settings"} direction="s" type="label">
-        <IconButton
+  return (
+    <>
+      {type === "button" ? (
+        <Button
           variant="invisible"
-          size="medium"
-          icon={() => <PiGear size={18} />}
+          leadingVisual={() => <PiGear size={18} />}
           disabled={false}
-          aria-label="App Settings"
+          aria-label="Settings"
           sx={{
             flexShrink: 0,
           }}
           onClick={() => setMenuOpen(true)}
-        />
-      </Tooltip>
+        >
+          <Text.Heading5Secondary>Settings</Text.Heading5Secondary>
+        </Button>
+      ) : type === "action-list" ? (
+        <ActionList.Item
+          sx={{
+            margin: 0,
+            width: "100%",
+            display: "flex",
+          }}
+          onClick={() => setMenuOpen(true)}
+        >
+          <ActionList.LeadingVisual>
+            <PiGear size={16} />
+          </ActionList.LeadingVisual>
+          <Text.Heading6Secondary>Settings</Text.Heading6Secondary>
+        </ActionList.Item>
+      ) : (
+        <Tooltip aria-label={"Settings"} direction="s" type="label">
+          <IconButton
+            variant="invisible"
+            size="medium"
+            icon={() => <PiGear size={18} />}
+            disabled={false}
+            aria-label="App Settings"
+            sx={{
+              flexShrink: 0,
+            }}
+            onClick={() => setMenuOpen(true)}
+          />
+        </Tooltip>
+      )}
       <ErrorBoundary
         fallback={
           <SettingsDialogFallback
             openModal={menuOpen}
-            closeModalFn={setMenuOpen}
+            closeModalFn={() => setMenuOpen(false)}
           >
             <Blank
               heading="Error Loading Settings"
@@ -72,16 +74,19 @@ function SettingsButton({ type }: { type: "icon" | "button" | "action-list" }) {
           fallback={
             <SettingsDialogFallback
               openModal={menuOpen}
-              closeModalFn={setMenuOpen}
+              closeModalFn={() => setMenuOpen(false)}
             >
               <Skeleton count={2} height={24} />
             </SettingsDialogFallback>
           }
         >
-          <SettingsDialog openModal={menuOpen} closeModalFn={setMenuOpen} />
+          <SettingsDialog
+            openModal={menuOpen}
+            closeModalFn={() => setMenuOpen(false)}
+          />
         </Suspense>
       </ErrorBoundary>
-    </Box>
+    </>
   );
 }
 

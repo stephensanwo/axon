@@ -15,6 +15,9 @@ import { useProjectContext } from "src/context/project/hooks/useProjectContext";
 import Board from "src/components/Board";
 import { Text } from "src/components/Common/Text";
 import { useBoardContext } from "src/context/board/hooks/useBoardContext";
+import NodePanel from "src/components/Note/NodePanel";
+import Nav from "src/components/Nav";
+import FlowTree from "src/components/FlowTree";
 
 function BoardPage() {
   const { folders } = useFolderContext();
@@ -47,7 +50,7 @@ function BoardPage() {
               />
               <Text.SmallSecondary>/</Text.SmallSecondary>
               <Board.Nav
-                isLoading={boardState.query.isLoading}
+                isLoading={boardState.boardQuery.isLoading}
                 boardState={boardState}
                 boardStateDispatch={boardStateDispatch}
               />
@@ -59,9 +62,7 @@ function BoardPage() {
             <User.Button type={"icon"} />,
           ],
         }}
-        leftPanel={
-          <Page.Left>{<Folders folders={folders} theme={theme} />}</Page.Left>
-        }
+        leftPanel={<Page.Left>{<Nav />}</Page.Left>}
         rightPanel={<Page.Right></Page.Right>}
         main={
           <Page.Main>
@@ -103,7 +104,7 @@ function BoardPage() {
               />
               <Text.SmallSecondary>/</Text.SmallSecondary>
               <Board.Nav
-                isLoading={boardState.query.isLoading}
+                isLoading={boardState.boardQuery.isLoading}
                 boardState={boardState}
                 boardStateDispatch={boardStateDispatch}
               />
@@ -115,15 +116,14 @@ function BoardPage() {
             <User.Button type={"icon"} />,
           ],
         }}
-        leftPanel={
-          <Page.Left>{<Folders folders={folders} theme={theme} />}</Page.Left>
-        }
+        leftPanel={<Page.Left>{<Nav />}</Page.Left>}
         rightPanel={<></>}
         main={
           <Page.Main>
             {
               <Project.Main>
-                <></>
+                <NodePanel />
+                <FlowTree />
               </Project.Main>
             }
           </Page.Main>
@@ -135,10 +135,10 @@ function BoardPage() {
     ),
   };
 
-  if (!boardState.query.isFetchedAfterMount && boardState.data === null) {
+  if (!boardState.boardQuery.isFetchedAfterMount && boardState.board === null) {
     return page["loading"];
   }
-  if (boardState.query.isFetchedAfterMount && boardState.data === null) {
+  if (boardState.boardQuery.isFetchedAfterMount && boardState.board === null) {
     return page["error"];
   }
   return page["success"];

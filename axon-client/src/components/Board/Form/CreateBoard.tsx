@@ -134,7 +134,7 @@ function CreateBoard({ projectState, projectStateDispatch }: BaseProjectProps) {
           children={([isSubmitting]) => (
             <Button
               variant="primary"
-              leadingVisual={isSubmitting ? InlineSpinner : Icon.AddBoard}
+              leadingVisual={isSubmitting ? InlineSpinner : Icon.BoardAlt}
               disabled={isSubmitting}
               onClick={Form.handleSubmit}
               size="medium"

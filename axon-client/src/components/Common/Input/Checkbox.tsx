@@ -1,4 +1,9 @@
-import { Box, FormControl, Checkbox as PrimerCheckbox } from "@primer/react";
+import {
+  Box,
+  FormControl,
+  Checkbox as PrimerCheckbox,
+  useTheme,
+} from "@primer/react";
 import { Updater } from "@tanstack/react-form";
 
 function Checkbox({
@@ -39,6 +44,7 @@ function Checkbox({
   visuallyHiddenLabel?: boolean;
   checked: boolean;
 }) {
+  const { theme } = useTheme();
   return (
     <FormControl
       sx={{
@@ -56,7 +62,14 @@ function Checkbox({
       >
         {label}
       </FormControl.Label>
-      <PrimerCheckbox checked={checked} value={"default"} onChange={onChange} />
+      <PrimerCheckbox
+        checked={checked}
+        value={"default"}
+        onChange={onChange}
+        sx={{
+          borderColor: theme?.colors.border.default,
+        }}
+      />
       {error && (
         <FormControl.Validation
           variant={"error"}

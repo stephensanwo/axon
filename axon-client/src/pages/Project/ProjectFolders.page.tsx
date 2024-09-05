@@ -13,6 +13,7 @@ import User from "src/components/User";
 import { Project, ProjectFolders } from "src/components/Project";
 import { useProjectContext } from "src/context/project/hooks/useProjectContext";
 import Icon from "src/components/Common/Icon";
+import Nav from "src/components/Nav";
 
 function ProjectFoldersPage() {
   const { folders } = useFolderContext();
@@ -48,9 +49,7 @@ function ProjectFoldersPage() {
             <User.Button type={"icon"} />,
           ],
         }}
-        leftPanel={
-          <Page.Left>{<Folders folders={folders} theme={theme} />}</Page.Left>
-        }
+        leftPanel={<Page.Left>{<Nav />}</Page.Left>}
         rightPanel={<Page.Right></Page.Right>}
         main={
           <Page.Main>
@@ -96,9 +95,7 @@ function ProjectFoldersPage() {
             <User.Button type={"icon"} />,
           ],
         }}
-        leftPanel={
-          <Page.Left>{<Folders folders={folders} theme={theme} />}</Page.Left>
-        }
+        leftPanel={<Page.Left>{<Nav />}</Page.Left>}
         rightPanel={<></>}
         main={
           <Page.Main>
@@ -115,10 +112,12 @@ function ProjectFoldersPage() {
                   projectStateDispatch={projectStateDispatch}
                   isLoading={projectState.projectFolders.query.isLoading}
                   initialSortColumn={
-                    projectState.projectFolders.data.length > 0 ? "created" : ""
+                    projectState.projectFolders.projects.length > 0
+                      ? "created"
+                      : ""
                   }
                   initialSortDirection={
-                    projectState.projectFolders.data.length > 0
+                    projectState.projectFolders.projects.length > 0
                       ? "DESC"
                       : undefined
                   }
@@ -144,13 +143,13 @@ function ProjectFoldersPage() {
 
   if (
     !projectState.projectFolders.query.isFetchedAfterMount &&
-    projectState.projectFolders.data === null
+    projectState.projectFolders.projects === null
   ) {
     return page["loading"];
   }
   if (
     projectState.projectFolders.query.isFetchedAfterMount &&
-    projectState.projectFolders.data === null
+    projectState.projectFolders.projects === null
   ) {
     return page["error"];
   }

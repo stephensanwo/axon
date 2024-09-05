@@ -136,9 +136,9 @@ function ProjectFoldersList({
   ];
 
   const tableState: TableState =
-    !isLoading && projectState.projectFolders.data.length === 0
+    !isLoading && projectState.projectFolders.projects.length === 0
       ? "empty"
-      : !isLoading && projectState.projectFolders.data.length > 0
+      : !isLoading && projectState.projectFolders.projects.length > 0
         ? "data"
         : "loading";
 
@@ -153,7 +153,7 @@ function ProjectFoldersList({
       <Table
         id="documents"
         state={tableState}
-        data={projectState.projectFolders.data}
+        data={projectState.projectFolders.projects}
         columns={columns}
         emptyStateMessage={emptyDocumentMessage}
         initialSortColumn={initialSortColumn}

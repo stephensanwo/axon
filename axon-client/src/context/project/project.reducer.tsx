@@ -10,11 +10,12 @@ export function projectReducer(
         ...state,
         projectFolders: {
           ...state.projectFolders,
-          data: action.payload.projectFolders,
+          projects: action.payload.data.projects,
           query: action.payload.query,
-          pinnedProjects: action.payload.projectFolders.filter(
+          pinnedProjects: action.payload.data.projects.filter(
             (project) => project.pinned
           ),
+          projectTree: action.payload.data.projectTree,
         },
       };
     }

@@ -122,9 +122,9 @@ function DocumentFolderList({
   ];
 
   const tableState: TableState =
-    !isLoading && documentState.documentFolders.data.length === 0
+    !isLoading && documentState.documentFolders.folders.length === 0
       ? "empty"
-      : !isLoading && documentState.documentFolders.data.length > 0
+      : !isLoading && documentState.documentFolders.folders.length > 0
         ? "data"
         : "loading";
 
@@ -132,7 +132,7 @@ function DocumentFolderList({
     <Table
       id="documents"
       state={tableState}
-      data={documentState.documentFolders.data}
+      data={documentState.documentFolders.folders}
       columns={columns}
       emptyStateMessage={emptyDocumentMessage}
       initialSortColumn={initialSortColumn}

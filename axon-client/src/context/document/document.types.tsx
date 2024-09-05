@@ -2,24 +2,27 @@ import { UseQueryResult } from "@tanstack/react-query";
 import {
   CreateDocumentFolderDto,
   GetDocumentFilesResponseDto,
+  GetDocumentFoldersResponseDto,
 } from "src/domain/document/document.dto";
 import {
   DocumentEventStatus,
   DocumentFileEntity,
   DocumentFolderEntity,
+  DocumentTreeEntity,
 } from "src/domain/document/document.entity";
 import { IAppPanelDirections, IAppPanels } from "src/types/app";
 
 export type DocumentState = {
   documentPage: DocumentPageProps;
   documentFolders: {
-    data: DocumentFolderEntity[];
-    query: UseQueryResult<DocumentFolderEntity[], unknown>;
+    folders: DocumentFolderEntity[];
+    query: UseQueryResult<GetDocumentFoldersResponseDto, unknown>;
     selectedDocumentFolders: DocumentFolderEntity[];
     createDocumentFolderForm: CreateDocumentFolderDto | null;
+    folderTree: DocumentTreeEntity;
   };
   documentFolderFiles: {
-    data: DocumentFileEntity[] | null;
+    files: DocumentFileEntity[] | null;
     query: UseQueryResult<GetDocumentFilesResponseDto | null, unknown>;
     folder: DocumentFolderEntity | null;
     fileStatus: Record<string, DocumentFileStatus> | null;
@@ -27,7 +30,6 @@ export type DocumentState = {
     selectedDocumentFilePreview: DocumentFileEntity | null;
   };
 };
-
 
 export enum DocumentFolderRouteParams {
   DOCUMENT_FOLDER_NAME = "documentFolderName",
@@ -50,21 +52,13 @@ export type DocumentAction =
   | {
       type: "INIT_DOCUMENT_FOLDERS";
       payload: {
-        documentFolders: DocumentFolderEntity[];
-        query: UseQueryResult<DocumentFolderEntity[], unknown>;
+        data: GetDocumentFoldersResponseDto;
+        query: UseQueryResult<GetDocumentFoldersResponseDto, unknown>;
       };
     }
   | {
       type: "ADD_DOCUMENT_FOLDER";
       payload: DocumentFolderEntity;
-    }
-  | {
-      type: "UPDATE_DOCUMENT_FOLDER";
-      payload: DocumentFolderEntity;
-    }
-  | {
-      type: "DELETE_DOCUMENT_FOLDER";
-      payload: string;
     }
   | {
       type: "OPEN_DOCUMENT_PAGE_PANEL";

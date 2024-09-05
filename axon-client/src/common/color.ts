@@ -1,4 +1,4 @@
-import { Color } from "src/components/ColorPicker/index.types";
+import { Color } from "src/components/Color/index.types";
 import { ColorViews } from "src/domain/settings/settings.entity";
 
 export function colorToString(color: Color, view: ColorViews): string {

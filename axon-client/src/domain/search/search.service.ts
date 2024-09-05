@@ -30,9 +30,8 @@ export class SearchService {
 
   public async initializeSearchRecords() {
     const { folders, files } = await documentService.getAllDocumentRecords();
-    const projects = await projectService.getProjects();
+    const { projects } = await projectService.getProjects();
     const boards = await boardService.getAllBoards();
-    console.log("Initializing Search Records:", folders, files);
     const folderIndexRecords = map(
       folders,
       (folder) =>

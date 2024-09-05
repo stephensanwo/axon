@@ -15,6 +15,7 @@ import { useProjectContext } from "src/context/project/hooks/useProjectContext";
 import Flow from "src/components/Board";
 import Board from "src/components/Board";
 import { PiAppWindowFill } from "react-icons/pi";
+import Nav from "src/components/Nav";
 
 function ProjectFilesPage() {
   const { folders } = useFolderContext();
@@ -50,9 +51,7 @@ function ProjectFilesPage() {
             <User.Button type={"icon"} />,
           ],
         }}
-        leftPanel={
-          <Page.Left>{<Folders folders={folders} theme={theme} />}</Page.Left>
-        }
+        leftPanel={<Page.Left>{<Nav />}</Page.Left>}
         rightPanel={<Page.Right></Page.Right>}
         main={
           <Page.Main>
@@ -98,9 +97,7 @@ function ProjectFilesPage() {
             <User.Button type={"icon"} />,
           ],
         }}
-        leftPanel={
-          <Page.Left>{<Folders folders={folders} theme={theme} />}</Page.Left>
-        }
+        leftPanel={<Page.Left>{<Nav />}</Page.Left>}
         rightPanel={<></>}
         main={
           <Page.Main>

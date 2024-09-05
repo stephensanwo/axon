@@ -7,6 +7,15 @@ export type ProjectData = {
 };
 export type ProjectEntity = BaseEntity & ProjectData;
 
+export type ProjectTreeData = { id: string; name: string };
+
+export type ProjectTreeEntity = Record<
+  string,
+  ProjectTreeData & {
+    boards: Record<string, ProjectTreeData>;
+  }
+>;
+
 export const ProjectQueryKeys = {
   PROJECTS: ["projects"],
   PROJECT_FILES: ["projects", "files"],

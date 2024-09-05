@@ -1,8 +1,9 @@
 import { UseMutationResult } from "@tanstack/react-query";
-import {
-  CreateColorDto,
-  UpdateNodeStyleDto,
-} from "src/domain/settings/settings.dto";
+import { UpdateEdgeStyleDto } from "src/domain/edge/edge.dto";
+import edgeService from "src/domain/edge/edge.service";
+import { UpdateNodeStyleDto } from "src/domain/node/node.dto";
+import nodeService from "src/domain/node/node.service";
+import { CreateColorDto } from "src/domain/settings/settings.dto";
 import {
   ColorData,
   ColorEntity,
@@ -20,6 +21,12 @@ export function useSettings(): {
     UpdateNodeStyleDto,
     unknown
   >;
+  updateEdgeStyles: UseMutationResult<
+    boolean,
+    unknown,
+    UpdateEdgeStyleDto,
+    unknown
+  >;
 } {
   const createColor = useDataMutation<CreateColorDto, ColorEntity>({
     mutationFn: async (dto: CreateColorDto) => settingsService.createColor(dto),
@@ -33,7 +40,13 @@ export function useSettings(): {
 
   const updateNodeStyles = useDataMutation<UpdateNodeStyleDto, boolean>({
     mutationFn: async (dto: UpdateNodeStyleDto) =>
-      settingsService.updateNodeStyles(dto),
+      nodeService.updateNodeStyles(dto),
+    optionalQueryKeysToInvalidate: [[...SettingsQueryKeys.SETTINGS]],
+  });
+
+  const updateEdgeStyles = useDataMutation<UpdateEdgeStyleDto, boolean>({
+    mutationFn: async (dto: UpdateEdgeStyleDto) =>
+      edgeService.updateEdgeStyles(dto),
     optionalQueryKeysToInvalidate: [[...SettingsQueryKeys.SETTINGS]],
   });
 
@@ -41,5 +54,6 @@ export function useSettings(): {
     createColor,
     deleteColor,
     updateNodeStyles,
+    updateEdgeStyles,
   };
 }

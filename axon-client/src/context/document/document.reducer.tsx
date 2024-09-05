@@ -10,39 +10,9 @@ export function documentReducer(
         ...state,
         documentFolders: {
           ...state.documentFolders,
-          data: action.payload.documentFolders,
+          folders: action.payload.data.folders,
           query: action.payload.query,
-        },
-      };
-    }
-    case "ADD_DOCUMENT_FOLDER": {
-      return {
-        ...state,
-        documentFolders: {
-          ...state.documentFolders,
-          data: [action.payload, ...state.documentFolders.data],
-        },
-      };
-    }
-    case "UPDATE_DOCUMENT_FOLDER": {
-      return {
-        ...state,
-        documentFolders: {
-          ...state.documentFolders,
-          data: state.documentFolders.data.map((folder) =>
-            folder.id === action.payload.id ? action.payload : folder
-          ),
-        },
-      };
-    }
-    case "DELETE_DOCUMENT_FOLDER": {
-      return {
-        ...state,
-        documentFolders: {
-          ...state.documentFolders,
-          data: state.documentFolders.data.filter(
-            (folder) => folder.id !== action.payload
-          ),
+          folderTree: action.payload.data.folderTree,
         },
       };
     }
@@ -126,7 +96,7 @@ export function documentReducer(
         ...state,
         documentFolderFiles: {
           ...state.documentFolderFiles,
-          data: action.payload.documentFiles,
+          files: action.payload.documentFiles,
           query: action.payload.query,
         },
       };

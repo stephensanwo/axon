@@ -1,12 +1,17 @@
 import { boardRepository } from "../board/board.repository";
+import boardService from "../board/board.service";
 import { projectsDb } from "./project.db";
 import {
   CreateProjectDto,
   GetProjectResponseDto,
+  GetProjectsResponseDto,
   UpdateProjectDto,
 } from "./project.dto";
-import { ProjectEntity } from "./project.entity";
+import { ProjectEntity, ProjectTreeData } from "./project.entity";
 import projectRepository from "./project.repository";
+import groupBy from "lodash/groupBy";
+import mapValues from "lodash/mapValues";
+import keyBy from "lodash/keyBy";
 
 export class ProjectService {
   projectsDb = projectsDb;
@@ -47,21 +52,60 @@ export class ProjectService {
     }
   }
 
-  public async getProjects(): Promise<ProjectEntity[]> {
+  public async getProjects(): Promise<GetProjectsResponseDto> {
     try {
       const projects = await this.projectsDb.getAllRecords<ProjectEntity>({
         descending: true,
         endkey: "project_",
         startkey: "project_\ufff0",
       });
-      if (projects) {
-        return projects;
-      } else {
-        return [];
+
+      if (!projects) {
+        return {
+          projects: [],
+          projectTree: {},
+        };
       }
+
+      const boards = await boardService.getAllBoards();
+      const groupedBoards = mapValues(
+        groupBy(boards, "projectId"),
+        (boardGroup) =>
+          keyBy(
+            boardGroup.map((board) => ({
+              id: board.id,
+              name: board.name,
+            })),
+            "id"
+          )
+      );
+
+      const groupedProjects = projects.reduce(
+        (acc, project) => {
+          acc[project.id] = {
+            id: project.id,
+            name: project.name,
+            boards: groupedBoards[project.id] || {},
+          };
+          return acc;
+        },
+        {} as Record<
+          string,
+          {
+            id: string;
+            name: string;
+            boards: Record<string, { id: string; name: string }>;
+          }
+        >
+      );
+
+      return {
+        projects,
+        projectTree: groupedProjects,
+      };
     } catch (err) {
       console.error(err);
-      return [];
+      throw new Error(`Error fetching projects`);
     }
   }
 

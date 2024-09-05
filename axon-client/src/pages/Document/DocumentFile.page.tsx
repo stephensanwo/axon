@@ -14,6 +14,7 @@ import Search from "src/components/Search";
 import Settings from "src/components/Settings";
 import User from "src/components/User";
 import Icon from "src/components/Common/Icon";
+import Nav from "src/components/Nav";
 
 function DocumentFilePage() {
   const { folders } = useFolderContext();
@@ -49,9 +50,7 @@ function DocumentFilePage() {
             <User.Button type={"icon"} />,
           ],
         }}
-        leftPanel={
-          <Page.Left>{<Folders folders={folders} theme={theme} />}</Page.Left>
-        }
+        leftPanel={<Page.Left>{<Nav />}</Page.Left>}
         rightPanel={<></>}
         main={
           <Page.Main>
@@ -95,15 +94,13 @@ function DocumentFilePage() {
             <User.Button type={"icon"} />,
           ],
         }}
-        leftPanel={
-          <Page.Left>{<Folders folders={folders} theme={theme} />}</Page.Left>
-        }
+        leftPanel={<Page.Left>{<Nav />}</Page.Left>}
         rightPanel={
           <Page.Right>{<Document.Preview {...documentState} />}</Page.Right>
         }
         main={
           <Page.Main>
-            {documentState.documentFolderFiles.data && (
+            {documentState.documentFolderFiles.files && (
               <Document.Main>
                 <DocumentFile.Header
                   title={`Documents / ${documentState.documentFolderFiles.query.isLoading ? "..." : documentState.documentFolderFiles.folder?.name}`}
@@ -116,12 +113,12 @@ function DocumentFilePage() {
                   documentStateDispatch={documentStateDispatch}
                   isLoading={documentState.documentFolderFiles.query.isLoading}
                   initialSortColumn={
-                    documentState.documentFolderFiles.data!!.length > 0
+                    documentState.documentFolderFiles.files!!.length > 0
                       ? "created"
                       : ""
                   }
                   initialSortDirection={
-                    documentState.documentFolderFiles.data!!.length > 0
+                    documentState.documentFolderFiles.files!!.length > 0
                       ? "DESC"
                       : undefined
                   }

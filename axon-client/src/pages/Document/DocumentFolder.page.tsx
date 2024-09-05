@@ -14,6 +14,7 @@ import Search from "src/components/Search";
 import Settings from "src/components/Settings";
 import User from "src/components/User";
 import Icon from "src/components/Common/Icon";
+import Nav from "src/components/Nav";
 
 function DocumentFolderPage() {
   const { folders } = useFolderContext();
@@ -50,9 +51,7 @@ function DocumentFolderPage() {
             <User.Button type={"icon"} />,
           ],
         }}
-        leftPanel={
-          <Page.Left>{<Folders folders={folders} theme={theme} />}</Page.Left>
-        }
+        leftPanel={<Page.Left>{<Nav />}</Page.Left>}
         rightPanel={
           <Page.Right>
             <Document.Preview {...documentState} />
@@ -102,9 +101,7 @@ function DocumentFolderPage() {
             <User.Button type={"icon"} />,
           ],
         }}
-        leftPanel={
-          <Page.Left>{<Folders folders={folders} theme={theme} />}</Page.Left>
-        }
+        leftPanel={<Page.Left>{<Nav />}</Page.Left>}
         rightPanel={<></>}
         main={
           <Page.Main>
@@ -121,12 +118,12 @@ function DocumentFolderPage() {
                   documentStateDispatch={documentStateDispatch}
                   isLoading={documentState.documentFolders.query.isLoading}
                   initialSortColumn={
-                    documentState.documentFolders.data.length > 0
+                    documentState.documentFolders.folders.length > 0
                       ? "created"
                       : ""
                   }
                   initialSortDirection={
-                    documentState.documentFolders.data.length > 0
+                    documentState.documentFolders.folders.length > 0
                       ? "DESC"
                       : undefined
                   }
@@ -152,13 +149,13 @@ function DocumentFolderPage() {
 
   if (
     !documentState.documentFolders.query.isFetchedAfterMount &&
-    documentState.documentFolders.data === null
+    documentState.documentFolders.folders === null
   ) {
     return page["loading"];
   }
   if (
     documentState.documentFolders.query.isFetchedAfterMount &&
-    documentState.documentFolders.data === null
+    documentState.documentFolders.folders === null
   ) {
     return page["error"];
   }

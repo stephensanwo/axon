@@ -4,7 +4,7 @@ import { BaseEntity } from "src/db/db.types";
 
 export interface EdgeEntity {
   user_id: string;
-  folder_id: string;
+  board_id: string;
   note_id: string;
   edge_id: string; // Same as id
   type: EdgeTypes;

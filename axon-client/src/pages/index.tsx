@@ -1,4 +1,4 @@
-export { default as Notes } from "./App";
+// export { default as Notes } from "./App";
 export { default as Privacy } from "./Privacy";
 export { default as DownTime } from "./DownTime";
 export { default as Terms } from "./Terms";

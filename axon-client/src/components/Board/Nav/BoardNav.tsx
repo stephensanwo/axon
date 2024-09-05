@@ -9,7 +9,7 @@ function BoardNav({
   isLoading: boolean;
 } & BaseBoardProps) {
   const { theme } = useTheme();
-  const boardNavTitle = `${isLoading ? "..." : boardState.data?.name}`;
+  const boardNavTitle = `${isLoading ? "..." : boardState.board?.name}`;
 
   const options: SelectMenuItem[] = [
     {

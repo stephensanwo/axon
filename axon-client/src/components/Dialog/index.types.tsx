@@ -1,5 +1,5 @@
 export type BaseDialogProps = {
   openModal: boolean;
-  closeModalFn: React.Dispatch<React.SetStateAction<boolean>>;
+  closeModalFn: () => void;
   children?: React.ReactNode;
 };

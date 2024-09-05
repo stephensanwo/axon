@@ -17,6 +17,15 @@ export type DocumentFolderData = { name: string; description: string };
 export type DocumentFolderEntity = BaseEntity & DocumentFolderData;
 export type DocumentFileEntity = BaseEntity & AttachmentRecord;
 
+export type DocumentTreeData = { id: string; name: string };
+
+export type DocumentTreeEntity = Record<
+  string,
+  DocumentTreeData & {
+    files: Record<string, DocumentTreeData>;
+  }
+>;
+
 export const DocumentTypes: Record<
   string,
   {

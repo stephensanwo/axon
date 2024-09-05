@@ -89,7 +89,7 @@ function UpdateBoard({ projectState }: BaseProjectProps) {
                 error={formValidation.fieldError(state.meta)}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                leadingVisual={<Icon.AddBoard />}
+                leadingVisual={<Icon.BoardAlt />}
                 required={true}
                 htmlFor="update-board-name"
                 type="text"
@@ -129,7 +129,7 @@ function UpdateBoard({ projectState }: BaseProjectProps) {
           children={([isSubmitting]) => (
             <Button
               variant="primary"
-              leadingVisual={isSubmitting ? InlineSpinner : Icon.AddBoard}
+              leadingVisual={isSubmitting ? InlineSpinner : Icon.BoardAlt}
               disabled={isSubmitting}
               onClick={Form.handleSubmit}
               size="medium"

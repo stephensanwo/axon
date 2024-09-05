@@ -9,9 +9,7 @@ const RequireAuth = () => {
   const location = useLocation();
   if (user === null) {
     return <Navigate to="/" state={{ from: location }} replace />;
-  } else {
-    return <Notes />;
-  }
+  } 
 };
 
 export default RequireAuth;

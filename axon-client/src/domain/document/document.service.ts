@@ -8,10 +8,14 @@ import {
 import {
   CreateDocumentFolderDto,
   GetDocumentFilesResponseDto,
+  GetDocumentFoldersResponseDto,
   UpdateDocumentFolderDto,
 } from "./document.dto";
 import { foldersDb, filesDb } from "./document.db";
 import { documentRepository } from "./document.repository";
+import groupBy from "lodash/groupBy";
+import mapValues from "lodash/mapValues";
+import keyBy from "lodash/keyBy";
 
 export class DocumentService {
   foldersDb = foldersDb;
@@ -169,21 +173,54 @@ export class DocumentService {
     }
   }
 
-  public async getDocumentFolders(): Promise<DocumentFolderEntity[]> {
+  public async getDocumentFolders(): Promise<GetDocumentFoldersResponseDto> {
     try {
-      const folders = await this.foldersDb.getAllRecords<DocumentFolderEntity>({
-        descending: true,
-        endkey: "folder_",
-        startkey: "folder_\ufff0",
-      });
-      if (folders) {
-        return folders;
-      } else {
-        return [];
+      const folders = await this.getAllDocumentFolders();
+
+      if (!folders) {
+        return {
+          folders: [],
+          folderTree: {},
+        };
       }
+
+      const files = await this.getAllDocumentFiles();
+
+      const groupedFiles = mapValues(groupBy(files, "parentId"), (fileGroup) =>
+        keyBy(
+          fileGroup.map((file) => ({
+            id: file.id,
+            name: file.name,
+          })),
+          "id"
+        )
+      );
+
+      const groupedFolders = folders.reduce(
+        (acc, folder) => {
+          acc[folder.id] = {
+            id: folder.id,
+            name: folder.name,
+            files: groupedFiles[folder.id] || {},
+          };
+          return acc;
+        },
+        {} as Record<
+          string,
+          {
+            id: string;
+            name: string;
+            files: Record<string, { id: string; name: string }>;
+          }
+        >
+      );
+      return {
+        folders,
+        folderTree: groupedFolders,
+      };
     } catch (err) {
       console.error(err);
-      return [];
+      throw new Error(`Error fetching document folders`);
     }
   }
 
@@ -275,20 +312,30 @@ export class DocumentService {
     }
   }
 
-  public async getAllDocumentRecords(): Promise<{
-    folders: DocumentFolderEntity[];
-    files: DocumentFileEntity[];
-  }> {
+  public async getAllDocumentFolders(): Promise<DocumentFolderEntity[]> {
     const folders = await this.foldersDb.getAllRecords<DocumentFolderEntity>({
       descending: true,
       endkey: "folder_",
       startkey: "folder_\ufff0",
     });
+    return folders;
+  }
+
+  public async getAllDocumentFiles(): Promise<DocumentFileEntity[]> {
     const files = await this.filesDb.getAllRecords<DocumentFileEntity>({
       descending: true,
       endkey: "file_",
       startkey: "file_\ufff0",
     });
+    return files;
+  }
+
+  public async getAllDocumentRecords(): Promise<{
+    folders: DocumentFolderEntity[];
+    files: DocumentFileEntity[];
+  }> {
+    const folders = await this.getAllDocumentFolders();
+    const files = await this.getAllDocumentFiles();
     return { folders, files };
   }
 }

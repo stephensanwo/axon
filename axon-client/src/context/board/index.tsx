@@ -6,6 +6,10 @@ import { GetBoardResponseDto } from "src/domain/board/board.dto";
 import boardService from "src/domain/board/board.service";
 import { boardReducer } from "./board.reducer";
 import { BoardQueryKeys } from "src/domain/board/board.entity";
+import nodeService from "src/domain/node/node.service";
+import { GetNodesResponseDto } from "src/domain/node/node.dto";
+import edgeService from "src/domain/edge/edge.service";
+import { GetEdgesResponseDto } from "src/domain/edge/edge.dto";
 
 interface BoardProviderProps {
   children: React.ReactNode;
@@ -29,14 +33,38 @@ const BoardProvider = ({ children }: BoardProviderProps) => {
     refetchOnWindowFocus: true,
   });
 
+  const nodeQuery = useDataQuery<GetNodesResponseDto>({
+    queryKey: [...BoardQueryKeys.BOARD, boardName || "notfound", "nodes"],
+    queryFn: async () => nodeService.getNodes(boardName || ""),
+    refetchOnMount: true,
+    refetchOnReconnect: true,
+    refetchOnWindowFocus: true,
+  });
+
+  const edgeQuery = useDataQuery<GetEdgesResponseDto>({
+    queryKey: [...BoardQueryKeys.BOARD, boardName || "notfound", "edges"],
+    queryFn: async () => edgeService.getEdges(boardName || ""),
+    refetchOnMount: true,
+    refetchOnReconnect: true,
+    refetchOnWindowFocus: true,
+  });
+
   const [boardState, boardStateDispatch] = useReducer<
     Reducer<BoardState, BoardAction>
   >(boardReducer, {
-    data: null,
-    query: boardQuery,
+    board: null,
+    boardQuery: boardQuery,
     selectedBoards: [],
     pinnedBoards: [],
     project: null,
+    nodes: {
+      data: [],
+      nodeQuery: nodeQuery,
+    },
+    edges: {
+      data: [],
+      edgeQuery: edgeQuery,
+    },
   });
 
   useEffect(() => {
@@ -44,14 +72,34 @@ const BoardProvider = ({ children }: BoardProviderProps) => {
       boardStateDispatch({
         type: "INIT_BOARD",
         payload: {
-          data: boardQuery.data.board,
-          query: boardQuery,
+          board: boardQuery.data.board,
+          boardQuery: boardQuery,
           project: boardQuery.data.project,
         },
       });
     }
+
+    if (nodeQuery.data && nodeQuery.isFetched) {
+      boardStateDispatch({
+        type: "INIT_NODES",
+        payload: {
+          nodes: nodeQuery.data.nodes,
+          nodeQuery: nodeQuery,
+        },
+      });
+    }
+
+    if (edgeQuery.data && edgeQuery.isFetched) {
+      boardStateDispatch({
+        type: "INIT_EDGES",
+        payload: {
+          edges: edgeQuery.data.edges,
+          edgeQuery: edgeQuery,
+        },
+      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [boardQuery.data]);
+  }, [boardQuery.data, nodeQuery.data]);
 
   return (
     <BoardContext.Provider

@@ -73,6 +73,8 @@ export class BoardService {
     try {
       const boards = await this.boardsDb.getAllRecords<BoardEntity>({
         descending: true,
+        endkey: "board_",
+        startkey: "board_\ufff0",
       });
       return boards;
     } catch (err) {

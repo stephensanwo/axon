@@ -7,7 +7,10 @@ import {
   ProjectQueryKeys,
 } from "src/domain/project/project.entity";
 import projectService from "src/domain/project/project.service";
-import { GetProjectResponseDto } from "src/domain/project/project.dto";
+import {
+  GetProjectResponseDto,
+  GetProjectsResponseDto,
+} from "src/domain/project/project.dto";
 import { useProjectRoute } from "./hooks/useProjectRoute";
 
 interface ProjectProviderProps {
@@ -24,7 +27,7 @@ const ProjectContext = createContext({} as ProjectContextProps);
 const ProjectProvider = ({ children }: ProjectProviderProps) => {
   const { projectName } = useProjectRoute();
 
-  const projectFoldersQuery = useDataQuery<ProjectEntity[]>({
+  const projectFoldersQuery = useDataQuery<GetProjectsResponseDto>({
     queryKey: [...ProjectQueryKeys.PROJECTS],
     queryFn: async () => projectService.getProjects(),
     refetchOnMount: true,
@@ -44,11 +47,12 @@ const ProjectProvider = ({ children }: ProjectProviderProps) => {
     Reducer<ProjectState, ProjectAction>
   >(projectReducer, {
     projectFolders: {
-      data: [],
+      projects: [],
       query: projectFoldersQuery,
       createProjectForm: null,
       selectedProjects: [],
       pinnedProjects: [],
+      projectTree: {},
     },
     projectFiles: {
       project: null,
@@ -65,7 +69,7 @@ const ProjectProvider = ({ children }: ProjectProviderProps) => {
       projectStateDispatch({
         type: "INIT_PROJECT_FOLDERS",
         payload: {
-          projectFolders: projectFoldersQuery.data,
+          data: projectFoldersQuery.data,
           query: projectFoldersQuery,
         },
       });
@@ -88,7 +92,7 @@ const ProjectProvider = ({ children }: ProjectProviderProps) => {
   }, [projectFilesQuery.data]);
 
   useEffect(() => {
-    const project = projectFoldersQuery.data?.find(
+    const project = projectFoldersQuery.data?.projects?.find(
       (project) => project.id === projectFilesQuery.data?.projectId
     );
 

@@ -1,38 +1,44 @@
-import { useEffect, useState } from "react";
-import { NumberInputProps } from "../index.types";
+import { useState, useCallback } from "react";
+import { flushSync } from "react-dom";
+
+interface NumberInputHookProps {
+  initialValue: number;
+  step: number;
+  minValue: number;
+  maxValue: number;
+  onChange: (value: number) => void;
+}
 
 export function useNumberInput({
   initialValue,
+  step,
   minValue,
   maxValue,
-  step,
   onChange,
-}: NumberInputProps): {
-  value: number;
-  increase: () => void;
-  decrease: () => void;
-} {
+}: NumberInputHookProps) {
   const [value, setValue] = useState(initialValue);
 
-  const increase = () => {
-    if (value + step <= maxValue) {
-      setValue(value + step);
-    } else setValue(maxValue);
-  };
+  const handleIncrease = useCallback(() => {
+    setValue((prevValue) => {
+      const newValue =
+        prevValue + step <= maxValue ? prevValue + step : maxValue;
+      flushSync(() => {
+        onChange(newValue);
+      });
+      return newValue;
+    });
+  }, [step, maxValue, onChange]);
 
-  useEffect(() => {
-    onChange(value);
-  }, [value]);
+  const handleDecrease = useCallback(() => {
+    setValue((prevValue) => {
+      const newValue =
+        prevValue - step >= minValue ? prevValue - step : minValue;
+      flushSync(() => {
+        onChange(newValue);
+      });
+      return newValue;
+    });
+  }, [step, minValue, onChange]);
 
-  const decrease = () => {
-    if (value - step >= minValue) {
-      setValue(value - step);
-    } else setValue(minValue);
-  };
-
-  return {
-    value,
-    increase,
-    decrease,
-  };
+  return { value, handleIncrease, handleDecrease };
 }

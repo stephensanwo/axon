@@ -55,6 +55,9 @@ export const AXON_THEME = deepmerge(theme, {
           default: AXON_TOKENS.primary100,
           variant1: AXON_TOKENS.primary100a,
         },
+        success: {
+          default: AXON_TOKENS.green100,
+        },
         danger: {
           default: AXON_TOKENS.red100,
         },
@@ -102,7 +105,7 @@ export const AXON_THEME = deepmerge(theme, {
           selectedBg: AXON_TOKENS.black80,
           counterBg: AXON_TOKENS.black80,
           primary: {
-            text: AXON_TOKENS.black100,
+            text: AXON_TOKENS.white100,
             bg: AXON_TOKENS.primary100,
             border: AXON_TOKENS.primary100,
             hoverBg: AXON_TOKENS.primary90,
@@ -144,24 +147,24 @@ export const AXON_THEME = deepmerge(theme, {
           red: AXON_TOKENS.primary100,
         },
         canvas: {
-          default: AXON_TOKENS.black90,
-          overlay: AXON_TOKENS.black90,
+          default: AXON_TOKENS.black100,
+          overlay: AXON_TOKENS.black100,
           inset: AXON_TOKENS.primary100,
-          subtle: AXON_TOKENS.black90,
+          subtle: AXON_TOKENS.black100,
         },
         actionListItem: {
           inlineDivider: AXON_TOKENS.black80,
           default: {
-            hoverBg: AXON_TOKENS.black85,
+            hoverBg: AXON_TOKENS.black90,
             hoverBorder: AXON_TOKENS.black85,
             activeBg: AXON_TOKENS.black85,
             activeBorder: AXON_TOKENS.black85,
             selectedBg: AXON_TOKENS.transparent,
           },
           danger: {
-            hoverBg: "red",
+            hoverBg: AXON_TOKENS.red100,
             activeBg: "red",
-            hoverText: "red",
+            hoverText: AXON_TOKENS.white100,
           },
         },
 

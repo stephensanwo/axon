@@ -1,8 +1,10 @@
 export const AXON_TOKENS = {
-  primary100: "#DAEF68",
-  primary100a: "#a7b651",
-  primary100b: "#303225",
-  primary90: "#d3ec45",
+  primary100: "#0064b7",
+  primary100a: "#0064b7cc", // 80%
+  primary100b: "#0064b799", // 60%
+  primary100c: "#0064b766", // 40%
+  primary100d: "#0064b733", // 20%
+  primary90: "#005AA5",
   black100: "#151515",
   black100a: "#151515ae",
   black90: "#262626",
@@ -16,7 +18,8 @@ export const AXON_TOKENS = {
   white80: "#c6c6c6",
   white70: "#8d8d8d",
   white60: "#6f6f6f",
-  red100: "#fa4d56",
+  red100: "#f20819",
   transparent: "transparent",
-  yellow100: "#f7d96d",
+  yellow100: "#E8C33F", // #FDD51E
+  green100: "#028b42", // #018F57
 };

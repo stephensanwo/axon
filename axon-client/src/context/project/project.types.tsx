@@ -4,16 +4,21 @@ import { BoardEntity } from "src/domain/board/board.entity";
 import {
   CreateProjectDto,
   GetProjectResponseDto,
+  GetProjectsResponseDto,
 } from "src/domain/project/project.dto";
-import { ProjectEntity } from "src/domain/project/project.entity";
+import {
+  ProjectEntity,
+  ProjectTreeEntity,
+} from "src/domain/project/project.entity";
 
 export type ProjectState = {
   projectFolders: {
-    data: ProjectEntity[];
-    query: UseQueryResult<ProjectEntity[], unknown>;
+    projects: ProjectEntity[];
+    query: UseQueryResult<GetProjectsResponseDto, unknown>;
     createProjectForm: CreateProjectDto | null;
     selectedProjects: ProjectEntity[];
     pinnedProjects: ProjectEntity[];
+    projectTree: ProjectTreeEntity;
   };
   projectFiles: {
     project: ProjectEntity | null;
@@ -35,8 +40,8 @@ export type ProjectAction =
   | {
       type: "INIT_PROJECT_FOLDERS";
       payload: {
-        projectFolders: ProjectEntity[];
-        query: UseQueryResult<ProjectEntity[], unknown>;
+        data: GetProjectsResponseDto;
+        query: UseQueryResult<GetProjectsResponseDto, unknown>;
       };
     }
   | {

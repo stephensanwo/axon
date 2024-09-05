@@ -18,7 +18,7 @@ function DocumentFooter(documentState: DocumentState) {
     >
       <Box>
         <Text.SmallSecondary>
-          Documents: {documentState.documentFolders.data.length}
+          Documents: {documentState.documentFolders.folders.length}
         </Text.SmallSecondary>
       </Box>
       <Box>

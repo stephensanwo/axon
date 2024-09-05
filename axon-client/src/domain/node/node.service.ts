@@ -1,7 +1,9 @@
+import { boardRepository } from "../board/board.repository";
 import { defaultNodeStyles } from "../node/node.defaults";
 import { NodeStyle, NodeStyleEntity } from "../node/node.entity";
 import { nodeDefaultsDb } from "./node.db";
-import { UpdateNodeStyleDto } from "./node.dto";
+import { GetNodesResponseDto, UpdateNodeStyleDto } from "./node.dto";
+import { nodeRepository } from "./node.repository";
 
 export class NodeService {
   nodeDefaultsDb = nodeDefaultsDb;
@@ -44,6 +46,27 @@ export class NodeService {
       return true;
     } catch (error) {
       throw new Error(`Error updating node styles - ${error}`);
+    }
+  }
+
+  public async getNodes(boardName: string): Promise<GetNodesResponseDto> {
+    try {
+      const board_id = await boardRepository.findBoardIdByName(boardName);
+
+      if (!board_id) {
+        return {
+          board_id: null,
+          nodes: [],
+        };
+      }
+      const nodes = await nodeRepository.findNodesByBoardId(board_id);
+      return {
+        board_id,
+        nodes,
+      };
+    } catch (err) {
+      console.error(err);
+      throw new Error("Error fetching nodes");
     }
   }
 }

@@ -22,7 +22,7 @@ function DocumentNav({
         documentState={documentState}
         documentStateDispatch={documentStateDispatch}
       />
-      <Text.SmallSecondary>/</Text.SmallSecondary>
+      <Text.ParagraphSecondary>/</Text.ParagraphSecondary>
       {level === "file" && (
         <DocumentFileNav
           navTitle={fileNavTitle}

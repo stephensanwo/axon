@@ -22,7 +22,7 @@ export type NodeEntity = Node<NodeDataProps, NodeTypes | undefined>;
 export interface NodeDataProps {
   user_id: string;
   folder_id: string;
-  note_id: string;
+  board_id: string;
   position: XYPosition;
   last_edited: string;
 
@@ -106,6 +106,23 @@ export interface NodeIconEntity {
 }
 
 export type NodeIconSizes = 16 | 24 | 32 | 40 | 48 | 56 | 64;
+
+export interface NodeOptions {
+  id: string;
+  name: string;
+  description: string;
+  longDescription?: string;
+  nodeType: NodeTypes;
+  nodeContentType: NodeContentTypes | null;
+  icon: React.ReactNode;
+  disabled?: boolean;
+  configOptions?: {};
+}
+
+
+
+
+
 
 export interface NodeThemeEntity {
   style: "background-fill" | "border-outline" | "none";

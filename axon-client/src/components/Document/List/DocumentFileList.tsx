@@ -141,9 +141,9 @@ function DocumentFileList({
   ];
 
   const tableState: TableState =
-    !isLoading && documentState.documentFolderFiles.data!!.length === 0
+    !isLoading && documentState.documentFolderFiles.files!!.length === 0
       ? "empty"
-      : !isLoading && documentState.documentFolderFiles.data!!.length > 0
+      : !isLoading && documentState.documentFolderFiles.files!!.length > 0
         ? "data"
         : "loading";
 
@@ -151,7 +151,7 @@ function DocumentFileList({
     <Table
       id="documents"
       state={tableState}
-      data={documentState.documentFolderFiles.data!!}
+      data={documentState.documentFolderFiles.files!!}
       columns={columns}
       emptyStateMessage={emptyDocumentMessage}
       initialSortColumn={initialSortColumn}
