@@ -1,3 +1,6 @@
+import { BoardSettingsEntity } from "../board/board.entity";
+import boardService from "../board/board.service";
+import contentService from "../content/content.service";
 import { EdgeStyleEntity } from "../edge/edge.entity";
 import edgeService from "../edge/edge.service";
 import { NodeStyleEntity } from "../node/node.entity";
@@ -30,6 +33,8 @@ export class SettingsService {
       colors: [],
       nodeStyles: {} as NodeStyleEntity,
       edgeStyles: {} as EdgeStyleEntity,
+      boardSettings: {} as BoardSettingsEntity,
+      contentTypes: {} as any,
     };
 
     try {
@@ -41,11 +46,19 @@ export class SettingsService {
       // Get Edge Styles
       await edgeService.createDefaultEdgeStyles();
       const edgeStyles = await edgeService.getEdgeStyles();
+      // Get Board Default Settings
+      await boardService.createDefaultBoardSettings();
+      const boardSettings = await boardService.getDefaultBoardSettings();
+      // Get Content Types Defaults
+      await contentService.createDefaultContentTypes();
+      const contentTypes = await contentService.getContentTypes();
 
       settings = {
         colors: colors,
         nodeStyles: nodeStyles,
         edgeStyles: edgeStyles,
+        boardSettings: boardSettings,
+        contentTypes: contentTypes,
       };
 
       return settings;

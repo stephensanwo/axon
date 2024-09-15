@@ -17,44 +17,19 @@ export type CustomNodeEntity<T = any> = {
   sourcePosition?: Position;
 };
 
-export type NodeEntity = Node<NodeDataProps, NodeTypes | undefined>;
-
+export type NodeEntity = Node<NodeDataProps, NodeTypes | undefined> &
+  BaseEntity;
 export interface NodeDataProps {
-  user_id: string;
-  folder_id: string;
-  board_id: string;
-  position: XYPosition;
-  last_edited: string;
-
+  name: string;
   node_id: string;
-  title: string;
-  description: string;
-  contentType: NodeContentTypes | null;
-  block?: string;
-  code?: NodeCodeEntity;
-  json?: NodeJsonEditorEntity;
-  link?: NodeLinkEntity;
-  inlineImage?: NodeInlineImageEntity;
-  markdown?: NodeMarkdownEntity;
-  block_note?: JSONContentEntity;
-  icon?: NodeIconEntity;
-  node_theme: NodeThemeEntity;
+  board_id: string;
   node_styles: NodeStyleEntity;
-  width: number;
-  height: number;
+  content_type: NodeContentTypes | null;
+  content_type_id: string;
 }
 
 // Default Node Types
-export type NodeTypes = DefaultNodeTypes | ExtendedNodeTypes;
-
-export type DefaultNodeTypes =
-  | "text"
-  | "icon"
-  | "paragraph"
-  | "bounding_box"
-  | "block";
-
-export type ExtendedNodeTypes = "link" | "image" | "code" | "json" | "markdown";
+export type NodeTypes = "box" | "text" | "block" | "icon" | "custom"; 
 
 export type NodeContentTypes =
   | "markdown"

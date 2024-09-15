@@ -13,8 +13,8 @@ export class EdgeService {
   public async createDefaultEdgeStyles(): Promise<boolean> {
     const existingStyles =
       await this.edgeDefaultsDb.getAllRecords<EdgeStyleEntity>({
-        startkey: "edge_defaults_",
-        endkey: "edge_defaults_\uffff",
+        startkey: "edge-defaults_",
+        endkey: "edge-defaults_\uffff",
       });
     if (existingStyles.length > 0) {
       return true;
@@ -31,8 +31,8 @@ export class EdgeService {
     try {
       const edgeStyles =
         await this.edgeDefaultsDb.getAllRecords<EdgeStyleEntity>({
-          startkey: "edge_defaults_",
-          endkey: "edge_defaults_\uffff",
+          startkey: "edge-defaults_",
+          endkey: "edge-defaults_\uffff",
         });
       return edgeStyles[0];
     } catch (err) {

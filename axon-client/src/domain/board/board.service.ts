@@ -1,15 +1,21 @@
 import projectService from "../project/project.service";
-import { boardsDb } from "./board.db";
+import { boardDefaultsDb, boardsDb } from "./board.db";
+import { defaultBoardSettings } from "./board.defaults";
 import {
   CreateBoardDto,
   GetBoardResponseDto,
   UpdateBoardDto,
 } from "./board.dto";
-import { BoardEntity } from "./board.entity";
+import {
+  BoardEntity,
+  BoardSettings,
+  BoardSettingsEntity,
+} from "./board.entity";
 import { boardRepository } from "./board.repository";
 
 export class BoardService {
   boardsDb = boardsDb;
+  boardDefaultsDb = boardDefaultsDb;
 
   constructor() {}
 
@@ -80,6 +86,41 @@ export class BoardService {
     } catch (err) {
       console.error(err);
       return [];
+    }
+  }
+
+  public async createDefaultBoardSettings() {
+    const existingSettings =
+      await this.boardDefaultsDb.getAllRecords<BoardSettingsEntity>({
+        startkey: "board-defaults_",
+        endkey: "board-defaults_\uffff",
+      });
+
+    if (existingSettings.length > 0) {
+      return true;
+    }
+
+    try {
+      await this.boardDefaultsDb.createRecord<BoardSettings>(
+        defaultBoardSettings
+      );
+      return true;
+    } catch (error) {
+      throw new Error(`Error creating default board settings - ${error}`);
+    }
+  }
+
+  public async getDefaultBoardSettings(): Promise<BoardSettingsEntity> {
+    try {
+      const boardSettings =
+        await this.boardDefaultsDb.getAllRecords<BoardSettingsEntity>({
+          startkey: "board-defaults_",
+          endkey: "board-defaults_\uffff",
+        });
+      return boardSettings[0];
+    } catch (err) {
+      console.error(err);
+      throw new Error("Error fetching board settings");
     }
   }
 }
