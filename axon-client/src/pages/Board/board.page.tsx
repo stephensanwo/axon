@@ -1,10 +1,7 @@
-import { useTheme } from "@primer/react";
 import Blank from "src/components/Blank";
 import { ComponentState } from "src/components/Common/ComponentState";
-import Folders from "src/components/Folders";
 import AxonLoader from "src/components/Loader/Loader";
 import Page from "src/components/Page";
-import { useFolderContext } from "src/hooks/folders/useFolderContext";
 import { usePage } from "src/context/page/hooks/usePage";
 import { useRef } from "react";
 import Search from "src/components/Search";
@@ -20,10 +17,8 @@ import Nav from "src/components/Nav";
 import FlowTree from "src/components/FlowTree";
 
 function BoardPage() {
-  const { folders } = useFolderContext();
   const { projectState, projectStateDispatch } = useProjectContext();
   const { boardState, boardStateDispatch } = useBoardContext();
-  const { theme } = useTheme();
   const { panel, togglePanel } = usePage();
   const initialFocusRef = useRef<HTMLButtonElement>(null);
   const returnFocusRef = useRef<HTMLButtonElement>(null);

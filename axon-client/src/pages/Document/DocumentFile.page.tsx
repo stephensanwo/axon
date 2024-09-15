@@ -1,13 +1,10 @@
-import { useTheme } from "@primer/react";
 import Blank from "src/components/Blank";
 import { ComponentState } from "src/components/Common/ComponentState";
 import { Document, DocumentFile } from "src/components/Document";
 import DocumentNav from "src/components/Document/Nav";
-import Folders from "src/components/Folders";
 import AxonLoader from "src/components/Loader/Loader";
 import Page from "src/components/Page";
 import { useDocumentContext } from "src/context/document/hooks/useDocumentContext";
-import { useFolderContext } from "src/hooks/folders/useFolderContext";
 import { useRef } from "react";
 import { usePage } from "src/context/page/hooks/usePage";
 import Search from "src/components/Search";
@@ -17,9 +14,7 @@ import Icon from "src/components/Common/Icon";
 import Nav from "src/components/Nav";
 
 function DocumentFilePage() {
-  const { folders } = useFolderContext();
   const { documentState, documentStateDispatch } = useDocumentContext();
-  const { theme } = useTheme();
   const { panel, togglePanel } = usePage();
   const initialFocusRef = useRef<HTMLButtonElement>(null);
   const returnFocusRef = useRef<HTMLButtonElement>(null);

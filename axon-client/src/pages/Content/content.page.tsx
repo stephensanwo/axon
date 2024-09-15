@@ -7,12 +7,12 @@ import { useRef } from "react";
 import Search from "src/components/Search";
 import Settings from "src/components/Settings";
 import User from "src/components/User";
-import { Project, ProjectFiles } from "src/components/Project";
-import { useProjectContext } from "src/context/project/hooks/useProjectContext";
 import Nav from "src/components/Nav";
+import { useContentContext } from "src/context/content/hooks/useContentContext";
+import Content from "src/components/Content";
 
-function ProjectFilesPage() {
-  const { projectState, projectStateDispatch } = useProjectContext();
+function ContentPage() {
+  const { contentState, contentStateDispatch } = useContentContext();
   const { panel, togglePanel } = usePage();
   const initialFocusRef = useRef<HTMLButtonElement>(null);
   const returnFocusRef = useRef<HTMLButtonElement>(null);
@@ -30,11 +30,11 @@ function ProjectFilesPage() {
         ignoreClickRefs={[]}
         header={{
           breadcrumb: (
-            <Project.Nav
-              level="project"
-              isLoading={projectState.projectFiles.query.isLoading}
-              projectState={projectState}
-              projectStateDispatch={projectStateDispatch}
+            <Content.Nav
+              level="content"
+              isLoading={contentState.content.contentQuery.isLoading}
+              contentState={contentState}
+              contentStateDispatch={contentStateDispatch}
             />
           ),
           menus: [
@@ -48,22 +48,22 @@ function ProjectFilesPage() {
         main={
           <Page.Main>
             {
-              <Project.Main>
+              <Content.Main>
                 <Blank
-                  heading="Project not found"
-                  description={`The project you are looking for does not exist\n or has been deleted.`}
+                  heading="Content not found"
+                  description={`The content you are looking for does not exist\n or has been deleted.`}
                   type="error"
                   action={{
-                    label: "Go to Projects",
-                    href: "/projects",
+                    label: "Go to Contents",
+                    href: "/content",
                   }}
                 />
-              </Project.Main>
+              </Content.Main>
             }
           </Page.Main>
         }
         footer={
-          <Page.Footer>{<Project.Footer {...projectState} />}</Page.Footer>
+          <Page.Footer>{<Content.Footer {...contentState} />}</Page.Footer>
         }
       />
     ),
@@ -76,59 +76,72 @@ function ProjectFilesPage() {
         ignoreClickRefs={[]}
         header={{
           breadcrumb: (
-            <Project.Nav
-              level="project"
-              isLoading={projectState.projectFiles.query.isLoading}
-              projectState={projectState}
-              projectStateDispatch={projectStateDispatch}
+            <Content.Nav
+              level="content"
+              isLoading={contentState.content.contentQuery.isLoading}
+              contentState={contentState}
+              contentStateDispatch={contentStateDispatch}
             />
           ),
           menus: [
+            panel.right ? (
+              <Content.PreviewOptions
+                contentState={contentState}
+                contentStateDispatch={contentStateDispatch}
+                togglePanel={togglePanel}
+              />
+            ) : null,
             <Search.Button type={"icon"} />,
             <Settings.Button type="icon" />,
             <User.Button type={"icon"} />,
           ],
         }}
         leftPanel={<Page.Left>{<Nav />}</Page.Left>}
-        rightPanel={<></>}
+        rightPanel={
+          <Page.Right>
+            <Content.Preview
+              contentState={contentState}
+              contentStateDispatch={contentStateDispatch}
+            />
+          </Page.Right>
+        }
         main={
           <Page.Main>
             {
-              <Project.Main>
-                <ProjectFiles.Header
-                  title={`Projects / ${projectState.projectFiles.query.isLoading ? "..." : projectState.projectFiles.project?.name}`}
-                  subtitle="Create, delete and manage boards"
-                  projectState={projectState}
-                  projectStateDispatch={projectStateDispatch}
+              <Content.Main>
+                <Content.ContentViewHeader
+                  isLoading={contentState.content.contentQuery.isLoading}
+                  contentState={contentState}
+                  contentStateDispatch={contentStateDispatch}
                 />
-                <ProjectFiles.List
-                  projectState={projectState}
-                  projectStateDispatch={projectStateDispatch}
+                <Content.View
+                  contentState={contentState}
+                  contentStateDispatch={contentStateDispatch}
                 />
-              </Project.Main>
+              </Content.Main>
             }
           </Page.Main>
         }
         footer={
-          <Page.Footer>{<Project.Footer {...projectState} />}</Page.Footer>
+          <Page.Footer>{<Content.Footer {...contentState} />}</Page.Footer>
         }
       />
     ),
   };
 
   if (
-    !projectState.projectFiles.query.isFetchedAfterMount &&
-    projectState.projectFiles.project === null
+    !contentState.content.contentQuery.isFetchedAfterMount &&
+    contentState.content.data === null
   ) {
     return page["loading"];
   }
   if (
-    projectState.projectFiles.query.isFetchedAfterMount &&
-    projectState.projectFiles.project === null
+    contentState.content.contentQuery.isFetchedAfterMount &&
+    contentState.content.data === null
   ) {
     return page["error"];
   }
   return page["success"];
 }
 
-export default ProjectFilesPage;
+export default ContentPage;

@@ -6,6 +6,7 @@ export interface BaseDocument {
 }
 
 export interface BaseEntity {
+  type: string;
   id: string;
   created: string;
   updated: string;

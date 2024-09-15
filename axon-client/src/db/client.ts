@@ -40,13 +40,17 @@ export class DBClient {
    * @returns The id of the created document
    * @throws Error if the document cannot be created
    */
-  public async createRecord<T>(entity: T): Promise<T & BaseEntity> {
+  public async createRecord<T>(
+    entity: T,
+    record_id?: string
+  ): Promise<T & BaseEntity> {
     try {
-      const id = uid(this.basePrefix);
+      const id = record_id ?? uid(this.basePrefix);
       const doc: T & BaseEntity & BaseDocument = {
         ...entity,
         _id: id,
         id: id,
+        type: this.basePrefix,
         created: new Date().toISOString(),
         updated: new Date().toISOString(),
       };
@@ -78,6 +82,7 @@ export class DBClient {
       const doc: AttachmentRecord & BaseDocument = {
         _id: id,
         id: id,
+        type: this.basePrefix,
         created: new Date().toISOString(),
         updated: new Date().toISOString(),
         name: entity.name,
@@ -95,6 +100,7 @@ export class DBClient {
       await this.client.put(doc);
       return {
         id: id,
+        type: doc.type,
         created: doc.created,
         updated: doc.updated,
         name: entity.name,
