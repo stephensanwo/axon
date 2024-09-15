@@ -1,17 +1,21 @@
-import React, { Reducer, createContext, useEffect, useReducer } from "react";
+import React, {
+  Reducer,
+  createContext,
+  useEffect,
+  useReducer,
+  useRef,
+} from "react";
 import { DocumentAction, DocumentState } from "./document.types";
 import { documentReducer } from "./document.reducer";
 import { useDataQuery } from "src/hooks/api/useDataQuery";
-import {
-  DocumentFolderEntity,
-  DocumentQueryKeys,
-} from "src/domain/document/document.entity";
+import { DocumentQueryKeys } from "src/domain/document/document.entity";
 import { useDocumentFileRoute } from "./hooks/useDocumentRoute";
 import documentService from "src/domain/document/document.service";
 import {
   GetDocumentFilesResponseDto,
   GetDocumentFoldersResponseDto,
 } from "src/domain/document/document.dto";
+import documentWorker from "../../worker/document.worker?worker";
 
 interface DocumentProviderProps {
   children: React.ReactNode;
@@ -20,6 +24,7 @@ interface DocumentProviderProps {
 interface DocumentContextProps {
   documentState: DocumentState;
   documentStateDispatch: React.Dispatch<DocumentAction>;
+  documentWorkerClient: React.MutableRefObject<Worker | null>;
 }
 
 const DocumentContext = createContext({} as DocumentContextProps);
@@ -108,11 +113,22 @@ const DocumentProvider = ({ children }: DocumentProviderProps) => {
     });
   }, [documentFilesQuery.data]);
 
+  // Document Worker
+  const documentWorkerClient = useRef<Worker | null>(null);
+
+  useEffect(() => {
+    documentWorkerClient.current = new documentWorker();
+    return () => {
+      documentWorkerClient.current?.terminate();
+    };
+  }, []);
+
   return (
     <DocumentContext.Provider
       value={{
         documentState,
         documentStateDispatch,
+        documentWorkerClient: documentWorkerClient,
       }}
     >
       {children}

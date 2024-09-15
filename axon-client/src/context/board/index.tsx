@@ -60,6 +60,7 @@ const BoardProvider = ({ children }: BoardProviderProps) => {
     nodes: {
       data: [],
       nodeQuery: nodeQuery,
+      selectedNode: null,
     },
     edges: {
       data: [],

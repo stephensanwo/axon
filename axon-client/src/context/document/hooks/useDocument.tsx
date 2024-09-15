@@ -1,5 +1,4 @@
 import documentService from "src/domain/document/document.service";
-import { useDocumentWorker } from "../../../hooks/worker/useDocumentWorker";
 import { useDocumentContext } from "./useDocumentContext";
 import {
   CreateDocumentFolderDto,
@@ -16,6 +15,7 @@ import {
 import { UseMutationResult } from "@tanstack/react-query";
 import { uid } from "src/common/uid";
 import { useDocumentFileRoute } from "./useDocumentRoute";
+import { useDocumentWorker } from "./useDocumentWorker";
 
 export function useDocument(): {
   uploadDocument: (folderId: string, folderName: string) => void;

@@ -16,6 +16,7 @@ export type BoardState = {
   nodes: {
     data: NodeEntity[];
     nodeQuery: UseQueryResult<GetNodesResponseDto, unknown>;
+    selectedNode: NodeEntity | null;
   };
   edges: {
     data: EdgeEntity[];
