@@ -19,9 +19,11 @@ export type CodeData = {
   language: string;
 };
 
+export type MarkdownViews = "input" | "preview";
 export interface MarkdownData {
   content_type: "markdown";
   data: string;
+  view: MarkdownViews;
 }
 
 export type JsonData = {
@@ -38,7 +40,10 @@ export type ContentTypeData = CodeData | MarkdownData | JsonData | BlockData;
 
 export type ContentTypeKeys = ContentTypeData["content_type"];
 
-export type ContentEntity = BaseEntity & ContentData;
+export type ContentEntity = BaseEntity &
+  ContentData & {
+    content: ContentTypeData;
+  };
 
 export type ContentType = Record<ContentTypeKeys, ContentTypeData>;
 

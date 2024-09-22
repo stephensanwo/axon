@@ -109,11 +109,6 @@ function ContentPage() {
           <Page.Main>
             {
               <Content.Main>
-                <Content.ContentViewHeader
-                  isLoading={contentState.content.contentQuery.isLoading}
-                  contentState={contentState}
-                  contentStateDispatch={contentStateDispatch}
-                />
                 <Content.View
                   contentState={contentState}
                   contentStateDispatch={contentStateDispatch}

@@ -15,6 +15,7 @@ export const defaultContentTypes: ContentType = {
   markdown: {
     content_type: "markdown",
     data: "",
+    view: "input",
   } as MarkdownData,
   json: {
     content_type: "json",
