@@ -5,11 +5,11 @@ import { css } from "styled-components";
 import { themeGet } from "@primer/react";
 import { Table } from "@primer/react/drafts";
 
-export const AxonMarkdown = styled(ReactMarkdown)`
-  white-space: pre-wrap;
-  line-height: 2;
-  overflow: auto;
-`;
+// export const AxonMarkdown = styled(ReactMarkdown)`
+//   white-space: pre-wrap;
+//   line-height: 2;
+//   overflow: auto;
+// `;
 
 export const AxonSyntaxHighlighter = styled(SyntaxHighlighter)`
   background-color: ${themeGet("colors.bg.default")} !important;
@@ -20,11 +20,6 @@ export const AxonSyntaxHighlighter = styled(SyntaxHighlighter)`
   border-radius: 4px !important;
   margin-top: 20px;
   margin-bottom: 20px;
-`;
-
-export const MarkdownPreview = styled.div`
-  padding: 0px 14px 14px 14px;
-  width: 100%;
 `;
 
 export const MarkdownBaseText = css`

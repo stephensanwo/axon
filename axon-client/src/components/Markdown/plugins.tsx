@@ -9,7 +9,7 @@ import rehypeRaw from "rehype-raw";
 
 export const REMARK_MARKDOWN_PLUGINS: PluggableList | undefined = [
   remarkGfm,
-  remarkToc,
+  [remarkToc, { heading: "Table of Contents", maxDepth: 3 }],
   remarkBreaks,
 ];
 

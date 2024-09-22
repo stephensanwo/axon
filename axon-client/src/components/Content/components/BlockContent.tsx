@@ -6,7 +6,7 @@ import { EDITOR_THEME } from "src/components/BlockNoteEditor/theme";
 import {
   ContentBody,
   ContentContainer,
-} from "src/components/Content/index.styles";
+} from "src/components/Content_/index.styles";
 import { BlockNoteEditor } from "src/components/BlockNoteEditor";
 import NoteContext from "src/context/notes";
 import { useBlock } from "src/hooks/content/useBlock";

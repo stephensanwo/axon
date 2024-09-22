@@ -1,32 +1,23 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { Box, Button, useTheme } from "@primer/react";
-import ReactMarkdown from "react-markdown";
+import { PiFloppyDisk } from "react-icons/pi";
 import Editor from "src/components/CodeEditor/Editor";
-import { getMarkdownComponents } from "./components";
-import { REHYPE_MARKDOWN_PLUGINS, REMARK_MARKDOWN_PLUGINS } from "./plugins";
-import { MarkdownData } from "src/domain/content/content.entity";
+import { BaseJsonProps, EditStateProps } from "./index.types";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { JsonData } from "src/domain/content/content.entity";
 import { FormApi, formOptions, Updater, useForm } from "@tanstack/react-form";
-import { BaseMarkdownProps, EditStateProps } from "./index.types";
-import { InlineSpinner } from "../Common/Spinner";
-import { PiEye, PiFloppyDisk, PiPencil } from "react-icons/pi";
-import { Text } from "../Common/Text";
-import { startCase } from "lodash";
-import { formatDateToRelativeTime } from "src/common/date";
 import { flushSync } from "react-dom";
 import usePageVisibility from "src/hooks/usePageVisibility";
-import { BsFillMarkdownFill } from "react-icons/bs";
+import { Box, Button, useTheme } from "@primer/react";
+import { formatDateToRelativeTime } from "src/common/date";
+import { BsFileCodeFill } from "react-icons/bs";
+import { Text } from "../Common/Text";
+import { startCase } from "lodash";
+import { InlineSpinner } from "../Common/Spinner";
 
-export function MarkdownInput({
+export function JsonInput({
   Form,
   setIsTyping,
 }: {
-  Form: FormApi<MarkdownData, undefined>;
+  Form: FormApi<JsonData, undefined>;
   setIsTyping: React.Dispatch<React.SetStateAction<EditStateProps>>;
 }) {
   const typingTimeout = useRef<number | undefined>(undefined); // Timeout reference to track typing
@@ -79,12 +70,12 @@ export function MarkdownInput({
   }, []);
 
   return (
-    <Form.Field name="data">
+    <Form.Field name="code">
       {({ state, handleChange }) => {
         return (
           <Editor
-            defaultValue="Add Markdown here..."
-            language={"markdown"}
+            defaultValue="Add Code here..."
+            language={"javascript"}
             value={state.value}
             loading={"Loading Markdown..."}
             onChange={(e: string | undefined) =>
@@ -108,56 +99,29 @@ export function MarkdownInput({
   );
 }
 
-export function MarkdownPreview({ markdown }: { markdown: MarkdownData }) {
-  const { theme } = useTheme();
-  const MARKDOWN_COMPONENTS = useMemo(() => {
-    return getMarkdownComponents(theme!!);
-  }, []);
-  return (
-    <Box
-      sx={{
-        padding: "0px 14px 14px 14px",
-        width: "100%",
-      }}
-    >
-      <ReactMarkdown
-        children={markdown.data}
-        remarkPlugins={REMARK_MARKDOWN_PLUGINS}
-        rehypePlugins={REHYPE_MARKDOWN_PLUGINS}
-        components={MARKDOWN_COMPONENTS}
-        // remarkRehypeOptions={{
-        //   allowDangerousHtml: false,
-        // }}
-      />
-    </Box>
-  );
-}
-
-export function Markdown({
-  markdown,
-  updateMarkdown,
-  title,
+export function Json({
+  json,
+  updateJson,
   updated,
   showHeader = true,
-  refetchMarkdown,
-}: BaseMarkdownProps) {
+  refetchJson,
+}: BaseJsonProps) {
   const [isTyping, setIsTyping] = useState<EditStateProps>({
     typing: false,
     lastTyped: updated,
   });
-  const formOpts = formOptions<MarkdownData>({
+  const formOpts = formOptions<JsonData>({
     defaultValues: {
-      data: markdown.data || `# ${title}`,
-      content_type: "markdown",
-      view: markdown.view || "input",
+      code: json.code || "{}",
+      content_type: "json",
     },
   });
 
   const Form = useForm({
     ...formOpts,
     onSubmit: async ({ value, formApi }) => {
-      console.log("Markdown Input Form Submitted", value);
-      updateMarkdown(value);
+      console.log("Json Input Form Submitted", value);
+      updateJson(value);
     },
   });
 
@@ -170,7 +134,7 @@ export function Markdown({
   // Callback to run when the page becomes visible (user returns)
   const handlePageReturn = () => {
     console.log("User returned to the page ==> refetching");
-    refetchMarkdown();
+    refetchJson();
   };
 
   // Use the custom hook with the leave and return callbacks
@@ -186,25 +150,19 @@ export function Markdown({
         height: "100%",
       }}
     >
-      {showHeader && (
-        <MarkdownHeader Form={Form} markdown={markdown} isTyping={isTyping} />
-      )}
-      {markdown.view === "input" ? (
-        <MarkdownInput Form={Form} setIsTyping={setIsTyping} />
-      ) : (
-        <MarkdownPreview markdown={markdown} />
-      )}
+      {showHeader && <JsonHeader Form={Form} json={json} isTyping={isTyping} />}
+      <JsonInput Form={Form} setIsTyping={setIsTyping} />
     </Box>
   );
 }
 
-export function MarkdownHeader({
+export function JsonHeader({
   Form,
-  markdown,
+  json,
   isTyping,
 }: {
-  Form: FormApi<MarkdownData, undefined>;
-  markdown: MarkdownData;
+  Form: FormApi<JsonData, undefined>;
+  json: JsonData;
   isTyping: EditStateProps;
 }) {
   const { theme } = useTheme();
@@ -242,9 +200,9 @@ export function MarkdownHeader({
           gap: 2,
         }}
       >
-        <BsFillMarkdownFill size={14} fill={theme?.colors.text.gray} />
+        <BsFileCodeFill size={14} fill={theme?.colors.text.gray} />
         <Text.SmallSecondary>
-          {startCase(markdown.content_type)}
+          {startCase(json.content_type)}
         </Text.SmallSecondary>
         <Text.SmallSecondary> | </Text.SmallSecondary>
         <Text.SmallSecondary>Saved {relativeTime}</Text.SmallSecondary>
@@ -259,23 +217,18 @@ export function MarkdownHeader({
         <Text.SmallSecondary>
           Auto Save • {isTyping.typing ? "Editing" : "Saved"}
         </Text.SmallSecondary>
-
-        <Form.Field name="view">
+        {/* 
+        <Form.Field name="language">
           {({ state }) => {
             return (
               <Button
                 variant="invisible"
-                leadingVisual={state.value === "input" ? PiEye : PiPencil}
+                leadingVisual={PiCode}
                 disabled={false}
                 onClick={() => {
                   flushSync(() => {
-                    Form.setFieldValue(
-                      "view",
-                      state.value === "input" ? "preview" : "input"
-                    );
                   });
-                  Form.handleSubmit();
-                }}
+               }}
                 size="small"
                 sx={{
                   height: "24px",
@@ -286,7 +239,7 @@ export function MarkdownHeader({
               </Button>
             );
           }}
-        </Form.Field>
+        </Form.Field> */}
         <Form.Subscribe
           selector={({ isSubmitting }) => [isSubmitting]}
           children={([isSubmitting]) => (
