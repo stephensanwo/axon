@@ -2,7 +2,7 @@ import { Box } from "@primer/react";
 import { Text } from "../../Common/Text";
 import { BaseProjectProps } from "../index.types";
 import CreateBoard from "src/components/Board/Form/CreateBoard";
-import SelectBoardOptions from "src/components/Board/components/SelectBoardOptions";
+import SelectBoardOptions from "src/components/Board/Form/SelectBoardOptions";
 
 function ProjectFilesHeader({
   title,
@@ -18,7 +18,8 @@ function ProjectFilesHeader({
     <>
       <Box
         sx={{
-          height: "80px",
+          marginTop: 4,
+          marginBottom: 4,
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",

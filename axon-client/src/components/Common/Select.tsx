@@ -1,9 +1,10 @@
 import { ActionList, ActionMenu, IconButton, useTheme } from "@primer/react";
 import { VariantType } from "@primer/react/lib/Button/types";
-import { useState } from "react";
+import { CSSProperties, useState } from "react";
 import { PiDotsThreeBold } from "react-icons/pi";
 import { TbEyeDiscount } from "react-icons/tb";
 import { Text } from "./Text";
+import { IconButtonProps } from "@primer/react/lib-esm";
 
 export type SelectMenuItem = {
   id: string;
@@ -13,12 +14,16 @@ export type SelectMenuItem = {
   variant?: "danger" | "default" | undefined;
   leadingVisual?: React.ReactNode;
   trailingVisual?: React.ReactNode;
+  subSelectMenu?: SelectMenuItem[];
 };
 
 export type SelectProps<T> = {
   title: string | React.ReactNode;
   menuItems: SelectMenuItem[];
   anchor?: "icon" | "text";
+  iconProps?: {
+    style: CSSProperties;
+  };
   width?:
     | "small"
     | "auto"
@@ -34,6 +39,7 @@ export type SelectProps<T> = {
     trailingVisual?: React.ElementType;
     trailingAction?: React.ElementType;
   };
+  portalContainerName?: string;
 };
 
 function Select<T>(props: SelectProps<T>) {
@@ -50,6 +56,7 @@ function Select<T>(props: SelectProps<T>) {
       trailingVisual: undefined,
       trailingAction: undefined,
     },
+    portalContainerName,
   } = props;
   const { theme } = useTheme();
   return (
@@ -61,6 +68,10 @@ function Select<T>(props: SelectProps<T>) {
               variant="invisible"
               icon={PiDotsThreeBold}
               aria-label="Open menu"
+              sx={{
+                ...props.iconProps?.style,
+                flexShrink: 0,
+              }}
             />
           </ActionMenu.Anchor>
         ) : (
@@ -87,38 +98,117 @@ function Select<T>(props: SelectProps<T>) {
           sx={{
             border: `1px solid ${theme?.colors.border.default}`,
             zIndex: 10050,
+            borderRadius: 6,
           }}
+          portalContainerName={portalContainerName}
         >
           <ActionList>
-            {menuItems.map((item, index) => (
-              <ActionList.Item
-                key={index}
-                onClick={() => {
-                  item.onClick(data);
-                  setMenuOpen(false);
-                }}
-                variant={item.variant}
-                aria-label={item.name}
-                id={item.id}
-              >
-                {item.name}
-                {item.description && (
-                  <ActionList.Description>
-                    {item.description}
-                  </ActionList.Description>
-                )}
-                {item.leadingVisual && (
-                  <ActionList.LeadingVisual>
-                    {item.leadingVisual}
-                  </ActionList.LeadingVisual>
-                )}
-                {item.trailingVisual && (
-                  <ActionList.TrailingVisual>
-                    {item.trailingVisual}
-                  </ActionList.TrailingVisual>
-                )}
-              </ActionList.Item>
-            ))}
+            {menuItems.map((item, index) =>
+              item.subSelectMenu ? (
+                <ActionMenu key={index}>
+                  <ActionMenu.Anchor>
+                    <ActionList.Item
+                      variant={item.variant}
+                      aria-label={item.name}
+                      id={item.id}
+                      sx={{
+                        borderRadius: 4,
+                      }}
+                    >
+                      {item.name}
+                      {item.description && (
+                        <ActionList.Description>
+                          {item.description}
+                        </ActionList.Description>
+                      )}
+                      {item.leadingVisual && (
+                        <ActionList.LeadingVisual>
+                          {item.leadingVisual}
+                        </ActionList.LeadingVisual>
+                      )}
+                      {item.trailingVisual && (
+                        <ActionList.TrailingVisual>
+                          {item.trailingVisual}
+                        </ActionList.TrailingVisual>
+                      )}
+                    </ActionList.Item>
+                  </ActionMenu.Anchor>
+                  <ActionMenu.Overlay
+                    sx={{
+                      border: `1px solid ${theme?.colors.border.default}`,
+                      offset: 40,
+                    }}
+                  >
+                    <ActionList>
+                      {item.subSelectMenu.map((subItem, subIndex) => (
+                        <ActionList.Item
+                          key={subIndex}
+                          onClick={() => {
+                            subItem.onClick(data);
+                            setMenuOpen(false);
+                          }}
+                          variant={subItem.variant}
+                          aria-label={subItem.name}
+                          id={subItem.id}
+                          sx={{
+                            borderRadius: 4,
+                          }}
+                        >
+                          {subItem.name}
+                          {subItem.description && (
+                            <ActionList.Description>
+                              {subItem.description}
+                            </ActionList.Description>
+                          )}
+                          {subItem.leadingVisual && (
+                            <ActionList.LeadingVisual>
+                              {subItem.leadingVisual}
+                            </ActionList.LeadingVisual>
+                          )}
+                          {subItem.trailingVisual && (
+                            <ActionList.TrailingVisual>
+                              {subItem.trailingVisual}
+                            </ActionList.TrailingVisual>
+                          )}
+                        </ActionList.Item>
+                      ))}
+                    </ActionList>
+                  </ActionMenu.Overlay>
+                </ActionMenu>
+              ) : (
+                <ActionList.Item
+                  key={index}
+                  onClick={() => {
+                    item.onClick(data);
+                    setMenuOpen(false);
+                  }}
+                  variant={item.variant}
+                  aria-label={item.name}
+                  id={item.id}
+                  sx={{
+                    borderRadius: 4,
+                    fontSize: 0,
+                  }}
+                >
+                  {item.name}
+                  {item.description && (
+                    <ActionList.Description>
+                      {item.description}
+                    </ActionList.Description>
+                  )}
+                  {item.leadingVisual && (
+                    <ActionList.LeadingVisual>
+                      {item.leadingVisual}
+                    </ActionList.LeadingVisual>
+                  )}
+                  {item.trailingVisual && (
+                    <ActionList.TrailingVisual>
+                      {item.trailingVisual}
+                    </ActionList.TrailingVisual>
+                  )}
+                </ActionList.Item>
+              )
+            )}
           </ActionList>
         </ActionMenu.Overlay>
       </ActionMenu>

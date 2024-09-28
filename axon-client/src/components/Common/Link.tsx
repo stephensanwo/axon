@@ -13,7 +13,7 @@ function Link({ truncateText, text, to }: LinkProps) {
   return (
     <PrimerLink
       sx={{
-        color: theme?.colors?.text.white,
+        color: theme?.colors?.text.gray,
         textDecoration: "none",
         cursor: "pointer",
         ":hover": {

@@ -8,6 +8,7 @@ import { useFolderMenuContext } from "../FolderMenuContext";
 import EditFolder from "../FolderDialogs/EditFolder";
 import NewNote from "../FolderDialogs/NewNote";
 import { FolderTreeProps } from "../index.types";
+import Icon from "src/components/Common/Icon";
 
 function FolderTree({ folder }: FolderTreeProps) {
   const { folder_id, folder_name, notes } = folder;
@@ -33,7 +34,7 @@ function FolderTree({ folder }: FolderTreeProps) {
         >
           {selectedNote?.folder_id === folder_id && (
             <TreeView.LeadingVisual>
-              <DotFillIcon size={10} fill={theme?.colors.text.primary} />
+              <Icon.Project size={10} fill={theme?.colors.text.primary} />
             </TreeView.LeadingVisual>
           )}
           <Text
@@ -45,9 +46,7 @@ function FolderTree({ folder }: FolderTreeProps) {
             {folder_name}
           </Text>
           <TreeView.SubTree>
-            {notes?.map((note, index) => (
-              <Notes {...note} key={index} />
-            ))}
+            {notes?.map((note, index) => <Notes {...note} key={index} />)}
           </TreeView.SubTree>
           {isCurrentFolder === folder_id && (
             <TreeView.TrailingVisual>

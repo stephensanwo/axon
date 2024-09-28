@@ -9,7 +9,7 @@ import { AppOptionsDialogProps } from "src/types/app";
 
 import Tabs from "../Tabs";
 import { CiPalette } from "react-icons/ci";
-import AppTheme from "./AppTheme";
+// import AppTheme from "./AppTheme";
 
 const AppSettings = forwardRef<HTMLButtonElement, AppOptionsDialogProps>(
   (props, ref) => {
@@ -37,11 +37,7 @@ const AppSettings = forwardRef<HTMLButtonElement, AppOptionsDialogProps>(
               icon: <CiPalette size={18} />,
             },
           ]}
-          content={[
-            <DialogBody>
-              <AppTheme />
-            </DialogBody>,
-          ]}
+          content={[<DialogBody>{/* <AppTheme /> */}</DialogBody>]}
           tabContainerStyle={{
             position: "fixed",
             width: "100%",

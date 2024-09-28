@@ -12,6 +12,8 @@ import {
   PagePanelActions,
   PagePanelDirections,
 } from "src/components/Page/index.types";
+import { useDocument } from "src/context/document/hooks/useDocument";
+import { CheckCircleIcon, TrashIcon } from "@primer/octicons-react";
 
 function DocumentFileList({
   documentState,
@@ -31,6 +33,7 @@ function DocumentFileList({
     action?: PagePanelActions
   ) => void;
 } & BaseDocumentProps) {
+  const { deleteDocumentFile } = useDocument();
   const options: SelectMenuItem[] = [
     {
       id: "preview",
@@ -47,6 +50,24 @@ function DocumentFileList({
       id: "open",
       name: "Open",
       onClick: (itemId: string) => {},
+    },
+    {
+      id: "delete",
+      name: "Delete File",
+      onClick: () => {},
+      variant: "danger",
+      subSelectMenu: [
+        {
+          id: "confirm-delete",
+          name: "Confirm Delete",
+          onClick: (data: DocumentFileEntity) => {
+            deleteDocumentFile.mutate([data.id]);
+          },
+          trailingVisual: <CheckCircleIcon />,
+          variant: "danger",
+        },
+      ],
+      leadingVisual: <TrashIcon />,
     },
   ];
 
@@ -156,7 +177,7 @@ function DocumentFileList({
       emptyStateMessage={emptyDocumentMessage}
       initialSortColumn={initialSortColumn}
       initialSortDirection={initialSortDirection}
-      cellPadding={"spacious"}
+      cellPadding={"normal"}
     />
   );
 }

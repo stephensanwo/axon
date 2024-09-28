@@ -1,8 +1,8 @@
 import { Box } from "@primer/react";
 import { DocumentLevels } from "src/context/document/document.types";
-import DeleteDocumentFolder from "../Form/DeleteDocumentFolder";
-import UpdateDocumentFolder from "../Form/UpdateDocumentFolder";
-import DeleteDocumentFile from "../Form/DeleteDocumentFile";
+import DeleteDocumentFolder from "./DeleteDocumentFolder";
+import UpdateDocumentFolder from "./UpdateDocumentFolder";
+import DeleteDocumentFile from "./DeleteDocumentFile";
 import { useEffect } from "react";
 import DownloadDocumentFile from "../Sync/DownloadDocumentFile";
 import { BaseDocumentProps } from "../index.types";

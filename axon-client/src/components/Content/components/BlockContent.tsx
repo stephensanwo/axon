@@ -3,16 +3,12 @@ import React, { useContext, useMemo } from "react";
 import { BlockNoteEditorProps } from "src/components/BlockNoteEditor/index.types";
 import { EDITOR_NODES } from "src/components/BlockNoteEditor/nodes";
 import { EDITOR_THEME } from "src/components/BlockNoteEditor/theme";
-import {
-  ContentBody,
-  ContentContainer,
-} from "src/components/Content_/index.styles";
 import { BlockNoteEditor } from "src/components/BlockNoteEditor";
 import NoteContext from "src/context/notes";
 import { useBlock } from "src/hooks/content/useBlock";
 import TipTap from "src/components/TipTapEditor";
 
-const Block = () => {
+const BlockContent = () => {
   const { selectedNode } = useContext(NoteContext);
   const { block, handleBlockEditorStateUpdate } = useBlock();
 
@@ -53,26 +49,23 @@ const Block = () => {
   // console.log("selectedNode editorProps", editorProps);
 
   return (
-    <ContentContainer>
-      <ContentBody>
-        {/* <AxonBlockNoteEditor
-          namespace={selectedNode?.id!!}
-          type="content"
-          initialEditorState={block!!}
-          updateExternalEditorState={handleBlockEditorStateUpdate}
-        /> */}
-        {/* <LexicalComposer initialConfig={initialConfig}>
-          {React.createElement(BlockNoteEditor, { ...editorProps })}
-        </LexicalComposer> */}
-        {/* <BlockNoteEditor {...editorProps} /> */}
-        <TipTap
-          content="<p>Hello World 2</p>"
-          updateEvent={handleBlockEditorStateUpdate}
-        />
-        {/* <TipTap content="<p>Hello World 2</p>" /> */}
-      </ContentBody>
-    </ContentContainer>
+    // {/* <AxonBlockNoteEditor
+    //   namespace={selectedNode?.id!!}
+    //   type="content"
+    //   initialEditorState={block!!}
+    //   updateExternalEditorState={handleBlockEditorStateUpdate}
+    // /> */}
+    // {/* <LexicalComposer initialConfig={initialConfig}>
+    //   {React.createElement(BlockNoteEditor, { ...editorProps })}
+    // </LexicalComposer> */}
+    // {/* <BlockNoteEditor {...editorProps} /> */}
+
+    // {/* <TipTap content="<p>Hello World 2</p>" /> */}
+    <TipTap
+      content="<p>Hello World 2</p>"
+      updateEvent={handleBlockEditorStateUpdate}
+    />
   );
 };
 
-export default Block;
+export default BlockContent;

@@ -1,4 +1,4 @@
-import { BaseProjectProps } from "../index.types";
+import { BaseProjectProps } from "./index.types";
 import { Box, useTheme } from "@primer/react";
 import { PiAppWindowFill } from "react-icons/pi";
 import { formatDateToRelativeTime } from "src/common/date";

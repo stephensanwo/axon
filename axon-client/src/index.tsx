@@ -8,14 +8,13 @@ import { datadog } from "./api/monitoring/datadog";
 import Router from "./Router";
 import { ThemeProvider, BaseStyles } from "@primer/react";
 import { AXON_THEME } from "./theme";
-import "@aws-amplify/ui-react/styles.css";
-import { Amplify } from "aws-amplify";
-import { authConfig } from "./Auth";
+import "./theme/tokens.css";
+import "./theme/primer.css";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const container = document.getElementById("root");
 const root = createRoot(container!);
 const queryClient = new QueryClient();
-Amplify.configure(authConfig);
 
 root.render(
   <React.StrictMode>
@@ -27,6 +26,7 @@ root.render(
           </BrowserRouter>
         </BaseStyles>
       </ThemeProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </React.StrictMode>
 );

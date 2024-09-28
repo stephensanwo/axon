@@ -22,7 +22,7 @@ import { useAppContext } from "src/hooks/app";
 import FolderMenu from "src/components/Header/FolderMenu";
 import FolderDropdown from "src/components/Folder/FolderDropdown";
 import NoteMenu from "src/components/Note/NoteMenu";
-import Content from "src/components/Content";
+import Content from "src/components/Content_";
 import Skeleton from "src/components/Skeleton";
 import Folders from "src/components/Folders";
 

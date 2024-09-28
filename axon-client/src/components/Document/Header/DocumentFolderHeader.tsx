@@ -1,7 +1,7 @@
 import { Box } from "@primer/react";
 import { Text } from "../../Common/Text";
 import CreateDocumentFolder from "../Form/CreateDocumentFolder";
-import SelectDocumentOptions from "../Common/SelectDocumentOptions";
+import SelectDocumentOptions from "../Form/SelectDocumentOptions";
 import { BaseDocumentProps } from "../index.types";
 
 function DocumentFolderHeader({
@@ -17,7 +17,8 @@ function DocumentFolderHeader({
     <>
       <Box
         sx={{
-          height: "80px",
+          marginTop: 4,
+          marginBottom: 4,
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",

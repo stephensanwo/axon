@@ -1,4 +1,4 @@
-import ProjectFooter from "./components/ProjectFooter";
+import ProjectFooter from "./ProjectFooter";
 import ProjectFilesHeader from "./Header/ProjectFilesHeader";
 import ProjectFoldersHeader from "./Header/ProjectFoldersHeader";
 import ProjectHeader from "./Header/ProjectFoldersHeader";

@@ -17,6 +17,8 @@ function ContentPage() {
   const initialFocusRef = useRef<HTMLButtonElement>(null);
   const returnFocusRef = useRef<HTMLButtonElement>(null);
 
+  console.log("contentState", contentState);
+
   const page: ComponentState = {
     // error and loading states are rendered within the DocumentFileList component
     empty: <></>,

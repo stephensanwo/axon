@@ -35,7 +35,7 @@ export const NoteMenuButtons: NoteMenuProps[] = [
   {
     id: "extensions",
     menuType: "extensions",
-    name: "Extansions",
+    name: "Extensions",
     description: "Toggle extensions",
     icon: <PiCubeLight size={18} />,
     disabled: false,

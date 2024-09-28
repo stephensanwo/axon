@@ -45,8 +45,8 @@ function Folders({ folders, theme }: FolderProps) {
               overflowY: "scroll",
             }}
           >
-            {folders?.map((folder, index) => (
-              <FolderTree folder={folder} key={index} />
+            {[1, 2, 3, 4, 5]?.map((folder, index) => (
+              <FolderTree folder={{} as any} key={index} />
             ))}
           </Box>
         </Box>

@@ -2,7 +2,7 @@ import { Box } from "@primer/react";
 import { Text } from "../../Common/Text";
 import { BaseProjectProps } from "../index.types";
 import CreateProject from "../Form/CreateProject";
-import SelectProjectOptions from "../components/SelectProjectOptions";
+import SelectProjectOptions from "../Form/SelectProjectOptions";
 
 function ProjectFoldersHeader({
   title,
@@ -17,7 +17,8 @@ function ProjectFoldersHeader({
     <>
       <Box
         sx={{
-          height: "80px",
+          marginTop: 4,
+          marginBottom: 4,
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",

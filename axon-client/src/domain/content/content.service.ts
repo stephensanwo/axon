@@ -61,6 +61,8 @@ export class ContentService {
         return null;
       }
       const content = await this.contentDb.getRecord<ContentEntity>(contentId);
+
+      console.log("Get Content", content);
       return content;
     } catch (error) {
       throw new Error(`Content not found - ${error}`);

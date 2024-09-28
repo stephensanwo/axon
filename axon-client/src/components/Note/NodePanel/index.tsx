@@ -2,7 +2,7 @@ import { IconButton, Tooltip } from "@primer/react";
 import { useAppContext } from "src/hooks/app";
 import { useNodeEvents } from "src/hooks/node/useNodeEvents";
 import { ExtensionNodes } from "src/components/Extensions/ExtensionNodes";
-import { NodePanelWrapper } from "./styles";
+import { NodePanelBox } from "./styles";
 import { DefaultNodes } from "./options";
 
 const NodePanel = () => {
@@ -10,7 +10,7 @@ const NodePanel = () => {
   const { createNewNode } = useNodeEvents();
 
   return (
-    <NodePanelWrapper>
+    <NodePanelBox>
       {DefaultNodes.map((node, index) => (
         <Tooltip aria-label={node.name} direction="e" key={index}>
           <IconButton
@@ -21,12 +21,18 @@ const NodePanel = () => {
             }}
             size="large"
             icon={() => node.icon}
-            variant="default"
+            variant="invisible"
             aria-label={node.description}
+            sx={{
+              borderBottomLeftRadius: index === DefaultNodes.length ? 4 : 0,
+              borderBottomRightRadius: index === DefaultNodes.length ? 4 : 0,
+              borderTopLeftRadius: index === 0 ? 4 : 0,
+              borderTopRightRadius: index === 0 ? 4 : 0,
+            }}
           />
         </Tooltip>
       ))}
-      {Array.from(extensions).length > 0 && (
+      {/* {Array.from(extensions).length > 0 && (
         <>
           {ExtensionNodes.map(
             (node, index) =>
@@ -46,8 +52,8 @@ const NodePanel = () => {
               )
           )}
         </>
-      )}
-    </NodePanelWrapper>
+      )} */}
+    </NodePanelBox>
   );
 };
 

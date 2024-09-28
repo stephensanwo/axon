@@ -320,7 +320,7 @@ function NewColorItem() {
           />
           <Color.Dialog
             openModal={menuOpen}
-            closeModalFn={setMenuOpen}
+            closeModalFn={() => setMenuOpen(false)}
             colorLabel={Form.state.values.label}
             defaultColor={Form.state.values.value.hex}
             defaultView={Form.state.values.view}

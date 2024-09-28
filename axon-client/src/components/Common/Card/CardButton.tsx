@@ -36,9 +36,10 @@ function CardButton({
       variant="invisible"
       sx={{
         height,
-        width,
+        minWidth: width,
+        maxWidth: width,
         flexShrink: 0,
-        borderRadius: 2,
+        borderRadius: 0,
         border: border ? `1px solid ${theme?.colors.border.default}` : "none",
         ":hover": {
           backgroundColor: "transparent",
@@ -93,7 +94,7 @@ function CardButton({
           }}
         >
           {title && (
-            <Truncate maxWidth={150} expandable={false} title={title}>
+            <Truncate maxWidth={120} expandable={false} title={title}>
               <Text
                 sx={{
                   fontSize: 0,

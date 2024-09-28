@@ -1,12 +1,11 @@
 import { useTheme } from "@primer/react";
 import { InputHTMLAttributes } from "react";
 
-function Box(props: InputHTMLAttributes<HTMLInputElement>) {
+function BoxArea(props: InputHTMLAttributes<HTMLTextAreaElement>) {
   const { theme } = useTheme();
   return (
-    <input
+    <textarea
       {...props}
-      type="text"
       style={{
         color: theme?.colors.text.gray,
         backgroundColor: theme?.colors.bg.default,
@@ -17,10 +16,12 @@ function Box(props: InputHTMLAttributes<HTMLInputElement>) {
         outline: "none",
         height: "32px",
         padding: "0 8px",
+        resize: "none",
+        scrollbarWidth: "none",
         ...props.style,
       }}
     />
   );
 }
 
-export default Box;
+export default BoxArea;

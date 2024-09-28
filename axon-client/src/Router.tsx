@@ -14,7 +14,6 @@ import Billing from "./pages/Auth/Billing";
 import SignUp from "./pages/Auth/SignUp";
 import { ReactFlowProvider } from "reactflow";
 import { DocumentProvider } from "./context/document";
-import { WorkerProvider } from "./context/worker";
 import DocumentFolderPage from "./pages/Document/DocumentFolder.page";
 import DocumentFilePage from "./pages/Document/DocumentFile.page";
 import { DocumentFolderRouteParams } from "./context/document/document.types";
@@ -26,6 +25,10 @@ import ProjectFilesPage from "./pages/Project/ProjectFiles.page";
 import { BoardRouteParams } from "./context/board/board.types";
 import BoardPage from "./pages/Board/board.page";
 import { BoardProvider } from "./context/board";
+import { ContentProvider } from "./context/content";
+import ContentListPage from "./pages/Content/contentList.page";
+import ContentPage from "./pages/Content/content.page";
+import { ContentRouteParams } from "./context/content/index.types";
 
 const Router = () => {
   return (
@@ -50,22 +53,22 @@ const Router = () => {
               <AppProvider>
                 <ProjectProvider>
                   <BoardProvider>
-                    <FolderProvider>
-                      {/* React flow provider is added at the note level */}
-                      <ReactFlowProvider>
-                        <DocumentProvider>
-                          <NoteProvider>
-                            <NodeProvider>
-                              <EdgeProvider>
-                                <WorkerProvider>
+                    <ContentProvider>
+                      <FolderProvider>
+                        {/* React flow provider is added at the note level */}
+                        <ReactFlowProvider>
+                          <DocumentProvider>
+                            <NoteProvider>
+                              <NodeProvider>
+                                <EdgeProvider>
                                   <Layout />
-                                </WorkerProvider>
-                              </EdgeProvider>
-                            </NodeProvider>
-                          </NoteProvider>
-                        </DocumentProvider>
-                      </ReactFlowProvider>
-                    </FolderProvider>
+                                </EdgeProvider>
+                              </NodeProvider>
+                            </NoteProvider>
+                          </DocumentProvider>
+                        </ReactFlowProvider>
+                      </FolderProvider>
+                    </ContentProvider>
                   </BoardProvider>
                 </ProjectProvider>
               </AppProvider>
@@ -89,7 +92,11 @@ const Router = () => {
           path={`/documents/:${DocumentFolderRouteParams.DOCUMENT_FOLDER_NAME}`}
           element={<DocumentFilePage />}
         />
-        {/* <Route path="/notes" element={<Notes />} /> */}
+        <Route path="/content" element={<ContentListPage />} />
+        <Route
+          path={`/content/:${ContentRouteParams.CONTENT_NAME}`}
+          element={<ContentPage />}
+        />
       </Route>
       {/* </Route>
       </Route> */}

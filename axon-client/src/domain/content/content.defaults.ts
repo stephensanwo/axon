@@ -4,6 +4,7 @@ import {
   ContentType,
   JsonData,
   MarkdownData,
+  TableData,
 } from "./content.entity";
 
 export const defaultContentTypes: ContentType = {
@@ -25,4 +26,14 @@ export const defaultContentTypes: ContentType = {
     content_type: "block",
     data: "",
   } as BlockData,
+  table: {
+    content_type: "table",
+    data: {
+      header: [
+        { key: "0", value: "", type: "text" },
+        { key: "1", value: "", type: "text" },
+      ],
+      body: [],
+    },
+  } as TableData,
 };

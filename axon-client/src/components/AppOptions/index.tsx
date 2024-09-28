@@ -47,7 +47,7 @@ function AppOptions() {
               fontWeight: "bold",
             }}
           >
-            {"Settings"}
+            Settings
           </Text>
         </ActionList.Item>
         <ActionList.Item
@@ -68,7 +68,7 @@ function AppOptions() {
               fontWeight: "bold",
             }}
           >
-            {"My Account"}
+            My Account
           </Text>
         </ActionList.Item>
       </ActionList>

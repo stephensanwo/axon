@@ -58,7 +58,7 @@ function Page({
             returnFocusRef={returnFocusRef}
             ignoreClickRefs={ignoreClickRefs}
             onEscape={() => togglePanel("right", "close")}
-            onClickOutside={() => togglePanel("right", "close")}
+            onClickOutside={() => {}}
             // onClickOutside={() => {}}
             width="auto"
             anchorSide={"inside-left"}

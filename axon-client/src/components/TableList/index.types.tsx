@@ -14,6 +14,7 @@ export type TableListHeaderProps = {
   data: TableListHeaderData;
   actions?: React.ReactNode[];
   gridTemplateColumns: string;
+  children?: React.ReactNode;
 };
 
 export type TableListBodyProps = {

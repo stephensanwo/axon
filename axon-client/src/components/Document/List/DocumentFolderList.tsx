@@ -8,6 +8,8 @@ import RowSelector from "src/components/Table/components/RowSelector";
 import Link from "src/components/Common/Link";
 import { useNavigate } from "react-router-dom";
 import { BaseDocumentProps } from "../index.types";
+import { useDocument } from "src/context/document/hooks/useDocument";
+import { CheckCircleIcon, TrashIcon } from "@primer/octicons-react";
 
 function DocumentFolderList({
   documentState,
@@ -23,6 +25,7 @@ function DocumentFolderList({
   emptyDocumentMessage: React.ReactNode;
 } & BaseDocumentProps) {
   const navigate = useNavigate();
+  const { deleteDocumentFolder } = useDocument();
   const options: SelectMenuItem[] = [
     {
       id: "open",
@@ -30,6 +33,24 @@ function DocumentFolderList({
       onClick: (data: DocumentFolderEntity) => {
         navigate(`${data.name}`);
       },
+    },
+    {
+      id: "delete",
+      name: "Delete Folder",
+      onClick: () => {},
+      variant: "danger",
+      subSelectMenu: [
+        {
+          id: "confirm-delete",
+          name: "Confirm Delete",
+          onClick: (data: DocumentFolderEntity) => {
+            deleteDocumentFolder.mutate([data.id]);
+          },
+          trailingVisual: <CheckCircleIcon />,
+          variant: "danger",
+        },
+      ],
+      leadingVisual: <TrashIcon />,
     },
   ];
 
@@ -137,7 +158,7 @@ function DocumentFolderList({
       emptyStateMessage={emptyDocumentMessage}
       initialSortColumn={initialSortColumn}
       initialSortDirection={initialSortDirection}
-      cellPadding={"spacious"}
+      cellPadding={"normal"}
     />
   );
 }

@@ -11,6 +11,7 @@ export enum ContentTypeEnums {
   MARKDOWN = "markdown",
   JSON = "json",
   BLOCK = "block",
+  TABLE = "table",
 }
 
 export type CodeData = {
@@ -36,7 +37,27 @@ export type BlockData = {
   data: string;
 };
 
-export type ContentTypeData = CodeData | MarkdownData | JsonData | BlockData;
+export type TableData = {
+  content_type: "table";
+  data: {
+    header: Record<
+      string,
+      {
+        key: string;
+        value: string;
+        type: "text";
+      }
+    >;
+    body: Record<string, string>[];
+  };
+};
+
+export type ContentTypeData =
+  | CodeData
+  | MarkdownData
+  | JsonData
+  | BlockData
+  | TableData;
 
 export type ContentTypeKeys = ContentTypeData["content_type"];
 

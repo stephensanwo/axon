@@ -17,6 +17,7 @@ import EdgeSettings from "../Edge/EdgeSettings";
 const SettingsDialog = forwardRef(
   ({ openModal, closeModalFn }: BaseDialogProps, ref) => {
     const { settingsState, settingsStateDispatch } = useSettingsContext();
+    console.log("settingsState", settingsState);
     return (
       <DialogContainer
         buttonRef={ref}

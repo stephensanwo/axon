@@ -8,9 +8,10 @@ import Link from "src/components/Common/Link";
 import { useNavigate } from "react-router-dom";
 import { BaseProjectProps } from "../index.types";
 import { ProjectEntity } from "src/domain/project/project.entity";
-import ProjectRecents from "../components/ProjectRecents";
+import ProjectRecents from "../ProjectRecents";
 import { useProject } from "src/context/project/hooks/useProject";
 import { UpdateProjectDto } from "src/domain/project/project.dto";
+import { CheckCircleIcon, TrashIcon } from "@primer/octicons-react";
 
 function ProjectFoldersList({
   projectState,
@@ -26,7 +27,7 @@ function ProjectFoldersList({
   emptyDocumentMessage: React.ReactNode;
 } & BaseProjectProps) {
   const navigate = useNavigate();
-  const { updateProject } = useProject();
+  const { updateProject, deleteProject } = useProject();
   const options: SelectMenuItem[] = [
     {
       id: "open",
@@ -45,6 +46,24 @@ function ProjectFoldersList({
         };
         updateProject.mutate(projectUpdateDto);
       },
+    },
+    {
+      id: "delete",
+      name: "Delete Project",
+      onClick: () => {},
+      variant: "danger",
+      subSelectMenu: [
+        {
+          id: "confirm-delete",
+          name: "Confirm Delete",
+          onClick: (data: ProjectEntity) => {
+            deleteProject.mutate([data.id]);
+          },
+          trailingVisual: <CheckCircleIcon />,
+          variant: "danger",
+        },
+      ],
+      leadingVisual: <TrashIcon />,
     },
   ];
 
@@ -158,7 +177,7 @@ function ProjectFoldersList({
         emptyStateMessage={emptyDocumentMessage}
         initialSortColumn={initialSortColumn}
         initialSortDirection={initialSortDirection}
-        cellPadding={"spacious"}
+        cellPadding={"normal"}
       />
     </>
   );

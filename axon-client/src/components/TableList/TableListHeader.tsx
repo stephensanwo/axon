@@ -27,6 +27,7 @@ function TableListHeader({
   data,
   gridTemplateColumns,
   actions,
+  children,
 }: TableListHeaderProps) {
   const { theme } = useTheme();
   return (
@@ -42,56 +43,70 @@ function TableListHeader({
           top: "0",
         }}
       >
-        {data.map((item, index) =>
-          item.tooltip ? (
-            <Box
-              key={index}
-              sx={{
-                display: "flex",
-                justifyContent: "flex-start",
-                alignItems: "center",
-                backgroundColor: theme?.colors.bg.default,
-              }}
-            >
-              <Tooltip {...item.tooltip}>
-                <Text
+        {children
+          ? // ? data.map((item, index) => (
+            //     <Box
+            //       key={index}
+            //       sx={{
+            //         display: "flex",
+            //         justifyContent: "flex-start",
+            //         alignItems: "center",
+            //         backgroundColor: theme?.colors.bg.default,
+            //       }}
+            //     >
+            children
+          : //   </Box>
+            // )
+            data.map((item, index) =>
+              item.tooltip ? (
+                <Box
+                  key={index}
                   sx={{
-                    color: theme?.colors.text.gray,
-                    fontSize: "12px",
-                    fontFamily: theme?.fonts.mono,
-                    fontWeight: "bold",
-                    padding: "0 8px",
-                    cursor: "default",
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    backgroundColor: theme?.colors.bg.default,
                   }}
                 >
-                  {item.name}
-                </Text>
-              </Tooltip>
-            </Box>
-          ) : (
-            <Box
-              key={index}
-              sx={{
-                display: "flex",
-                justifyContent: "flex-start",
-                alignItems: "center",
-                backgroundColor: theme?.colors.bg.default,
-              }}
-            >
-              <Text
-                sx={{
-                  color: theme?.colors.text.gray,
-                  fontSize: "12px",
-                  fontFamily: theme?.fonts.mono,
-                  fontWeight: "bold",
-                  padding: "0 8px",
-                }}
-              >
-                {item.name}
-              </Text>
-            </Box>
-          )
-        )}
+                  <Tooltip {...item.tooltip}>
+                    <Text
+                      sx={{
+                        color: theme?.colors.text.gray,
+                        fontSize: "12px",
+                        fontFamily: theme?.fonts.mono,
+                        fontWeight: "bold",
+                        padding: "0 8px",
+                        cursor: "default",
+                      }}
+                    >
+                      {item.name}
+                    </Text>
+                  </Tooltip>
+                </Box>
+              ) : (
+                <Box
+                  key={index}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    backgroundColor: theme?.colors.bg.default,
+                  }}
+                >
+                  <Text
+                    sx={{
+                      color: theme?.colors.text.gray,
+                      fontSize: "12px",
+                      fontFamily: theme?.fonts.mono,
+                      fontWeight: "bold",
+                      padding: "0 8px",
+                    }}
+                  >
+                    {item.name}
+                  </Text>
+                </Box>
+              )
+            )}
         {actions &&
           actions.map((action, index) => (
             <Box

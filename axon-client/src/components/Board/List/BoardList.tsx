@@ -10,7 +10,7 @@ import { BaseProjectProps } from "src/components/Project/index.types";
 import { BoardEntity } from "src/domain/board/board.entity";
 import { useBoard } from "src/context/board/hooks/useBoard";
 import { UpdateBoardDto } from "src/domain/board/board.dto";
-import BoardRecents from "../components/BoardRecents";
+import BoardRecents from "../BoardRecents";
 
 function BoardList({
   projectState,

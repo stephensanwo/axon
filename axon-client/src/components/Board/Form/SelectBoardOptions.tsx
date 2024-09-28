@@ -1,7 +1,7 @@
 import { Box } from "@primer/react";
 import { useEffect } from "react";
-import DeleteBoard from "../Form/DeleteBoard";
-import UpdateBoard from "../Form/UpdateBoard";
+import DeleteBoard from "./DeleteBoard";
+import UpdateBoard from "./UpdateBoard";
 import { BaseProjectProps } from "src/components/Project/index.types";
 
 function SelectBoardOptions({

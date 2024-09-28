@@ -6,7 +6,7 @@ export const BASE_EDITOR_OPTIONS: editor.IStandaloneEditorConstructionOptions =
       enabled: false,
     },
     fontFamily: "IBM Plex Mono",
-    fontSize: 14,
+    fontSize: 12,
     tabSize: 8,
     padding: {
       top: 14,
@@ -27,7 +27,7 @@ export const BASE_EDITOR_OPTIONS: editor.IStandaloneEditorConstructionOptions =
     hideCursorInOverviewRuler: false,
     renderLineHighlightOnlyWhenFocus: false,
     renderValidationDecorations: "off", // Turn off validation errors
-    renderWhitespace: "all",
+    renderWhitespace: "none",
     selectionHighlight: false,
     "semanticHighlighting.enabled": false,
     formatOnType: true,

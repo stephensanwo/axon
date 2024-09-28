@@ -19,3 +19,12 @@ thead.TableHead {
 .Table {
     max-height: calc(100vh - 48px - 80px - 32px - 24px) !important;
 }
+
+.TableHeader {
+    border-radius: 0 !important;
+}
+
+.TableCell {
+    border-radius: 0 !important;
+    color: var(--white-70) !important;
+}

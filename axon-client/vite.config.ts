@@ -3,6 +3,7 @@
 
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+// import MillionLint from "@million/lint";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -21,5 +22,14 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: "test/setup.ts",
     css: true,
+  },
+  define: {
+    global: {
+      // https://vitejs.dev/config/env-and-mode.html#env-variables
+      __DEV__: true,
+    },
+  },
+  worker: {
+    format: "es",
   },
 });
