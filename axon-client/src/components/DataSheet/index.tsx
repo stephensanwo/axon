@@ -1,9 +1,4 @@
-import React, {
-  InputHTMLAttributes,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 import { useTheme, Box } from "@primer/react";
 import {
   useReactTable,
@@ -11,188 +6,23 @@ import {
   getFilteredRowModel,
   flexRender,
   ColumnDef,
-  CellContext,
-  HeaderContext,
-  Table,
 } from "@tanstack/react-table";
-import { Input } from "src/components/Common/Input";
 import Select, { SelectMenuItem } from "../Common/Select";
-import { BaseDataSheetProps, TableMeta } from "./index.types";
-import { flushSync } from "react-dom";
-import DataSheetHeader from "./components/DataSheetHeader";
+import { BaseDataSheetProps, TableCellTypes, TableMeta } from "./index.types";
 import usePageVisibility from "src/hooks/usePageVisibility";
-import { mockTable } from "./index.mock";
-import { addColumn, duplicateColumn, deleteColumn } from "./actions/columns";
-// Define the meta type
+import {
+  addColumn,
+  duplicateColumn,
+  deleteColumn,
+  updateHeader,
+  moveColumn,
+} from "./actions/columns";
+import "./index.css";
+import { addRow, updateData } from "./actions/rows";
+import { EditableHeader } from "./components/Header";
+import { RowActionCell } from "./components/Row";
+import { SheetHeader } from "./components/Sheet";
 
-export const TableCellTypes = {
-  text: EditableCell,
-};
-// EditableCell component
-function EditableCell({
-  getValue,
-  row,
-  column,
-  table,
-}: CellContext<Record<string, string>, unknown>) {
-  const initialValue = getValue() as string;
-  const [value, setValue] = useState(initialValue);
-  const { theme } = useTheme();
-
-  const debouncedOnChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      flushSync(() => {
-        setValue(e.target.value);
-        (table.options.meta as TableMeta).updateData(
-          row.index,
-          column.id,
-          e.target.value
-        );
-      });
-    },
-    [row.index, column.id, table.options.meta]
-  );
-
-  const onBlur = () => {
-    flushSync(() => {
-      (table.options.meta as TableMeta).updateData(row.index, column.id, value);
-    });
-  };
-
-  return (
-    <Input.Box
-      value={value}
-      onChange={(e) => debouncedOnChange(e)}
-      onBlur={onBlur}
-    />
-  );
-}
-
-// EditableHeader component
-function EditableHeader({
-  column,
-  table,
-  header,
-}: HeaderContext<Record<string, string>, unknown>) {
-  const initialValue = column.columnDef.header as string;
-  const [value, setValue] = useState(initialValue);
-  const { theme } = useTheme();
-
-  const debouncedOnChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      flushSync(() => {
-        setValue(e.target.value);
-        (table.options.meta as TableMeta).updateHeader(column.id, value);
-      });
-    },
-    [column.id, table.options.meta]
-  );
-
-  const onBlur = () => {
-    flushSync(() => {
-      (table.options.meta as TableMeta).updateHeader(column.id, value);
-    });
-  };
-
-  const options: SelectMenuItem[] = [
-    {
-      id: "duplicateColumn",
-      name: "Duplicate Column",
-      onClick: () => {
-        (table.options.meta as TableMeta).duplicateColumn(table, column.id);
-      },
-    },
-    {
-      id: "deleteColumn",
-      name: "Delete Column",
-      onClick: () => {
-        (table.options.meta as TableMeta).deleteColumn(table, column.id);
-      },
-    },
-  ];
-  return (
-    <Box
-      sx={{
-        display: "flex",
-      }}
-    >
-      <Input.Box
-        value={value}
-        onChange={(e) => debouncedOnChange(e)}
-        onBlur={onBlur}
-      />
-      <Select<any>
-        title={`Actions`}
-        menuItems={options}
-        data={[]}
-        anchor="icon"
-        iconProps={{
-          style: {
-            borderRadius: 0,
-          },
-        }}
-      />
-      <div
-        style={{
-          width: "4px",
-          backgroundColor: header.column.getIsResizing()
-            ? "red"
-            : "transparent",
-          cursor: "col-resize",
-        }}
-        onMouseDown={header.getResizeHandler()}
-        onTouchStart={header.getResizeHandler()}
-      ></div>
-    </Box>
-  );
-}
-
-function RowActionCell() {
-  const options: SelectMenuItem[] = [
-    {
-      id: "newRowAbove",
-      name: "Add Row Above",
-      onClick: () => {},
-    },
-    {
-      id: "newRowBelow",
-      name: "Add Row Below",
-      onClick: () => {},
-    },
-    {
-      id: "copyRow",
-      name: "Copy Row",
-      onClick: () => {},
-    },
-    {
-      id: "deleteRow",
-      name: "Delete Row",
-      onClick: () => {},
-    },
-  ];
-  return (
-    <Box
-      sx={{
-        width: "32px",
-      }}
-    >
-      <Select<any>
-        title={`Actions`}
-        menuItems={options}
-        data={[]}
-        anchor="icon"
-        iconProps={{
-          style: {
-            borderRadius: 0,
-            width: "32px",
-          },
-        }}
-      />
-    </Box>
-  );
-}
-
-// Table component
 function DataSheet({
   view,
   updated,
@@ -201,8 +31,17 @@ function DataSheet({
   table: tableData,
   refetchTable,
 }: BaseDataSheetProps) {
-  const [data, setData] = useState(mockTable.data.body);
-  const [headers, setHeaders] = useState(mockTable.data.header);
+  const [data, setData] = useState(tableData.data.data);
+  const [headers, setHeaders] = useState(tableData.data.header);
+  const [columnOrder, setColumnOrder] = useState(
+    tableData.data.columnOrder ?? Object.keys(headers)
+  );
+  const [focusedCell, setFocusedCell] = useState<{
+    rowIndex: number;
+    columnId: string;
+  } | null>(null);
+
+  console.log("focusedCell", focusedCell);
 
   const columns: ColumnDef<any>[] = Object.values(headers).map((header) => ({
     accessorKey: header.key,
@@ -211,51 +50,40 @@ function DataSheet({
     minSize: 250,
   }));
 
-  useEffect(() => {
-    console.log("data", data);
-    console.log("headers", headers);
-    // updateTableCallback(headers, data);
-  }, [data, headers]);
-
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     initialState: {
-      columnOrder: Object.keys(headers),
+      columnOrder,
     },
+    state: {
+      columnOrder,
+    },
+    onColumnOrderChange: setColumnOrder,
     meta: {
-      updateData: (rowIndex: number, columnId: string, value: unknown) => {
-        setData((old) =>
-          old.map((row, index) => {
-            if (index === rowIndex) {
-              return {
-                ...row,
-                [columnId]: value as string,
-              };
-            }
-            return row;
-          })
-        );
-      },
-      updateHeader: (columnId: string, value: string) => {
-        setHeaders((headers) => ({
-          ...headers,
-          [columnId]: {
-            ...headers[columnId],
-            value,
-          },
-        }));
-      },
+      focusedCell,
+      setFocusedCell,
+      headers: headers,
+      updateData: updateData,
+      updateHeader: updateHeader,
       setHeaders,
       setData,
+      moveColumn: moveColumn,
       addColumn: addColumn,
       duplicateColumn: duplicateColumn,
       deleteColumn: deleteColumn,
+      addRow: addRow,
     } as TableMeta,
     columnResizeMode: "onChange",
   });
+
+  useEffect(() => {
+    console.log("data", data);
+    console.log("headers", headers);
+    updateTableCallback(headers, data, columnOrder);
+  }, [headers, data, columnOrder]);
 
   const { theme } = useTheme();
 
@@ -280,7 +108,7 @@ function DataSheet({
       }}
     >
       {showHeader && (
-        <DataSheetHeader
+        <SheetHeader
           table={tableData}
           editState={{
             lastTyped: updated,
@@ -324,9 +152,8 @@ function DataSheet({
                 <th
                   className="TableHeader"
                   style={{
-                    padding: 0,
                     width: "32px",
-                    border: `1px solid ${theme?.colors.border.default}`,
+                    // border: `1px solid ${theme?.colors.border.default}`,
                   }}
                 >
                   <Box
@@ -362,6 +189,12 @@ function DataSheet({
                       border: `1px solid ${theme?.colors.border.default}`,
                     }}
                     className="TableCell"
+                    onClick={() => {
+                      (table.options.meta as TableMeta).setFocusedCell({
+                        rowIndex: cell.row.index,
+                        columnId: cell.column.id,
+                      });
+                    }}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
@@ -370,7 +203,7 @@ function DataSheet({
                   <td
                     style={{
                       padding: 0,
-                      border: `1px solid ${theme?.colors.border.default}`,
+                      // border: `1px solid ${theme?.colors.border.default}`,
                     }}
                     className="TableCell"
                   >
@@ -383,19 +216,22 @@ function DataSheet({
               {table.getAllColumns().length > 0 &&
                 table.getAllColumns().map((column) => (
                   <td
-                    key={column.id}
                     style={{
                       padding: 0,
-                      border: `1px solid ${theme?.colors.border.default}`,
+                      height: "32px",
                     }}
-                    className="TableCell"
-                  >
-                    <Box
-                      sx={{
-                        height: "32px",
-                      }}
-                    ></Box>
-                  </td>
+                    className="NewCell"
+                    onClick={() => {
+                      (table.options.meta as TableMeta).addRow(
+                        table,
+                        table.getRowModel().rows.length
+                      );
+                      (table.options.meta as TableMeta).setFocusedCell({
+                        rowIndex: table.getRowModel().rows.length,
+                        columnId: column.id,
+                      });
+                    }}
+                  ></td>
                 ))}
             </tr>
           </tbody>

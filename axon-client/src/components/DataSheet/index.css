@@ -1,0 +1,4 @@
+td.NewCell:hover {
+    border: 1px solid var(--black-90);
+    cursor: text;
+}

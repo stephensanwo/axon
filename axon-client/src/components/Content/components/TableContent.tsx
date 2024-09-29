@@ -1,14 +1,10 @@
-import {
-  TableCellData,
-  TableData,
-  TableHeadData,
-} from "src/domain/content/content.entity";
+import { TableData } from "src/domain/content/content.entity";
 import { useContent } from "../../../context/content/hooks/useContent";
 import { BaseContentProps } from "../index.types";
 import { UpdateContentDto } from "src/domain/content/content.dto";
-import DataTable from "src/components/DataTable";
-import DataSheet, { TableCellTypes } from "src/components/DataSheet";
+import DataSheet from "src/components/DataSheet";
 import { ColumnDef } from "@tanstack/react-table";
+import { TableCellTypes } from "src/components/DataSheet/index.types";
 
 function TableContent({ contentState }: BaseContentProps) {
   const { updateContent } = useContent();
@@ -17,32 +13,43 @@ function TableContent({ contentState }: BaseContentProps) {
       ? contentState.content.data?.content
       : ({} as TableData);
 
-  console.log("table===>", table);
-  function updateTable(value: TableData) {
+  // function updateTable(value: TableData) {
+  //   const dto: UpdateContentDto = {
+  //     ...contentState.content.data!!,
+  //     content: {
+  //       ...contentState.content.data?.content,
+  //       ...value,
+  //     },
+  //   };
+  //   updateContent.mutate(dto);
+  // }
+
+  function updateTableCallback(
+    header: Record<
+      string,
+      {
+        key: string;
+        value: string;
+        type: "text";
+      }
+    >,
+    data: Record<string, string>[],
+    columnOrder: string[]
+  ) {
     const dto: UpdateContentDto = {
       ...contentState.content.data!!,
       content: {
-        ...contentState.content.data?.content,
-        ...value,
+        ...table,
+        data: {
+          ...table.data,
+          header,
+          data,
+          columnOrder,
+        },
       },
     };
+    console.log("dto", dto);
     updateContent.mutate(dto);
-  }
-
-  function updateTableCallback(header: TableHeadData[], body: TableCellData[]) {
-    // const dto: UpdateContentDto = {
-    //   ...contentState.content.data!!,
-    //   content: {
-    //     ...table,
-    //     data: {
-    //       ...table.data,
-    //       header,
-    //       body,
-    //     },
-    //   },
-    // };
-    // console.log("dto", dto);
-    // updateContent.mutate(dto);
   }
 
   function refetchTable() {
@@ -73,8 +80,6 @@ function TableContent({ contentState }: BaseContentProps) {
       updated={contentState.content.data?.updated!!}
       updateTableCallback={updateTableCallback}
       table={table}
-      columns={columns}
-      data={table.data.body}
       refetchTable={refetchTable}
       showHeader
     />

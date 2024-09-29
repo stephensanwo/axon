@@ -4,18 +4,19 @@ export const mockTable: TableData = {
   content_type: "table",
   data: {
     header: {
-      "0": { key: "0", value: "Database", type: "text" },
-      "1": { key: "1", value: "Description", type: "text" },
+      "1": { key: "1", value: "Database", type: "text" },
+      "2": { key: "2", value: "Description", type: "text" },
     },
-    body: [
+    data: [
       {
-        "0": "MySQL",
-        "1": "MySQL is an open-source relational database management system.",
+        "1": "MySQL",
+        "2": "MySQL is an open-source relational database management system.",
       },
       {
-        "0": "PostgreSQL",
-        "1": "PostgreSQL is a powerful, open-source object-relational database system.",
+        "1": "PostgreSQL",
+        "2": "PostgreSQL is a powerful, open-source object-relational database system.",
       },
     ],
+    columnOrder: ["1", "2"],
   },
 };

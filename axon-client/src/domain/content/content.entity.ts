@@ -48,7 +48,8 @@ export type TableData = {
         type: "text";
       }
     >;
-    body: Record<string, string>[];
+    data: Record<string, string>[];
+    columnOrder: string[];
   };
 };
 

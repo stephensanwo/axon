@@ -29,11 +29,9 @@ export const defaultContentTypes: ContentType = {
   table: {
     content_type: "table",
     data: {
-      header: [
-        { key: "0", value: "", type: "text" },
-        { key: "1", value: "", type: "text" },
-      ],
-      body: [],
+      header: {},
+      data: [],
+      columnOrder: [],
     },
   } as TableData,
 };

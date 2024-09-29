@@ -7,7 +7,7 @@ import { EditStateProps } from "../index.types";
 import { Text } from "src/components/Common/Text";
 import { useEffect, useState } from "react";
 
-function DataSheetHeader({
+export function SheetHeader({
   table,
   editState,
 }: {
@@ -70,5 +70,3 @@ function DataSheetHeader({
     </Box>
   );
 }
-
-export default DataSheetHeader;
