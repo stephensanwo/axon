@@ -7,7 +7,7 @@ export class ProjectRepository implements IProjectRepository {
 
   constructor() {
     this.projectsDb.client.createIndex({
-      index: { fields: ["name"] },
+      index: { fields: ["type", "name"] },
     });
   }
 
@@ -16,6 +16,7 @@ export class ProjectRepository implements IProjectRepository {
   ): Promise<PouchDB.Find.FindResponse<{}>> {
     const doc = await this.projectsDb.client.find({
       selector: {
+        type: { $eq: "project" },
         name: { $regex: `^${name}` },
       },
       sort: ["name"],
@@ -26,6 +27,7 @@ export class ProjectRepository implements IProjectRepository {
   async findProjectIdByName(name: string): Promise<string> {
     const doc = await this.projectsDb.client.find({
       selector: {
+        type: { $eq: "project" },
         name: { $eq: name },
       },
       sort: ["name"],

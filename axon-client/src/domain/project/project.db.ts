@@ -1,3 +1,3 @@
 import { DBClient } from "src/db/client";
 
-export const projectsDb = new DBClient("projects", "project");
+export const projectsDb = new DBClient("axon", "project");
