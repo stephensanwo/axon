@@ -23,6 +23,8 @@ const ContentContext = createContext({} as ContentContextProps);
 const ContentProvider = ({ children }: ContentProviderProps) => {
   const { contentName } = useContentRoute();
 
+  console.log("contentName", contentName);
+
   const contentListQuery = useDataQuery<ContentEntity[]>({
     queryKey: [...ContentQueryKeys.CONTENT],
     queryFn: async () => contentService.getAllContent(),
@@ -55,6 +57,12 @@ const ContentProvider = ({ children }: ContentProviderProps) => {
     },
   });
 
+  // useEffect(() => {
+  //   contentStateDispatch({
+  //     type: "RESET_CONTENT",
+  //   });
+  // }, []);
+
   useEffect(() => {
     if (contentListQuery.data && contentListQuery.isFetched) {
       contentStateDispatch({
@@ -66,6 +74,12 @@ const ContentProvider = ({ children }: ContentProviderProps) => {
       });
     }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contentListQuery.data]);
+
+  useEffect(() => {
+    contentQuery.data?.content.content_type === "table" &&
+      console.log("contentName", contentQuery.data?.content.data.header);
     if (contentQuery.data && contentQuery.isFetched) {
       contentStateDispatch({
         type: "INIT_CONTENT",
@@ -77,7 +91,7 @@ const ContentProvider = ({ children }: ContentProviderProps) => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contentListQuery.data, contentQuery.data]);
+  }, [contentQuery.data, contentName]);
 
   console.log("contentState", contentState);
 

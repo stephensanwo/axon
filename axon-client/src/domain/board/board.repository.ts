@@ -8,7 +8,7 @@ export class BoardRepository implements IBoardRepository {
 
   constructor() {
     this.boardsDb.client.createIndex({
-      index: { fields: ["type", "name"] },
+      index: { fields: ["doc_key", "name"] },
     });
     this.setupChangeListener();
   }
@@ -18,7 +18,7 @@ export class BoardRepository implements IBoardRepository {
   ): Promise<PouchDB.Find.FindResponse<{}>> {
     const doc = await this.boardsDb.client.find({
       selector: {
-        type: { $eq: "board" },
+        doc_key: { $eq: "board" },
         name: { $regex: `^${name}` },
       },
       sort: ["name"],
@@ -29,7 +29,7 @@ export class BoardRepository implements IBoardRepository {
   async findBoardIdByName(name: string): Promise<string> {
     const doc = await this.boardsDb.client.find({
       selector: {
-        type: { $eq: "board" },
+        doc_key: { $eq: "board" },
         name: { $eq: name },
       },
       sort: ["name"],

@@ -30,7 +30,7 @@ function TableContent({ contentState }: BaseContentProps) {
       {
         key: string;
         value: string;
-        type: "text";
+        type: keyof typeof TableCellTypes;
       }
     >,
     data: Record<string, string>[],
@@ -49,7 +49,7 @@ function TableContent({ contentState }: BaseContentProps) {
       },
     };
     console.log("dto", dto);
-    updateContent.mutate(dto);
+    // updateContent.mutate(dto);
   }
 
   function refetchTable() {
@@ -82,6 +82,7 @@ function TableContent({ contentState }: BaseContentProps) {
       table={table}
       refetchTable={refetchTable}
       showHeader
+      editableHeaders={true}
     />
   );
 }

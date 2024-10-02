@@ -4,8 +4,8 @@ export const mockTable: TableData = {
   content_type: "table",
   data: {
     header: {
-      "1": { key: "1", value: "Database", type: "text" },
-      "2": { key: "2", value: "Description", type: "text" },
+      "1": { key: "1", value: "Database", type: "cell" },
+      "2": { key: "2", value: "Description", type: "cell" },
     },
     data: [
       {

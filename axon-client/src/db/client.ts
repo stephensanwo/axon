@@ -50,7 +50,7 @@ export class DBClient {
         ...entity,
         _id: id,
         id: id,
-        type: this.basePrefix,
+        doc_key: this.basePrefix,
         created: new Date().toISOString(),
         updated: new Date().toISOString(),
       };
@@ -82,7 +82,7 @@ export class DBClient {
       const doc: AttachmentRecord & BaseDocument = {
         _id: id,
         id: id,
-        type: this.basePrefix,
+        doc_key: this.basePrefix,
         created: new Date().toISOString(),
         updated: new Date().toISOString(),
         name: entity.name,
@@ -100,7 +100,7 @@ export class DBClient {
       await this.client.put(doc);
       return {
         id: id,
-        type: doc.type,
+        doc_key: doc.doc_key,
         created: doc.created,
         updated: doc.updated,
         name: entity.name,

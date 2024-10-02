@@ -1,6 +1,7 @@
 import { ColumnDef, Table } from "@tanstack/react-table";
 import { TableData } from "src/domain/content/content.entity";
-import { EditableCell } from "./components/Cell";
+import { EditableCell, TextCell } from "./components/Cell";
+import { EditableHeader, TextHeader } from "./components/Header";
 
 export type BaseDataSheetProps = {
   view: "edit" | "preview";
@@ -12,7 +13,7 @@ export type BaseDataSheetProps = {
       {
         key: string;
         value: string;
-        type: "text";
+        type: keyof typeof TableCellTypes;
       }
     >,
     data: Record<string, string>[],
@@ -21,6 +22,8 @@ export type BaseDataSheetProps = {
   showHeader?: boolean;
   table: TableData;
   refetchTable: () => void;
+  columns?: ColumnDef<any>[];
+  editableHeaders?: boolean;
 };
 
 export type EditStateProps = {
@@ -49,7 +52,7 @@ export type TableMeta = {
     {
       key: string;
       value: string;
-      type: "text";
+      type: keyof typeof TableCellTypes;
     }
   >;
   updateHeader: (
@@ -64,7 +67,7 @@ export type TableMeta = {
         {
           key: string;
           value: string;
-          type: "text";
+          type: keyof typeof TableCellTypes;
         }
       >
     >
@@ -91,5 +94,6 @@ export type TableMeta = {
 };
 
 export const TableCellTypes = {
-  text: EditableCell,
+  cell: EditableCell,
+  text: TextCell,
 };

@@ -1,5 +1,5 @@
 import { Table } from "@tanstack/react-table";
-import { TableMeta } from "../index.types";
+import { TableCellTypes, TableMeta } from "../index.types";
 
 export function updateHeader(
   table: Table<Record<string, string>>,
@@ -24,7 +24,7 @@ export function addColumn(table: Table<Record<string, string>>) {
     [newColumnId]: {
       key: newColumnId.toString(),
       value: newColumnHeader,
-      type: "text",
+      type: "cell" as keyof typeof TableCellTypes,
     },
   }));
 
@@ -112,7 +112,7 @@ export function duplicateColumn(
     [newColumnId]: {
       key: newColumnId.toString(),
       value: newColumnHeader,
-      type: "text",
+      type: "cell" as keyof typeof TableCellTypes,
     },
   }));
 

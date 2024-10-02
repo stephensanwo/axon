@@ -44,69 +44,30 @@ function TableListHeader({
         }}
       >
         {children
-          ? // ? data.map((item, index) => (
-            //     <Box
-            //       key={index}
-            //       sx={{
-            //         display: "flex",
-            //         justifyContent: "flex-start",
-            //         alignItems: "center",
-            //         backgroundColor: theme?.colors.bg.default,
-            //       }}
-            //     >
-            children
-          : //   </Box>
-            // )
-            data.map((item, index) =>
-              item.tooltip ? (
-                <Box
-                  key={index}
+          ? children
+          : data.map((item, index) => (
+              <Box
+                key={index}
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                  backgroundColor: theme?.colors.bg.default,
+                }}
+              >
+                <Text
                   sx={{
-                    display: "flex",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    backgroundColor: theme?.colors.bg.default,
+                    color: theme?.colors.text.gray,
+                    fontSize: "12px",
+                    fontFamily: theme?.fonts.mono,
+                    fontWeight: 400,
+                    padding: "0 8px",
                   }}
                 >
-                  <Tooltip {...item.tooltip}>
-                    <Text
-                      sx={{
-                        color: theme?.colors.text.gray,
-                        fontSize: "12px",
-                        fontFamily: theme?.fonts.mono,
-                        fontWeight: "bold",
-                        padding: "0 8px",
-                        cursor: "default",
-                      }}
-                    >
-                      {item.name}
-                    </Text>
-                  </Tooltip>
-                </Box>
-              ) : (
-                <Box
-                  key={index}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    backgroundColor: theme?.colors.bg.default,
-                  }}
-                >
-                  <Text
-                    sx={{
-                      color: theme?.colors.text.gray,
-                      fontSize: "12px",
-                      fontFamily: theme?.fonts.mono,
-                      fontWeight: "bold",
-                      padding: "0 8px",
-                    }}
-                  >
-                    {item.name}
-                  </Text>
-                </Box>
-              )
-            )}
+                  {item.name}
+                </Text>
+              </Box>
+            ))}
         {actions &&
           actions.map((action, index) => (
             <Box

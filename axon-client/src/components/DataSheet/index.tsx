@@ -19,7 +19,7 @@ import {
 } from "./actions/columns";
 import "./index.css";
 import { addRow, updateData } from "./actions/rows";
-import { EditableHeader } from "./components/Header";
+import { EditableHeader, TextHeader } from "./components/Header";
 import { RowActionCell } from "./components/Row";
 import { SheetHeader } from "./components/Sheet";
 
@@ -30,6 +30,8 @@ function DataSheet({
   updateTableCallback,
   table: tableData,
   refetchTable,
+  columns: columnsData,
+  editableHeaders,
 }: BaseDataSheetProps) {
   const [data, setData] = useState(tableData.data.data);
   const [headers, setHeaders] = useState(tableData.data.header);
@@ -43,12 +45,14 @@ function DataSheet({
 
   console.log("focusedCell", focusedCell);
 
-  const columns: ColumnDef<any>[] = Object.values(headers).map((header) => ({
-    accessorKey: header.key,
-    header: header.value,
-    cell: TableCellTypes[header.type],
-    minSize: 250,
-  }));
+  const columns: ColumnDef<any>[] =
+    columnsData ??
+    Object.values(headers).map((header) => ({
+      accessorKey: header.key,
+      header: header.value,
+      cell: TableCellTypes[header.type],
+      minSize: 250,
+    }));
 
   const table = useReactTable({
     data,
@@ -142,11 +146,19 @@ function DataSheet({
                       border: `1px solid ${theme?.colors.border.default}`,
                     }}
                   >
-                    <EditableHeader
-                      header={header}
-                      column={header.column}
-                      table={table}
-                    />
+                    {editableHeaders ? (
+                      <EditableHeader
+                        header={header}
+                        column={header.column}
+                        table={table}
+                      />
+                    ) : (
+                      <TextHeader
+                        header={header}
+                        column={header.column}
+                        table={table}
+                      />
+                    )}
                   </th>
                 ))}
                 <th

@@ -3,6 +3,8 @@ import { useCallback, useState } from "react";
 import { flushSync } from "react-dom";
 import { TableMeta } from "../index.types";
 import { Input } from "src/components/Common/Input";
+import { Text } from "src/components/Common/Text";
+import { Box, useTheme } from "@primer/react";
 
 export function EditableCell({
   getValue,
@@ -61,5 +63,38 @@ export function EditableCell({
         }
       }}
     />
+  );
+}
+
+export function TextCell({
+  getValue,
+  row,
+  column,
+  table,
+}: CellContext<Record<string, string>, unknown>) {
+  const { theme } = useTheme();
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        backgroundColor: theme?.colors.bg.default,
+        width: "100%",
+        border: "none",
+        outline: "none",
+        height: "32px",
+        padding: "0 8px",
+      }}
+    >
+      <Text.Paragraph
+        sx={{
+          color: theme?.colors.text.gray,
+          fontSize: "12px",
+          fontFamily: theme?.fonts.mono,
+        }}
+      >
+        {"Data"}
+      </Text.Paragraph>
+    </Box>
   );
 }

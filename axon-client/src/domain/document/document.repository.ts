@@ -9,7 +9,7 @@ export class DocumentRepository implements IDocumentRepository {
 
   constructor() {
     this.foldersDb.client.createIndex({
-      index: { fields: ["type", "name"] },
+      index: { fields: ["doc_key", "name"] },
     });
     this.setupChangeListener();
   }
@@ -19,7 +19,7 @@ export class DocumentRepository implements IDocumentRepository {
   ): Promise<PouchDB.Find.FindResponse<{}>> {
     const doc = await this.foldersDb.client.find({
       selector: {
-        type: { $eq: "folder" },
+        doc_key: { $eq: "folder" },
         name: { $regex: `^${name}` },
       },
       sort: ["name"],
@@ -30,7 +30,7 @@ export class DocumentRepository implements IDocumentRepository {
   async findDocumentIdByName(name: string): Promise<string> {
     const doc = await this.foldersDb.client.find({
       selector: {
-        type: { $eq: "folder" },
+        doc_key: { $eq: "folder" },
         name: { $eq: name },
       },
       sort: ["name"],
@@ -44,7 +44,7 @@ export class DocumentRepository implements IDocumentRepository {
   ): Promise<PouchDB.Core.ExistingDocument<DocumentFileEntity>[]> {
     const doc = await this.filesDb.client.find({
       selector: {
-        type: { $eq: "file" },
+        doc_key: { $eq: "file" },
         parentId: { $eq: folderId },
       },
     });

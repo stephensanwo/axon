@@ -1,5 +1,3 @@
-import { TooltipProps } from "@primer/react";
-
 export type TableListContainerProps = {
   children: React.ReactNode;
 };
@@ -7,8 +5,9 @@ export type TableListContainerProps = {
 export type TableListHeaderData = {
   id: string;
   name: string;
-  tooltip?: TooltipProps;
 }[];
+
+export type TableListData = Record<string, string>[];
 
 export type TableListHeaderProps = {
   data: TableListHeaderData;

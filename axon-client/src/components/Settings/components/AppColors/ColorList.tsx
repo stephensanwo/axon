@@ -38,11 +38,6 @@ function ColorList({ settingsState }: BaseSettingsProps) {
     {
       id: "color",
       name: "Color",
-      tooltip: {
-        direction: "s",
-        text: "Click to open the color palette and update a color. \n Axon supports HEX, RGB and HSL",
-        type: "label",
-      },
     },
   ];
   return (

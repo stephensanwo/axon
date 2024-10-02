@@ -5,6 +5,7 @@ import { flushSync } from "react-dom";
 import { TableMeta } from "../index.types";
 import Select, { SelectMenuItem } from "src/components/Common/Select";
 import { Input } from "src/components/Common/Input";
+import { Text } from "src/components/Common/Text";
 
 // EditableHeader component
 export function EditableHeader({
@@ -91,6 +92,36 @@ export function EditableHeader({
         onMouseDown={header.getResizeHandler()}
         onTouchStart={header.getResizeHandler()}
       ></div>
+    </Box>
+  );
+}
+
+export function TextHeader({
+  column,
+}: HeaderContext<Record<string, string>, unknown>) {
+  const { theme } = useTheme();
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        backgroundColor: theme?.colors.bg.default,
+        width: "100%",
+        border: "none",
+        outline: "none",
+        height: "32px",
+        padding: "0 8px",
+      }}
+    >
+      <Text.Paragraph
+        sx={{
+          color: theme?.colors.text.gray,
+          fontSize: "12px",
+          fontFamily: theme?.fonts.mono,
+        }}
+      >
+        {column.columnDef.header as string}
+      </Text.Paragraph>
     </Box>
   );
 }

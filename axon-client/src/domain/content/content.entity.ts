@@ -1,3 +1,4 @@
+import { TableCellTypes } from "src/components/DataSheet/index.types";
 import { BaseEntity } from "src/db/db.types";
 
 export type ContentData = {
@@ -45,7 +46,7 @@ export type TableData = {
       {
         key: string;
         value: string;
-        type: "text";
+        type: keyof typeof TableCellTypes;
       }
     >;
     data: Record<string, string>[];

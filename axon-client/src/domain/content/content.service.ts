@@ -1,4 +1,3 @@
-import { pick } from "lodash";
 import { contentDb, contentTypeDb } from "./content.db";
 import { defaultContentTypes } from "./content.defaults";
 import { CreateContentDto, UpdateContentDto } from "./content.dto";

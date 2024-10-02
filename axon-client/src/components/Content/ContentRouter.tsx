@@ -16,6 +16,7 @@ export const ContentRouter: Record<ContentTypeKeys, React.ElementType> = {
 
 export function ContentRouterComponent(props: BaseContentProps) {
   const content_type = props.contentState.content.data?.content.content_type;
+  console.log("content_type", content_type);
   const Content = ContentRouter[content_type as ContentTypeKeys];
   return <Content {...props} />;
 }

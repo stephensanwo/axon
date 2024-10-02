@@ -7,7 +7,7 @@ export class ContentRepository implements IContentRepository {
 
   constructor() {
     this.contentDb.client.createIndex({
-      index: { fields: ["type", "name"] },
+      index: { fields: ["doc_key", "name"] },
     });
     this.setupChangeListener();
   }
@@ -15,22 +15,20 @@ export class ContentRepository implements IContentRepository {
   async findContentMatchByName(
     name: string
   ): Promise<PouchDB.Find.FindResponse<{}>> {
-    console.log("name", name);
     const doc = await this.contentDb.client.find({
       selector: {
-        type: { $eq: "content" },
+        doc_key: { $eq: "content" },
         name: { $regex: `^${name}` },
       },
       sort: ["name"],
     });
-    console.log("doc", doc);
     return doc;
   }
 
   async findContentIdByName(name: string): Promise<string> {
     const doc = await this.contentDb.client.find({
       selector: {
-        type: { $eq: "content" },
+        doc_key: { $eq: "content" },
         name: { $eq: name },
       },
       sort: ["name"],

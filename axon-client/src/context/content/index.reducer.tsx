@@ -69,6 +69,15 @@ export function contentReducer(
         },
       };
     }
+    case "RESET_CONTENT": {
+      return {
+        ...state,
+        content: {
+          ...state.content,
+          data: null,
+        },
+      };
+    }
     default:
       return state;
   }

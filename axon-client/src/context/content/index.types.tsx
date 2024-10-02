@@ -48,4 +48,7 @@ export type ContentAction =
     }
   | {
       type: "CLEAR_SELECTED_CONTENT";
+    }
+  | {
+      type: "RESET_CONTENT";
     };

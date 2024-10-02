@@ -1,10 +1,4 @@
-import { BaseEntity } from "src/db/db.types";
-import {
-  ContentData,
-  ContentEntity,
-  ContentTypeData,
-  ContentTypeKeys,
-} from "./content.entity";
+import { ContentData, ContentEntity, ContentTypeData } from "./content.entity";
 
 export type CreateContentDto = ContentData & {
   content: ContentTypeData;
