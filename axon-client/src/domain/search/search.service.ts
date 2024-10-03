@@ -15,6 +15,7 @@ import map from "lodash/map";
 import { convertFileSize, getContentType } from "src/common/file";
 import projectService from "../project/project.service";
 import boardService from "../board/board.service";
+import contentService from "../content/content.service";
 
 export class SearchService {
   constructor() {
@@ -32,6 +33,7 @@ export class SearchService {
     const { folders, files } = await documentService.getAllDocumentRecords();
     const { projects } = await projectService.getProjects();
     const boards = await boardService.getAllBoards();
+    const content = await contentService.getAllContent();
     const folderIndexRecords = map(
       folders,
       (folder) =>
@@ -86,11 +88,23 @@ export class SearchService {
       } satisfies BaseSearchSchema;
     });
 
+    const contentRecords = map(content, (contentItem) => {
+      return {
+        identifier: contentItem.id,
+        type: SearchIndexTypes.CONTENT,
+        name: contentItem.name,
+        description: "",
+        content: contentItem.content_type,
+        path: ["content", `${contentItem.name}`],
+      } satisfies BaseSearchSchema;
+    });
+
     const allIndexRecords = concat(
       folderIndexRecords,
       fileIndexRecords,
       projectRecords,
-      boardRecords
+      boardRecords,
+      contentRecords
     );
     search.insertMultipleIndexes(allIndexRecords);
   }

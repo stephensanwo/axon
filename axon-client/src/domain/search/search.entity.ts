@@ -17,6 +17,7 @@ export enum SearchIndexTypes {
   DOCUMENT_FILE = "file",
   PROJECT = "project",
   BOARD = "board",
+  CONTENT = "content",
 }
 
 export type SearchResults = Results<BaseSearchSchema>;
@@ -41,6 +42,10 @@ export const SearchIndexProps: Record<
     icon: Icon.Project,
   },
   [SearchIndexTypes.BOARD]: {
+    color: "red",
+    icon: Icon.BoardAlt,
+  },
+  [SearchIndexTypes.CONTENT]: {
     color: "red",
     icon: Icon.BoardAlt,
   },
