@@ -1,10 +1,13 @@
-import { Box, FormControl, Radio, Text, useTheme } from "@primer/react";
+import { Box, FormControl, Radio, Text } from "@primer/react";
 import { InlineHeader } from "src/components/Common";
 
 function ColorMode() {
   return (
     <Box>
-      <InlineHeader title="Fonts" subtitle="(Select default color mode)" />
+      <InlineHeader
+        title="Color Mode"
+        subtitle="(Select default application color mode)"
+      />
       <Box
         sx={{
           display: "flex",
@@ -13,8 +16,8 @@ function ColorMode() {
       >
         <FormControl>
           <Radio
-            name="Dark Theme"
-            value={"Dark Theme"}
+            name="Dark Mode"
+            value={"Dark Mode"}
             onChange={() => {}}
             checked={false}
             disabled={false}
@@ -26,14 +29,14 @@ function ColorMode() {
                 fontWeight: 400,
               }}
             >
-              Dark Theme
+              Dark Mode
             </Text>
           </FormControl.Label>
         </FormControl>
         <FormControl>
           <Radio
-            name="Light Theme"
-            value={"Light Theme"}
+            name="Light Mode"
+            value={"Light Mode"}
             onChange={() => {}}
             checked={false}
             disabled={false}
@@ -45,7 +48,7 @@ function ColorMode() {
                 fontWeight: 400,
               }}
             >
-              Light Theme
+              Light Mode
             </Text>
           </FormControl.Label>
         </FormControl>
