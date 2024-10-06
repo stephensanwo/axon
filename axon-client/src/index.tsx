@@ -1,4 +1,5 @@
 import "./primer.scss";
+import "./theme/index.css";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { createRoot } from "react-dom/client";

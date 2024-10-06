@@ -7,8 +7,8 @@ import { BaseDocumentProps } from "../index.types";
 function DocumentFolderHeader({
   title,
   subtitle,
-  documentState,
-  documentStateDispatch,
+  documentFiles,
+  documentFolders,
 }: {
   title: string;
   subtitle: string;
@@ -43,15 +43,8 @@ function DocumentFolderHeader({
             gap: 2,
           }}
         >
-          <SelectDocumentOptions
-            level="folder"
-            documentState={documentState}
-            documentStateDispatch={documentStateDispatch}
-          />
-          <CreateDocumentFolder
-            documentState={documentState}
-            documentStateDispatch={documentStateDispatch}
-          />
+          <SelectDocumentOptions level="folder" />
+          <CreateDocumentFolder />
         </Box>
       </Box>
     </>

@@ -4,9 +4,8 @@ import Icon from "src/components/Common/Icon";
 import { Text } from "src/components/Common/Text";
 import { PiPlus } from "react-icons/pi";
 
-function DocumentTree({ documentState }: BaseDocumentProps) {
+function DocumentTree({ documentFolders }: BaseDocumentProps) {
   const { theme } = useTheme();
-  console.log("documentState", documentState);
   return (
     <>
       <TreeView.Item id="documents">
@@ -24,7 +23,7 @@ function DocumentTree({ documentState }: BaseDocumentProps) {
               New Folder
             </Text.SmallSecondary>
           </TreeView.Item>
-          {Object.values(documentState.documentFolders.folderTree).map(
+          {Object.values(documentFolders.data?.folderTree!!).map(
             (folder, index) => (
               <TreeView.Item key={index} id={`folders/${folder.name}`}>
                 <TreeView.LeadingVisual>

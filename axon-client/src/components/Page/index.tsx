@@ -19,6 +19,7 @@ function Page({
   initialFocusRef,
   returnFocusRef,
   ignoreClickRefs,
+  closeOnClickOutside = false,
 }: PageProps) {
   const { theme } = useTheme();
   return (
@@ -58,8 +59,9 @@ function Page({
             returnFocusRef={returnFocusRef}
             ignoreClickRefs={ignoreClickRefs}
             onEscape={() => togglePanel("right", "close")}
-            onClickOutside={() => {}}
-            // onClickOutside={() => {}}
+            onClickOutside={() =>
+              closeOnClickOutside && togglePanel("right", "close")
+            }
             width="auto"
             anchorSide={"inside-left"}
             right={0}

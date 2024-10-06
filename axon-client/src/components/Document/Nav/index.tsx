@@ -6,28 +6,26 @@ import { BaseDocumentProps } from "../index.types";
 
 function DocumentNav({
   level,
-  isLoading,
-  documentState,
-  documentStateDispatch,
+  documentFiles,
+  documentFolders,
 }: {
   level: DocumentLevels;
-  isLoading: boolean;
 } & BaseDocumentProps) {
-  const fileNavTitle = `${isLoading ? "..." : documentState.documentFolderFiles.folder?.name}`;
+  const fileNavTitle = `${documentFiles.isLoading ? "..." : documentFiles.data?.folder?.name}`;
 
   return (
     <>
       <DocumentFolderNav
         navTitle={"Documents"}
-        documentState={documentState}
-        documentStateDispatch={documentStateDispatch}
+        documentFiles={documentFiles}
+        documentFolders={documentFolders}
       />
       <Text.ParagraphSecondary>/</Text.ParagraphSecondary>
       {level === "file" && (
         <DocumentFileNav
           navTitle={fileNavTitle}
-          documentState={documentState}
-          documentStateDispatch={documentStateDispatch}
+          documentFiles={documentFiles}
+          documentFolders={documentFolders}
         />
       )}
     </>

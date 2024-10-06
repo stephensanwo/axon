@@ -15,6 +15,7 @@ export interface PageProps {
   initialFocusRef: React.RefObject<HTMLButtonElement> | undefined;
   returnFocusRef: React.RefObject<HTMLButtonElement>;
   ignoreClickRefs: React.RefObject<HTMLDivElement>[];
+  closeOnClickOutside?: boolean;
 }
 
 export type PagePanelDirections = "left" | "right";

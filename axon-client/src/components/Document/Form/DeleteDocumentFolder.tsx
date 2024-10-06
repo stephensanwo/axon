@@ -7,14 +7,14 @@ import { InlineSpinner } from "../../Common/Spinner";
 import { useDocument } from "src/context/document/hooks/useDocument";
 import map from "lodash/map";
 import { useMemo } from "react";
-import { BaseDocumentProps } from "../index.types";
+import { useDocumentStore } from "src/context/document/document.store";
 
-function DeleteDocumentFolder({ documentState }: BaseDocumentProps) {
+function DeleteDocumentFolder() {
+  const { selectedDocumentFolders, setSelectedDocumentFolders } =
+    useDocumentStore();
   const { deleteDocumentFolder } = useDocument();
-  const {
-    documentFolders: { selectedDocumentFolders },
-  } = documentState;
-  const isMultipleFoldersSelected = selectedDocumentFolders.length > 1;
+
+  const isMultipleFoldersSelected = selectedDocumentFolders?.length!! > 1;
 
   const selectedFolderIds = useMemo(
     () => map(selectedDocumentFolders, "id"),
@@ -41,7 +41,7 @@ function DeleteDocumentFolder({ documentState }: BaseDocumentProps) {
             variant="danger"
             leadingVisual={PiTrashBold}
             trailingVisual={() => (
-              <Text.Heading6>{selectedDocumentFolders.length}</Text.Heading6>
+              <Text.Heading6>{selectedDocumentFolders?.length}</Text.Heading6>
             )}
             disabled={false}
             aria-label="Delete Selected Folders"
@@ -79,6 +79,7 @@ function DeleteDocumentFolder({ documentState }: BaseDocumentProps) {
           sx={{
             textAlign: "center",
             marginBottom: 1,
+            fontSize: 0,
           }}
         >
           {`Are you sure you want to delete ${isMultipleFoldersSelected ? "these folders and all their contents" : "this folder and all its contents"}? This action cannot be undone.`}

@@ -3,8 +3,9 @@ import { DocumentState } from "src/context/document/document.types";
 import { Text } from "../Common/Text";
 import OverlayMenu from "../Common/OverlayMenu";
 import { PiArrowsClockwise } from "react-icons/pi";
+import { BaseDocumentProps } from "./index.types";
 
-function DocumentFooter(documentState: DocumentState) {
+function DocumentFooter({ documentFolders, documentFiles }: BaseDocumentProps) {
   const { theme } = useTheme();
   return (
     <Box
@@ -17,14 +18,10 @@ function DocumentFooter(documentState: DocumentState) {
       }}
     >
       <Box>
-        <Text.SmallSecondary>
-          Documents: {documentState.documentFolders.folders.length}
-        </Text.SmallSecondary>
+        <Text.SmallSecondary>Documents:</Text.SmallSecondary>
       </Box>
       <Box>
-        <Text.SmallSecondary>
-          {documentState.documentFolders.selectedDocumentFolders[0]?.name}
-        </Text.SmallSecondary>
+        <Text.SmallSecondary>Name</Text.SmallSecondary>
       </Box>
       <Box
         sx={{

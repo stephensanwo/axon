@@ -3,42 +3,33 @@ import { Stack } from "@primer/react/drafts";
 import { DocumentIcon } from "./Common/DocumentIcon";
 import { formatDateToRelativeTime } from "src/common/date";
 import { convertFileSize, getContentType } from "src/common/file";
-import { DocumentState } from "src/context/document/document.types";
 import { Text } from "../Common/Text";
+import { useDocumentStore } from "src/context/document/document.store";
 
-function DocumentPreview(documentState: DocumentState) {
+function DocumentPreview() {
+  const { selectedDocumentFilePreview } = useDocumentStore();
   const { theme } = useTheme();
 
   const documentInfo: Record<string, string>[] = [
     {
       name: "File Name",
-      value:
-        documentState.documentFolderFiles.selectedDocumentFilePreview?.name ||
-        "",
+      value: selectedDocumentFilePreview?.name || "",
     },
     {
       name: "Extension",
-      value:
-        getContentType(
-          documentState.documentFolderFiles.selectedDocumentFilePreview
-            ?.content_type!!
-        ) || "",
+      value: getContentType(selectedDocumentFilePreview?.content_type!!) || "",
     },
     {
       name: "Size",
       value:
         convertFileSize({
-          size: documentState.documentFolderFiles.selectedDocumentFilePreview
-            ?.file_size!!,
+          size: selectedDocumentFilePreview?.file_size!!,
         }) || "",
     },
     {
       name: "Created",
       value:
-        formatDateToRelativeTime(
-          documentState.documentFolderFiles.selectedDocumentFilePreview
-            ?.created!!
-        ) || "",
+        formatDateToRelativeTime(selectedDocumentFilePreview?.created!!) || "",
     },
   ];
 
@@ -56,9 +47,7 @@ function DocumentPreview(documentState: DocumentState) {
     >
       <Box>
         {DocumentIcon({
-          content_type:
-            documentState.documentFolderFiles.selectedDocumentFilePreview
-              ?.content_type || "",
+          content_type: selectedDocumentFilePreview?.content_type || "",
           size: 250,
           color: theme?.colors.border.variant1,
         })}
@@ -70,9 +59,6 @@ function DocumentPreview(documentState: DocumentState) {
           width: "100%",
         }}
       >
-        <Box>
-          <Text.Heading5Secondary>Placeholder</Text.Heading5Secondary>
-        </Box>
         {documentInfo.map((info, index) => (
           <Box
             key={index}

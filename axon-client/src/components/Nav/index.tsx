@@ -3,18 +3,14 @@ import ProjectTree from "../Project/ProjectTree";
 import { ActionList, TreeView, useTheme } from "@primer/react";
 import DocumentTree from "../Document/DocumentTree";
 import { useProjectContext } from "src/context/project/hooks/useProjectContext";
-import { useDocumentContext } from "src/context/document/hooks/useDocumentContext";
-import { CiSettings } from "react-icons/ci";
-import { Text } from "../Common/Text";
-import { PiUserCircleLight } from "react-icons/pi";
 import Settings from "../Settings";
 import User from "../User";
 import Search from "../Search";
+import { useDocument } from "src/context/document/hooks/useDocument";
 
 function Nav() {
   const { projectState, projectStateDispatch } = useProjectContext();
-  const { documentState, documentStateDispatch } = useDocumentContext();
-  const { theme } = useTheme();
+  const { documentFolders, documentFiles } = useDocument();
   return (
     <nav
       style={{
@@ -41,8 +37,8 @@ function Nav() {
           projectStateDispatch={projectStateDispatch}
         />
         <DocumentTree
-          documentState={documentState}
-          documentStateDispatch={documentStateDispatch}
+          documentFolders={documentFolders}
+          documentFiles={documentFiles}
         />
       </TreeView>
     </nav>

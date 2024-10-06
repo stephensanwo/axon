@@ -16,6 +16,6 @@ export type GetDocumentFoldersResponseDto = {
 };
 
 export type GetDocumentFilesResponseDto = {
-  folderId: string | null;
   files: DocumentFileEntity[];
+  folder: DocumentFolderEntity | null;
 };

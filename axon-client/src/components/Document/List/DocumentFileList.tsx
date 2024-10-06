@@ -1,5 +1,5 @@
 import Table from "../../Table";
-import { Truncate } from "@primer/react";
+import { Token, Truncate } from "@primer/react";
 import { Column } from "@primer/react/lib-esm/DataTable";
 import { formatDateToRelativeTime } from "src/common/date";
 import Select, { SelectMenuItem } from "../../Common/Select";
@@ -7,17 +7,15 @@ import { TableState } from "../../Table/index.types";
 import { DocumentFileEntity } from "src/domain/document/document.entity";
 import { convertFileSize, getContentType } from "src/common/file";
 import RowSelector from "src/components/Table/components/RowSelector";
-import { BaseDocumentProps } from "../index.types";
 import {
   PagePanelActions,
   PagePanelDirections,
 } from "src/components/Page/index.types";
 import { useDocument } from "src/context/document/hooks/useDocument";
 import { CheckCircleIcon, TrashIcon } from "@primer/octicons-react";
+import { useDocumentStore } from "src/context/document/document.store";
 
 function DocumentFileList({
-  documentState,
-  documentStateDispatch,
   isLoading,
   initialSortColumn,
   initialSortDirection,
@@ -32,24 +30,21 @@ function DocumentFileList({
     direction: PagePanelDirections,
     action?: PagePanelActions
   ) => void;
-} & BaseDocumentProps) {
-  const { deleteDocumentFile } = useDocument();
+}) {
+  const { documentFiles, deleteDocumentFile } = useDocument();
+  const {
+    setSelectedDocumentFilePreview,
+    selectedDocumentFiles,
+    setSelectedDocumentFiles,
+  } = useDocumentStore();
   const options: SelectMenuItem[] = [
     {
       id: "preview",
       name: "Preview",
       onClick: (data: DocumentFileEntity) => {
-        documentStateDispatch({
-          type: "SET_SELECTED_DOCUMENT_FILE_PREVIEW",
-          payload: data,
-        });
+        setSelectedDocumentFilePreview(data);
         togglePanel("right");
       },
-    },
-    {
-      id: "open",
-      name: "Open",
-      onClick: (itemId: string) => {},
     },
     {
       id: "delete",
@@ -83,15 +78,11 @@ function DocumentFileList({
             onChangeCallback={(selected: boolean) => {
               console.log("selected", selected);
               if (selected) {
-                documentStateDispatch({
-                  type: "SELECT_DOCUMENT_FILE",
-                  payload: row,
-                });
+                setSelectedDocumentFiles([...selectedDocumentFiles, row]);
               } else {
-                documentStateDispatch({
-                  type: "REMOVE_SELECTED_DOCUMENT_FILE",
-                  payload: row.id,
-                });
+                setSelectedDocumentFiles(
+                  selectedDocumentFiles.filter((file) => file.id !== row.id)
+                );
               }
             }}
           />
@@ -118,7 +109,7 @@ function DocumentFileList({
       field: "content_type",
       sortBy: "alphanumeric",
       renderCell: (row) => {
-        return <>{getContentType(row.content_type)}</>;
+        return <>{<Token text={getContentType(row.content_type)} />}</>;
       },
     },
     {
@@ -162,9 +153,9 @@ function DocumentFileList({
   ];
 
   const tableState: TableState =
-    !isLoading && documentState.documentFolderFiles.files!!.length === 0
+    !isLoading && documentFiles.data?.files.length!! === 0
       ? "empty"
-      : !isLoading && documentState.documentFolderFiles.files!!.length > 0
+      : !isLoading && documentFiles.data?.files.length!! > 0
         ? "data"
         : "loading";
 
@@ -172,7 +163,7 @@ function DocumentFileList({
     <Table
       id="documents"
       state={tableState}
-      data={documentState.documentFolderFiles.files!!}
+      data={documentFiles.data?.files!!}
       columns={columns}
       emptyStateMessage={emptyDocumentMessage}
       initialSortColumn={initialSortColumn}

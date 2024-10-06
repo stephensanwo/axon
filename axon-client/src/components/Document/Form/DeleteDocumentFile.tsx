@@ -7,14 +7,13 @@ import { InlineSpinner } from "../../Common/Spinner";
 import { useDocument } from "src/context/document/hooks/useDocument";
 import map from "lodash/map";
 import { useMemo } from "react";
-import { BaseDocumentProps } from "../index.types";
+import { useDocumentStore } from "src/context/document/document.store";
 
-function DeleteDocumentFile({ documentState }: BaseDocumentProps) {
+function DeleteDocumentFile() {
+  const { selectedDocumentFiles, setSelectedDocumentFiles } =
+    useDocumentStore();
   const { deleteDocumentFile } = useDocument();
-  const {
-    documentFolderFiles: { selectedDocumentFiles },
-  } = documentState;
-  const isMultipleFilesSelected = selectedDocumentFiles.length > 1;
+  const isMultipleFilesSelected = selectedDocumentFiles?.length!! > 1;
 
   const selectedFileIds = useMemo(
     () => map(selectedDocumentFiles, "id"),
@@ -41,7 +40,7 @@ function DeleteDocumentFile({ documentState }: BaseDocumentProps) {
             variant="danger"
             leadingVisual={PiTrashBold}
             trailingVisual={() => (
-              <Text.Heading6>{selectedDocumentFiles.length}</Text.Heading6>
+              <Text.Heading6>{selectedDocumentFiles?.length!!}</Text.Heading6>
             )}
             disabled={false}
             aria-label="Delete Selected Files"
@@ -79,6 +78,7 @@ function DeleteDocumentFile({ documentState }: BaseDocumentProps) {
           sx={{
             textAlign: "center",
             marginBottom: 1,
+            fontSize: 0,
           }}
         >
           {`Are you sure you want to delete ${isMultipleFilesSelected ? "these files" : "this file"}? This action cannot be undone.`}

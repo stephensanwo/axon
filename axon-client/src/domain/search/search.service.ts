@@ -41,7 +41,7 @@ export class SearchService {
           identifier: folder.id,
           type: SearchIndexTypes.DOCUMENT_FOLDER,
           name: folder.name,
-          description: folder.description,
+          description: "",
           content: "",
           path: ["documents", `${folder.name}`],
         }) satisfies BaseSearchSchema
@@ -115,7 +115,7 @@ export class SearchService {
       identifier: dto.id,
       type: SearchIndexTypes.DOCUMENT_FOLDER,
       name: dto.name,
-      description: dto.description,
+      description: "",
       content: "",
       path: ["documents", `${dto.name}`],
     } satisfies BaseSearchSchema);

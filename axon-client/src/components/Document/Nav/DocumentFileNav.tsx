@@ -6,7 +6,7 @@ import { BaseDocumentProps } from "../index.types";
 
 function DocumentFileNav({
   navTitle,
-  documentState,
+  documentFiles,
 }: {
   navTitle: string;
 } & BaseDocumentProps) {
@@ -26,8 +26,8 @@ function DocumentFileNav({
       name: "Upload Document",
       onClick: () => {
         uploadDocument(
-          documentState.documentFolderFiles.folder?.id!!,
-          documentState.documentFolderFiles.folder?.name!!
+          documentFiles.data?.folder?.id!!,
+          documentFiles.data?.folder?.name!!
         );
       },
     },

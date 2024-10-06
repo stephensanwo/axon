@@ -13,7 +13,6 @@ import { EdgeProvider } from "./context/edge";
 import Billing from "./pages/Auth/Billing";
 import SignUp from "./pages/Auth/SignUp";
 import { ReactFlowProvider } from "reactflow";
-import { DocumentProvider } from "./context/document";
 import DocumentFolderPage from "./pages/Document/DocumentFolder.page";
 import DocumentFilePage from "./pages/Document/DocumentFile.page";
 import { DocumentFolderRouteParams } from "./context/document/document.types";
@@ -29,6 +28,7 @@ import { ContentProvider } from "./context/content";
 import ContentListPage from "./pages/Content/contentList.page";
 import ContentPage from "./pages/Content/content.page";
 import { ContentRouteParams } from "./context/content/index.types";
+import { WorkerProvider } from "./context/worker";
 
 const Router = () => {
   return (
@@ -57,15 +57,15 @@ const Router = () => {
                       <FolderProvider>
                         {/* React flow provider is added at the note level */}
                         <ReactFlowProvider>
-                          <DocumentProvider>
-                            <NoteProvider>
-                              <NodeProvider>
-                                <EdgeProvider>
+                          <NoteProvider>
+                            <NodeProvider>
+                              <EdgeProvider>
+                                <WorkerProvider>
                                   <Layout />
-                                </EdgeProvider>
-                              </NodeProvider>
-                            </NoteProvider>
-                          </DocumentProvider>
+                                </WorkerProvider>
+                              </EdgeProvider>
+                            </NodeProvider>
+                          </NoteProvider>
                         </ReactFlowProvider>
                       </FolderProvider>
                     </ContentProvider>

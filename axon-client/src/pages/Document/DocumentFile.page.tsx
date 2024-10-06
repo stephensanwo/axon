@@ -4,7 +4,6 @@ import { Document, DocumentFile } from "src/components/Document";
 import DocumentNav from "src/components/Document/Nav";
 import AxonLoader from "src/components/Loader/Loader";
 import Page from "src/components/Page";
-import { useDocumentContext } from "src/context/document/hooks/useDocumentContext";
 import { useRef } from "react";
 import { usePage } from "src/context/page/hooks/usePage";
 import Search from "src/components/Search";
@@ -12,9 +11,10 @@ import Settings from "src/components/Settings";
 import User from "src/components/User";
 import Icon from "src/components/Common/Icon";
 import Nav from "src/components/Nav";
+import { useDocument } from "src/context/document/hooks/useDocument";
 
 function DocumentFilePage() {
-  const { documentState, documentStateDispatch } = useDocumentContext();
+  const { documentFolders, documentFiles } = useDocument();
   const { panel, togglePanel } = usePage();
   const initialFocusRef = useRef<HTMLButtonElement>(null);
   const returnFocusRef = useRef<HTMLButtonElement>(null);
@@ -34,9 +34,8 @@ function DocumentFilePage() {
           breadcrumb: (
             <DocumentNav
               level="file"
-              isLoading={documentState.documentFolderFiles.query.isLoading}
-              documentState={documentState}
-              documentStateDispatch={documentStateDispatch}
+              documentFolders={documentFolders}
+              documentFiles={documentFiles}
             />
           ),
           menus: [
@@ -74,13 +73,13 @@ function DocumentFilePage() {
         initialFocusRef={initialFocusRef}
         returnFocusRef={returnFocusRef}
         ignoreClickRefs={[]}
+        closeOnClickOutside={true}
         header={{
           breadcrumb: (
             <DocumentNav
               level="file"
-              isLoading={documentState.documentFolderFiles.query.isLoading}
-              documentState={documentState}
-              documentStateDispatch={documentStateDispatch}
+              documentFolders={documentFolders}
+              documentFiles={documentFiles}
             />
           ),
           menus: [
@@ -90,32 +89,22 @@ function DocumentFilePage() {
           ],
         }}
         leftPanel={<Page.Left>{<Nav />}</Page.Left>}
-        rightPanel={
-          <Page.Right>{<Document.Preview {...documentState} />}</Page.Right>
-        }
+        rightPanel={<Page.Right>{<Document.Preview />}</Page.Right>}
         main={
           <Page.Main>
-            {documentState.documentFolderFiles.files && (
+            {documentFiles.data?.files && (
               <Document.Main>
                 <DocumentFile.Header
-                  title={`Documents / ${documentState.documentFolderFiles.query.isLoading ? "..." : documentState.documentFolderFiles.folder?.name}`}
+                  title={`Documents / ${documentFiles.isLoading ? "..." : documentFiles.data?.folder?.name}`}
                   subtitle="Create, delete and manage documents"
-                  documentState={documentState}
-                  documentStateDispatch={documentStateDispatch}
                 />
                 <DocumentFile.List
-                  documentState={documentState}
-                  documentStateDispatch={documentStateDispatch}
-                  isLoading={documentState.documentFolderFiles.query.isLoading}
+                  isLoading={documentFiles.isLoading}
                   initialSortColumn={
-                    documentState.documentFolderFiles.files!!.length > 0
-                      ? "created"
-                      : ""
+                    documentFiles.data?.files!!.length > 0 ? "created" : ""
                   }
                   initialSortDirection={
-                    documentState.documentFolderFiles.files!!.length > 0
-                      ? "DESC"
-                      : undefined
+                    documentFiles.data?.files!!.length > 0 ? "DESC" : undefined
                   }
                   emptyDocumentMessage={
                     <Document.Empty
@@ -132,21 +121,28 @@ function DocumentFilePage() {
           </Page.Main>
         }
         footer={
-          <Page.Footer>{<Document.Footer {...documentState} />}</Page.Footer>
+          <Page.Footer>
+            {
+              <Document.Footer
+                documentFolders={documentFolders}
+                documentFiles={documentFiles}
+              />
+            }
+          </Page.Footer>
         }
       />
     ),
   };
 
   if (
-    !documentState.documentFolderFiles.query.isFetchedAfterMount &&
-    documentState.documentFolderFiles.folder === null
+    !documentFiles.isFetchedAfterMount &&
+    documentFiles.data?.folder === null
   ) {
     return page["loading"];
   }
   if (
-    documentState.documentFolderFiles.query.isFetchedAfterMount &&
-    documentState.documentFolderFiles.folder === null
+    documentFiles.isFetchedAfterMount &&
+    documentFiles.data?.folder === null
   ) {
     return page["error"];
   }

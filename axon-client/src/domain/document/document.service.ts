@@ -233,10 +233,13 @@ export class DocumentService {
 
       if (!folderId) {
         return {
-          folderId: null,
           files: [],
+          folder: null,
         } as GetDocumentFilesResponseDto;
       }
+
+      const folder =
+        await this.foldersDb.getRecord<DocumentFolderEntity>(folderId);
 
       const files =
         await documentRepository.findDocumentFilesByFolderId(folderId);
@@ -244,6 +247,7 @@ export class DocumentService {
       return {
         folderId,
         files: files || [],
+        folder: folder,
       } as GetDocumentFilesResponseDto;
     } catch (err) {
       console.error(err);

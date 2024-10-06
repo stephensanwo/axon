@@ -2,26 +2,22 @@ import { useCallback, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDocumentFileRoute } from "src/context/document/hooks/useDocumentRoute";
 import { DocumentQueryKeys } from "src/domain/document/document.entity";
-import { useDocumentContext } from "./useDocumentContext";
+import { useDocumentStore } from "../document.store";
+import { useWorkerContext } from "src/context/worker";
 
 export function useDocumentWorker<T>(): {
   postMessage: (message: T) => void;
 } {
   const queryClient = useQueryClient();
   const { documentFolderName } = useDocumentFileRoute();
-  const { documentStateDispatch, documentWorkerClient } = useDocumentContext();
+  const { updateFileStatus } = useDocumentStore();
+  const { documentWorkerClient } = useWorkerContext();
 
   useEffect(() => {
     if (documentWorkerClient.current) {
       documentWorkerClient.current.onmessage = (event) => {
         console.log("Worker message received", event.data);
-        documentStateDispatch({
-          type: "UPDATE_DOCUMENT_FOLDER_FILE_STATUS",
-          payload: {
-            eventId: event.data.eventId,
-            status: event.data.status,
-          },
-        });
+        updateFileStatus(event.data.eventId, event.data.status);
         queryClient.invalidateQueries({
           queryKey: [...DocumentQueryKeys.DOCUMENT_FOLDERS, documentFolderName],
         });

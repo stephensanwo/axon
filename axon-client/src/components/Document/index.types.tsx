@@ -1,9 +1,10 @@
+import { UseQueryResult } from "@tanstack/react-query";
 import {
-  DocumentAction,
-  DocumentState,
-} from "src/context/document/document.types";
+  GetDocumentFilesResponseDto,
+  GetDocumentFoldersResponseDto,
+} from "src/domain/document/document.dto";
 
 export type BaseDocumentProps = {
-  documentState: DocumentState;
-  documentStateDispatch: React.Dispatch<DocumentAction>;
+  documentFolders: UseQueryResult<GetDocumentFoldersResponseDto, unknown>;
+  documentFiles: UseQueryResult<GetDocumentFilesResponseDto | null, unknown>;
 };

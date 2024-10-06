@@ -9,27 +9,26 @@ import Link from "src/components/Common/Link";
 import { useNavigate } from "react-router-dom";
 import { BaseDocumentProps } from "../index.types";
 import { useDocument } from "src/context/document/hooks/useDocument";
-import { CheckCircleIcon, TrashIcon } from "@primer/octicons-react";
+import { CheckCircleIcon } from "@primer/octicons-react";
+import { useDocumentStore } from "src/context/document/document.store";
 
 function DocumentFolderList({
-  documentState,
-  documentStateDispatch,
-  isLoading,
   initialSortColumn,
   initialSortDirection,
   emptyDocumentMessage,
 }: {
-  isLoading: boolean | undefined;
   initialSortColumn: string | undefined;
   initialSortDirection: "ASC" | "DESC" | undefined;
   emptyDocumentMessage: React.ReactNode;
-} & BaseDocumentProps) {
+}) {
   const navigate = useNavigate();
-  const { deleteDocumentFolder } = useDocument();
+  const { documentFolders, deleteDocumentFolder } = useDocument();
+  const { selectedDocumentFolders, setSelectedDocumentFolders } =
+    useDocumentStore();
   const options: SelectMenuItem[] = [
     {
       id: "open",
-      name: "Open",
+      name: "Open Folder",
       onClick: (data: DocumentFolderEntity) => {
         navigate(`${data.name}`);
       },
@@ -50,7 +49,6 @@ function DocumentFolderList({
           variant: "danger",
         },
       ],
-      leadingVisual: <TrashIcon />,
     },
   ];
 
@@ -64,17 +62,14 @@ function DocumentFolderList({
           <RowSelector
             rowId={row.id}
             onChangeCallback={(selected: boolean) => {
-              console.log("selected", selected);
               if (selected) {
-                documentStateDispatch({
-                  type: "SELECT_DOCUMENT_FOLDER",
-                  payload: row,
-                });
+                setSelectedDocumentFolders([...selectedDocumentFolders, row]);
               } else {
-                documentStateDispatch({
-                  type: "REMOVE_SELECTED_DOCUMENT_FOLDER",
-                  payload: row.id,
-                });
+                setSelectedDocumentFolders(
+                  selectedDocumentFolders.filter(
+                    (folder) => folder.id !== row.id
+                  )
+                );
               }
             }}
           />
@@ -86,7 +81,7 @@ function DocumentFolderList({
       field: "name",
       rowHeader: true,
       width: "grow",
-      maxWidth: "400px",
+      maxWidth: "800px",
       id: "name",
       sortBy: "alphanumeric",
       renderCell: (row) => {
@@ -97,15 +92,6 @@ function DocumentFolderList({
             truncateText={800}
           />
         );
-      },
-    },
-    {
-      header: "Description",
-      maxWidth: "600px",
-      field: "description",
-      sortBy: "alphanumeric",
-      renderCell: (row) => {
-        return <>{row.description}</>;
       },
     },
     {
@@ -143,9 +129,9 @@ function DocumentFolderList({
   ];
 
   const tableState: TableState =
-    !isLoading && documentState.documentFolders.folders.length === 0
+    !documentFolders.isLoading && documentFolders.data?.folders.length === 0
       ? "empty"
-      : !isLoading && documentState.documentFolders.folders.length > 0
+      : !documentFolders.isLoading && documentFolders.data?.folders.length!! > 0
         ? "data"
         : "loading";
 
@@ -153,7 +139,7 @@ function DocumentFolderList({
     <Table
       id="documents"
       state={tableState}
-      data={documentState.documentFolders.folders}
+      data={documentFolders.data?.folders!!}
       columns={columns}
       emptyStateMessage={emptyDocumentMessage}
       initialSortColumn={initialSortColumn}

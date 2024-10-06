@@ -11,21 +11,19 @@ import { Input } from "src/components/Common/Input";
 import { formValidation } from "src/common/forms/forms.validation";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { PiFolderBold } from "react-icons/pi";
-import { BaseDocumentProps } from "../index.types";
+import { useDocumentStore } from "src/context/document/document.store";
 
-function UpdateDocumentFolder({ documentState }: BaseDocumentProps) {
+function UpdateDocumentFolder() {
+  const { selectedDocumentFolders, setSelectedDocumentFolders } =
+    useDocumentStore();
   const { updateDocumentFolder } = useDocument();
-  const {
-    documentFolders: { selectedDocumentFolders },
-  } = documentState;
 
   // UpdateDocumentFolder.tsx is only rendered when a single folder is selected
-  const folderData = selectedDocumentFolders[0];
+  const folderData = selectedDocumentFolders && selectedDocumentFolders[0];
 
   const formOpts = formOptions<DocumentFolderData>({
     defaultValues: {
       name: folderData?.name || "",
-      description: folderData?.description || "",
     },
   });
 
@@ -33,7 +31,7 @@ function UpdateDocumentFolder({ documentState }: BaseDocumentProps) {
     ...formOpts,
     onSubmit: async ({ value }) => {
       const dto: UpdateDocumentFolderDto = {
-        ...folderData,
+        ...folderData!!,
         ...value,
       };
       updateDocumentFolder.mutate(dto);
@@ -92,32 +90,6 @@ function UpdateDocumentFolder({ documentState }: BaseDocumentProps) {
                 htmlFor="update-document-folder-name"
                 type="text"
                 caption="Max 50 characters"
-              />
-            );
-          }}
-        </Form.Field>
-        <Form.Field
-          name="description"
-          validatorAdapter={zodValidator()}
-          validators={{
-            onChangeAsyncDebounceMs: 500,
-            onChange: formValidation.fieldValidation("string", 250),
-          }}
-        >
-          {({ state, handleChange, handleBlur }) => {
-            return (
-              <Input.TextArea
-                label="Short Description"
-                placeholder="e.g. Project Folder"
-                rows={2}
-                resize="none"
-                value={state.value || ""}
-                error={formValidation.fieldError(state.meta)}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                caption="Max 250 characters"
-                required={true}
-                htmlFor="update-document-folder-description"
               />
             );
           }}

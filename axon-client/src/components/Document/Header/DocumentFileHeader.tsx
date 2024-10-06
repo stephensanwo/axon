@@ -8,12 +8,10 @@ import { BaseDocumentProps } from "../index.types";
 function DocumentFileHeader({
   title,
   subtitle,
-  documentState,
-  documentStateDispatch,
 }: {
   title: string;
   subtitle: string;
-} & BaseDocumentProps) {
+}) {
   return (
     <>
       <Box
@@ -44,19 +42,9 @@ function DocumentFileHeader({
             gap: 2,
           }}
         >
-          <SelectDocumentOptions
-            level="file"
-            documentState={documentState}
-            documentStateDispatch={documentStateDispatch}
-          />
-          <SyncDocumentStatus
-            documentState={documentState}
-            documentStateDispatch={documentStateDispatch}
-          />
-          <UploadDocumentFile
-            documentState={documentState}
-            documentStateDispatch={documentStateDispatch}
-          />
+          <SelectDocumentOptions level="file" />
+          <SyncDocumentStatus />
+          <UploadDocumentFile />
         </Box>
       </Box>
     </>

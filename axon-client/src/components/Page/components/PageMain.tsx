@@ -1,5 +1,5 @@
 import { Box } from "@primer/react";
-import React from "react";
+import React, { useEffect } from "react";
 
 function PageMain({ children }: { children?: React.ReactNode }) {
   return (
@@ -13,6 +13,7 @@ function PageMain({ children }: { children?: React.ReactNode }) {
         display: "inline-flex",
         justifyContent: "center",
         alignItems: "center",
+        overflow: "auto",
       }}
     >
       {children}

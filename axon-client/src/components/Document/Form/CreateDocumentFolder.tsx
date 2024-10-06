@@ -13,21 +13,16 @@ import { zodValidator } from "@tanstack/zod-form-adapter";
 import { formValidation } from "src/common/forms/forms.validation";
 import { InlineSpinner } from "../../Common/Spinner";
 import { useDocument } from "src/context/document/hooks/useDocument";
-import { BaseDocumentProps } from "../index.types";
+import { useDocumentStore } from "src/context/document/document.store";
 
-function CreateDocumentFolder({
-  documentState,
-  documentStateDispatch,
-}: BaseDocumentProps) {
-  const {
-    documentFolders: { createDocumentFolderForm },
-  } = documentState;
+function CreateDocumentFolder() {
+  const { createDocumentFolderForm, setCreateDocumentFolderForm } =
+    useDocumentStore();
   const { createDocumentFolder } = useDocument();
 
   const formOpts = formOptions<CreateDocumentFolderDto>({
     defaultValues: {
       name: createDocumentFolderForm?.name || "",
-      description: createDocumentFolderForm?.description || "",
     },
   });
 
@@ -42,7 +37,7 @@ function CreateDocumentFolder({
   return (
     <OverlayMenu
       width={300}
-      minHeight={300}
+      minHeight={200}
       side="outside-top"
       anchorOffset={10}
       alignmentOffset={0}
@@ -60,10 +55,7 @@ function CreateDocumentFolder({
       }
       heading={<Text.Heading5>Create New Folder</Text.Heading5>}
       onCloseCallback={() => {
-        documentStateDispatch({
-          type: "SET_CREATE_DOCUMENT_FOLDER_FORM",
-          payload: Form.state.values,
-        });
+        setCreateDocumentFolderForm(Form.state.values);
       }}
     >
       <Box
@@ -97,32 +89,6 @@ function CreateDocumentFolder({
                 htmlFor="create-document-folder-name"
                 type="text"
                 caption="Max 50 characters"
-              />
-            );
-          }}
-        </Form.Field>
-        <Form.Field
-          name="description"
-          validatorAdapter={zodValidator()}
-          validators={{
-            onChangeAsyncDebounceMs: 500,
-            onChange: formValidation.fieldValidation("string", 250),
-          }}
-        >
-          {({ state, handleChange, handleBlur }) => {
-            return (
-              <Input.TextArea
-                label="Short Description"
-                placeholder="e.g. Project Folder"
-                rows={2}
-                resize="none"
-                value={state.value || ""}
-                error={formValidation.fieldError(state.meta)}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                caption="Max 250 characters"
-                required={true}
-                htmlFor="create-document-folder-description"
               />
             );
           }}

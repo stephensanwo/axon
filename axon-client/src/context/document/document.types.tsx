@@ -17,17 +17,17 @@ export type DocumentState = {
   documentFolders: {
     folders: DocumentFolderEntity[];
     query: UseQueryResult<GetDocumentFoldersResponseDto, unknown>;
-    selectedDocumentFolders: DocumentFolderEntity[];
-    createDocumentFolderForm: CreateDocumentFolderDto | null;
-    folderTree: DocumentTreeEntity;
+    // selectedDocumentFolders: DocumentFolderEntity[];
+    // createDocumentFolderForm: CreateDocumentFolderDto | null;
+    // folderTree: DocumentTreeEntity;
   };
   documentFolderFiles: {
     files: DocumentFileEntity[] | null;
     query: UseQueryResult<GetDocumentFilesResponseDto | null, unknown>;
-    folder: DocumentFolderEntity | null;
-    fileStatus: Record<string, DocumentFileStatus> | null;
-    selectedDocumentFiles: DocumentFileEntity[];
-    selectedDocumentFilePreview: DocumentFileEntity | null;
+    // folder: DocumentFolderEntity | null;
+    // fileStatus: Record<string, DocumentFileStatus> | null;
+    // selectedDocumentFiles: DocumentFileEntity[];
+    // selectedDocumentFilePreview: DocumentFileEntity | null;
   };
 };
 

@@ -1,22 +1,20 @@
 import { Button, IconButton } from "@primer/react";
 import { PiCloudArrowDown } from "react-icons/pi";
 import { Text } from "src/components/Common/Text";
-import { BaseDocumentProps } from "../index.types";
 import { useDocument } from "src/context/document/hooks/useDocument";
+import { useDocumentStore } from "src/context/document/document.store";
 
-function DownloadDocumentFile({ documentState }: BaseDocumentProps) {
-  const {
-    documentFolderFiles: { selectedDocumentFiles },
-  } = documentState;
+function DownloadDocumentFile() {
+  const { selectedDocumentFiles } = useDocumentStore();
   const { downloadDocumentFile } = useDocument();
 
-  const isMultipleFilesSelected = selectedDocumentFiles.length > 1;
+  const isMultipleFilesSelected = selectedDocumentFiles?.length!! > 1;
   return isMultipleFilesSelected ? (
     <Button
       variant="default"
       leadingVisual={PiCloudArrowDown}
       trailingVisual={() => (
-        <Text.Heading6>{selectedDocumentFiles.length}</Text.Heading6>
+        <Text.Heading6>{selectedDocumentFiles?.length!!}</Text.Heading6>
       )}
       disabled={false}
       aria-label="Download Selected Files"
@@ -35,7 +33,7 @@ function DownloadDocumentFile({ documentState }: BaseDocumentProps) {
       sx={{
         flexShrink: 0,
       }}
-      onClick={() => downloadDocumentFile(selectedDocumentFiles)}
+      onClick={() => downloadDocumentFile(selectedDocumentFiles!!)}
     />
   );
 }

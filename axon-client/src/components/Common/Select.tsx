@@ -2,9 +2,7 @@ import { ActionList, ActionMenu, IconButton, useTheme } from "@primer/react";
 import { VariantType } from "@primer/react/lib/Button/types";
 import { CSSProperties, useState } from "react";
 import { PiDotsThreeBold } from "react-icons/pi";
-import { TbEyeDiscount } from "react-icons/tb";
 import { Text } from "./Text";
-import { IconButtonProps } from "@primer/react/lib-esm";
 
 export type SelectMenuItem = {
   id: string;
@@ -113,6 +111,7 @@ function Select<T>(props: SelectProps<T>) {
                       id={item.id}
                       sx={{
                         borderRadius: 4,
+                        fontSize: 0,
                       }}
                     >
                       {item.name}
@@ -152,6 +151,7 @@ function Select<T>(props: SelectProps<T>) {
                           id={subItem.id}
                           sx={{
                             borderRadius: 4,
+                            fontSize: 0,
                           }}
                         >
                           {subItem.name}
@@ -188,6 +188,7 @@ function Select<T>(props: SelectProps<T>) {
                   sx={{
                     borderRadius: 4,
                     fontSize: 0,
+                    color: theme?.colors.text.gray,
                   }}
                 >
                   {item.name}

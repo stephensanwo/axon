@@ -5,30 +5,22 @@ import UpdateDocumentFolder from "./UpdateDocumentFolder";
 import DeleteDocumentFile from "./DeleteDocumentFile";
 import { useEffect } from "react";
 import DownloadDocumentFile from "../Sync/DownloadDocumentFile";
-import { BaseDocumentProps } from "../index.types";
+import { useDocumentStore } from "src/context/document/document.store";
 
-function SelectDocumentOptions({
-  level,
-  documentState,
-  documentStateDispatch,
-}: BaseDocumentProps & {
-  level: DocumentLevels;
-}) {
+function SelectDocumentOptions({ level }: { level: DocumentLevels }) {
   const {
-    documentFolders: { selectedDocumentFolders },
-    documentFolderFiles: { selectedDocumentFiles },
-  } = documentState;
+    selectedDocumentFolders,
+    selectedDocumentFiles,
+    setSelectedDocumentFolders,
+    setSelectedDocumentFiles,
+  } = useDocumentStore();
 
   const data =
     level === "folder" ? selectedDocumentFolders : selectedDocumentFiles;
 
   useEffect(() => {
-    documentStateDispatch({
-      type: "CLEAR_SELECTED_DOCUMENT_FILES",
-    });
-    documentStateDispatch({
-      type: "CLEAR_SELECTED_DOCUMENT_FOLDERS",
-    });
+    setSelectedDocumentFiles([]);
+    setSelectedDocumentFolders([]);
   }, []);
 
   return (
@@ -40,30 +32,10 @@ function SelectDocumentOptions({
         gap: 2,
       }}
     >
-      {level === "folder" && data.length === 1 && (
-        <UpdateDocumentFolder
-          documentState={documentState}
-          documentStateDispatch={documentStateDispatch}
-        />
-      )}
-      {level === "folder" && data.length > 0 && (
-        <DeleteDocumentFolder
-          documentState={documentState}
-          documentStateDispatch={documentStateDispatch}
-        />
-      )}
-      {level === "file" && data.length > 0 && (
-        <DownloadDocumentFile
-          documentState={documentState}
-          documentStateDispatch={documentStateDispatch}
-        />
-      )}
-      {level === "file" && data.length > 0 && (
-        <DeleteDocumentFile
-          documentState={documentState}
-          documentStateDispatch={documentStateDispatch}
-        />
-      )}
+      {level === "folder" && data?.length === 1 && <UpdateDocumentFolder />}
+      {level === "folder" && data?.length!! > 0 && <DeleteDocumentFolder />}
+      {level === "file" && data?.length!! > 0 && <DownloadDocumentFile />}
+      {level === "file" && data?.length!! > 0 && <DeleteDocumentFile />}
     </Box>
   );
 }

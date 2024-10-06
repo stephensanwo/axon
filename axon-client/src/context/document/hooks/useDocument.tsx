@@ -1,7 +1,8 @@
 import documentService from "src/domain/document/document.service";
-import { useDocumentContext } from "./useDocumentContext";
 import {
   CreateDocumentFolderDto,
+  GetDocumentFilesResponseDto,
+  GetDocumentFoldersResponseDto,
   UpdateDocumentFolderDto,
 } from "src/domain/document/document.dto";
 import { useDataMutation } from "../../../hooks/api/useDataMutation";
@@ -12,10 +13,12 @@ import {
   DocumentQueryKeys,
   DocumentUploadEventPayload,
 } from "src/domain/document/document.entity";
-import { UseMutationResult } from "@tanstack/react-query";
+import { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 import { uid } from "src/common/uid";
 import { useDocumentFileRoute } from "./useDocumentRoute";
 import { useDocumentWorker } from "./useDocumentWorker";
+import { useDataQuery } from "src/hooks/api/useDataQuery";
+import { useDocumentStore } from "../document.store";
 
 export function useDocument(): {
   uploadDocument: (folderId: string, folderName: string) => void;
@@ -34,9 +37,15 @@ export function useDocument(): {
   >;
   deleteDocumentFile: UseMutationResult<boolean, unknown, string[], unknown>;
   downloadDocumentFile: (file: DocumentFileEntity[]) => void;
+  documentFolders: UseQueryResult<GetDocumentFoldersResponseDto, unknown>;
+  documentFiles: UseQueryResult<GetDocumentFilesResponseDto | null, unknown>;
 } {
+  const {
+    setFileStatus,
+    setCreateDocumentFolderForm,
+    setSelectedDocumentFolders,
+  } = useDocumentStore();
   const { postMessage } = useDocumentWorker();
-  const { documentStateDispatch } = useDocumentContext();
   const { documentFolderName } = useDocumentFileRoute();
 
   async function uploadDocument(folderId: string, folderName: string) {
@@ -50,15 +59,12 @@ export function useDocument(): {
         eventId: uid(),
       } as DocumentUploadEventPayload,
     };
-    documentStateDispatch({
-      type: "SET_DOCUMENT_FOLDER_FILE_STATUS",
-      payload: {
-        [documentEvent["document:upload"].eventId]: {
-          type: "document:upload",
-          name: documentFile.name,
-          content_type: documentFile.type,
-          status: "pending",
-        },
+    setFileStatus({
+      [documentEvent["document:upload"].eventId]: {
+        type: "document:upload",
+        name: documentFile.name,
+        content_type: documentFile.type,
+        status: "pending",
       },
     });
     postMessage(documentEvent);
@@ -73,9 +79,7 @@ export function useDocument(): {
       documentService.createDocumentFolder(dto),
     optionalQueryKeysToInvalidate: [[...DocumentQueryKeys.DOCUMENT_FOLDERS]],
     onSuccessCallback: () => {
-      documentStateDispatch({
-        type: "CLEAR_CREATE_DOCUMENT_FOLDER_FORM",
-      });
+      setCreateDocumentFolderForm(null);
     },
   });
 
@@ -84,9 +88,7 @@ export function useDocument(): {
       documentService.deleteDocumentFolders(dto),
     optionalQueryKeysToInvalidate: [[...DocumentQueryKeys.DOCUMENT_FOLDERS]],
     onSuccessCallback: () => {
-      documentStateDispatch({
-        type: "CLEAR_SELECTED_DOCUMENT_FOLDERS",
-      });
+      setSelectedDocumentFolders([]);
     },
   });
 
@@ -103,13 +105,33 @@ export function useDocument(): {
     mutationFn: async (dto: string[]) =>
       documentService.deleteDocumentFile(dto),
     optionalQueryKeysToInvalidate: [
-      [...DocumentQueryKeys.DOCUMENT_FILE, documentFolderName || "notfound"],
+      [...DocumentQueryKeys.DOCUMENT_FOLDERS, documentFolderName || "notfound"],
     ],
   });
 
   function downloadDocumentFile(file: DocumentFileEntity[]) {
     documentService.downloadDocumentFile(file);
   }
+
+  const documentFolders = useDataQuery<GetDocumentFoldersResponseDto>({
+    queryKey: [...DocumentQueryKeys.DOCUMENT_FOLDERS],
+    queryFn: async () => documentService.getDocumentFolders(),
+    refetchOnMount: true,
+    refetchOnReconnect: true,
+    refetchOnWindowFocus: true,
+  });
+
+  const documentFiles = useDataQuery<GetDocumentFilesResponseDto | null>({
+    queryKey: [
+      ...DocumentQueryKeys.DOCUMENT_FOLDERS,
+      documentFolderName || "notfound",
+    ],
+    queryFn: async () =>
+      documentService.getDocumentFiles(documentFolderName || ""),
+    refetchOnMount: true,
+    refetchOnReconnect: true,
+    refetchOnWindowFocus: true,
+  });
 
   return {
     uploadDocument,
@@ -118,5 +140,7 @@ export function useDocument(): {
     updateDocumentFolder,
     deleteDocumentFile,
     downloadDocumentFile,
+    documentFolders,
+    documentFiles,
   };
 }

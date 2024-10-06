@@ -13,7 +13,7 @@ import {
 } from "react-icons/pi";
 import { BaseEntity, AttachmentRecord } from "src/db/db.types";
 
-export type DocumentFolderData = { name: string; description: string };
+export type DocumentFolderData = { name: string };
 export type DocumentFolderEntity = BaseEntity & DocumentFolderData;
 export type DocumentFileEntity = BaseEntity & AttachmentRecord;
 
@@ -33,75 +33,75 @@ export const DocumentTypes: Record<
     icon: React.ElementType;
   }
 > = {
-  PDF: {
+  Pdf: {
     name: "PDF",
     icon: PiFilePdf,
   },
-  DOC: {
+  Doc: {
     name: "Word",
     icon: PiMicrosoftWordLogo,
   },
-  DOCX: {
+  Docx: {
     name: "Word",
     icon: PiMicrosoftWordLogo,
   },
-  XLS: {
+  Xls: {
     name: "Excel",
     icon: PiMicrosoftExcelLogo,
   },
-  XLSX: {
+  Xlsx: {
     name: "Excel",
     icon: PiMicrosoftExcelLogo,
   },
-  PPT: {
+  Ppt: {
     name: "Powerpoint",
     icon: PiMicrosoftPowerpointLogo,
   },
-  PPTX: {
+  Pptx: {
     name: "Powerpoint",
     icon: PiMicrosoftPowerpointLogo,
   },
-  CSV: {
+  Csv: {
     name: "CSV",
     icon: PiFileCsv,
   },
-  TXT: {
+  Txt: {
     name: "Text",
     icon: PiFileText,
   },
-  JSON: {
+  Json: {
     name: "JSON",
     icon: PiFileJs,
   },
-  XML: {
+  Xml: {
     name: "XML",
     icon: PiFileCode,
   },
-  ZIP: {
+  Zip: {
     name: "ZIP",
     icon: PiFileZip,
   },
-  JPG: {
+  Jpg: {
     name: "JPG",
     icon: PiFileImage,
   },
-  JPEG: {
+  Jpeg: {
     name: "JPEG",
     icon: PiFileImage,
   },
-  PNG: {
+  Png: {
     name: "PNG",
     icon: PiFileImage,
   },
-  GIF: {
+  Gif: {
     name: "GIF",
     icon: PiFileImage,
   },
-  SVG: {
+  Svg: {
     name: "SVG",
     icon: PiFileSvg,
   },
-  FILE: {
+  File: {
     name: "File",
     icon: PiFileCode,
   },

@@ -7,15 +7,10 @@ import Tabs from "src/components/Tabs";
 import { AiOutlineSync } from "react-icons/ai";
 import UploadDocumentFile from "./UploadDocumentFile";
 import { getContentType } from "src/common/file";
-import { BaseDocumentProps } from "../index.types";
+import { useDocumentStore } from "src/context/document/document.store";
 
-function DocumentFileStatus({
-  documentState,
-  documentStateDispatch,
-}: BaseDocumentProps) {
-  const {
-    documentFolderFiles: { fileStatus },
-  } = documentState;
+function DocumentFileStatus() {
+  const { fileStatus, updateFileStatus } = useDocumentStore();
   const { theme } = useTheme();
   const tabContainerHeight = 300 - 44;
   const syncState =
@@ -56,7 +51,7 @@ function DocumentFileStatus({
         }}
       >
         <Tabs
-          name="Axon Settings"
+          name="File Sync"
           headers={[
             {
               label: "Uploads",
@@ -139,12 +134,7 @@ function DocumentFileStatus({
                   }}
                 >
                   <Text.ParagraphSecondary>No Uploads</Text.ParagraphSecondary>
-                  <UploadDocumentFile
-                    documentState={documentState}
-                    documentStateDispatch={documentStateDispatch}
-                    isIconButton={false}
-                    variant="primary"
-                  />
+                  <UploadDocumentFile isIconButton={false} variant="primary" />
                 </Box>
               )}
             </ActionList>,
