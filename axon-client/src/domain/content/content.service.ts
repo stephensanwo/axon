@@ -68,6 +68,17 @@ export class ContentService {
     }
   }
 
+  public async getContentById(
+    contentId: string
+  ): Promise<ContentEntity | null> {
+    try {
+      const content = await this.contentDb.getRecord<ContentEntity>(contentId);
+      return content;
+    } catch (error) {
+      throw new Error(`Content not found - ${error}`);
+    }
+  }
+
   public async getAllContent(): Promise<ContentEntity[]> {
     try {
       const content = await this.contentDb.getAllRecords<ContentEntity>({

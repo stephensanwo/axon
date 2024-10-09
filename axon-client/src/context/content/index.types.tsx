@@ -6,7 +6,7 @@ export type ContentState = {
     data: ContentEntity[];
     pinnedContent: ContentEntity[];
     selectedContent: ContentEntity[];
-    previewContent: ContentEntity | null;
+    previewContent: string | null;
     contentListQuery: UseQueryResult<ContentEntity[] | null, unknown>;
   };
   content: {
@@ -40,7 +40,7 @@ export type ContentAction =
     }
   | {
       type: "PREVIEW_CONTENT";
-      payload: ContentEntity;
+      payload: string;
     }
   | {
       type: "REMOVE_SELECTED_CONTENT";

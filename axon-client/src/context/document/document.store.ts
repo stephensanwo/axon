@@ -23,6 +23,7 @@ export type DocumentStore = {
   fileStatus: Record<string, DocumentFileStatus> | null;
   updateFileStatus: (eventId: string, status: DocumentEventStatus) => void;
   setFileStatus: (fileStatus: Record<string, DocumentFileStatus>) => void;
+  clearFileStatus: () => void;
   selectedDocumentFilePreview: DocumentFileEntity | null;
   setSelectedDocumentFilePreview: (
     selectedDocumentFilePreview: DocumentFileEntity
@@ -57,8 +58,6 @@ export const useDocumentStore = create<DocumentStore>((set) => ({
         return state;
       }
 
-      console.log("currentFileStatus", currentFileStatus);
-
       return {
         ...state,
         fileStatus: {
@@ -78,4 +77,5 @@ export const useDocumentStore = create<DocumentStore>((set) => ({
         ...fileStatus,
       },
     })),
+  clearFileStatus: () => set({ fileStatus: null }),
 }));

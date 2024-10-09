@@ -12,7 +12,8 @@ import { useContentContext } from "src/context/content/hooks/useContentContext";
 import Content from "src/components/Content";
 
 function ContentPage() {
-  const { contentState, contentStateDispatch } = useContentContext();
+  const { contentState, contentStateDispatch, contentId, setContentId } =
+    useContentContext();
   const { panel, togglePanel } = usePage();
   const initialFocusRef = useRef<HTMLButtonElement>(null);
   const returnFocusRef = useRef<HTMLButtonElement>(null);
@@ -37,6 +38,8 @@ function ContentPage() {
               isLoading={contentState.content.contentQuery.isLoading}
               contentState={contentState}
               contentStateDispatch={contentStateDispatch}
+              contentId={contentId}
+              setContentId={setContentId}
             />
           ),
           menus: [
@@ -83,6 +86,8 @@ function ContentPage() {
               isLoading={contentState.content.contentQuery.isLoading}
               contentState={contentState}
               contentStateDispatch={contentStateDispatch}
+              contentId={contentId}
+              setContentId={setContentId}
             />
           ),
           menus: [
@@ -90,6 +95,8 @@ function ContentPage() {
               <Content.PreviewOptions
                 contentState={contentState}
                 contentStateDispatch={contentStateDispatch}
+                contentId={contentId}
+                setContentId={setContentId}
                 togglePanel={togglePanel}
               />
             ) : null,
@@ -102,8 +109,7 @@ function ContentPage() {
         rightPanel={
           <Page.Right>
             <Content.Preview
-              contentState={contentState}
-              contentStateDispatch={contentStateDispatch}
+              previewContent={contentState.contentList.previewContent!!}
             />
           </Page.Right>
         }
@@ -114,6 +120,8 @@ function ContentPage() {
                 <Content.View
                   contentState={contentState}
                   contentStateDispatch={contentStateDispatch}
+                  contentId={contentId}
+                  setContentId={setContentId}
                 />
               </Content.Main>
             }

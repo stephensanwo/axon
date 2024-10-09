@@ -14,7 +14,8 @@ import Content from "src/components/Content";
 import Icon from "src/components/Common/Icon";
 
 function ContentListPage() {
-  const { contentState, contentStateDispatch } = useContentContext();
+  const { contentState, contentStateDispatch, contentId, setContentId } =
+    useContentContext();
   const { panel, togglePanel } = usePage();
   const initialFocusRef = useRef<HTMLButtonElement>(null);
   const returnFocusRef = useRef<HTMLButtonElement>(null);
@@ -37,6 +38,8 @@ function ContentListPage() {
               isLoading={contentState.contentList.contentListQuery.isLoading}
               contentState={contentState}
               contentStateDispatch={contentStateDispatch}
+              contentId={contentId}
+              setContentId={setContentId}
             />
           ),
           menus: [
@@ -83,6 +86,8 @@ function ContentListPage() {
               isLoading={contentState.contentList.contentListQuery.isLoading}
               contentState={contentState}
               contentStateDispatch={contentStateDispatch}
+              contentId={contentId}
+              setContentId={setContentId}
             />
           ),
           menus: [
@@ -90,6 +95,8 @@ function ContentListPage() {
               <Content.PreviewOptions
                 contentState={contentState}
                 contentStateDispatch={contentStateDispatch}
+                contentId={contentId}
+                setContentId={setContentId}
                 togglePanel={togglePanel}
               />
             ) : null,
@@ -102,8 +109,7 @@ function ContentListPage() {
         rightPanel={
           <Page.Right>
             <Content.Preview
-              contentState={contentState}
-              contentStateDispatch={contentStateDispatch}
+              previewContent={contentState.contentList.previewContent!!}
             />
           </Page.Right>
         }
@@ -116,10 +122,14 @@ function ContentListPage() {
                   subtitle="Manage content"
                   contentState={contentState}
                   contentStateDispatch={contentStateDispatch}
+                  contentId={contentId}
+                  setContentId={setContentId}
                 />
                 <Content.List
                   contentState={contentState}
                   contentStateDispatch={contentStateDispatch}
+                  contentId={contentId}
+                  setContentId={setContentId}
                   togglePanel={togglePanel}
                   isLoading={
                     contentState.contentList.contentListQuery.isLoading

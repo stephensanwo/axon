@@ -1,4 +1,4 @@
-import { Button, IconButton } from "@primer/react";
+import { Button, IconButton, useTheme } from "@primer/react";
 import { VariantType } from "@primer/react/lib/Button/types";
 import { PiCloudArrowUp } from "react-icons/pi";
 import { useDocument } from "src/context/document/hooks/useDocument";
@@ -11,7 +11,7 @@ function UploadDocumentFile({
   variant?: VariantType;
 }) {
   const { documentFiles, uploadDocument } = useDocument();
-
+  const { theme } = useTheme();
   return isIconButton ? (
     <IconButton
       variant={variant}
@@ -41,6 +41,7 @@ function UploadDocumentFile({
       aria-label="Upload New Document"
       sx={{
         flexShrink: 0,
+        color: theme?.colors.text.gray,
       }}
       leadingVisual={() => <PiCloudArrowUp size={14} />}
       size="small"

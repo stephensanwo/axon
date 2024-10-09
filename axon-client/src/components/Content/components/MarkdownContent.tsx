@@ -1,14 +1,17 @@
-import { BaseContentProps } from "../index.types";
+import { BaseContentProps, ContentRouterProps } from "../index.types";
 import { MarkdownData } from "src/domain/content/content.entity";
 import { UpdateContentDto } from "src/domain/content/content.dto";
 import { Markdown } from "src/components/Markdown";
 import { useContent } from "src/context/content/hooks/useContent";
 
-function MarkdownContent({ contentState }: BaseContentProps) {
+function MarkdownContent({
+  contentState,
+  previewContent,
+}: BaseContentProps & ContentRouterProps) {
   const { updateContent } = useContent();
   const markdown =
-    contentState.content.data?.content.content_type === "markdown"
-      ? contentState.content.data?.content
+    previewContent.content.content_type === "markdown"
+      ? previewContent.content
       : ({} as MarkdownData);
 
   function updateMarkdown(value: MarkdownData) {
@@ -30,8 +33,8 @@ function MarkdownContent({ contentState }: BaseContentProps) {
     <Markdown
       markdown={markdown}
       updateMarkdown={updateMarkdown}
-      title={contentState.content.data?.name!!}
-      updated={contentState.content.data?.updated!!}
+      title={previewContent.name!!}
+      updated={previewContent.updated!!}
       refetchMarkdown={refetchMarkdown}
       showHeader
     />

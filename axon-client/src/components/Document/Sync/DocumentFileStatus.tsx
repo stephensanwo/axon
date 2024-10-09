@@ -10,7 +10,7 @@ import { getContentType } from "src/common/file";
 import { useDocumentStore } from "src/context/document/document.store";
 
 function DocumentFileStatus() {
-  const { fileStatus, updateFileStatus } = useDocumentStore();
+  const { fileStatus } = useDocumentStore();
   const { theme } = useTheme();
   const tabContainerHeight = 300 - 44;
   const syncState =
@@ -28,7 +28,7 @@ function DocumentFileStatus() {
       align="center"
       anchorComponent={
         <Button
-          variant="primary"
+          variant="default"
           leadingVisual={syncState ? InlineSpinner : AiOutlineSync}
           trailingVisual={() => (
             <Text.Paragraph>{statusCount ? statusCount : ""}</Text.Paragraph>
@@ -37,6 +37,7 @@ function DocumentFileStatus() {
           aria-label="Selected Folders"
           sx={{
             flexShrink: 0,
+            color: theme?.colors.text.gray,
           }}
         >
           File Sync
@@ -129,12 +130,14 @@ function DocumentFileStatus() {
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                    gap: 4,
+                    gap: 3,
                     paddingTop: 6,
                   }}
                 >
-                  <Text.ParagraphSecondary>No Uploads</Text.ParagraphSecondary>
-                  <UploadDocumentFile isIconButton={false} variant="primary" />
+                  <Text.ParagraphSecondary>
+                    No uploads in progress
+                  </Text.ParagraphSecondary>
+                  <UploadDocumentFile isIconButton={false} />
                 </Box>
               )}
             </ActionList>,

@@ -1,4 +1,10 @@
-import React, { Reducer, createContext, useEffect, useReducer } from "react";
+import React, {
+  Reducer,
+  createContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import { useDataQuery } from "src/hooks/api/useDataQuery";
 import { useContentRoute } from "./hooks/useContentRoute";
 import { ContentAction, ContentState } from "./index.types";
@@ -16,12 +22,15 @@ interface ContentProviderProps {
 interface ContentContextProps {
   contentState: ContentState;
   contentStateDispatch: React.Dispatch<ContentAction>;
+  contentId: string | undefined;
+  setContentId: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
 const ContentContext = createContext({} as ContentContextProps);
 
 const ContentProvider = ({ children }: ContentProviderProps) => {
   const { contentName } = useContentRoute();
+  const [contentId, setContentId] = useState<string | undefined>(undefined);
 
   console.log("contentName", contentName);
 
@@ -41,6 +50,14 @@ const ContentProvider = ({ children }: ContentProviderProps) => {
     refetchOnWindowFocus: true,
   });
 
+  const contentByIdQuery = useDataQuery<ContentEntity | null>({
+    queryKey: [...ContentQueryKeys.CONTENT, contentId || "notfound"],
+    queryFn: async () => contentService.getContentById(contentId || ""),
+    refetchOnMount: true,
+    refetchOnReconnect: true,
+    refetchOnWindowFocus: true,
+  });
+
   const [contentState, contentStateDispatch] = useReducer<
     Reducer<ContentState, ContentAction>
   >(contentReducer, {
@@ -53,7 +70,7 @@ const ContentProvider = ({ children }: ContentProviderProps) => {
     },
     content: {
       data: null,
-      contentQuery: contentQuery,
+      contentQuery: contentQuery ?? contentByIdQuery,
     },
   });
 
@@ -84,8 +101,8 @@ const ContentProvider = ({ children }: ContentProviderProps) => {
       contentStateDispatch({
         type: "INIT_CONTENT",
         payload: {
-          content: contentQuery.data,
-          contentQuery: contentQuery,
+          content: contentQuery.data ?? contentByIdQuery.data,
+          contentQuery: contentQuery ?? contentByIdQuery,
         },
       });
     }
@@ -100,6 +117,8 @@ const ContentProvider = ({ children }: ContentProviderProps) => {
       value={{
         contentState,
         contentStateDispatch,
+        contentId,
+        setContentId,
       }}
     >
       {children}

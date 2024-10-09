@@ -1,18 +1,15 @@
 import { TableData } from "src/domain/content/content.entity";
 import { useContent } from "../../../context/content/hooks/useContent";
-import { BaseContentProps } from "../index.types";
+import { BaseContentProps, ContentRouterProps } from "../index.types";
 import { UpdateContentDto } from "src/domain/content/content.dto";
 import DataSheet from "src/components/DataSheet";
 import { ColumnDef } from "@tanstack/react-table";
 import { TableCellTypes } from "src/components/DataSheet/index.types";
 
-function TableContent({ contentState }: BaseContentProps) {
+function TableContent({ contentState }: BaseContentProps & ContentRouterProps) {
   const { updateContent } = useContent();
-  const table =
-    contentState.content.data?.content.content_type === "table"
-      ? contentState.content.data?.content
-      : ({} as TableData);
-
+  const table = contentState.content.data?.content as TableData;
+  console.log("table", table);
   // function updateTable(value: TableData) {
   //   const dto: UpdateContentDto = {
   //     ...contentState.content.data!!,

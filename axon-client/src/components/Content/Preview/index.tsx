@@ -1,15 +1,19 @@
 import { Box } from "@primer/react";
-import { BaseContentProps } from "../index.types";
+import { ContentRouter, ContentRouterProps } from "../index.types";
 import { ContentRouterComponent } from "../ContentRouter";
+import { ContentTypeKeys } from "src/domain/content/content.entity";
 
-function ContentPreview(props: BaseContentProps) {
+function ContentPreview(props: ContentRouterProps) {
+  const content_type = props.previewContent.content_type;
+  console.log("content_type", props.previewContent);
+  const Content = ContentRouter[content_type as ContentTypeKeys];
   return (
     <Box
       sx={{
         height: "80%",
       }}
     >
-      <ContentRouterComponent {...props} />
+      <Content {...props} viewType="preview" />;
     </Box>
   );
 }

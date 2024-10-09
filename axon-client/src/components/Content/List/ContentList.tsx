@@ -5,7 +5,7 @@ import Select, { SelectMenuItem } from "../../Common/Select";
 import { TableState } from "../../Table/index.types";
 import RowSelector from "src/components/Table/components/RowSelector";
 import Link from "src/components/Common/Link";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { BaseContentProps } from "../index.types";
 import { useContent } from "src/context/content/hooks/useContent";
 import { ContentEntity } from "src/domain/content/content.entity";
@@ -20,6 +20,8 @@ import ContentPreviewButton from "../Preview/ContentPreviewButton";
 function ContentList({
   contentState,
   contentStateDispatch,
+  contentId,
+  setContentId,
   isLoading,
   initialSortColumn,
   initialSortDirection,
@@ -34,6 +36,10 @@ function ContentList({
 } & BaseContentProps) {
   const { updateContent, deleteContent } = useContent();
   const navigate = useNavigate();
+
+  function updateSearchParams(id: string) {
+    setContentId(id);
+  }
 
   const options: SelectMenuItem[] = [
     {
@@ -161,10 +167,11 @@ function ContentList({
             togglePanel={togglePanel}
             disableTooltip
             onClick={() =>
-              contentStateDispatch({
-                type: "PREVIEW_CONTENT",
-                payload: row,
-              })
+              // contentStateDispatch({
+              //   type: "PREVIEW_CONTENT",
+              //   payload: row.id,
+              // })
+              updateSearchParams(row.id)
             }
           />
         );
@@ -197,10 +204,14 @@ function ContentList({
 
   return (
     <>
-      <ContentRecents
-        contentState={contentState}
-        contentStateDispatch={contentStateDispatch}
-      />
+      {contentState.contentList.pinnedContent.length > 0 && (
+        <ContentRecents
+          contentState={contentState}
+          contentStateDispatch={contentStateDispatch}
+          setContentId={setContentId}
+          contentId={contentId}
+        />
+      )}
       <Table
         id="content"
         state={tableState}

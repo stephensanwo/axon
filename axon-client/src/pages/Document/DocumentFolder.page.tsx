@@ -15,8 +15,6 @@ import { useDocument } from "src/context/document/hooks/useDocument";
 
 function DocumentFolderPage() {
   const { documentFolders, documentFiles } = useDocument();
-
-  console.log("documentFolders", documentFolders);
   const { panel, togglePanel } = usePage();
   const initialFocusRef = useRef<HTMLButtonElement>(null);
   const returnFocusRef = useRef<HTMLButtonElement>(null);
@@ -47,11 +45,6 @@ function DocumentFolderPage() {
           ],
         }}
         leftPanel={<Page.Left>{<Nav />}</Page.Left>}
-        rightPanel={
-          <Page.Right>
-            {/* <Document.Preview {...documentState} /> */}
-          </Page.Right>
-        }
         main={
           <Page.Main>
             {
@@ -68,13 +61,6 @@ function DocumentFolderPage() {
               </Document.Main>
             }
           </Page.Main>
-        }
-        footer={
-          <Page.Footer>
-            {
-              // <Document.Footer {...documentState} />
-            }
-          </Page.Footer>
         }
       />
     ),
@@ -100,7 +86,6 @@ function DocumentFolderPage() {
           ],
         }}
         leftPanel={<Page.Left>{<Nav />}</Page.Left>}
-        rightPanel={<></>}
         main={
           <Page.Main>
             {
@@ -132,13 +117,6 @@ function DocumentFolderPage() {
               </Document.Main>
             }
           </Page.Main>
-        }
-        footer={
-          <Page.Footer>
-            {
-              // <Document.Footer {...documentState} />
-            }
-          </Page.Footer>
         }
       />
     ),

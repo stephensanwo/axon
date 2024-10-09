@@ -45,7 +45,6 @@ function DocumentFilePage() {
           ],
         }}
         leftPanel={<Page.Left>{<Nav />}</Page.Left>}
-        rightPanel={<></>}
         main={
           <Page.Main>
             {
@@ -63,7 +62,6 @@ function DocumentFilePage() {
             }
           </Page.Main>
         }
-        footer={<Page.Footer></Page.Footer>}
       />
     ),
     success: (
@@ -119,16 +117,6 @@ function DocumentFilePage() {
               </Document.Main>
             )}
           </Page.Main>
-        }
-        footer={
-          <Page.Footer>
-            {
-              <Document.Footer
-                documentFolders={documentFolders}
-                documentFiles={documentFiles}
-              />
-            }
-          </Page.Footer>
         }
       />
     ),

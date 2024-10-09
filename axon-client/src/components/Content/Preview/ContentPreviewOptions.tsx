@@ -17,7 +17,6 @@ function ContentPreviewOptions({
   const {
     contentList: { previewContent },
   } = contentState;
-  console.log("previewContent", previewContent);
   const { theme } = useTheme();
   const options: SelectMenuItem[] = [
     {

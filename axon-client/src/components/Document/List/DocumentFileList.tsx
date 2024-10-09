@@ -12,8 +12,8 @@ import {
   PagePanelDirections,
 } from "src/components/Page/index.types";
 import { useDocument } from "src/context/document/hooks/useDocument";
-import { CheckCircleIcon, TrashIcon } from "@primer/octicons-react";
 import { useDocumentStore } from "src/context/document/document.store";
+import { useEffect } from "react";
 
 function DocumentFileList({
   isLoading,
@@ -36,7 +36,13 @@ function DocumentFileList({
     setSelectedDocumentFilePreview,
     selectedDocumentFiles,
     setSelectedDocumentFiles,
+    clearFileStatus,
   } = useDocumentStore();
+
+  useEffect(() => {
+    clearFileStatus();
+  }, []);
+
   const options: SelectMenuItem[] = [
     {
       id: "preview",
@@ -58,11 +64,9 @@ function DocumentFileList({
           onClick: (data: DocumentFileEntity) => {
             deleteDocumentFile.mutate([data.id]);
           },
-          trailingVisual: <CheckCircleIcon />,
           variant: "danger",
         },
       ],
-      leadingVisual: <TrashIcon />,
     },
   ];
 

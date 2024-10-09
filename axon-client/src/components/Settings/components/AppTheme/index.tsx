@@ -12,7 +12,7 @@ function AppTheme(): JSX.Element {
       }}
     >
       <ColorMode />
-      <Colors />
+      {/* <Colors /> */}
     </Box>
   );
 }

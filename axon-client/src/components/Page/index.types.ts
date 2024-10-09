@@ -1,6 +1,6 @@
 export interface PageProps {
   leftPanel: React.ReactNode;
-  rightPanel: React.ReactNode;
+  rightPanel?: React.ReactNode;
   main: React.ReactNode;
   footer?: React.ReactNode;
   header: {
