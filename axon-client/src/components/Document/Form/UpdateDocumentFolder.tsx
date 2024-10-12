@@ -24,6 +24,7 @@ function UpdateDocumentFolder() {
   const formOpts = formOptions<DocumentFolderData>({
     defaultValues: {
       name: folderData?.name || "",
+      pinned: folderData?.pinned,
     },
   });
 

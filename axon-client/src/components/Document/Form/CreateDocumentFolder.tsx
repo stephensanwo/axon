@@ -23,6 +23,7 @@ function CreateDocumentFolder() {
   const formOpts = formOptions<CreateDocumentFolderDto>({
     defaultValues: {
       name: createDocumentFolderForm?.name || "",
+      pinned: false,
     },
   });
 

@@ -10,6 +10,9 @@ import { useNavigate } from "react-router-dom";
 import { useDocument } from "src/context/document/hooks/useDocument";
 import { CheckCircleIcon } from "@primer/octicons-react";
 import { useDocumentStore } from "src/context/document/document.store";
+import { UpdateDocumentFolderDto } from "src/domain/document/document.dto";
+import { useMemo } from "react";
+import DocumentRecents from "../DocumentRecents";
 
 function DocumentFolderList({
   initialSortColumn,
@@ -21,7 +24,8 @@ function DocumentFolderList({
   emptyDocumentMessage: React.ReactNode;
 }) {
   const navigate = useNavigate();
-  const { documentFolders, deleteDocumentFolder } = useDocument();
+  const { documentFolders, deleteDocumentFolder, updateDocumentFolder } =
+    useDocument();
   const { selectedDocumentFolders, setSelectedDocumentFolders } =
     useDocumentStore();
   const options: SelectMenuItem[] = [
@@ -30,6 +34,17 @@ function DocumentFolderList({
       name: "Open Folder",
       onClick: (data: DocumentFolderEntity) => {
         navigate(`${data.name}`);
+      },
+    },
+    {
+      id: "pin",
+      name: "Pin Folder",
+      onClick: (data: DocumentFolderEntity) => {
+        const dto: UpdateDocumentFolderDto = {
+          ...data,
+          pinned: true,
+        };
+        updateDocumentFolder.mutate(dto);
       },
     },
     {
@@ -134,17 +149,28 @@ function DocumentFolderList({
         ? "data"
         : "loading";
 
+  const documentRecents = useMemo(() => {
+    return (
+      documentFolders.data?.folders.filter((folder) => folder.pinned) ?? []
+    );
+  }, [documentFolders.data?.folders]);
+
   return (
-    <Table
-      id="documents"
-      state={tableState}
-      data={documentFolders.data?.folders!!}
-      columns={columns}
-      emptyStateMessage={emptyDocumentMessage}
-      initialSortColumn={initialSortColumn}
-      initialSortDirection={initialSortDirection}
-      cellPadding={"normal"}
-    />
+    <>
+      {documentRecents.length > 0 && (
+        <DocumentRecents documentRecents={documentRecents} />
+      )}
+      <Table
+        id="documents"
+        state={tableState}
+        data={documentFolders.data?.folders!!}
+        columns={columns}
+        emptyStateMessage={emptyDocumentMessage}
+        initialSortColumn={initialSortColumn}
+        initialSortDirection={initialSortDirection}
+        cellPadding={"normal"}
+      />
+    </>
   );
 }
 

@@ -13,7 +13,7 @@ import {
 } from "react-icons/pi";
 import { BaseEntity, AttachmentRecord } from "src/db/db.types";
 
-export type DocumentFolderData = { name: string };
+export type DocumentFolderData = { name: string; pinned: boolean };
 export type DocumentFolderEntity = BaseEntity & DocumentFolderData;
 export type DocumentFileEntity = BaseEntity & AttachmentRecord;
 
