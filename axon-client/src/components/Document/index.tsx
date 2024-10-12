@@ -1,7 +1,4 @@
 import DocumentEmpty from "./DocumentEmpty";
-import DocumentFooter from "./DocumentFooter";
-import DocumentHeader from "./Header/DocumentFileHeader";
-import DocumentList from "./List/DocumentFileList";
 import { DocumentMain } from "./DocumentMain";
 import DocumentNav from "./Nav";
 import DocumentPreview from "./DocumentPreview";
@@ -13,7 +10,6 @@ import DocumentFileList from "./List/DocumentFileList";
 export const Document = {
   Main: DocumentMain,
   Nav: DocumentNav,
-  Footer: DocumentFooter,
   Preview: DocumentPreview,
   Empty: DocumentEmpty,
 };

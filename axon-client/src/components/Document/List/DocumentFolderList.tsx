@@ -7,7 +7,6 @@ import { TableState } from "../../Table/index.types";
 import RowSelector from "src/components/Table/components/RowSelector";
 import Link from "src/components/Common/Link";
 import { useNavigate } from "react-router-dom";
-import { BaseDocumentProps } from "../index.types";
 import { useDocument } from "src/context/document/hooks/useDocument";
 import { CheckCircleIcon } from "@primer/octicons-react";
 import { useDocumentStore } from "src/context/document/document.store";

@@ -4,7 +4,6 @@ import { DocumentIcon } from "./Common/DocumentIcon";
 import { formatDateToRelativeTime } from "src/common/date";
 import { convertFileSize, getContentType } from "src/common/file";
 import { Text } from "../Common/Text";
-import { useDocumentStore } from "src/context/document/document.store";
 import { UseQueryResult } from "@tanstack/react-query";
 import { DocumentFileEntity } from "src/domain/document/document.entity";
 import Skeleton from "../Skeleton";

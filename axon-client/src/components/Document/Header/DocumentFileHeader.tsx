@@ -3,7 +3,6 @@ import { Text } from "../../Common/Text";
 import SyncDocumentStatus from "../Sync/DocumentFileStatus";
 import UploadDocumentFile from "../Sync/UploadDocumentFile";
 import SelectDocumentOptions from "../Form/SelectDocumentOptions";
-import { BaseDocumentProps } from "../index.types";
 
 function DocumentFileHeader({
   title,
