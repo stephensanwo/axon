@@ -11,7 +11,7 @@ function DocumentNav({
 }: {
   level: DocumentLevels;
 } & BaseDocumentProps) {
-  const fileNavTitle = `${documentFiles.isLoading ? "..." : documentFiles.data?.folder?.name}`;
+  const fileNavTitle = `${documentFiles.isLoading ? "..." : documentFiles.data ? documentFiles.data.folder?.name : ""}`;
 
   return (
     <>
@@ -21,7 +21,7 @@ function DocumentNav({
         documentFolders={documentFolders}
       />
       <Text.ParagraphSecondary>/</Text.ParagraphSecondary>
-      {level === "file" && (
+      {level === "file" && fileNavTitle && (
         <DocumentFileNav
           navTitle={fileNavTitle}
           documentFiles={documentFiles}

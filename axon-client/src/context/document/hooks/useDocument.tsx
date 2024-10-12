@@ -10,7 +10,6 @@ import {
   DocumentEventPayload,
   DocumentFileEntity,
   DocumentFolderEntity,
-  DocumentQueryKeys,
   DocumentUploadEventPayload,
 } from "src/domain/document/document.entity";
 import { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
@@ -19,6 +18,11 @@ import { useDocumentFileRoute } from "./useDocumentRoute";
 import { useDocumentWorker } from "./useDocumentWorker";
 import { useDataQuery } from "src/hooks/api/useDataQuery";
 import { useDocumentStore } from "../document.store";
+import {
+  DocumentFolderQueryKey,
+  DocumentFolderRouteParams,
+  DocumentFoldersQueryKey,
+} from "../document.types";
 
 export function useDocument(): {
   uploadDocument: (folderId: string, folderName: string) => void;
@@ -37,16 +41,25 @@ export function useDocument(): {
   >;
   deleteDocumentFile: UseMutationResult<boolean, unknown, string[], unknown>;
   downloadDocumentFile: (file: DocumentFileEntity[]) => void;
-  documentFolders: UseQueryResult<GetDocumentFoldersResponseDto, unknown>;
+  documentFolders: UseQueryResult<
+    GetDocumentFoldersResponseDto | null,
+    unknown
+  >;
   documentFiles: UseQueryResult<GetDocumentFilesResponseDto | null, unknown>;
+  documentFile: UseQueryResult<DocumentFileEntity | null, unknown>;
 } {
   const {
     setFileStatus,
     setCreateDocumentFolderForm,
     setSelectedDocumentFolders,
+    setSelectedDocumentFiles,
   } = useDocumentStore();
   const { postMessage } = useDocumentWorker();
-  const { documentFolderName } = useDocumentFileRoute();
+  const {
+    documentFolderName,
+    documentPreviewFileId,
+    clearDocumentFileRouteSearchParams,
+  } = useDocumentFileRoute();
 
   async function uploadDocument(folderId: string, folderName: string) {
     const documentFile = await documentService.buildDocumentUploadFile();
@@ -77,7 +90,7 @@ export function useDocument(): {
   >({
     mutationFn: async (dto: CreateDocumentFolderDto) =>
       documentService.createDocumentFolder(dto),
-    optionalQueryKeysToInvalidate: [[...DocumentQueryKeys.DOCUMENT_FOLDERS]],
+    optionalQueryKeysToInvalidate: [[...DocumentFoldersQueryKey]],
     onSuccessCallback: () => {
       setCreateDocumentFolderForm(null);
     },
@@ -86,7 +99,7 @@ export function useDocument(): {
   const deleteDocumentFolder = useDataMutation<string[], boolean>({
     mutationFn: async (dto: string[]) =>
       documentService.deleteDocumentFolders(dto),
-    optionalQueryKeysToInvalidate: [[...DocumentQueryKeys.DOCUMENT_FOLDERS]],
+    optionalQueryKeysToInvalidate: [[...DocumentFoldersQueryKey]],
     onSuccessCallback: () => {
       setSelectedDocumentFolders([]);
     },
@@ -98,23 +111,29 @@ export function useDocument(): {
   >({
     mutationFn: async (dto: UpdateDocumentFolderDto) =>
       documentService.updateDocumentFolder(dto),
-    optionalQueryKeysToInvalidate: [[...DocumentQueryKeys.DOCUMENT_FOLDERS]],
+    optionalQueryKeysToInvalidate: [[...DocumentFoldersQueryKey]],
   });
 
   const deleteDocumentFile = useDataMutation<string[], boolean>({
     mutationFn: async (dto: string[]) =>
       documentService.deleteDocumentFile(dto),
     optionalQueryKeysToInvalidate: [
-      [...DocumentQueryKeys.DOCUMENT_FOLDERS, documentFolderName || "notfound"],
+      [...DocumentFolderQueryKey, documentFolderName],
     ],
+    onSuccessCallback: () => {
+      setSelectedDocumentFiles([]);
+      clearDocumentFileRouteSearchParams(
+        DocumentFolderRouteParams.DOCUMENT_FILE_PREVIEW
+      );
+    },
   });
 
   function downloadDocumentFile(file: DocumentFileEntity[]) {
     documentService.downloadDocumentFile(file);
   }
 
-  const documentFolders = useDataQuery<GetDocumentFoldersResponseDto>({
-    queryKey: [...DocumentQueryKeys.DOCUMENT_FOLDERS],
+  const documentFolders = useDataQuery<GetDocumentFoldersResponseDto | null>({
+    queryKey: [...DocumentFoldersQueryKey],
     queryFn: async () => documentService.getDocumentFolders(),
     refetchOnMount: true,
     refetchOnReconnect: true,
@@ -122,12 +141,20 @@ export function useDocument(): {
   });
 
   const documentFiles = useDataQuery<GetDocumentFilesResponseDto | null>({
+    queryKey: [...DocumentFolderQueryKey, documentFolderName],
+    queryFn: async () => documentService.getDocumentFiles(documentFolderName),
+    refetchOnMount: true,
+    refetchOnReconnect: true,
+    refetchOnWindowFocus: true,
+  });
+
+  const documentFile = useDataQuery<DocumentFileEntity | null>({
     queryKey: [
-      ...DocumentQueryKeys.DOCUMENT_FOLDERS,
-      documentFolderName || "notfound",
+      ...DocumentFolderQueryKey,
+      documentFolderName,
+      documentPreviewFileId,
     ],
-    queryFn: async () =>
-      documentService.getDocumentFiles(documentFolderName || ""),
+    queryFn: async () => documentService.getDocumentFile(documentPreviewFileId),
     refetchOnMount: true,
     refetchOnReconnect: true,
     refetchOnWindowFocus: true,
@@ -142,5 +169,6 @@ export function useDocument(): {
     downloadDocumentFile,
     documentFolders,
     documentFiles,
+    documentFile,
   };
 }

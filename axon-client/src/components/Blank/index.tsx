@@ -12,8 +12,9 @@ function Blank(props: {
     label: string;
     href: string;
   };
+  containerStyles?: React.CSSProperties;
 }) {
-  const { heading, type, description, action } = props;
+  const { heading, type, description, action, containerStyles } = props;
   const { theme } = useTheme();
   const Icon = {
     error: <AlertIcon size={48} fill={theme?.colors.danger.default} />,
@@ -27,6 +28,7 @@ function Blank(props: {
         height: "100%",
         display: "grid",
         alignItems: "center",
+        ...containerStyles,
       }}
     >
       <Blankslate>
@@ -40,15 +42,13 @@ function Blank(props: {
             marginTop: 2,
           }}
         >
-          <Text.Heading5>{heading}</Text.Heading5>
+          <Text.Heading5Secondary>{heading}</Text.Heading5Secondary>
           {description.split("\n").map((item, index) => (
-            <Text.ParagraphSecondary key={index}>
-              {item}
-            </Text.ParagraphSecondary>
+            <Text.SmallSecondary key={index}>{item}</Text.SmallSecondary>
           ))}
           {action && (
             <Blankslate.SecondaryAction href={action.href}>
-              <Text.Paragraph>{action.label}</Text.Paragraph>
+              <Text.Small>{action.label}</Text.Small>
             </Blankslate.SecondaryAction>
           )}
         </Box>

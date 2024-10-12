@@ -132,8 +132,10 @@ export type DocumentEventResponse = {
   status: DocumentEventStatus;
 };
 
-export const DocumentQueryKeys = {
-  DOCUMENT_FOLDERS: ["document", "folders"],
-  DOCUMENT_FOLDER_COUNT: ["document", "folders", "count"],
-  DOCUMENT_FILE: ["document", "file"],
-} satisfies Record<string, string[]>;
+export enum DocumentEntityKeys {
+  DOCUMENT = "document",
+  FOLDERS = "folders",
+  FOLDER = "folder",
+  FILES = "files",
+  FILE = "file",
+}

@@ -9,8 +9,8 @@ const AppIcon: React.FC<React.ImgHTMLAttributes<HTMLImageElement>> = (
     <Box
       sx={{
         backgroundColor: theme?.colors.fg.variant1,
-        width: "24px",
-        height: "24px",
+        width: "20px",
+        height: "20px",
         borderRadius: 1,
         display: "flex",
         justifyContent: "center",
@@ -21,8 +21,8 @@ const AppIcon: React.FC<React.ImgHTMLAttributes<HTMLImageElement>> = (
         src={AxonIcon}
         alt="axon-logo"
         style={{
-          width: "14px",
-          height: "14px",
+          width: "12px",
+          height: "12px",
           cursor: "pointer",
         }}
         {...props}

@@ -1,5 +1,5 @@
 import Table from "../../Table";
-import { Token, Truncate } from "@primer/react";
+import { IconButton, Token, Truncate } from "@primer/react";
 import { Column } from "@primer/react/lib-esm/DataTable";
 import { formatDateToRelativeTime } from "src/common/date";
 import Select, { SelectMenuItem } from "../../Common/Select";
@@ -7,37 +7,32 @@ import { TableState } from "../../Table/index.types";
 import { DocumentFileEntity } from "src/domain/document/document.entity";
 import { convertFileSize, getContentType } from "src/common/file";
 import RowSelector from "src/components/Table/components/RowSelector";
-import {
-  PagePanelActions,
-  PagePanelDirections,
-} from "src/components/Page/index.types";
 import { useDocument } from "src/context/document/hooks/useDocument";
 import { useDocumentStore } from "src/context/document/document.store";
 import { useEffect } from "react";
+import { useDocumentFileRoute } from "src/context/document/hooks/useDocumentRoute";
+import { DocumentFolderRouteParams } from "src/context/document/document.types";
+import { PiSidebarSimple } from "react-icons/pi";
 
 function DocumentFileList({
   isLoading,
   initialSortColumn,
   initialSortDirection,
   emptyDocumentMessage,
-  togglePanel,
 }: {
   isLoading: boolean;
   initialSortColumn: string | undefined;
   initialSortDirection: "ASC" | "DESC" | undefined;
   emptyDocumentMessage: React.ReactNode;
-  togglePanel: (
-    direction: PagePanelDirections,
-    action?: PagePanelActions
-  ) => void;
 }) {
   const { documentFiles, deleteDocumentFile } = useDocument();
+  const { selectedDocumentFiles, setSelectedDocumentFiles, clearFileStatus } =
+    useDocumentStore();
   const {
-    setSelectedDocumentFilePreview,
-    selectedDocumentFiles,
-    setSelectedDocumentFiles,
-    clearFileStatus,
-  } = useDocumentStore();
+    updateDocumentFileRouteSearchParams,
+    documentPreviewFileId,
+    clearDocumentFileRouteSearchParams,
+  } = useDocumentFileRoute();
 
   useEffect(() => {
     clearFileStatus();
@@ -48,8 +43,10 @@ function DocumentFileList({
       id: "preview",
       name: "Preview",
       onClick: (data: DocumentFileEntity) => {
-        setSelectedDocumentFilePreview(data);
-        togglePanel("right");
+        updateDocumentFileRouteSearchParams(
+          DocumentFolderRouteParams.DOCUMENT_FILE_PREVIEW,
+          data.id
+        );
       },
     },
     {
@@ -82,10 +79,10 @@ function DocumentFileList({
             onChangeCallback={(selected: boolean) => {
               console.log("selected", selected);
               if (selected) {
-                setSelectedDocumentFiles([...selectedDocumentFiles, row]);
+                setSelectedDocumentFiles([...selectedDocumentFiles, row.id]);
               } else {
                 setSelectedDocumentFiles(
-                  selectedDocumentFiles.filter((file) => file.id !== row.id)
+                  selectedDocumentFiles.filter((id) => id !== row.id)
                 );
               }
             }}
@@ -136,6 +133,35 @@ function DocumentFileList({
       sortBy: "datetime",
       renderCell: (row) => {
         return <>{formatDateToRelativeTime(row.created)}</>;
+      },
+    },
+    {
+      id: "preview",
+      header: () => null,
+      width: "64px",
+      renderCell: (row) => {
+        return (
+          <IconButton
+            variant={documentPreviewFileId === row.id ? "default" : "invisible"}
+            size="medium"
+            icon={() => <PiSidebarSimple size={18} />}
+            disabled={false}
+            aria-label="Preview"
+            sx={{
+              flexShrink: 0,
+            }}
+            onClick={() => {
+              documentPreviewFileId === row.id
+                ? clearDocumentFileRouteSearchParams(
+                    DocumentFolderRouteParams.DOCUMENT_FILE_PREVIEW
+                  )
+                : updateDocumentFileRouteSearchParams(
+                    DocumentFolderRouteParams.DOCUMENT_FILE_PREVIEW,
+                    row.id
+                  );
+            }}
+          />
+        );
       },
     },
     {

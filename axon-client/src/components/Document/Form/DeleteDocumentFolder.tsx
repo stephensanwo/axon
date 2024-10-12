@@ -1,4 +1,4 @@
-import { Box, Button, IconButton } from "@primer/react";
+import { Box, Button } from "@primer/react";
 import { PiTrashBold } from "react-icons/pi";
 import OverlayMenu from "../../Common/OverlayMenu";
 import { Text } from "../../Common/Text";
@@ -10,8 +10,7 @@ import { useMemo } from "react";
 import { useDocumentStore } from "src/context/document/document.store";
 
 function DeleteDocumentFolder() {
-  const { selectedDocumentFolders, setSelectedDocumentFolders } =
-    useDocumentStore();
+  const { selectedDocumentFolders } = useDocumentStore();
   const { deleteDocumentFolder } = useDocument();
 
   const isMultipleFoldersSelected = selectedDocumentFolders?.length!! > 1;
@@ -36,32 +35,20 @@ function DeleteDocumentFolder() {
       alignmentOffset={0}
       align="center"
       anchorComponent={
-        isMultipleFoldersSelected ? (
-          <Button
-            variant="danger"
-            leadingVisual={PiTrashBold}
-            trailingVisual={() => (
-              <Text.Heading6>{selectedDocumentFolders?.length}</Text.Heading6>
-            )}
-            disabled={false}
-            aria-label="Delete Selected Folders"
-            sx={{
-              flexShrink: 0,
-            }}
-          >
-            Delete Folders
-          </Button>
-        ) : (
-          <IconButton
-            variant="danger"
-            icon={PiTrashBold}
-            disabled={false}
-            aria-label="Delete Selected Folder"
-            sx={{
-              flexShrink: 0,
-            }}
-          />
-        )
+        <Button
+          variant="danger"
+          leadingVisual={PiTrashBold}
+          trailingVisual={() => (
+            <Text.Heading6>{selectedDocumentFolders?.length}</Text.Heading6>
+          )}
+          disabled={false}
+          aria-label="Delete Selected Folders"
+          sx={{
+            flexShrink: 0,
+          }}
+        >
+          Delete Folders
+        </Button>
       }
       heading={<Text.Heading5>Delete Selected Folder(s)</Text.Heading5>}
       onCloseCallback={() => {}}

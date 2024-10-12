@@ -1,36 +1,29 @@
 import Blank from "src/components/Blank";
-import { ComponentState } from "src/components/Common/ComponentState";
 import { Document, DocumentFile } from "src/components/Document";
 import DocumentNav from "src/components/Document/Nav";
 import AxonLoader from "src/components/Loader/Loader";
-import Page from "src/components/Page";
-import { useRef } from "react";
-import { usePage } from "src/context/page/hooks/usePage";
 import Search from "src/components/Search";
 import Settings from "src/components/Settings";
 import User from "src/components/User";
 import Icon from "src/components/Common/Icon";
-import Nav from "src/components/Nav";
 import { useDocument } from "src/context/document/hooks/useDocument";
+import Layout from "src/components/Layout";
+import { useDocumentFileRoute } from "src/context/document/hooks/useDocumentRoute";
+import { DocumentFolderRouteParams } from "src/context/document/document.types";
 
 function DocumentFilePage() {
-  const { documentFolders, documentFiles } = useDocument();
-  const { panel, togglePanel } = usePage();
-  const initialFocusRef = useRef<HTMLButtonElement>(null);
-  const returnFocusRef = useRef<HTMLButtonElement>(null);
+  const { documentFolders, documentFiles, documentFile } = useDocument();
+  const { documentPreviewFileId, clearDocumentFileRouteSearchParams } =
+    useDocumentFileRoute();
 
-  const page: ComponentState = {
-    // error and loading states are rendered within the DocumentFileList component
-    empty: <></>,
-    loading: <AxonLoader />,
-    error: (
-      <Page
-        panel={panel}
-        togglePanel={togglePanel}
-        initialFocusRef={initialFocusRef}
-        returnFocusRef={returnFocusRef}
-        ignoreClickRefs={[]}
-        header={{
+  if (documentFiles.isLoading) {
+    return <AxonLoader />;
+  }
+
+  if (documentFiles.isFetchedAfterMount && documentFiles.data === null) {
+    return (
+      <Layout
+        pageHeader={{
           breadcrumb: (
             <DocumentNav
               level="file"
@@ -44,97 +37,89 @@ function DocumentFilePage() {
             <User.Button type={"icon"} />,
           ],
         }}
-        leftPanel={<Page.Left>{<Nav />}</Page.Left>}
-        main={
-          <Page.Main>
-            {
-              <Document.Main>
-                <Blank
-                  heading="Folder not found"
-                  description={`The folder you are looking for does not exist\n or has been deleted.`}
-                  type="error"
-                  action={{
-                    label: "Go to Folders",
-                    href: "/documents",
-                  }}
-                />
-              </Document.Main>
-            }
-          </Page.Main>
-        }
-      />
-    ),
-    success: (
-      <Page
-        panel={panel}
-        togglePanel={togglePanel}
-        initialFocusRef={initialFocusRef}
-        returnFocusRef={returnFocusRef}
-        ignoreClickRefs={[]}
-        closeOnClickOutside={true}
-        header={{
-          breadcrumb: (
-            <DocumentNav
-              level="file"
-              documentFolders={documentFolders}
-              documentFiles={documentFiles}
+        middleTopPanel={
+          <Document.Main>
+            <Blank
+              heading="Folder not found"
+              description={`The folder you are looking for does not exist\n or has been deleted.`}
+              type="error"
+              containerStyles={{
+                height: "calc(100vh - 48px)",
+                overflow: "none",
+              }}
+              action={{
+                label: "Go to Folders",
+                href: "/documents",
+              }}
             />
-          ),
-          menus: [
-            <Search.Button type={"icon"} />,
-            <Settings.Button type="icon" />,
-            <User.Button type={"icon"} />,
-          ],
-        }}
-        leftPanel={<Page.Left>{<Nav />}</Page.Left>}
-        rightPanel={<Page.Right>{<Document.Preview />}</Page.Right>}
-        main={
-          <Page.Main>
-            {documentFiles.data?.files && (
-              <Document.Main>
-                <DocumentFile.Header
-                  title={`Documents / ${documentFiles.isLoading ? "..." : documentFiles.data?.folder?.name}`}
-                  subtitle="Create, delete and manage documents"
-                />
-                <DocumentFile.List
-                  isLoading={documentFiles.isLoading}
-                  initialSortColumn={
-                    documentFiles.data?.files!!.length > 0 ? "created" : ""
-                  }
-                  initialSortDirection={
-                    documentFiles.data?.files!!.length > 0 ? "DESC" : undefined
-                  }
-                  emptyDocumentMessage={
-                    <Document.Empty
-                      message={
-                        "No files in this folder \n Create a new file to get started"
-                      }
-                      icon={Icon.DocumentFile}
-                    ></Document.Empty>
-                  }
-                  togglePanel={togglePanel}
-                />
-              </Document.Main>
-            )}
-          </Page.Main>
+          </Document.Main>
         }
       />
-    ),
-  };
+    );
+  }
 
-  if (
-    !documentFiles.isFetchedAfterMount &&
-    documentFiles.data?.folder === null
-  ) {
-    return page["loading"];
-  }
-  if (
-    documentFiles.isFetchedAfterMount &&
-    documentFiles.data?.folder === null
-  ) {
-    return page["error"];
-  }
-  return page["success"];
+  return (
+    <Layout
+      pageHeader={{
+        breadcrumb: (
+          <DocumentNav
+            level="file"
+            documentFolders={documentFolders}
+            documentFiles={documentFiles}
+          />
+        ),
+        menus: [
+          <Search.Button type={"icon"} />,
+          <Settings.Button type="icon" />,
+          <User.Button type={"icon"} />,
+        ],
+      }}
+      middleTopPanel={
+        documentFiles.data?.files && (
+          <Document.Main>
+            <DocumentFile.Header
+              title={`Documents / ${documentFiles.isLoading ? "..." : documentFiles.data?.folder?.name}`}
+              subtitle="Upload, delete and manage documents"
+            />
+            <DocumentFile.List
+              isLoading={documentFiles.isLoading}
+              initialSortColumn={
+                documentFiles.data?.files!!.length > 0 ? "created" : ""
+              }
+              initialSortDirection={
+                documentFiles.data?.files!!.length > 0 ? "DESC" : undefined
+              }
+              emptyDocumentMessage={
+                <Document.Empty
+                  message={
+                    "No files in this folder \n Create a new file to get started"
+                  }
+                  icon={Icon.DocumentFile}
+                ></Document.Empty>
+              }
+            />
+          </Document.Main>
+        )
+      }
+      rightPanel={{
+        enabled: documentPreviewFileId !== "",
+        component: <Document.Preview documentFile={documentFile} />,
+        defaultSize: 35,
+        minSize: 35,
+        maxSize: 35,
+        collapsible: true,
+        onCollapse: () => {
+          clearDocumentFileRouteSearchParams(
+            DocumentFolderRouteParams.DOCUMENT_FILE_PREVIEW
+          );
+        },
+      }}
+      leftPanel={{
+        enabled: false,
+        defaultSize: 0,
+      }}
+    />
+  );
 }
 
 export default DocumentFilePage;

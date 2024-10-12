@@ -23,41 +23,42 @@ function DocumentTree({ documentFolders }: BaseDocumentProps) {
               New Folder
             </Text.SmallSecondary>
           </TreeView.Item>
-          {Object.values(documentFolders.data?.folderTree!!).map(
-            (folder, index) => (
-              <TreeView.Item key={index} id={`folders/${folder.name}`}>
-                <TreeView.LeadingVisual>
-                  <Icon.DocumentFolder />
-                </TreeView.LeadingVisual>
-                <Text.SmallSecondary>{folder.name}</Text.SmallSecondary>
-                <TreeView.SubTree>
-                  <TreeView.Item id={`folders/new-folder`}>
-                    <TreeView.LeadingVisual>
-                      <PiPlus fill={theme?.colors.primary.default} />
-                    </TreeView.LeadingVisual>
-                    <Text.SmallSecondary
-                      sx={{
-                        color: theme?.colors.primary.default,
-                      }}
-                    >
-                      New File
-                    </Text.SmallSecondary>
-                  </TreeView.Item>
-                  {Object.values(folder.files).map((file, index) => (
-                    <TreeView.Item
-                      key={index}
-                      id={`folders/${folder.name}/${file.name}`}
-                    >
+          {documentFolders.data?.folderTree &&
+            Object.values(documentFolders.data?.folderTree!!).map(
+              (folder, index) => (
+                <TreeView.Item key={index} id={`folders/${folder.name}`}>
+                  <TreeView.LeadingVisual>
+                    <Icon.DocumentFolder />
+                  </TreeView.LeadingVisual>
+                  <Text.SmallSecondary>{folder.name}</Text.SmallSecondary>
+                  <TreeView.SubTree>
+                    <TreeView.Item id={`folders/new-folder`}>
                       <TreeView.LeadingVisual>
-                        <Icon.DocumentFile />
+                        <PiPlus fill={theme?.colors.primary.default} />
                       </TreeView.LeadingVisual>
-                      <Text.SmallSecondary>{file.name}</Text.SmallSecondary>
+                      <Text.SmallSecondary
+                        sx={{
+                          color: theme?.colors.primary.default,
+                        }}
+                      >
+                        New File
+                      </Text.SmallSecondary>
                     </TreeView.Item>
-                  ))}
-                </TreeView.SubTree>
-              </TreeView.Item>
-            )
-          )}
+                    {Object.values(folder.files).map((file, index) => (
+                      <TreeView.Item
+                        key={index}
+                        id={`folders/${folder.name}/${file.name}`}
+                      >
+                        <TreeView.LeadingVisual>
+                          <Icon.DocumentFile />
+                        </TreeView.LeadingVisual>
+                        <Text.SmallSecondary>{file.name}</Text.SmallSecondary>
+                      </TreeView.Item>
+                    ))}
+                  </TreeView.SubTree>
+                </TreeView.Item>
+              )
+            )}
         </TreeView.SubTree>
       </TreeView.Item>
     </>

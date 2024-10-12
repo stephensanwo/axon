@@ -173,15 +173,12 @@ export class DocumentService {
     }
   }
 
-  public async getDocumentFolders(): Promise<GetDocumentFoldersResponseDto> {
+  public async getDocumentFolders(): Promise<GetDocumentFoldersResponseDto | null> {
     try {
       const folders = await this.getAllDocumentFolders();
 
       if (!folders) {
-        return {
-          folders: [],
-          folderTree: {},
-        };
+        return null;
       }
 
       const files = await this.getAllDocumentFiles();
@@ -220,7 +217,7 @@ export class DocumentService {
       };
     } catch (err) {
       console.error(err);
-      throw new Error(`Error fetching document folders`);
+      return null;
     }
   }
 
@@ -232,10 +229,7 @@ export class DocumentService {
         await documentRepository.findDocumentIdByName(folderName);
 
       if (!folderId) {
-        return {
-          files: [],
-          folder: null,
-        } as GetDocumentFilesResponseDto;
+        return null;
       }
 
       const folder =
@@ -250,8 +244,20 @@ export class DocumentService {
         folder: folder,
       } as GetDocumentFilesResponseDto;
     } catch (err) {
-      console.error(err);
-      throw new Error(`Error fetching document files`);
+      return null;
+    }
+  }
+
+  public async getDocumentFile(id: string): Promise<DocumentFileEntity | null> {
+    if (!id) {
+      return null;
+    }
+    try {
+      const file = await this.filesDb.getRecord<DocumentFileEntity>(id);
+      return file;
+    } catch (error) {
+      console.error("Error fetching document file", error);
+      return null;
     }
   }
 

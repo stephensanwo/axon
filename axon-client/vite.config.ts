@@ -1,6 +1,6 @@
 /// <reference types="vitest" />
 /// <reference types="vite/client" />
-
+import path from "path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 // import MillionLint from "@million/lint";
@@ -10,7 +10,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      src: "/src",
+      src: path.resolve(__dirname, "./src"),
     },
   },
   server: {

@@ -7,8 +7,6 @@ import { BaseDocumentProps } from "../index.types";
 function DocumentFolderHeader({
   title,
   subtitle,
-  documentFiles,
-  documentFolders,
 }: {
   title: string;
   subtitle: string;
