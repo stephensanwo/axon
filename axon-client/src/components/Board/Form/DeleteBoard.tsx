@@ -1,4 +1,4 @@
-import { Box, Button, IconButton } from "@primer/react";
+import { Box, Button } from "@primer/react";
 import { PiTrashBold } from "react-icons/pi";
 import OverlayMenu from "../../Common/OverlayMenu";
 import { Text } from "../../Common/Text";
@@ -6,14 +6,13 @@ import { useForm } from "@tanstack/react-form";
 import { InlineSpinner } from "../../Common/Spinner";
 import map from "lodash/map";
 import { useMemo } from "react";
-import { BaseProjectProps } from "src/components/Project/index.types";
 import { useBoard } from "src/context/board/hooks/useBoard";
+import { useBoardStore } from "src/context/board/board.store";
 
-function DeleteBoard({ projectState }: BaseProjectProps) {
+function DeleteBoard() {
   const { deleteBoard } = useBoard();
-  const {
-    projectFiles: { selectedBoards },
-  } = projectState;
+  const { selectedBoards } = useBoardStore();
+
   const isMultipleBoardsSelected = selectedBoards.length > 1;
 
   const selectedBoardIds = useMemo(
@@ -36,32 +35,20 @@ function DeleteBoard({ projectState }: BaseProjectProps) {
       alignmentOffset={0}
       align="center"
       anchorComponent={
-        isMultipleBoardsSelected ? (
-          <Button
-            variant="danger"
-            leadingVisual={PiTrashBold}
-            trailingVisual={() => (
-              <Text.Heading6>{selectedBoards.length}</Text.Heading6>
-            )}
-            disabled={false}
-            aria-label="Delete Selected Boards"
-            sx={{
-              flexShrink: 0,
-            }}
-          >
-            Delete Boards
-          </Button>
-        ) : (
-          <IconButton
-            variant="danger"
-            icon={PiTrashBold}
-            disabled={false}
-            aria-label="Delete Selected Boards"
-            sx={{
-              flexShrink: 0,
-            }}
-          />
-        )
+        <Button
+          variant="danger"
+          leadingVisual={PiTrashBold}
+          trailingVisual={() => (
+            <Text.Heading6>{selectedBoards.length}</Text.Heading6>
+          )}
+          disabled={false}
+          aria-label="Delete Selected Boards"
+          sx={{
+            flexShrink: 0,
+          }}
+        >
+          Delete Boards
+        </Button>
       }
       heading={<Text.Heading5>Delete Selected Boards(s)</Text.Heading5>}
       onCloseCallback={() => {}}

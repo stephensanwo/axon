@@ -13,14 +13,9 @@ export const DocumentFoldersQueryKey = [
   DocumentEntityKeys.FOLDERS,
 ];
 
-export const DocumentFolderQueryKey = [
-  DocumentEntityKeys.DOCUMENT,
-  DocumentEntityKeys.FOLDER,
-];
-
 export const DocumentFilesQueryKey = [
   DocumentEntityKeys.DOCUMENT,
-  DocumentEntityKeys.FILE,
+  DocumentEntityKeys.FOLDER,
 ];
 
 export type DocumentFileStatus = {

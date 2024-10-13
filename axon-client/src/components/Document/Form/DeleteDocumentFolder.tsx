@@ -12,8 +12,7 @@ import { useDocumentStore } from "src/context/document/document.store";
 function DeleteDocumentFolder() {
   const { selectedDocumentFolders } = useDocumentStore();
   const { deleteDocumentFolder } = useDocument();
-
-  const isMultipleFoldersSelected = selectedDocumentFolders?.length!! > 1;
+  const isMultipleFoldersSelected = selectedDocumentFolders.length > 1;
 
   const selectedFolderIds = useMemo(
     () => map(selectedDocumentFolders, "id"),

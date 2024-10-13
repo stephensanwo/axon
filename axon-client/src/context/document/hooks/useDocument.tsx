@@ -19,7 +19,7 @@ import { useDocumentWorker } from "./useDocumentWorker";
 import { useDataQuery } from "src/hooks/api/useDataQuery";
 import { useDocumentStore } from "../document.store";
 import {
-  DocumentFolderQueryKey,
+  DocumentFilesQueryKey,
   DocumentFolderRouteParams,
   DocumentFoldersQueryKey,
 } from "../document.types";
@@ -118,7 +118,7 @@ export function useDocument(): {
     mutationFn: async (dto: string[]) =>
       documentService.deleteDocumentFile(dto),
     optionalQueryKeysToInvalidate: [
-      [...DocumentFolderQueryKey, documentFolderName],
+      [...DocumentFilesQueryKey, documentFolderName],
     ],
     onSuccessCallback: () => {
       setSelectedDocumentFiles([]);
@@ -141,7 +141,7 @@ export function useDocument(): {
   });
 
   const documentFiles = useDataQuery<GetDocumentFilesResponseDto | null>({
-    queryKey: [...DocumentFolderQueryKey, documentFolderName],
+    queryKey: [...DocumentFilesQueryKey, documentFolderName],
     queryFn: async () => documentService.getDocumentFiles(documentFolderName),
     refetchOnMount: true,
     refetchOnReconnect: true,
@@ -150,7 +150,7 @@ export function useDocument(): {
 
   const documentFile = useDataQuery<DocumentFileEntity | null>({
     queryKey: [
-      ...DocumentFolderQueryKey,
+      ...DocumentFilesQueryKey,
       documentFolderName,
       documentPreviewFileId,
     ],

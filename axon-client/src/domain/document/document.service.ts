@@ -1,4 +1,5 @@
 import {
+  DocumentEntityKeys,
   DocumentEventPayload,
   DocumentEventResponse,
   DocumentFileEntity,
@@ -325,8 +326,8 @@ export class DocumentService {
   public async getAllDocumentFolders(): Promise<DocumentFolderEntity[]> {
     const folders = await this.foldersDb.getAllRecords<DocumentFolderEntity>({
       descending: true,
-      endkey: "folder_",
-      startkey: "folder_\ufff0",
+      endkey: `${DocumentEntityKeys.FOLDER}_`,
+      startkey: `${DocumentEntityKeys.FOLDER}_\ufff0`,
     });
     return folders;
   }
@@ -334,8 +335,8 @@ export class DocumentService {
   public async getAllDocumentFiles(): Promise<DocumentFileEntity[]> {
     const files = await this.filesDb.getAllRecords<DocumentFileEntity>({
       descending: true,
-      endkey: "file_",
-      startkey: "file_\ufff0",
+      endkey: `${DocumentEntityKeys.FILE}_`,
+      startkey: `${DocumentEntityKeys.FILE}_\ufff0`,
     });
     return files;
   }

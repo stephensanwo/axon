@@ -12,26 +12,25 @@ import ProjectRecents from "../ProjectRecents";
 import { useProject } from "src/context/project/hooks/useProject";
 import { UpdateProjectDto } from "src/domain/project/project.dto";
 import { CheckCircleIcon, TrashIcon } from "@primer/octicons-react";
+import { useProjectStore } from "src/context/project/project.store";
+import { useMemo } from "react";
 
 function ProjectFoldersList({
-  projectState,
-  projectStateDispatch,
-  isLoading,
   initialSortColumn,
   initialSortDirection,
   emptyDocumentMessage,
 }: {
-  isLoading: boolean | undefined;
   initialSortColumn: string | undefined;
   initialSortDirection: "ASC" | "DESC" | undefined;
   emptyDocumentMessage: React.ReactNode;
 } & BaseProjectProps) {
   const navigate = useNavigate();
-  const { updateProject, deleteProject } = useProject();
+  const { projectFolders, updateProject, deleteProject } = useProject();
+  const { selectedProjects, setSelectedProjects } = useProjectStore();
   const options: SelectMenuItem[] = [
     {
       id: "open",
-      name: "Open",
+      name: "Open Project",
       onClick: (data: ProjectEntity) => {
         navigate(`${data.name}`);
       },
@@ -78,15 +77,11 @@ function ProjectFoldersList({
             rowId={row.id}
             onChangeCallback={(selected: boolean) => {
               if (selected) {
-                projectStateDispatch({
-                  type: "SELECT_PROJECT",
-                  payload: row,
-                });
+                setSelectedProjects([...selectedProjects, row]);
               } else {
-                projectStateDispatch({
-                  type: "REMOVE_SELECTED_PROJECT",
-                  payload: row.id,
-                });
+                setSelectedProjects(
+                  selectedProjects.filter((project) => project.id !== row.id)
+                );
               }
             }}
           />
@@ -109,15 +104,6 @@ function ProjectFoldersList({
             truncateText={800}
           />
         );
-      },
-    },
-    {
-      header: "Description",
-      maxWidth: "600px",
-      field: "description",
-      sortBy: "alphanumeric",
-      renderCell: (row) => {
-        return <>{row.description}</>;
       },
     },
     {
@@ -155,24 +141,27 @@ function ProjectFoldersList({
   ];
 
   const tableState: TableState =
-    !isLoading && projectState.projectFolders.projects.length === 0
+    !projectFolders.isLoading && projectFolders.data?.projects.length === 0
       ? "empty"
-      : !isLoading && projectState.projectFolders.projects.length > 0
+      : !projectFolders.isLoading && projectFolders.data?.projects.length!! > 0
         ? "data"
         : "loading";
 
+  const projectRecents = useMemo(() => {
+    return (
+      projectFolders.data?.projects.filter((project) => project.pinned) ?? []
+    );
+  }, [projectFolders.data?.projects]);
+
   return (
     <>
-      {projectState.projectFolders.pinnedProjects?.length > 0 && (
-        <ProjectRecents
-          projectState={projectState}
-          projectStateDispatch={projectStateDispatch}
-        />
+      {projectRecents.length > 0 && (
+        <ProjectRecents projectRecents={projectRecents} />
       )}
       <Table
         id="documents"
         state={tableState}
-        data={projectState.projectFolders.projects}
+        data={projectFolders.data?.projects!!}
         columns={columns}
         emptyStateMessage={emptyDocumentMessage}
         initialSortColumn={initialSortColumn}

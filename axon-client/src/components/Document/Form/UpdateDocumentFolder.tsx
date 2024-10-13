@@ -19,7 +19,7 @@ function UpdateDocumentFolder() {
   const { updateDocumentFolder } = useDocument();
 
   // UpdateDocumentFolder.tsx is only rendered when a single folder is selected
-  const folderData = selectedDocumentFolders && selectedDocumentFolders[0];
+  const folderData = selectedDocumentFolders[0];
 
   const formOpts = formOptions<DocumentFolderData>({
     defaultValues: {

@@ -1,35 +1,27 @@
 import { Box, Button, IconButton } from "@primer/react";
 import { Input } from "../../Common/Input";
-import {
-  PiFolderBold,
-  PiFolderNotchPlusBold,
-  PiPlusBold,
-} from "react-icons/pi";
+import { PiFolderBold, PiPlusBold } from "react-icons/pi";
 import OverlayMenu from "../../Common/OverlayMenu";
 import { Text } from "../../Common/Text";
 import { formOptions, useForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { formValidation } from "src/common/forms/forms.validation";
 import { InlineSpinner } from "../../Common/Spinner";
-import { BaseBoardProps } from "../index.types";
 import { useBoard } from "src/context/board/hooks/useBoard";
 import { CreateBoardDto } from "src/domain/board/board.dto";
-import { useProjectContext } from "src/context/project/hooks/useProjectContext";
 import { BaseProjectProps } from "src/components/Project/index.types";
 import Icon from "src/components/Common/Icon";
+import { useBoardStore } from "src/context/board/board.store";
 
-function CreateBoard({ projectState, projectStateDispatch }: BaseProjectProps) {
+function CreateBoard({ projectFiles }: BaseProjectProps) {
   const { createBoard } = useBoard();
-  const {
-    projectFiles: { createBoardForm },
-  } = projectState;
+  const { createBoardForm, setCreateBoardForm } = useBoardStore();
 
   const formOpts = formOptions<CreateBoardDto>({
     defaultValues: {
       name: createBoardForm?.name || "",
-      description: createBoardForm?.description || "",
-      pinned: createBoardForm?.pinned || false,
-      projectId: createBoardForm?.projectId || "",
+      pinned: false,
+      projectId: projectFiles.data?.project?.id!!,
     },
   });
 
@@ -44,7 +36,7 @@ function CreateBoard({ projectState, projectStateDispatch }: BaseProjectProps) {
   return (
     <OverlayMenu
       width={300}
-      minHeight={300}
+      minHeight={150}
       side="outside-top"
       anchorOffset={10}
       alignmentOffset={0}
@@ -62,10 +54,7 @@ function CreateBoard({ projectState, projectStateDispatch }: BaseProjectProps) {
       }
       heading={<Text.Heading5>Create New Board</Text.Heading5>}
       onCloseCallback={() => {
-        projectStateDispatch({
-          type: "SET_CREATE_BOARD_FORM",
-          payload: Form.state.values,
-        });
+        setCreateBoardForm(Form.state.values);
       }}
     >
       <Box
@@ -99,32 +88,6 @@ function CreateBoard({ projectState, projectStateDispatch }: BaseProjectProps) {
                 htmlFor="create-board-name"
                 type="text"
                 caption="Max 50 characters"
-              />
-            );
-          }}
-        </Form.Field>
-        <Form.Field
-          name="description"
-          validatorAdapter={zodValidator()}
-          validators={{
-            onChangeAsyncDebounceMs: 500,
-            onChange: formValidation.fieldValidation("string", 250),
-          }}
-        >
-          {({ state, handleChange, handleBlur }) => {
-            return (
-              <Input.TextArea
-                label="Short Description"
-                placeholder="e.g. Board"
-                rows={2}
-                resize="none"
-                value={state.value || ""}
-                error={formValidation.fieldError(state.meta)}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                caption="Max 250 characters"
-                required={true}
-                htmlFor="create-board-description"
               />
             );
           }}

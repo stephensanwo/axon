@@ -6,7 +6,7 @@ import Icon from "src/components/Common/Icon";
 import { Text } from "src/components/Common/Text";
 import { PiPlus } from "react-icons/pi";
 
-function ProjectTree({ projectState }: BaseProjectProps) {
+function ProjectTree({ projectFolders }: BaseProjectProps) {
   const { theme } = useTheme();
   return (
     <>
@@ -25,7 +25,7 @@ function ProjectTree({ projectState }: BaseProjectProps) {
               New Project
             </Text.SmallSecondary>
           </TreeView.Item>
-          {Object.values(projectState.projectFolders.projectTree).map(
+          {Object.values(projectFolders.data?.projectTree!!).map(
             (project, index) => (
               <TreeView.Item key={index} id={`projects/${project.name}`}>
                 <TreeView.LeadingVisual>

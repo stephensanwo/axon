@@ -2,20 +2,13 @@ import { Box } from "@primer/react";
 import { useEffect } from "react";
 import DeleteBoard from "./DeleteBoard";
 import UpdateBoard from "./UpdateBoard";
-import { BaseProjectProps } from "src/components/Project/index.types";
+import { useBoardStore } from "src/context/board/board.store";
 
-function SelectBoardOptions({
-  projectState,
-  projectStateDispatch,
-}: BaseProjectProps) {
-  const {
-    projectFiles: { selectedBoards },
-  } = projectState;
+function SelectBoardOptions() {
+  const { selectedBoards, setSelectedBoards } = useBoardStore();
 
   useEffect(() => {
-    projectStateDispatch({
-      type: "CLEAR_SELECTED_BOARDS",
-    });
+    setSelectedBoards([]);
   }, []);
 
   return (
@@ -27,18 +20,8 @@ function SelectBoardOptions({
         gap: 2,
       }}
     >
-      {selectedBoards.length === 1 && (
-        <UpdateBoard
-          projectState={projectState}
-          projectStateDispatch={projectStateDispatch}
-        />
-      )}
-      {selectedBoards.length > 0 && (
-        <DeleteBoard
-          projectState={projectState}
-          projectStateDispatch={projectStateDispatch}
-        />
-      )}
+      {selectedBoards.length === 1 && <UpdateBoard />}
+      {selectedBoards.length > 0 && <DeleteBoard />}
     </Box>
   );
 }

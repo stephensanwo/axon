@@ -11,22 +11,22 @@ import { BoardEntity } from "src/domain/board/board.entity";
 import { useBoard } from "src/context/board/hooks/useBoard";
 import { UpdateBoardDto } from "src/domain/board/board.dto";
 import BoardRecents from "../BoardRecents";
+import { useMemo } from "react";
+import { useBoardStore } from "src/context/board/board.store";
 
 function BoardList({
-  projectState,
-  projectStateDispatch,
-  isLoading,
+  projectFiles,
   initialSortColumn,
   initialSortDirection,
   emptyDocumentMessage,
 }: {
-  isLoading: boolean | undefined;
   initialSortColumn: string | undefined;
   initialSortDirection: "ASC" | "DESC" | undefined;
   emptyDocumentMessage: React.ReactNode;
 } & BaseProjectProps) {
   const navigate = useNavigate();
   const { updateBoard } = useBoard();
+  const { selectedBoards, setSelectedBoards } = useBoardStore();
   const options: SelectMenuItem[] = [
     {
       id: "open",
@@ -59,15 +59,11 @@ function BoardList({
             rowId={row.id}
             onChangeCallback={(selected: boolean) => {
               if (selected) {
-                projectStateDispatch({
-                  type: "SELECT_BOARD",
-                  payload: row,
-                });
+                setSelectedBoards([...selectedBoards, row]);
               } else {
-                projectStateDispatch({
-                  type: "REMOVE_SELECTED_BOARD",
-                  payload: row.id,
-                });
+                setSelectedBoards(
+                  selectedBoards.filter((b) => b.id !== row.id)
+                );
               }
             }}
           />
@@ -85,20 +81,11 @@ function BoardList({
       renderCell: (row) => {
         return (
           <Link
-            to={`/projects/${projectState.projectFiles.project?.name}/${row.name}/`}
+            to={`/projects/${projectFiles.data?.project?.name}/${row.name}/`}
             text={row.name}
             truncateText={800}
           />
         );
-      },
-    },
-    {
-      header: "Description",
-      maxWidth: "600px",
-      field: "description",
-      sortBy: "alphanumeric",
-      renderCell: (row) => {
-        return <>{row.description}</>;
       },
     },
     {
@@ -136,24 +123,23 @@ function BoardList({
   ];
 
   const tableState: TableState =
-    !isLoading && projectState.projectFiles.boards!!.length === 0
+    !projectFiles.isLoading && projectFiles.data?.boards!!.length === 0
       ? "empty"
-      : !isLoading && projectState.projectFiles.boards!!.length > 0
+      : !projectFiles.isLoading && projectFiles.data?.boards?.length!! > 0
         ? "data"
         : "loading";
 
+  const boardRecents = useMemo(() => {
+    return projectFiles.data?.boards?.filter((board) => board.pinned) ?? [];
+  }, [projectFiles.data?.boards]);
+
   return (
     <>
-      {projectState.projectFiles.pinnedBoards?.length > 0 && (
-        <BoardRecents
-          projectState={projectState}
-          projectStateDispatch={projectStateDispatch}
-        />
-      )}
+      {boardRecents.length > 0 && <BoardRecents boardRecents={boardRecents} />}
       <Table
-        id="documents"
+        id="project-files"
         state={tableState}
-        data={projectState.projectFiles.boards!!}
+        data={projectFiles.data?.boards!!}
         columns={columns}
         emptyStateMessage={emptyDocumentMessage}
         initialSortColumn={initialSortColumn}
@@ -165,38 +151,3 @@ function BoardList({
 }
 
 export default BoardList;
-
-// import React from "react";
-// import Card from "src/components/Common/Card";
-// import { PiFile } from "react-icons/pi";
-// import { Box, useTheme } from "@primer/react";
-
-// function BoardList() {
-//   const { theme } = useTheme();
-//   return (
-//     <Box
-//       sx={{
-//         display: "grid",
-//         gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-//         height: "100%",
-//         // alignItems: "center",
-//         gap: 4,
-//         overflowY: "scroll",
-//         scrollbarWidth: "none",
-//       }}
-//     >
-//       {/* {Array.from({ length: 100 }).map((flow, index) => (
-//         <Card.Button
-//           key={index}
-//           icon={<PiFile size={64} color={theme?.colors.primary.default} />}
-//           title={"Project A"}
-//           subtitle={"Last updated 2 days ago"}
-//           border
-//           onClick={() => console.log("click")}
-//         ></Card.Button>
-//       ))} */}
-//     </Box>
-//   );
-// }
-
-// export default BoardList;

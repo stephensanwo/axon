@@ -6,28 +6,26 @@ import ProjectsListNav from "./ProjectFilesNav";
 
 function ProjectNav({
   level,
-  isLoading,
-  projectState,
-  projectStateDispatch,
+  projectFolders,
+  projectFiles,
 }: {
   level: ProjectLevels;
-  isLoading: boolean;
 } & BaseProjectProps) {
-  const projectNavTitle = `${isLoading ? "..." : projectState.projectFiles.project?.name}`;
+  const projectNavTitle = `${projectFiles.isLoading ? "..." : projectFiles.data ? projectFiles.data.project?.name : ""}`;
 
   return (
     <>
       <ProjectsFolderNav
         navTitle={"Projects"}
-        projectState={projectState}
-        projectStateDispatch={projectStateDispatch}
+        projectFolders={projectFolders}
+        projectFiles={projectFiles}
       />
       <Text.SmallSecondary>/</Text.SmallSecondary>
       {level === "project" && (
         <ProjectsListNav
           navTitle={projectNavTitle}
-          projectState={projectState}
-          projectStateDispatch={projectStateDispatch}
+          projectFolders={projectFolders}
+          projectFiles={projectFiles}
         />
       )}
     </>

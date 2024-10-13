@@ -1,6 +1,5 @@
 import Blank from "src/components/Blank";
 import { Document, DocumentFile } from "src/components/Document";
-import DocumentNav from "src/components/Document/Nav";
 import AxonLoader from "src/components/Loader/Loader";
 import Search from "src/components/Search";
 import Settings from "src/components/Settings";
@@ -25,7 +24,7 @@ function DocumentFilePage() {
       <Layout
         pageHeader={{
           breadcrumb: (
-            <DocumentNav
+            <Document.Nav
               level="file"
               documentFolders={documentFolders}
               documentFiles={documentFiles}
@@ -62,7 +61,7 @@ function DocumentFilePage() {
     <Layout
       pageHeader={{
         breadcrumb: (
-          <DocumentNav
+          <Document.Nav
             level="file"
             documentFolders={documentFolders}
             documentFiles={documentFiles}
@@ -113,10 +112,6 @@ function DocumentFilePage() {
             DocumentFolderRouteParams.DOCUMENT_FILE_PREVIEW
           );
         },
-      }}
-      leftPanel={{
-        enabled: false,
-        defaultSize: 0,
       }}
     />
   );

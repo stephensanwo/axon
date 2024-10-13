@@ -16,6 +16,6 @@ export type GetProjectsResponseDto = {
 };
 
 export type GetProjectResponseDto = {
-  projectId: string | null;
+  project: ProjectEntity | null;
   boards: BoardEntity[];
 };

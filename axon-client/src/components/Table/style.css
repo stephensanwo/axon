@@ -28,3 +28,6 @@ thead.TableHead {
     border-radius: 0 !important;
     color: var(--white-70) !important;
 }
+.TableOverflowWrapper {
+    scrollbar-width: none;
+}

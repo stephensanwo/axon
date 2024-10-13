@@ -7,7 +7,7 @@ import {
   GetProjectsResponseDto,
   UpdateProjectDto,
 } from "./project.dto";
-import { ProjectEntity, ProjectTreeData } from "./project.entity";
+import { ProjectEntity, ProjectEntityKeys } from "./project.entity";
 import projectRepository from "./project.repository";
 import groupBy from "lodash/groupBy";
 import mapValues from "lodash/mapValues";
@@ -52,19 +52,21 @@ export class ProjectService {
     }
   }
 
-  public async getProjects(): Promise<GetProjectsResponseDto> {
+  public async getAllProjects(): Promise<ProjectEntity[]> {
+    const projects = await this.projectsDb.getAllRecords<ProjectEntity>({
+      descending: true,
+      endkey: `${ProjectEntityKeys.PROJECT}_`,
+      startkey: `${ProjectEntityKeys.PROJECT}_\ufff0`,
+    });
+    return projects;
+  }
+
+  public async getProjects(): Promise<GetProjectsResponseDto | null> {
     try {
-      const projects = await this.projectsDb.getAllRecords<ProjectEntity>({
-        descending: true,
-        endkey: "project_",
-        startkey: "project_\ufff0",
-      });
+      const projects = await this.getAllProjects();
 
       if (!projects) {
-        return {
-          projects: [],
-          projectTree: {},
-        };
+        return null;
       }
 
       const boards = await boardService.getAllBoards();
@@ -105,32 +107,32 @@ export class ProjectService {
       };
     } catch (err) {
       console.error(err);
-      throw new Error(`Error fetching projects`);
+      return null;
     }
   }
 
   public async getProjectFiles(
     projectName: string
-  ): Promise<null | GetProjectResponseDto> {
+  ): Promise<GetProjectResponseDto | null> {
     try {
       const projectId =
         await projectRepository.findProjectIdByName(projectName);
+
       if (!projectId) {
-        return {
-          projectId: null,
-          boards: [],
-        } as GetProjectResponseDto;
+        return null;
       }
+
+      const project = await this.getProject(projectId);
 
       const boards = await boardRepository.findBoardByProjectId(projectId);
 
       return {
-        projectId,
+        project,
         boards: boards || [],
-      } as GetProjectResponseDto;
+      };
     } catch (err) {
       console.error(err);
-      throw new Error(`Error fetching project files`);
+      return null;
     }
   }
 

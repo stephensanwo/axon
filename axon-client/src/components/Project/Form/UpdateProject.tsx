@@ -8,16 +8,14 @@ import { Input } from "src/components/Common/Input";
 import { formValidation } from "src/common/forms/forms.validation";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { PiFolderBold } from "react-icons/pi";
-import { BaseProjectProps } from "../index.types";
 import { ProjectData } from "src/domain/project/project.entity";
 import { UpdateProjectDto } from "src/domain/project/project.dto";
 import { useProject } from "src/context/project/hooks/useProject";
+import { useProjectStore } from "src/context/project/project.store";
 
-function UpdateProject({ projectState }: BaseProjectProps) {
+function UpdateProject() {
+  const { selectedProjects } = useProjectStore();
   const { updateProject } = useProject();
-  const {
-    projectFolders: { selectedProjects },
-  } = projectState;
 
   // UpdateDocumentFolder.tsx is only rendered when a single folder is selected
   const projectData = selectedProjects[0];
@@ -25,7 +23,6 @@ function UpdateProject({ projectState }: BaseProjectProps) {
   const formOpts = formOptions<ProjectData>({
     defaultValues: {
       name: projectData?.name || "",
-      description: projectData?.description || "",
       pinned: projectData?.pinned,
     },
   });
@@ -93,32 +90,6 @@ function UpdateProject({ projectState }: BaseProjectProps) {
                 htmlFor="update-project-name"
                 type="text"
                 caption="Max 50 characters"
-              />
-            );
-          }}
-        </Form.Field>
-        <Form.Field
-          name="description"
-          validatorAdapter={zodValidator()}
-          validators={{
-            onChangeAsyncDebounceMs: 500,
-            onChange: formValidation.fieldValidation("string", 250),
-          }}
-        >
-          {({ state, handleChange, handleBlur }) => {
-            return (
-              <Input.TextArea
-                label="Short Description"
-                placeholder="e.g. Project Folder"
-                rows={2}
-                resize="none"
-                value={state.value || ""}
-                error={formValidation.fieldError(state.meta)}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                caption="Max 250 characters"
-                required={true}
-                htmlFor="update-project-description"
               />
             );
           }}

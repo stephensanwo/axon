@@ -7,17 +7,15 @@ import { InlineSpinner } from "../../Common/Spinner";
 import { Input } from "src/components/Common/Input";
 import { formValidation } from "src/common/forms/forms.validation";
 import { zodValidator } from "@tanstack/zod-form-adapter";
-import { BaseProjectProps } from "src/components/Project/index.types";
 import { useBoard } from "src/context/board/hooks/useBoard";
 import { BoardData } from "src/domain/board/board.entity";
 import { UpdateBoardDto } from "src/domain/board/board.dto";
 import Icon from "src/components/Common/Icon";
+import { useBoardStore } from "src/context/board/board.store";
 
-function UpdateBoard({ projectState }: BaseProjectProps) {
+function UpdateBoard() {
   const { updateBoard } = useBoard();
-  const {
-    projectFiles: { selectedBoards },
-  } = projectState;
+  const { selectedBoards } = useBoardStore();
 
   // UpdateBoard.tsx is only rendered when a single folder is selected
   const boardData = selectedBoards[0];
@@ -25,7 +23,6 @@ function UpdateBoard({ projectState }: BaseProjectProps) {
   const formOpts = formOptions<BoardData>({
     defaultValues: {
       name: boardData?.name || "",
-      description: boardData?.description || "",
       pinned: boardData?.pinned,
       projectId: boardData?.projectId,
     },
@@ -94,32 +91,6 @@ function UpdateBoard({ projectState }: BaseProjectProps) {
                 htmlFor="update-board-name"
                 type="text"
                 caption="Max 50 characters"
-              />
-            );
-          }}
-        </Form.Field>
-        <Form.Field
-          name="description"
-          validatorAdapter={zodValidator()}
-          validators={{
-            onChangeAsyncDebounceMs: 500,
-            onChange: formValidation.fieldValidation("string", 250),
-          }}
-        >
-          {({ state, handleChange, handleBlur }) => {
-            return (
-              <Input.TextArea
-                label="Short Description"
-                placeholder="e.g. Board Description"
-                rows={2}
-                resize="none"
-                value={state.value || ""}
-                error={formValidation.fieldError(state.meta)}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                caption="Max 250 characters"
-                required={true}
-                htmlFor="update-board-description"
               />
             );
           }}

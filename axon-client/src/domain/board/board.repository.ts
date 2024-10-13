@@ -1,5 +1,5 @@
 import { boardsDb } from "./board.db";
-import { BoardEntity } from "./board.entity";
+import { BoardEntity, BoardEntityKeys } from "./board.entity";
 
 interface IBoardRepository {}
 
@@ -18,7 +18,7 @@ export class BoardRepository implements IBoardRepository {
   ): Promise<PouchDB.Find.FindResponse<{}>> {
     const doc = await this.boardsDb.client.find({
       selector: {
-        doc_key: { $eq: "board" },
+        doc_key: { $eq: BoardEntityKeys.BOARD },
         name: { $regex: `^${name}` },
       },
       sort: ["name"],
@@ -29,7 +29,7 @@ export class BoardRepository implements IBoardRepository {
   async findBoardIdByName(name: string): Promise<string> {
     const doc = await this.boardsDb.client.find({
       selector: {
-        doc_key: { $eq: "board" },
+        doc_key: { $eq: BoardEntityKeys.BOARD },
         name: { $eq: name },
       },
       sort: ["name"],

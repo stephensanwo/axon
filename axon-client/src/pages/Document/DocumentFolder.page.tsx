@@ -1,6 +1,5 @@
 import Blank from "src/components/Blank";
 import { Document, DocumentFolder } from "src/components/Document";
-import DocumentNav from "src/components/Document/Nav";
 import AxonLoader from "src/components/Loader/Loader";
 import Search from "src/components/Search";
 import Settings from "src/components/Settings";
@@ -21,7 +20,7 @@ function DocumentFolderPage() {
       <Layout
         pageHeader={{
           breadcrumb: (
-            <DocumentNav
+            <Document.Nav
               level="folder"
               documentFolders={documentFolders}
               documentFiles={documentFiles}
@@ -58,7 +57,7 @@ function DocumentFolderPage() {
     <Layout
       pageHeader={{
         breadcrumb: (
-          <DocumentNav
+          <Document.Nav
             level="folder"
             documentFolders={documentFolders}
             documentFiles={documentFiles}

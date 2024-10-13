@@ -1,41 +1,29 @@
 import Blank from "src/components/Blank";
-import { ComponentState } from "src/components/Common/ComponentState";
 import AxonLoader from "src/components/Loader/Loader";
-import Page from "src/components/Page";
-import { usePage } from "src/context/page/hooks/usePage";
-import { useRef } from "react";
 import Search from "src/components/Search";
 import Settings from "src/components/Settings";
 import User from "src/components/User";
 import { Project, ProjectFolders } from "src/components/Project";
-import { useProjectContext } from "src/context/project/hooks/useProjectContext";
 import Icon from "src/components/Common/Icon";
-import Nav from "src/components/Nav";
+import { useProject } from "src/context/project/hooks/useProject";
+import Layout from "src/components/Layout";
 
 function ProjectFoldersPage() {
-  const { projectState, projectStateDispatch } = useProjectContext();
-  const { panel, togglePanel } = usePage();
-  const initialFocusRef = useRef<HTMLButtonElement>(null);
-  const returnFocusRef = useRef<HTMLButtonElement>(null);
+  const { projectFolders, projectFiles } = useProject();
 
-  const page: ComponentState = {
-    // error and loading states are rendered within the DocumentFileList component
-    empty: <></>,
-    loading: <AxonLoader />,
-    error: (
-      <Page
-        panel={panel}
-        togglePanel={togglePanel}
-        initialFocusRef={initialFocusRef}
-        returnFocusRef={returnFocusRef}
-        ignoreClickRefs={[]}
-        header={{
+  if (projectFolders.isLoading) {
+    return <AxonLoader />;
+  }
+
+  if (projectFolders.isFetchedAfterMount && projectFolders.data === null) {
+    return (
+      <Layout
+        pageHeader={{
           breadcrumb: (
             <Project.Nav
               level="projects"
-              isLoading={projectState.projectFolders.query.isLoading}
-              projectState={projectState}
-              projectStateDispatch={projectStateDispatch}
+              projectFolders={projectFolders}
+              projectFiles={projectFiles}
             />
           ),
           menus: [
@@ -44,111 +32,71 @@ function ProjectFoldersPage() {
             <User.Button type={"icon"} />,
           ],
         }}
-        leftPanel={<Page.Left>{<Nav />}</Page.Left>}
-        rightPanel={<Page.Right></Page.Right>}
-        main={
-          <Page.Main>
-            {
-              <Project.Main>
-                <Blank
-                  heading="Unable to load projects"
-                  description={`An error occurred while loading projects\n Please try again later.`}
-                  type="error"
-                  action={{
-                    label: "Try again",
-                    href: "/projects",
-                  }}
-                />
-              </Project.Main>
-            }
-          </Page.Main>
-        }
-        footer={
-          <Page.Footer>{<Project.Footer {...projectState} />}</Page.Footer>
-        }
-      />
-    ),
-    success: (
-      <Page
-        panel={panel}
-        togglePanel={togglePanel}
-        initialFocusRef={initialFocusRef}
-        returnFocusRef={returnFocusRef}
-        ignoreClickRefs={[]}
-        header={{
-          breadcrumb: (
-            <Project.Nav
-              level="projects"
-              isLoading={projectState.projectFolders.query.isLoading}
-              projectState={projectState}
-              projectStateDispatch={projectStateDispatch}
+        middleTopPanel={
+          <Project.Main>
+            <Blank
+              heading="Unable to load projects"
+              description={`An error occurred while loading projects\n Please try again later.`}
+              type="error"
+              action={{
+                label: "Try again",
+                href: "/projects",
+              }}
             />
-          ),
-          menus: [
-            <Search.Button type={"icon"} />,
-            <Settings.Button type="icon" />,
-            <User.Button type={"icon"} />,
-          ],
-        }}
-        leftPanel={<Page.Left>{<Nav />}</Page.Left>}
-        rightPanel={<></>}
-        main={
-          <Page.Main>
-            {
-              <Project.Main>
-                <ProjectFolders.Header
-                  title="Projects"
-                  subtitle="Manage projects"
-                  projectState={projectState}
-                  projectStateDispatch={projectStateDispatch}
-                />
-                <ProjectFolders.List
-                  projectState={projectState}
-                  projectStateDispatch={projectStateDispatch}
-                  isLoading={projectState.projectFolders.query.isLoading}
-                  initialSortColumn={
-                    projectState.projectFolders.projects.length > 0
-                      ? "created"
-                      : ""
-                  }
-                  initialSortDirection={
-                    projectState.projectFolders.projects.length > 0
-                      ? "DESC"
-                      : undefined
-                  }
-                  emptyDocumentMessage={
-                    <Project.Empty
-                      message={
-                        "You have no projects \n Create a new project to get started"
-                      }
-                      icon={Icon.Project}
-                    ></Project.Empty>
-                  }
-                />
-              </Project.Main>
-            }
-          </Page.Main>
-        }
-        footer={
-          <Page.Footer>{<Project.Footer {...projectState} />}</Page.Footer>
+          </Project.Main>
         }
       />
-    ),
-  };
+    );
+  }
 
-  if (
-    !projectState.projectFolders.query.isFetchedAfterMount &&
-    projectState.projectFolders.projects === null
-  ) {
-    return page["loading"];
-  }
-  if (
-    projectState.projectFolders.query.isFetchedAfterMount &&
-    projectState.projectFolders.projects === null
-  ) {
-    return page["error"];
-  }
-  return page["success"];
+  return (
+    <Layout
+      pageHeader={{
+        breadcrumb: (
+          <Project.Nav
+            level="projects"
+            projectFolders={projectFolders}
+            projectFiles={projectFiles}
+          />
+        ),
+        menus: [
+          <Search.Button type={"icon"} />,
+          <Settings.Button type="icon" />,
+          <User.Button type={"icon"} />,
+        ],
+      }}
+      middleTopPanel={
+        projectFolders.data?.projects && (
+          <Project.Main>
+            <ProjectFolders.Header
+              title="Projects"
+              subtitle="Manage document folders"
+              projectFolders={projectFolders}
+              projectFiles={projectFiles}
+            />
+            <ProjectFolders.List
+              projectFolders={projectFolders}
+              projectFiles={projectFiles}
+              initialSortColumn={
+                projectFolders.data?.projects.length!! > 0 ? "created" : ""
+              }
+              initialSortDirection={
+                projectFolders.data?.projects.length!! > 0 ? "DESC" : undefined
+              }
+              emptyDocumentMessage={
+                <Project.Empty
+                  message={
+                    "You have no projects \n Create a new project to get started"
+                  }
+                  icon={Icon.Project}
+                ></Project.Empty>
+              }
+            />
+          </Project.Main>
+        )
+      }
+    />
+  );
 }
 
 export default ProjectFoldersPage;

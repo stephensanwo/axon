@@ -4,7 +4,6 @@ import {
   NodeEntity,
   NodeTypes,
 } from "src/domain/node/node.entity";
-import { useProjectContext } from "../project/hooks/useProjectContext";
 import { uid } from "src/common/uid";
 import { useMemo } from "react";
 import { useBoardContext } from "../board/hooks/useBoardContext";

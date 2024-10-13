@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useDocumentFileRoute } from "src/context/document/hooks/useDocumentRoute";
 import { useDocumentStore } from "../document.store";
 import { useWorkerContext } from "src/context/worker";
-import { DocumentFolderQueryKey } from "../document.types";
+import { DocumentFilesQueryKey } from "../document.types";
 
 export function useDocumentWorker<T>(): {
   postMessage: (message: T) => void;
@@ -18,7 +18,7 @@ export function useDocumentWorker<T>(): {
       documentWorkerClient.current.onmessage = (event) => {
         updateFileStatus(event.data.eventId, event.data.status);
         queryClient.invalidateQueries({
-          queryKey: [...DocumentFolderQueryKey, documentFolderName],
+          queryKey: [...DocumentFilesQueryKey, documentFolderName],
         });
       };
     }

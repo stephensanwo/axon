@@ -11,23 +11,17 @@ import { formOptions, useForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { formValidation } from "src/common/forms/forms.validation";
 import { InlineSpinner } from "../../Common/Spinner";
-import { BaseProjectProps } from "../index.types";
 import { useProject } from "src/context/project/hooks/useProject";
 import { CreateProjectDto } from "src/domain/project/project.dto";
+import { useProjectStore } from "src/context/project/project.store";
 
-function CreateProject({
-  projectState,
-  projectStateDispatch,
-}: BaseProjectProps) {
-  const {
-    projectFolders: { createProjectForm },
-  } = projectState;
+function CreateProject() {
+  const { createProjectForm, setCreateProjectForm } = useProjectStore();
   const { createProject } = useProject();
 
   const formOpts = formOptions<CreateProjectDto>({
     defaultValues: {
       name: createProjectForm?.name || "",
-      description: createProjectForm?.description || "",
       pinned: false,
     },
   });
@@ -43,7 +37,7 @@ function CreateProject({
   return (
     <OverlayMenu
       width={300}
-      minHeight={300}
+      minHeight={150}
       side="outside-top"
       anchorOffset={10}
       alignmentOffset={0}
@@ -61,10 +55,7 @@ function CreateProject({
       }
       heading={<Text.Heading5>Create New Folder</Text.Heading5>}
       onCloseCallback={() => {
-        projectStateDispatch({
-          type: "SET_CREATE_PROJECT_FORM",
-          payload: Form.state.values,
-        });
+        setCreateProjectForm(Form.state.values);
       }}
     >
       <Box
@@ -98,32 +89,6 @@ function CreateProject({
                 htmlFor="create-project-name"
                 type="text"
                 caption="Max 50 characters"
-              />
-            );
-          }}
-        </Form.Field>
-        <Form.Field
-          name="description"
-          validatorAdapter={zodValidator()}
-          validators={{
-            onChangeAsyncDebounceMs: 500,
-            onChange: formValidation.fieldValidation("string", 250),
-          }}
-        >
-          {({ state, handleChange, handleBlur }) => {
-            return (
-              <Input.TextArea
-                label="Short Description"
-                placeholder="e.g. Project Folder"
-                rows={2}
-                resize="none"
-                value={state.value || ""}
-                error={formValidation.fieldError(state.meta)}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                caption="Max 250 characters"
-                required={true}
-                htmlFor="create-project-description"
               />
             );
           }}

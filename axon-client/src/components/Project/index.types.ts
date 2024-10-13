@@ -1,6 +1,10 @@
-import { ProjectAction, ProjectState } from "src/context/project/project.types";
+import { UseQueryResult } from "@tanstack/react-query";
+import {
+  GetProjectResponseDto,
+  GetProjectsResponseDto,
+} from "src/domain/project/project.dto";
 
 export type BaseProjectProps = {
-  projectState: ProjectState;
-  projectStateDispatch: React.Dispatch<ProjectAction>;
+  projectFolders: UseQueryResult<GetProjectsResponseDto | null, unknown>;
+  projectFiles: UseQueryResult<GetProjectResponseDto | null, unknown>;
 };

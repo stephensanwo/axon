@@ -1,4 +1,4 @@
-import { Box, Button, IconButton } from "@primer/react";
+import { Box, Button } from "@primer/react";
 import { PiTrashBold } from "react-icons/pi";
 import OverlayMenu from "../../Common/OverlayMenu";
 import { Text } from "../../Common/Text";
@@ -6,14 +6,12 @@ import { useForm } from "@tanstack/react-form";
 import { InlineSpinner } from "../../Common/Spinner";
 import map from "lodash/map";
 import { useMemo } from "react";
-import { BaseProjectProps } from "../index.types";
 import { useProject } from "src/context/project/hooks/useProject";
+import { useProjectStore } from "src/context/project/project.store";
 
-function DeleteProject({ projectState }: BaseProjectProps) {
+function DeleteProject() {
   const { deleteProject } = useProject();
-  const {
-    projectFolders: { selectedProjects },
-  } = projectState;
+  const { selectedProjects } = useProjectStore();
   const isMultipleProjectsSelected = selectedProjects.length > 1;
 
   const selectedProjectIds = useMemo(
@@ -36,32 +34,20 @@ function DeleteProject({ projectState }: BaseProjectProps) {
       alignmentOffset={0}
       align="center"
       anchorComponent={
-        isMultipleProjectsSelected ? (
-          <Button
-            variant="danger"
-            leadingVisual={PiTrashBold}
-            trailingVisual={() => (
-              <Text.Heading6>{selectedProjects.length}</Text.Heading6>
-            )}
-            disabled={false}
-            aria-label="Delete Selected Projects"
-            sx={{
-              flexShrink: 0,
-            }}
-          >
-            Delete Projects
-          </Button>
-        ) : (
-          <IconButton
-            variant="danger"
-            icon={PiTrashBold}
-            disabled={false}
-            aria-label="Delete Selected Project"
-            sx={{
-              flexShrink: 0,
-            }}
-          />
-        )
+        <Button
+          variant="danger"
+          leadingVisual={PiTrashBold}
+          trailingVisual={() => (
+            <Text.Heading6>{selectedProjects.length}</Text.Heading6>
+          )}
+          disabled={false}
+          aria-label="Delete Selected Projects"
+          sx={{
+            flexShrink: 0,
+          }}
+        >
+          Delete Projects
+        </Button>
       }
       heading={<Text.Heading5>Delete Selected Project(s)</Text.Heading5>}
       onCloseCallback={() => {}}

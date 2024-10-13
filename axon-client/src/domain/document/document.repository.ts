@@ -1,5 +1,5 @@
 import { foldersDb, filesDb } from "./document.db";
-import { DocumentFileEntity } from "./document.entity";
+import { DocumentEntityKeys, DocumentFileEntity } from "./document.entity";
 
 interface IDocumentRepository {}
 
@@ -19,7 +19,7 @@ export class DocumentRepository implements IDocumentRepository {
   ): Promise<PouchDB.Find.FindResponse<{}>> {
     const doc = await this.foldersDb.client.find({
       selector: {
-        doc_key: { $eq: "folder" },
+        doc_key: { $eq: DocumentEntityKeys.FOLDER },
         name: { $regex: `^${name}` },
       },
       sort: ["name"],
@@ -30,7 +30,7 @@ export class DocumentRepository implements IDocumentRepository {
   async findDocumentIdByName(name: string): Promise<string> {
     const doc = await this.foldersDb.client.find({
       selector: {
-        doc_key: { $eq: "folder" },
+        doc_key: { $eq: DocumentEntityKeys.FOLDER },
         name: { $eq: name },
       },
       sort: ["name"],
@@ -44,7 +44,7 @@ export class DocumentRepository implements IDocumentRepository {
   ): Promise<PouchDB.Core.ExistingDocument<DocumentFileEntity>[]> {
     const doc = await this.filesDb.client.find({
       selector: {
-        doc_key: { $eq: "file" },
+        doc_key: { $eq: DocumentEntityKeys.FILE },
         parentId: { $eq: folderId },
       },
     });

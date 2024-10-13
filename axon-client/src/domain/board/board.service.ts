@@ -8,6 +8,7 @@ import {
 } from "./board.dto";
 import {
   BoardEntity,
+  BoardEntityKeys,
   BoardSettings,
   BoardSettingsEntity,
 } from "./board.entity";
@@ -53,25 +54,31 @@ export class BoardService {
     }
   }
 
-  public async getBoard(boardName: string): Promise<GetBoardResponseDto> {
+  public async getBoard(
+    boardName: string
+  ): Promise<GetBoardResponseDto | null> {
     try {
       const boardId = await boardRepository.findBoardIdByName(boardName);
 
       if (!boardId) {
-        return {
-          board: null,
-          project: null,
-        };
+        return null;
       }
+
       const board = await this.boardsDb.getRecord<BoardEntity>(boardId);
+
       const project = await projectService.getProject(board.projectId);
+
+      if (!project) {
+        return null;
+      }
 
       return {
         board,
         project,
       };
     } catch (error) {
-      throw new Error(`Board not found - ${error}`);
+      console.error(error);
+      return null;
     }
   }
 
@@ -79,8 +86,8 @@ export class BoardService {
     try {
       const boards = await this.boardsDb.getAllRecords<BoardEntity>({
         descending: true,
-        endkey: "board_",
-        startkey: "board_\ufff0",
+        endkey: `${BoardEntityKeys.BOARD}_`,
+        startkey: `${BoardEntityKeys.BOARD}_\ufff0`,
       });
       return boards;
     } catch (err) {
@@ -92,8 +99,8 @@ export class BoardService {
   public async createDefaultBoardSettings() {
     const existingSettings =
       await this.boardDefaultsDb.getAllRecords<BoardSettingsEntity>({
-        startkey: "board-defaults_",
-        endkey: "board-defaults_\uffff",
+        startkey: `${BoardEntityKeys.BOARD_DEFAULTS}_`,
+        endkey: `${BoardEntityKeys.BOARD_DEFAULTS}_\uffff`,
       });
 
     if (existingSettings.length > 0) {
@@ -114,8 +121,8 @@ export class BoardService {
     try {
       const boardSettings =
         await this.boardDefaultsDb.getAllRecords<BoardSettingsEntity>({
-          startkey: "board-defaults_",
-          endkey: "board-defaults_\uffff",
+          startkey: `${BoardEntityKeys.BOARD_DEFAULTS}_`,
+          endkey: `${BoardEntityKeys.BOARD_DEFAULTS}_\uffff`,
         });
       return boardSettings[0];
     } catch (err) {

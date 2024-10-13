@@ -7,8 +7,8 @@ import SelectProjectOptions from "../Form/SelectProjectOptions";
 function ProjectFoldersHeader({
   title,
   subtitle,
-  projectState,
-  projectStateDispatch,
+  projectFiles,
+  projectFolders,
 }: {
   title: string;
   subtitle: string;
@@ -43,14 +43,8 @@ function ProjectFoldersHeader({
             gap: 2,
           }}
         >
-          <SelectProjectOptions
-            projectState={projectState}
-            projectStateDispatch={projectStateDispatch}
-          />
-          <CreateProject
-            projectState={projectState}
-            projectStateDispatch={projectStateDispatch}
-          />
+          <SelectProjectOptions />
+          <CreateProject />
         </Box>
       </Box>
     </>

@@ -7,8 +7,8 @@ import SelectBoardOptions from "src/components/Board/Form/SelectBoardOptions";
 function ProjectFilesHeader({
   title,
   subtitle,
-  projectState,
-  projectStateDispatch,
+  projectFiles,
+  projectFolders,
 }: {
   title: string;
   subtitle: string;
@@ -44,13 +44,10 @@ function ProjectFilesHeader({
             gap: 2,
           }}
         >
-          <SelectBoardOptions
-            projectState={projectState}
-            projectStateDispatch={projectStateDispatch}
-          />
+          <SelectBoardOptions />
           <CreateBoard
-            projectState={projectState}
-            projectStateDispatch={projectStateDispatch}
+            projectFolders={projectFolders}
+            projectFiles={projectFiles}
           />
         </Box>
       </Box>

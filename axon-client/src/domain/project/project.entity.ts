@@ -2,7 +2,6 @@ import { BaseEntity } from "src/db/db.types";
 
 export type ProjectData = {
   name: string;
-  description: string;
   pinned: boolean;
 };
 export type ProjectEntity = BaseEntity & ProjectData;
@@ -16,7 +15,9 @@ export type ProjectTreeEntity = Record<
   }
 >;
 
-export const ProjectQueryKeys = {
-  PROJECTS: ["projects"],
-  PROJECT_FILES: ["projects", "files"],
-} satisfies Record<string, string[]>;
+export enum ProjectEntityKeys {
+  PROJECTS = "projects",
+  PROJECT = "project",
+  FOLDERS = "folders",
+  FOLDER = "folder",
+}

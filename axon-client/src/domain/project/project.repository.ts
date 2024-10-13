@@ -1,4 +1,5 @@
 import { projectsDb } from "./project.db";
+import { ProjectEntityKeys } from "./project.entity";
 
 interface IProjectRepository {}
 
@@ -16,7 +17,7 @@ export class ProjectRepository implements IProjectRepository {
   ): Promise<PouchDB.Find.FindResponse<{}>> {
     const doc = await this.projectsDb.client.find({
       selector: {
-        doc_key: { $eq: "project" },
+        doc_key: { $eq: ProjectEntityKeys.PROJECT },
         name: { $regex: `^${name}` },
       },
       sort: ["name"],
@@ -27,7 +28,7 @@ export class ProjectRepository implements IProjectRepository {
   async findProjectIdByName(name: string): Promise<string> {
     const doc = await this.projectsDb.client.find({
       selector: {
-        doc_key: { $eq: "project" },
+        doc_key: { $eq: ProjectEntityKeys.PROJECT },
         name: { $eq: name },
       },
       sort: ["name"],

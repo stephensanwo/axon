@@ -1,6 +1,7 @@
 import { Truncate, useTheme } from "@primer/react";
 import Select, { SelectMenuItem } from "src/components/Common/Select";
 import { BaseProjectProps } from "../index.types";
+import { useNavigate } from "react-router-dom";
 
 function ProjectFoldersNav({
   navTitle,
@@ -8,16 +9,29 @@ function ProjectFoldersNav({
   navTitle: string;
 } & BaseProjectProps) {
   const { theme } = useTheme();
+  const navigate = useNavigate();
   const options: SelectMenuItem[] = [
     {
-      id: "notes",
-      name: "Notes",
-      onClick: (item: string) => {},
+      id: "projects",
+      name: "Go to Projects",
+      onClick: () => {
+        navigate("/projects");
+      },
     },
+
     {
       id: "documents",
       name: "Documents",
-      onClick: (item: string) => {},
+      onClick: () => {
+        navigate("/documents");
+      },
+    },
+    {
+      id: "content",
+      name: "Content",
+      onClick: () => {
+        navigate("/content");
+      },
     },
   ];
 

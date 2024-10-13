@@ -1,12 +1,16 @@
-import { BaseProjectProps } from "./index.types";
 import { Box, useTheme } from "@primer/react";
 import { PiAppWindowFill } from "react-icons/pi";
 import { formatDateToRelativeTime } from "src/common/date";
 import Card from "src/components/Common/Card";
 import { useProject } from "src/context/project/hooks/useProject";
 import { UpdateProjectDto } from "src/domain/project/project.dto";
+import { ProjectEntity } from "src/domain/project/project.entity";
 
-function ProjectRecents({ projectState }: BaseProjectProps) {
+function ProjectRecents({
+  projectRecents,
+}: {
+  projectRecents: ProjectEntity[];
+}) {
   const { theme } = useTheme();
   const { updateProject } = useProject();
   return (
@@ -21,7 +25,7 @@ function ProjectRecents({ projectState }: BaseProjectProps) {
         mb: 4,
       }}
     >
-      {projectState?.projectFolders?.pinnedProjects?.map((project, index) => (
+      {projectRecents.map((project, index) => (
         <Card.Button
           key={index}
           icon={

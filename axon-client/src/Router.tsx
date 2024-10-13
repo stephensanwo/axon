@@ -17,13 +17,11 @@ import DocumentFolderPage from "./pages/Document/DocumentFolder.page";
 import DocumentFilePage from "./pages/Document/DocumentFile.page";
 import { DocumentFolderRouteParams } from "./context/document/document.types";
 import { SettingsProvider } from "./context/settings";
-import { ProjectProvider } from "./context/project";
 import { ProjectRouteParams } from "./context/project/project.types";
 import ProjectFoldersPage from "./pages/Project/ProjectFolders.page";
 import ProjectFilesPage from "./pages/Project/ProjectFiles.page";
 import { BoardRouteParams } from "./context/board/board.types";
 import BoardPage from "./pages/Board/board.page";
-import { BoardProvider } from "./context/board";
 import { ContentProvider } from "./context/content";
 import ContentListPage from "./pages/Content/contentList.page";
 import ContentPage from "./pages/Content/content.page";
@@ -51,26 +49,22 @@ const Router = () => {
           <AuthProvider>
             <SettingsProvider>
               <AppProvider>
-                <ProjectProvider>
-                  <BoardProvider>
-                    <ContentProvider>
-                      <FolderProvider>
-                        {/* React flow provider is added at the note level */}
-                        <ReactFlowProvider>
-                          <NoteProvider>
-                            <NodeProvider>
-                              <EdgeProvider>
-                                <WorkerProvider>
-                                  <Layout />
-                                </WorkerProvider>
-                              </EdgeProvider>
-                            </NodeProvider>
-                          </NoteProvider>
-                        </ReactFlowProvider>
-                      </FolderProvider>
-                    </ContentProvider>
-                  </BoardProvider>
-                </ProjectProvider>
+                <ContentProvider>
+                  <FolderProvider>
+                    {/* React flow provider is added at the note level */}
+                    <ReactFlowProvider>
+                      <NoteProvider>
+                        <NodeProvider>
+                          <EdgeProvider>
+                            <WorkerProvider>
+                              <Layout />
+                            </WorkerProvider>
+                          </EdgeProvider>
+                        </NodeProvider>
+                      </NoteProvider>
+                    </ReactFlowProvider>
+                  </FolderProvider>
+                </ContentProvider>
               </AppProvider>
             </SettingsProvider>
           </AuthProvider>

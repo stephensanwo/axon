@@ -2,11 +2,11 @@ import { Box, useTheme } from "@primer/react";
 import { PiAppWindowFill } from "react-icons/pi";
 import { formatDateToRelativeTime } from "src/common/date";
 import Card from "src/components/Common/Card";
-import { BaseProjectProps } from "src/components/Project/index.types";
 import { useBoard } from "src/context/board/hooks/useBoard";
 import { UpdateBoardDto } from "src/domain/board/board.dto";
+import { BoardEntity } from "src/domain/board/board.entity";
 
-function BoardRecents({ projectState }: BaseProjectProps) {
+function BoardRecents({ boardRecents }: { boardRecents: BoardEntity[] }) {
   const { theme } = useTheme();
   const { updateBoard } = useBoard();
   return (
@@ -21,7 +21,7 @@ function BoardRecents({ projectState }: BaseProjectProps) {
         mb: 4,
       }}
     >
-      {projectState?.projectFiles?.pinnedBoards?.map((board, index) => (
+      {boardRecents.map((board, index) => (
         <Card.Button
           key={index}
           icon={

@@ -3,7 +3,6 @@ import { DefaultNodeTypes, NodeContentTypes } from "src/types/node";
 
 export type BoardData = {
   name: string;
-  description: string;
   pinned: boolean;
   projectId: string;
 };
@@ -18,6 +17,7 @@ export type BoardSettings = {
 
 export type BoardSettingsEntity = BaseEntity & BoardSettings;
 
-export const BoardQueryKeys = {
-  BOARD: ["board"],
-} satisfies Record<string, string[]>;
+export enum BoardEntityKeys {
+  BOARD = "board",
+  BOARD_DEFAULTS = "board-defaults",
+}

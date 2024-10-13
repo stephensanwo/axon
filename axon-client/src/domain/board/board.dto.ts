@@ -7,6 +7,6 @@ export type CreateBoardDto = BoardData;
 export type UpdateBoardDto = BaseEntity & BoardData;
 
 export type GetBoardResponseDto = {
-  board: BoardEntity | null;
-  project: ProjectEntity | null;
+  board: BoardEntity;
+  project: ProjectEntity;
 };

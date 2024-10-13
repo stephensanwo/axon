@@ -2,15 +2,15 @@ import { Divider } from "../Common/Divider";
 import ProjectTree from "../Project/ProjectTree";
 import { ActionList, TreeView, useTheme } from "@primer/react";
 import DocumentTree from "../Document/DocumentTree";
-import { useProjectContext } from "src/context/project/hooks/useProjectContext";
 import Settings from "../Settings";
 import User from "../User";
 import Search from "../Search";
 import { useDocument } from "src/context/document/hooks/useDocument";
+import { useProject } from "src/context/project/hooks/useProject";
 
 function Nav() {
-  const { projectState, projectStateDispatch } = useProjectContext();
   const { documentFolders, documentFiles } = useDocument();
+  const { projectFolders, projectFiles } = useProject();
   return (
     <nav
       style={{
@@ -33,8 +33,8 @@ function Nav() {
       <Divider margin={36} />
       <TreeView aria-label="Navigation Tree">
         <ProjectTree
-          projectState={projectState}
-          projectStateDispatch={projectStateDispatch}
+          projectFolders={projectFolders}
+          projectFiles={projectFiles}
         />
         <DocumentTree
           documentFolders={documentFolders}
