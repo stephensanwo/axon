@@ -13,40 +13,41 @@ import startCase from "lodash/startCase";
 import { Token } from "@primer/react";
 import { UpdateContentDto } from "src/domain/content/content.dto";
 import ContentRecents from "../ContentRecents";
-import { PagePanelDirections } from "src/components/Page/index.types";
 import { CheckCircleIcon, TrashIcon } from "@primer/octicons-react";
 import ContentPreviewButton from "../Preview/ContentPreviewButton";
+import { useMemo } from "react";
+import { useContentStore } from "src/context/content/content.store";
+import { useContentRoute } from "src/context/content/hooks/useContentRoute";
+import { ContentRouteParams } from "src/context/content/index.types";
 
 function ContentList({
-  contentState,
-  contentStateDispatch,
-  contentId,
-  setContentId,
-  isLoading,
   initialSortColumn,
   initialSortDirection,
   emptyDocumentMessage,
-  togglePanel,
+  contentList,
 }: {
-  isLoading: boolean | undefined;
   initialSortColumn: string | undefined;
   initialSortDirection: "ASC" | "DESC" | undefined;
   emptyDocumentMessage: React.ReactNode;
-  togglePanel: (direction: PagePanelDirections) => void;
 } & BaseContentProps) {
   const { updateContent, deleteContent } = useContent();
+  const { setSelectedContent, selectedContent } = useContentStore();
+  const {
+    updateContentRouteSearchParams,
+    clearContentRouteSearchParams,
+    contentPreviewId,
+  } = useContentRoute();
   const navigate = useNavigate();
-
-  function updateSearchParams(id: string) {
-    setContentId(id);
-  }
 
   const options: SelectMenuItem[] = [
     {
       id: "preview",
       name: "Preview",
       onClick: (data: ContentEntity) => {
-        togglePanel("right");
+        updateContentRouteSearchParams(
+          ContentRouteParams.CONTENT_PREVIEW,
+          data.id
+        );
       },
     },
     {
@@ -98,15 +99,11 @@ function ContentList({
             rowId={row.id}
             onChangeCallback={(selected: boolean) => {
               if (selected) {
-                contentStateDispatch({
-                  type: "SELECT_CONTENT",
-                  payload: row,
-                });
+                setSelectedContent([...selectedContent, row]);
               } else {
-                contentStateDispatch({
-                  type: "REMOVE_SELECTED_CONTENT",
-                  payload: row.id,
-                });
+                setSelectedContent(
+                  selectedContent.filter((content) => content.id !== row.id)
+                );
               }
             }}
           />
@@ -163,15 +160,18 @@ function ContentList({
       renderCell: (row) => {
         return (
           <ContentPreviewButton
+            variant={contentPreviewId === row.id ? "default" : "invisible"}
             type="icon"
-            togglePanel={togglePanel}
             disableTooltip
             onClick={() =>
-              // contentStateDispatch({
-              //   type: "PREVIEW_CONTENT",
-              //   payload: row.id,
-              // })
-              updateSearchParams(row.id)
+              contentPreviewId === row.id
+                ? clearContentRouteSearchParams(
+                    ContentRouteParams.CONTENT_PREVIEW
+                  )
+                : updateContentRouteSearchParams(
+                    ContentRouteParams.CONTENT_PREVIEW,
+                    row.id
+                  )
             }
           />
         );
@@ -196,26 +196,25 @@ function ContentList({
   ];
 
   const tableState: TableState =
-    !isLoading && contentState.contentList.data!!.length === 0
+    !contentList.isLoading && contentList.data!!.length === 0
       ? "empty"
-      : !isLoading && contentState.contentList.data!!.length > 0
+      : !contentList.isLoading && contentList.data!!.length > 0
         ? "data"
         : "loading";
 
+  const contentRecents = useMemo(() => {
+    return contentList.data?.filter((content) => content.pinned) ?? [];
+  }, [contentList.data]);
+
   return (
     <>
-      {contentState.contentList.pinnedContent.length > 0 && (
-        <ContentRecents
-          contentState={contentState}
-          contentStateDispatch={contentStateDispatch}
-          setContentId={setContentId}
-          contentId={contentId}
-        />
+      {contentRecents.length > 0 && (
+        <ContentRecents contentRecents={contentRecents} />
       )}
       <Table
         id="content"
         state={tableState}
-        data={contentState.contentList.data!!}
+        data={contentList.data!!}
         columns={columns}
         emptyStateMessage={emptyDocumentMessage}
         initialSortColumn={initialSortColumn}

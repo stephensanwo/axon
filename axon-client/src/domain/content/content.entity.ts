@@ -72,6 +72,7 @@ export type ContentType = Record<ContentTypeKeys, ContentTypeData>;
 
 export type ContentTypeEntity = BaseEntity & ContentType;
 
-export const ContentQueryKeys = {
-  CONTENT: ["content"],
-} satisfies Record<string, string[]>;
+export const ContentEntityKeys = {
+  CONTENT: "content",
+  CONTENT_TYPES: "content-types",
+};

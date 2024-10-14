@@ -1,14 +1,14 @@
 import { TableData } from "src/domain/content/content.entity";
 import { useContent } from "../../../context/content/hooks/useContent";
-import { BaseContentProps, ContentRouterProps } from "../index.types";
+import { BaseContentProps } from "../index.types";
 import { UpdateContentDto } from "src/domain/content/content.dto";
 import DataSheet from "src/components/DataSheet";
 import { ColumnDef } from "@tanstack/react-table";
 import { TableCellTypes } from "src/components/DataSheet/index.types";
 
-function TableContent({ contentState }: BaseContentProps & ContentRouterProps) {
+function TableContent({ content }: BaseContentProps) {
   const { updateContent } = useContent();
-  const table = contentState.content.data?.content as TableData;
+  const table = content.data?.content as TableData;
   console.log("table", table);
   // function updateTable(value: TableData) {
   //   const dto: UpdateContentDto = {
@@ -34,7 +34,7 @@ function TableContent({ contentState }: BaseContentProps & ContentRouterProps) {
     columnOrder: string[]
   ) {
     const dto: UpdateContentDto = {
-      ...contentState.content.data!!,
+      ...content.data!!,
       content: {
         ...table,
         data: {
@@ -50,7 +50,7 @@ function TableContent({ contentState }: BaseContentProps & ContentRouterProps) {
   }
 
   function refetchTable() {
-    contentState.content.contentQuery.refetch();
+    content.refetch();
   }
 
   const columns: ColumnDef<any>[] = Object.values(table.data.header).map(
@@ -73,8 +73,8 @@ function TableContent({ contentState }: BaseContentProps & ContentRouterProps) {
     // />
     <DataSheet
       view={"edit"}
-      title={contentState.content.data?.name!!}
-      updated={contentState.content.data?.updated!!}
+      title={content.data?.name!!}
+      updated={content.data?.updated!!}
       updateTableCallback={updateTableCallback}
       table={table}
       refetchTable={refetchTable}

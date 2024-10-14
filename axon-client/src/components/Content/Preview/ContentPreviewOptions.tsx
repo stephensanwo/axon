@@ -4,19 +4,14 @@ import { Box, ButtonGroup, Truncate, useTheme } from "@primer/react";
 import { ContentEntity } from "src/domain/content/content.entity";
 import Close from "src/components/Common/Close";
 import { PagePanelDirections } from "src/components/Page/index.types";
+import { useContent } from "src/context/content/hooks/useContent";
+import { useContentRoute } from "src/context/content/hooks/useContentRoute";
+import { ContentRouteParams } from "src/context/content/index.types";
 
-function ContentPreviewOptions({
-  contentState,
-  togglePanel,
-}: BaseContentProps & {
-  togglePanel: (
-    direction: PagePanelDirections,
-    action?: "open" | "close"
-  ) => void;
-}) {
-  const {
-    contentList: { previewContent },
-  } = contentState;
+function ContentPreviewOptions() {
+  const { content } = useContent();
+  const { clearContentRouteSearchParams } = useContentRoute();
+
   const { theme } = useTheme();
   const options: SelectMenuItem[] = [
     {
@@ -40,7 +35,7 @@ function ContentPreviewOptions({
     >
       <Close
         onClick={() => {
-          togglePanel("right", "close");
+          clearContentRouteSearchParams(ContentRouteParams.CONTENT_PREVIEW);
         }}
         sx={{
           flexShrink: 0,
@@ -51,16 +46,16 @@ function ContentPreviewOptions({
           <Truncate
             maxWidth={200}
             expandable={false}
-            title={previewContent?.name || "..."}
+            title={content?.data?.name || "..."}
             sx={{
               color: theme?.colors.text.gray,
             }}
           >
-            {previewContent?.name || "..."}
+            {content?.data?.name || "..."}
           </Truncate>
         }
         menuItems={options}
-        data={previewContent!!}
+        data={content?.data!!}
         anchor="text"
         width={"small"}
       />

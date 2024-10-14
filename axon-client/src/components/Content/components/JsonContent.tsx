@@ -5,18 +5,15 @@ import { useContent } from "src/context/content/hooks/useContent";
 import { Code } from "src/components/Code";
 import { Json } from "src/components/Json";
 
-function JsonContent({ contentState, contentStateDispatch }: BaseContentProps) {
+function JsonContent({ content }: BaseContentProps) {
   const { updateContent } = useContent();
-  const json =
-    contentState.content.data?.content.content_type === "json"
-      ? contentState.content.data?.content
-      : ({} as JsonData);
+  const json = content.data?.content as JsonData;
 
   function updateJson(value: JsonData) {
     const dto: UpdateContentDto = {
-      ...contentState.content.data!!,
+      ...content.data!!,
       content: {
-        ...contentState.content.data?.content,
+        ...content.data?.content,
         ...value,
       },
     };
@@ -24,7 +21,7 @@ function JsonContent({ contentState, contentStateDispatch }: BaseContentProps) {
   }
 
   function refetchJson() {
-    contentState.content.contentQuery.refetch();
+    content.refetch();
   }
 
   return (
@@ -32,7 +29,7 @@ function JsonContent({ contentState, contentStateDispatch }: BaseContentProps) {
       json={json}
       updateJson={updateJson}
       refetchJson={refetchJson}
-      updated={contentState.content.data?.updated!!}
+      updated={content.data?.updated!!}
       showHeader
     />
   );

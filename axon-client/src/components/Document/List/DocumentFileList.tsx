@@ -15,12 +15,10 @@ import { DocumentFolderRouteParams } from "src/context/document/document.types";
 import { PiSidebarSimple } from "react-icons/pi";
 
 function DocumentFileList({
-  isLoading,
   initialSortColumn,
   initialSortDirection,
   emptyDocumentMessage,
 }: {
-  isLoading: boolean;
   initialSortColumn: string | undefined;
   initialSortDirection: "ASC" | "DESC" | undefined;
   emptyDocumentMessage: React.ReactNode;
@@ -183,9 +181,9 @@ function DocumentFileList({
   ];
 
   const tableState: TableState =
-    !isLoading && documentFiles.data?.files.length!! === 0
+    !documentFiles.isLoading && documentFiles.data?.files.length!! === 0
       ? "empty"
-      : !isLoading && documentFiles.data?.files.length!! > 0
+      : !documentFiles.isLoading && documentFiles.data?.files.length!! > 0
         ? "data"
         : "loading";
 

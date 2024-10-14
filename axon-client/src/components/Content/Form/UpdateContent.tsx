@@ -8,16 +8,14 @@ import { Input } from "src/components/Common/Input";
 import { formValidation } from "src/common/forms/forms.validation";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import Icon from "src/components/Common/Icon";
-import { BaseContentProps } from "../index.types";
 import { ContentData } from "src/domain/content/content.entity";
 import { UpdateContentDto } from "src/domain/content/content.dto";
 import { useContent } from "src/context/content/hooks/useContent";
+import { useContentStore } from "src/context/content/content.store";
 
-function UpdateContent({ contentState }: BaseContentProps) {
+function UpdateContent() {
   const { updateContent } = useContent();
-  const {
-    contentList: { selectedContent },
-  } = contentState;
+  const { selectedContent } = useContentStore();
 
   // UpdateContent.tsx is only rendered when a single content is selected
   const contentData = selectedContent[0];

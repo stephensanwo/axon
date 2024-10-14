@@ -1,22 +1,10 @@
 import { Box } from "@primer/react";
-import { useEffect } from "react";
-import { BaseContentProps } from "../index.types";
 import UpdateContent from "./UpdateContent";
 import DeleteContent from "./DeleteContent";
+import { useContentStore } from "src/context/content/content.store";
 
-function SelectContentOptions({
-  contentState,
-  contentStateDispatch,
-}: BaseContentProps) {
-  const {
-    contentList: { selectedContent },
-  } = contentState;
-
-  useEffect(() => {
-    contentStateDispatch({
-      type: "CLEAR_SELECTED_CONTENT",
-    });
-  }, []);
+function SelectContentOptions() {
+  const { selectedContent } = useContentStore();
 
   return (
     <Box
@@ -27,18 +15,8 @@ function SelectContentOptions({
         gap: 2,
       }}
     >
-      {selectedContent.length === 1 && (
-        <UpdateContent
-          contentState={contentState}
-          contentStateDispatch={contentStateDispatch}
-        />
-      )}
-      {selectedContent.length > 0 && (
-        <DeleteContent
-          contentState={contentState}
-          contentStateDispatch={contentStateDispatch}
-        />
-      )}
+      {selectedContent.length === 1 && <UpdateContent />}
+      {selectedContent.length > 0 && <DeleteContent />}
     </Box>
   );
 }

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Truncate, useTheme } from "@primer/react";
 import Select, { SelectMenuItem } from "src/components/Common/Select";
 import { BaseContentProps } from "../index.types";
@@ -8,16 +9,28 @@ function ContentListNav({
   navTitle: string;
 } & BaseContentProps) {
   const { theme } = useTheme();
+  const navigate = useNavigate();
   const options: SelectMenuItem[] = [
+    {
+      id: "content",
+      name: "Go to Content",
+      onClick: () => {
+        navigate("/content");
+      },
+    },
     {
       id: "projects",
       name: "Projects",
-      onClick: (item: string) => {},
+      onClick: () => {
+        navigate("/projects");
+      },
     },
     {
       id: "documents",
       name: "Documents",
-      onClick: (item: string) => {},
+      onClick: () => {
+        navigate("/documents");
+      },
     },
   ];
 

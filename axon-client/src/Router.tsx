@@ -22,7 +22,6 @@ import ProjectFoldersPage from "./pages/Project/ProjectFolders.page";
 import ProjectFilesPage from "./pages/Project/ProjectFiles.page";
 import { BoardRouteParams } from "./context/board/board.types";
 import BoardPage from "./pages/Board/board.page";
-import { ContentProvider } from "./context/content";
 import ContentListPage from "./pages/Content/contentList.page";
 import ContentPage from "./pages/Content/content.page";
 import { ContentRouteParams } from "./context/content/index.types";
@@ -49,22 +48,20 @@ const Router = () => {
           <AuthProvider>
             <SettingsProvider>
               <AppProvider>
-                <ContentProvider>
-                  <FolderProvider>
-                    {/* React flow provider is added at the note level */}
-                    <ReactFlowProvider>
-                      <NoteProvider>
-                        <NodeProvider>
-                          <EdgeProvider>
-                            <WorkerProvider>
-                              <Layout />
-                            </WorkerProvider>
-                          </EdgeProvider>
-                        </NodeProvider>
-                      </NoteProvider>
-                    </ReactFlowProvider>
-                  </FolderProvider>
-                </ContentProvider>
+                <FolderProvider>
+                  {/* React flow provider is added at the note level */}
+                  <ReactFlowProvider>
+                    <NoteProvider>
+                      <NodeProvider>
+                        <EdgeProvider>
+                          <WorkerProvider>
+                            <Layout />
+                          </WorkerProvider>
+                        </EdgeProvider>
+                      </NodeProvider>
+                    </NoteProvider>
+                  </ReactFlowProvider>
+                </FolderProvider>
               </AppProvider>
             </SettingsProvider>
           </AuthProvider>

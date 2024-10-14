@@ -8,18 +8,7 @@ function ProjectFilesNav({
   navTitle: string;
 } & BaseProjectProps) {
   const { theme } = useTheme();
-  const options: SelectMenuItem[] = [
-    {
-      id: "notes",
-      name: "Notes",
-      onClick: (item: string) => {},
-    },
-    {
-      id: "documents",
-      name: "Documents",
-      onClick: (item: string) => {},
-    },
-  ];
+  const options: SelectMenuItem[] = [];
 
   return (
     <Select

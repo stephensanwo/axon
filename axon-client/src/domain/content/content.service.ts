@@ -3,6 +3,7 @@ import { defaultContentTypes } from "./content.defaults";
 import { CreateContentDto, UpdateContentDto } from "./content.dto";
 import {
   ContentEntity,
+  ContentEntityKeys,
   ContentType,
   ContentTypeEntity,
   ContentTypeEnums,
@@ -83,8 +84,8 @@ export class ContentService {
     try {
       const content = await this.contentDb.getAllRecords<ContentEntity>({
         descending: true,
-        endkey: "content_",
-        startkey: "content_\ufff0",
+        endkey: `${ContentEntityKeys.CONTENT}_`,
+        startkey: `${ContentEntityKeys.CONTENT}_\ufff0`,
       });
       return content;
     } catch (err) {
@@ -97,8 +98,8 @@ export class ContentService {
     try {
       const content = await this.contentDb.getAllRecords<ContentEntity>({
         descending: true,
-        endkey: `content_${boardId}_\ufff0`,
-        startkey: `content_${boardId}_`,
+        endkey: `${ContentEntityKeys.CONTENT}_${boardId}_\ufff0`,
+        startkey: `${ContentEntityKeys.CONTENT}_${boardId}_`,
       });
       return content;
     } catch (err) {
@@ -110,8 +111,8 @@ export class ContentService {
   public async createDefaultContentTypes(): Promise<boolean> {
     const existingContentTypes =
       await this.contentTypeDb.getAllRecords<ContentTypeEntity>({
-        startkey: "content-types_",
-        endkey: "content-types_\uffff",
+        startkey: `${ContentEntityKeys.CONTENT_TYPES}_`,
+        endkey: `${ContentEntityKeys.CONTENT_TYPES}_\uffff`,
       });
     if (existingContentTypes.length > 0) {
       return true;
@@ -127,8 +128,8 @@ export class ContentService {
   public async getContentTypes(): Promise<ContentType> {
     try {
       const contentTypes = await this.contentTypeDb.getAllRecords<ContentType>({
-        startkey: "content-types_",
-        endkey: "content-types_\uffff",
+        startkey: `${ContentEntityKeys.CONTENT_TYPES}_`,
+        endkey: `${ContentEntityKeys.CONTENT_TYPES}_\uffff`,
       });
 
       const contentTypeKeys = Object.values(ContentTypeEnums);

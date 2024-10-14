@@ -81,7 +81,6 @@ function DocumentFilePage() {
               subtitle="Upload, delete and manage documents"
             />
             <DocumentFile.List
-              isLoading={documentFiles.isLoading}
               initialSortColumn={
                 documentFiles.data?.files!!.length > 0 ? "created" : ""
               }

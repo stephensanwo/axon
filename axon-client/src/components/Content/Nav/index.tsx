@@ -5,28 +5,26 @@ import ContentViewNav from "./ContentViewNav";
 
 function ContentNav({
   level,
-  isLoading,
-  contentState,
-  contentStateDispatch,
+  contentList,
+  content,
 }: {
   level: "list" | "content";
-  isLoading: boolean;
 } & BaseContentProps) {
-  const contentNavTitle = `${isLoading ? "..." : contentState.content.data?.name}`;
+  const contentNavTitle = `${content.isLoading ? "..." : content.data?.name}`;
 
   return (
     <>
       <ContentListNav
         navTitle={"Content"}
-        contentState={contentState}
-        contentStateDispatch={contentStateDispatch}
+        contentList={contentList}
+        content={content}
       />
       <Text.SmallSecondary>/</Text.SmallSecondary>
       {level === "content" && (
         <ContentViewNav
           navTitle={contentNavTitle}
-          contentState={contentState}
-          contentStateDispatch={contentStateDispatch}
+          contentList={contentList}
+          content={content}
         />
       )}
     </>

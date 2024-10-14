@@ -4,18 +4,15 @@ import { UpdateContentDto } from "src/domain/content/content.dto";
 import { useContent } from "src/context/content/hooks/useContent";
 import { Code } from "src/components/Code";
 
-function CodeContent({ contentState, contentStateDispatch }: BaseContentProps) {
+function CodeContent({ content }: BaseContentProps) {
   const { updateContent } = useContent();
-  const code =
-    contentState.content.data?.content.content_type === "code"
-      ? contentState.content.data?.content
-      : ({} as CodeData);
+  const code = content.data?.content as CodeData;
 
   function updateCode(value: CodeData) {
     const dto: UpdateContentDto = {
-      ...contentState.content.data!!,
+      ...content.data!!,
       content: {
-        ...contentState.content.data?.content,
+        ...content.data?.content,
         ...value,
       },
     };
@@ -23,7 +20,7 @@ function CodeContent({ contentState, contentStateDispatch }: BaseContentProps) {
   }
 
   function refetchCode() {
-    contentState.content.contentQuery.refetch();
+    content.refetch();
   }
 
   return (
@@ -31,7 +28,7 @@ function CodeContent({ contentState, contentStateDispatch }: BaseContentProps) {
       code={code}
       updateCode={updateCode}
       refetchCode={refetchCode}
-      updated={contentState.content.data?.updated!!}
+      updated={content.data?.updated!!}
       showHeader
     />
   );

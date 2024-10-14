@@ -1,12 +1,16 @@
 import { Box, useTheme } from "@primer/react";
 import { formatDateToRelativeTime } from "src/common/date";
 import Card from "src/components/Common/Card";
-import { BaseContentProps } from "./index.types";
 import { useContent } from "src/context/content/hooks/useContent";
 import { UpdateContentDto } from "src/domain/content/content.dto";
 import { BsFillFileEarmarkTextFill } from "react-icons/bs";
+import { ContentEntity } from "src/domain/content/content.entity";
 
-function ContentRecents({ contentState }: BaseContentProps) {
+function ContentRecents({
+  contentRecents,
+}: {
+  contentRecents: ContentEntity[];
+}) {
   const { theme } = useTheme();
   const { updateContent } = useContent();
   return (
@@ -21,7 +25,7 @@ function ContentRecents({ contentState }: BaseContentProps) {
         mb: 4,
       }}
     >
-      {contentState?.contentList.pinnedContent?.map((content, index) => (
+      {contentRecents?.map((content, index) => (
         <Card.Button
           key={index}
           icon={

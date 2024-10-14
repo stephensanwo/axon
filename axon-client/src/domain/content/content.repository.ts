@@ -1,4 +1,5 @@
 import { contentDb } from "./content.db";
+import { ContentEntityKeys } from "./content.entity";
 
 interface IContentRepository {}
 
@@ -17,7 +18,7 @@ export class ContentRepository implements IContentRepository {
   ): Promise<PouchDB.Find.FindResponse<{}>> {
     const doc = await this.contentDb.client.find({
       selector: {
-        doc_key: { $eq: "content" },
+        doc_key: { $eq: ContentEntityKeys.CONTENT },
         name: { $regex: `^${name}` },
       },
       sort: ["name"],
@@ -28,7 +29,7 @@ export class ContentRepository implements IContentRepository {
   async findContentIdByName(name: string): Promise<string> {
     const doc = await this.contentDb.client.find({
       selector: {
-        doc_key: { $eq: "content" },
+        doc_key: { $eq: ContentEntityKeys.CONTENT },
         name: { $eq: name },
       },
       sort: ["name"],

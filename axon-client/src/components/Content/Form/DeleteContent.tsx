@@ -6,14 +6,13 @@ import { useForm } from "@tanstack/react-form";
 import { InlineSpinner } from "../../Common/Spinner";
 import map from "lodash/map";
 import { useMemo } from "react";
-import { BaseContentProps } from "../index.types";
 import { useContent } from "src/context/content/hooks/useContent";
+import { useContentStore } from "src/context/content/content.store";
 
-function DeleteContent({ contentState }: BaseContentProps) {
+function DeleteContent() {
   const { deleteContent } = useContent();
-  const {
-    contentList: { selectedContent },
-  } = contentState;
+  const { selectedContent } = useContentStore();
+
   const isMultipleContentSelected = selectedContent.length > 1;
 
   const selectedContentIds = useMemo(
@@ -36,32 +35,20 @@ function DeleteContent({ contentState }: BaseContentProps) {
       alignmentOffset={0}
       align="center"
       anchorComponent={
-        isMultipleContentSelected ? (
-          <Button
-            variant="danger"
-            leadingVisual={PiTrashBold}
-            trailingVisual={() => (
-              <Text.Heading6>{selectedContent.length}</Text.Heading6>
-            )}
-            disabled={false}
-            aria-label="Delete Selected Content"
-            sx={{
-              flexShrink: 0,
-            }}
-          >
-            Delete Content
-          </Button>
-        ) : (
-          <IconButton
-            variant="danger"
-            icon={PiTrashBold}
-            disabled={false}
-            aria-label="Delete Selected Content"
-            sx={{
-              flexShrink: 0,
-            }}
-          />
-        )
+        <Button
+          variant="danger"
+          leadingVisual={PiTrashBold}
+          trailingVisual={() => (
+            <Text.Heading6>{selectedContent.length}</Text.Heading6>
+          )}
+          disabled={false}
+          aria-label="Delete Selected Content"
+          sx={{
+            flexShrink: 0,
+          }}
+        >
+          Delete Content
+        </Button>
       }
       heading={<Text.Heading5>Delete Selected Content(s)</Text.Heading5>}
       onCloseCallback={() => {}}

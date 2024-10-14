@@ -7,8 +7,6 @@ import SelectContentOptions from "../Form/SelectContentOptions";
 function ContentListHeader({
   title,
   subtitle,
-  contentState,
-  contentStateDispatch,
 }: {
   title: string;
   subtitle: string;
@@ -43,10 +41,7 @@ function ContentListHeader({
             gap: 2,
           }}
         >
-          <SelectContentOptions
-            contentState={contentState}
-            contentStateDispatch={contentStateDispatch}
-          />
+          <SelectContentOptions />
           <CreateContent />
         </Box>
       </Box>

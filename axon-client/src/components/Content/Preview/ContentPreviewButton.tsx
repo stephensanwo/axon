@@ -1,21 +1,18 @@
 import { ActionList, Button, IconButton, Tooltip } from "@primer/react";
+import { VariantType } from "@primer/react/lib/Button/types";
 import { flushSync } from "react-dom";
 import { PiSidebarSimple } from "react-icons/pi";
 import Close from "src/components/Common/Close";
 import { Text } from "src/components/Common/Text";
-import { PagePanelDirections } from "src/components/Page/index.types";
 
 function ContentPreviewButton({
   type,
-  togglePanel,
   disableTooltip,
   onClick,
+  variant = "invisible",
 }: {
   type: "icon" | "button" | "action-list" | "close-icon";
-  togglePanel: (
-    direction: PagePanelDirections,
-    action?: "open" | "close"
-  ) => void;
+  variant?: VariantType;
   disableTooltip?: boolean;
   onClick?: () => void;
 }) {
@@ -23,7 +20,7 @@ function ContentPreviewButton({
     <>
       {type === "button" ? (
         <Button
-          variant="invisible"
+          variant={variant}
           leadingVisual={() => <PiSidebarSimple size={18} />}
           disabled={false}
           aria-label="Preview"
@@ -34,7 +31,6 @@ function ContentPreviewButton({
             flushSync(() => {
               onClick && onClick();
             });
-            togglePanel("right");
           }}
         >
           <Text.Heading5Secondary>Preview</Text.Heading5Secondary>
@@ -45,7 +41,6 @@ function ContentPreviewButton({
             flushSync(() => {
               onClick && onClick();
             });
-            togglePanel("right", "close");
           }}
         />
       ) : type === "action-list" ? (
@@ -59,7 +54,6 @@ function ContentPreviewButton({
             flushSync(() => {
               onClick && onClick();
             });
-            togglePanel("right");
           }}
         >
           <ActionList.LeadingVisual>
@@ -69,11 +63,11 @@ function ContentPreviewButton({
         </ActionList.Item>
       ) : disableTooltip ? (
         <ContentPreviewButtonIcon
+          variant={variant}
           onClick={() => {
             flushSync(() => {
               onClick && onClick();
             });
-            togglePanel("right");
           }}
         />
       ) : (
@@ -83,7 +77,6 @@ function ContentPreviewButton({
               flushSync(() => {
                 onClick && onClick();
               });
-              togglePanel("right");
             }}
           />
         </Tooltip>
@@ -92,10 +85,16 @@ function ContentPreviewButton({
   );
 }
 
-function ContentPreviewButtonIcon({ onClick }: { onClick?: () => void }) {
+function ContentPreviewButtonIcon({
+  onClick,
+  variant = "invisible",
+}: {
+  onClick?: () => void;
+  variant?: VariantType;
+}) {
   return (
     <IconButton
-      variant="invisible"
+      variant={variant}
       size="medium"
       icon={() => <PiSidebarSimple size={18} />}
       disabled={false}
