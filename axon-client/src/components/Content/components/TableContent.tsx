@@ -1,25 +1,14 @@
 import { TableData } from "src/domain/content/content.entity";
 import { useContent } from "../../../context/content/hooks/useContent";
 import { BaseContentProps } from "../index.types";
-import { UpdateContentDto } from "src/domain/content/content.dto";
+import { UpdateContentTypeDataDto } from "src/domain/content/content.dto";
 import DataSheet from "src/components/DataSheet";
-import { ColumnDef } from "@tanstack/react-table";
 import { TableCellTypes } from "src/components/DataSheet/index.types";
 
-function TableContent({ content }: BaseContentProps) {
-  const { updateContent } = useContent();
-  const table = content.data?.content as TableData;
+function TableContent({ contentTypeData }: BaseContentProps) {
+  const { updateContentTypeData } = useContent();
+  const table = contentTypeData.data?.content as TableData;
   console.log("table", table);
-  // function updateTable(value: TableData) {
-  //   const dto: UpdateContentDto = {
-  //     ...contentState.content.data!!,
-  //     content: {
-  //       ...contentState.content.data?.content,
-  //       ...value,
-  //     },
-  //   };
-  //   updateContent.mutate(dto);
-  // }
 
   function updateTableCallback(
     header: Record<
@@ -33,48 +22,36 @@ function TableContent({ content }: BaseContentProps) {
     data: Record<string, string>[],
     columnOrder: string[]
   ) {
-    const dto: UpdateContentDto = {
-      ...content.data!!,
+    const newTableData: TableData = {
+      ...table,
+      data: {
+        ...table.data,
+        data,
+        columnOrder,
+        header,
+      },
+    };
+
+    const dto: UpdateContentTypeDataDto = {
+      ...contentTypeData.data!!,
       content: {
-        ...table,
-        data: {
-          ...table.data,
-          header,
-          data,
-          columnOrder,
-        },
+        ...contentTypeData.data?.content,
+        ...newTableData,
       },
     };
     console.log("dto", dto);
-    // updateContent.mutate(dto);
+    updateContentTypeData.mutate(dto);
   }
 
   function refetchTable() {
-    content.refetch();
+    contentTypeData.refetch();
   }
 
-  const columns: ColumnDef<any>[] = Object.values(table.data.header).map(
-    (header) => ({
-      accessorKey: header.key,
-      header: header.value,
-      cell: TableCellTypes[header.type],
-      minSize: 250,
-    })
-  );
-
   return (
-    // <DataTable
-    //   data={table}
-    //   updateTable={updateTable}
-    //   refetchTable={refetchTable}
-    //   title={contentState.content.data?.name!!}
-    //   updated={contentState.content.data?.updated!!}
-    //   showHeader
-    // />
     <DataSheet
       view={"edit"}
-      title={content.data?.name!!}
-      updated={content.data?.updated!!}
+      title={contentTypeData.data?.parent_content.name!!}
+      updated={contentTypeData.data?.parent_content.updated!!}
       updateTableCallback={updateTableCallback}
       table={table}
       refetchTable={refetchTable}

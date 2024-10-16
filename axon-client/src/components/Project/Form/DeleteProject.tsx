@@ -11,7 +11,7 @@ import { useProjectStore } from "src/context/project/project.store";
 
 function DeleteProject() {
   const { deleteProject } = useProject();
-  const { selectedProjects } = useProjectStore();
+  const { selectedProjects, setSelectedProjects } = useProjectStore();
   const isMultipleProjectsSelected = selectedProjects.length > 1;
 
   const selectedProjectIds = useMemo(
@@ -22,6 +22,7 @@ function DeleteProject() {
   const Form = useForm({
     onSubmit: async ({ value }) => {
       deleteProject.mutate(selectedProjectIds);
+      setSelectedProjects([]);
     },
   });
 

@@ -5,7 +5,7 @@ import Select, { SelectMenuItem } from "../../Common/Select";
 import { TableState } from "../../Table/index.types";
 import RowSelector from "src/components/Table/components/RowSelector";
 import Link from "src/components/Common/Link";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { BaseContentProps } from "../index.types";
 import { useContent } from "src/context/content/hooks/useContent";
 import { ContentEntity } from "src/domain/content/content.entity";
@@ -35,7 +35,7 @@ function ContentList({
   const {
     updateContentRouteSearchParams,
     clearContentRouteSearchParams,
-    contentPreviewId,
+    contentId,
   } = useContentRoute();
   const navigate = useNavigate();
 
@@ -120,11 +120,7 @@ function ContentList({
       sortBy: "alphanumeric",
       renderCell: (row) => {
         return (
-          <Link
-            to={`/content/${row.name}`}
-            text={row.name}
-            truncateText={800}
-          />
+          <Link to={`/content/${row.id}`} text={row.name} truncateText={800} />
         );
       },
     },
@@ -160,11 +156,11 @@ function ContentList({
       renderCell: (row) => {
         return (
           <ContentPreviewButton
-            variant={contentPreviewId === row.id ? "default" : "invisible"}
+            variant={contentId === row.id ? "default" : "invisible"}
             type="icon"
             disableTooltip
             onClick={() =>
-              contentPreviewId === row.id
+              contentId === row.id
                 ? clearContentRouteSearchParams(
                     ContentRouteParams.CONTENT_PREVIEW
                   )

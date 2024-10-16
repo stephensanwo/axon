@@ -2,16 +2,20 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { ContentRouteParams } from "../index.types";
 
 export function useContentRoute(): {
-  contentName: string;
-  contentPreviewId: string;
+  contentId: string;
   updateContentRouteSearchParams: (key: string, value: string) => void;
   clearContentRouteSearchParams: (key: string) => void;
 } {
-  const { contentName } = useParams();
+  const { contentIdFromPath } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const contentPreviewId =
+  const contentIdFromSearchParams =
     searchParams.get(ContentRouteParams.CONTENT_PREVIEW) ?? "";
+
+  const contentId = contentIdFromPath ?? contentIdFromSearchParams;
+
+  console.log("contentIdFromPath", contentIdFromPath);
+  console.log("contentIdFromSearchParams", contentIdFromSearchParams);
 
   function updateContentRouteSearchParams(key: string, value: string) {
     const updatedParams = new URLSearchParams(searchParams);
@@ -26,8 +30,7 @@ export function useContentRoute(): {
   }
 
   return {
-    contentName: contentName ?? "",
-    contentPreviewId,
+    contentId: contentId ?? "",
     updateContentRouteSearchParams,
     clearContentRouteSearchParams,
   };

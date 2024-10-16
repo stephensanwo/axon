@@ -1,4 +1,4 @@
-import { PiFloppyDisk } from "react-icons/pi";
+import { PiCode, PiFloppyDisk } from "react-icons/pi";
 import Editor from "src/components/CodeEditor/Editor";
 import { BaseCodeProps, EditStateProps } from "./index.types";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -82,7 +82,7 @@ export function CodeInput({
               handleEditorChange(e, handleChange)
             }
             overrideOptions={{
-              lineNumbers: "off",
+              lineNumbers: "on",
               renderLineHighlight: "none",
               autoIndent: "full",
               wrappingIndent: "none",
@@ -218,7 +218,7 @@ export function CodeHeader({
         <Text.SmallSecondary>
           Auto Save • {isTyping.typing ? "Editing" : "Saved"}
         </Text.SmallSecondary>
-        {/* 
+
         <Form.Field name="language">
           {({ state }) => {
             return (
@@ -227,9 +227,8 @@ export function CodeHeader({
                 leadingVisual={PiCode}
                 disabled={false}
                 onClick={() => {
-                  flushSync(() => {
-                  });
-               }}
+                  flushSync(() => {});
+                }}
                 size="small"
                 sx={{
                   height: "24px",
@@ -240,7 +239,7 @@ export function CodeHeader({
               </Button>
             );
           }}
-        </Form.Field> */}
+        </Form.Field>
         <Form.Subscribe
           selector={({ isSubmitting }) => [isSubmitting]}
           children={([isSubmitting]) => (

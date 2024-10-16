@@ -10,7 +10,8 @@ import { useMemo } from "react";
 import { useDocumentStore } from "src/context/document/document.store";
 
 function DeleteDocumentFolder() {
-  const { selectedDocumentFolders } = useDocumentStore();
+  const { selectedDocumentFolders, setSelectedDocumentFolders } =
+    useDocumentStore();
   const { deleteDocumentFolder } = useDocument();
   const isMultipleFoldersSelected = selectedDocumentFolders.length > 1;
 
@@ -22,6 +23,7 @@ function DeleteDocumentFolder() {
   const Form = useForm({
     onSubmit: async ({ value }) => {
       deleteDocumentFolder.mutate(selectedFolderIds);
+      setSelectedDocumentFolders([]);
     },
   });
 

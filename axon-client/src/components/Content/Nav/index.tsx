@@ -6,25 +6,25 @@ import ContentViewNav from "./ContentViewNav";
 function ContentNav({
   level,
   contentList,
-  content,
+  contentTypeData,
 }: {
   level: "list" | "content";
 } & BaseContentProps) {
-  const contentNavTitle = `${content.isLoading ? "..." : content.data?.name}`;
+  const contentNavTitle = `${contentTypeData.isLoading ? "..." : contentTypeData.data?.parent_content.name}`;
 
   return (
     <>
       <ContentListNav
         navTitle={"Content"}
         contentList={contentList}
-        content={content}
+        contentTypeData={contentTypeData}
       />
       <Text.SmallSecondary>/</Text.SmallSecondary>
       {level === "content" && (
         <ContentViewNav
           navTitle={contentNavTitle}
           contentList={contentList}
-          content={content}
+          contentTypeData={contentTypeData}
         />
       )}
     </>

@@ -8,20 +8,18 @@ import Search from "src/components/Search";
 import Settings from "src/components/Settings";
 import User from "src/components/User";
 import { Project } from "src/components/Project";
-import { useProjectContext } from "src/context/project/hooks/useProjectContext";
 import Board from "src/components/Board";
 import { Text } from "src/components/Common/Text";
-import { useBoardContext } from "src/context/board/hooks/useBoardContext";
 import NodePanel from "src/components/Note/NodePanel";
 import Nav from "src/components/Nav";
 import FlowTree from "src/components/FlowTree";
 
 function BoardPage() {
-  const { projectState, projectStateDispatch } = useProjectContext();
-  const { boardState, boardStateDispatch } = useBoardContext();
-  const { panel, togglePanel } = usePage();
-  const initialFocusRef = useRef<HTMLButtonElement>(null);
-  const returnFocusRef = useRef<HTMLButtonElement>(null);
+  // const { projectState, projectStateDispatch } = useProjectContext();
+  // const { boardState, boardStateDispatch } = useBoardContext();
+  // const { panel, togglePanel } = usePage();
+  // const initialFocusRef = useRef<HTMLButtonElement>(null);
+  // const returnFocusRef = useRef<HTMLButtonElement>(null);
 
   const page: ComponentState = {
     // error and loading states are rendered within the DocumentFileList component

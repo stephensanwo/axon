@@ -105,7 +105,7 @@ function UpdateContent() {
               onClick={Form.handleSubmit}
               size="medium"
             >
-              {isSubmitting ? "Creating Content..." : "Create Content"}
+              {isSubmitting ? "Updating Content..." : "Update Content"}
             </Button>
           )}
         />

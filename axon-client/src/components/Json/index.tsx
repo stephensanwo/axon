@@ -217,29 +217,6 @@ export function JsonHeader({
         <Text.SmallSecondary>
           Auto Save • {isTyping.typing ? "Editing" : "Saved"}
         </Text.SmallSecondary>
-        {/* 
-        <Form.Field name="language">
-          {({ state }) => {
-            return (
-              <Button
-                variant="invisible"
-                leadingVisual={PiCode}
-                disabled={false}
-                onClick={() => {
-                  flushSync(() => {
-                  });
-               }}
-                size="small"
-                sx={{
-                  height: "24px",
-                  color: theme?.colors.text.gray,
-                }}
-              >
-                {state.value === "input" ? "Preview" : "Edit"}
-              </Button>
-            );
-          }}
-        </Form.Field> */}
         <Form.Subscribe
           selector={({ isSubmitting }) => [isSubmitting]}
           children={([isSubmitting]) => (

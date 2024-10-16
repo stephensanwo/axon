@@ -16,7 +16,6 @@ export type LayoutProps = {
   middleTopPanel?: ReactNode;
   middleBottomPanel?: ReactNode;
   rightPanel?: PanelProps;
-  pageNavContent?: ReactNode; // New prop for PageNav children
   pageHeader?: {
     breadcrumb: ReactNode;
     menus: ReactNode[];

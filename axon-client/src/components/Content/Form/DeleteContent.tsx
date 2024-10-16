@@ -1,4 +1,4 @@
-import { Box, Button, IconButton } from "@primer/react";
+import { Box, Button } from "@primer/react";
 import { PiTrashBold } from "react-icons/pi";
 import OverlayMenu from "../../Common/OverlayMenu";
 import { Text } from "../../Common/Text";
@@ -11,18 +11,18 @@ import { useContentStore } from "src/context/content/content.store";
 
 function DeleteContent() {
   const { deleteContent } = useContent();
-  const { selectedContent } = useContentStore();
+  const { selectedContent, setSelectedContent } = useContentStore();
 
   const isMultipleContentSelected = selectedContent.length > 1;
 
-  const selectedContentIds = useMemo(
-    () => map(selectedContent, "id"),
-    [selectedContent]
-  );
+  const selectedContentIds = useMemo(() => {
+    return map(selectedContent, "id");
+  }, [selectedContent]);
 
   const Form = useForm({
     onSubmit: async ({ value }) => {
       deleteContent.mutate(selectedContentIds);
+      setSelectedContent([]);
     },
   });
 

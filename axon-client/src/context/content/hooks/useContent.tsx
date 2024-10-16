@@ -3,7 +3,9 @@ import { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
 import { ContentEntity } from "src/domain/content/content.entity";
 import {
   CreateContentDto,
+  GetContentTypeDataResponseDto,
   UpdateContentDto,
+  UpdateContentTypeDataDto,
 } from "src/domain/content/content.dto";
 import { useContentRoute } from "./useContentRoute";
 import contentService from "src/domain/content/content.service";
@@ -20,9 +22,18 @@ export function useContent(): {
   updateContent: UseMutationResult<boolean, unknown, UpdateContentDto, unknown>;
   deleteContent: UseMutationResult<boolean, unknown, string[], unknown>;
   contentList: UseQueryResult<ContentEntity[], unknown>;
-  content: UseQueryResult<ContentEntity | null, unknown>;
+  contentTypeData: UseQueryResult<
+    GetContentTypeDataResponseDto | null,
+    unknown
+  >;
+  updateContentTypeData: UseMutationResult<
+    boolean,
+    unknown,
+    UpdateContentTypeDataDto,
+    unknown
+  >;
 } {
-  const { contentName, contentPreviewId } = useContentRoute();
+  const { contentId } = useContentRoute();
 
   const createContent = useDataMutation<CreateContentDto, ContentEntity>({
     mutationFn: async (dto: CreateContentDto) =>
@@ -50,19 +61,22 @@ export function useContent(): {
     refetchOnWindowFocus: true,
   });
 
-  console.log("contentName", contentName);
-  console.log("contentPreviewId", contentPreviewId);
-  const content = useDataQuery<ContentEntity | null>({
-    queryKey: [...ContentQueryKeys.CONTENT, contentName || contentPreviewId],
+  const contentTypeData = useDataQuery<GetContentTypeDataResponseDto | null>({
+    queryKey: [...ContentQueryKeys.CONTENT, contentId],
     queryFn: async () =>
-      contentName
-        ? contentService.getContent(contentName)
-        : contentPreviewId
-          ? contentService.getContentById(contentPreviewId)
-          : null,
+      contentId ? contentService.getContentTypeData(contentId) : null,
     refetchOnMount: true,
     refetchOnReconnect: true,
     refetchOnWindowFocus: true,
+  });
+
+  const updateContentTypeData = useDataMutation<
+    UpdateContentTypeDataDto,
+    boolean
+  >({
+    mutationFn: async (dto: UpdateContentTypeDataDto) =>
+      contentService.updateContentTypeData(dto),
+    optionalQueryKeysToInvalidate: [[...ContentQueryKeys.CONTENT]],
   });
 
   return {
@@ -70,6 +84,7 @@ export function useContent(): {
     updateContent,
     deleteContent,
     contentList,
-    content,
+    contentTypeData,
+    updateContentTypeData,
   };
 }

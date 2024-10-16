@@ -22,6 +22,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   onChange,
   options = BASE_EDITOR_OPTIONS,
   overrideOptions,
+  beforeMount,
 }): JSX.Element => {
   const { theme: axonTheme } = useTheme();
   return (
@@ -45,6 +46,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
           "customEditorTheme",
           getCustomEditorTheme(axonTheme!!)
         );
+        beforeMount && beforeMount(monaco);
       }}
     />
   );

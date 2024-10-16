@@ -1,35 +1,35 @@
 import { BaseContentProps } from "../index.types";
 import { JsonData } from "src/domain/content/content.entity";
-import { UpdateContentDto } from "src/domain/content/content.dto";
+import { UpdateContentTypeDataDto } from "src/domain/content/content.dto";
 import { useContent } from "src/context/content/hooks/useContent";
-import { Code } from "src/components/Code";
 import { Json } from "src/components/Json";
 
-function JsonContent({ content }: BaseContentProps) {
-  const { updateContent } = useContent();
-  const json = content.data?.content as JsonData;
+function JsonContent({ contentTypeData }: BaseContentProps) {
+  const { updateContentTypeData } = useContent();
+  const json = contentTypeData.data?.content as JsonData;
 
   function updateJson(value: JsonData) {
-    const dto: UpdateContentDto = {
-      ...content.data!!,
+    const dto: UpdateContentTypeDataDto = {
+      ...contentTypeData.data!!,
       content: {
-        ...content.data?.content,
+        ...contentTypeData.data?.content,
         ...value,
       },
     };
-    updateContent.mutate(dto);
+    updateContentTypeData.mutate(dto);
   }
 
   function refetchJson() {
-    content.refetch();
+    contentTypeData.refetch();
   }
 
   return (
     <Json
+      key={contentTypeData.data?.id}
       json={json}
       updateJson={updateJson}
       refetchJson={refetchJson}
-      updated={content.data?.updated!!}
+      updated={contentTypeData.data?.parent_content.updated!!}
       showHeader
     />
   );

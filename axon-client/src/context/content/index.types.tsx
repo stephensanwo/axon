@@ -1,7 +1,7 @@
 import { ContentEntityKeys } from "src/domain/content/content.entity";
 
 export enum ContentRouteParams {
-  CONTENT_NAME = "contentName",
+  CONTENT_ID_FROM_PATH = "contentIdFromPath",
   CONTENT_PREVIEW = "preview",
 }
 

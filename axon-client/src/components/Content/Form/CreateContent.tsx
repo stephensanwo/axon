@@ -34,12 +34,9 @@ function CreateContent() {
   const Form = useForm({
     ...formOpts,
     onSubmit: async ({ value, formApi }) => {
-      const content = contentTypes[value.content_type as ContentTypeKeys];
       const dto: CreateContentDto = {
         ...value,
-        content,
       };
-      console.log("CreateContentDto", dto);
       createContent.mutate(dto);
       formApi.reset();
     },

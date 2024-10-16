@@ -1,34 +1,35 @@
 import { BaseContentProps } from "../index.types";
 import { MarkdownData } from "src/domain/content/content.entity";
-import { UpdateContentDto } from "src/domain/content/content.dto";
+import { UpdateContentTypeDataDto } from "src/domain/content/content.dto";
 import { Markdown } from "src/components/Markdown";
 import { useContent } from "src/context/content/hooks/useContent";
 
-function MarkdownContent({ content }: BaseContentProps) {
-  const { updateContent } = useContent();
-  const markdown = content.data?.content as MarkdownData;
+function MarkdownContent({ contentTypeData }: BaseContentProps) {
+  const markdown = contentTypeData.data?.content as MarkdownData;
+  const { updateContentTypeData } = useContent();
 
   function updateMarkdown(value: MarkdownData) {
-    const dto: UpdateContentDto = {
-      ...content.data!!,
+    const dto: UpdateContentTypeDataDto = {
+      ...contentTypeData.data!!,
       content: {
-        ...content.data?.content,
+        ...contentTypeData.data?.content,
         ...value,
       },
     };
-    updateContent.mutate(dto);
+    updateContentTypeData.mutate(dto);
   }
 
   function refetchMarkdown() {
-    content.refetch();
+    contentTypeData.refetch();
   }
 
   return (
     <Markdown
+      key={contentTypeData.data?.id}
       markdown={markdown}
       updateMarkdown={updateMarkdown}
-      title={content.data?.name!!}
-      updated={content.data?.updated!!}
+      title={contentTypeData.data?.parent_content.name!!}
+      updated={contentTypeData.data?.parent_content.updated!!}
       refetchMarkdown={refetchMarkdown}
       showHeader
     />

@@ -9,7 +9,7 @@ import { useContentRoute } from "src/context/content/hooks/useContentRoute";
 import { ContentRouteParams } from "src/context/content/index.types";
 
 function ContentPreviewOptions() {
-  const { content } = useContent();
+  const { contentTypeData } = useContent();
   const { clearContentRouteSearchParams } = useContentRoute();
 
   const { theme } = useTheme();
@@ -46,16 +46,16 @@ function ContentPreviewOptions() {
           <Truncate
             maxWidth={200}
             expandable={false}
-            title={content?.data?.name || "..."}
+            title={contentTypeData?.data?.parent_content.name || "..."}
             sx={{
               color: theme?.colors.text.gray,
             }}
           >
-            {content?.data?.name || "..."}
+            {contentTypeData?.data?.parent_content.name || "..."}
           </Truncate>
         }
         menuItems={options}
-        data={content?.data!!}
+        data={contentTypeData?.data?.parent_content!!}
         anchor="text"
         width={"small"}
       />

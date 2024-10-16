@@ -98,6 +98,7 @@ export function MarkdownInput({
               tabSize: 2,
               padding: {
                 top: 0,
+                bottom: 0,
               },
             }}
             width={"100%"}

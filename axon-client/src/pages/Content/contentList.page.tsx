@@ -12,8 +12,8 @@ import { useContentRoute } from "src/context/content/hooks/useContentRoute";
 import { ContentRouteParams } from "src/context/content/index.types";
 
 function ContentListPage() {
-  const { contentList, content } = useContent();
-  const { contentPreviewId, clearContentRouteSearchParams } = useContentRoute();
+  const { contentList, contentTypeData } = useContent();
+  const { contentId, clearContentRouteSearchParams } = useContentRoute();
 
   if (contentList.isLoading) {
     return <AxonLoader />;
@@ -27,7 +27,7 @@ function ContentListPage() {
             <Content.Nav
               level="list"
               contentList={contentList}
-              content={content}
+              contentTypeData={contentTypeData}
             />
           ),
           menus: [
@@ -60,7 +60,7 @@ function ContentListPage() {
           <Content.Nav
             level="list"
             contentList={contentList}
-            content={content}
+            contentTypeData={contentTypeData}
           />
         ),
         menus: [
@@ -76,11 +76,11 @@ function ContentListPage() {
               title="Content"
               subtitle="Manage content"
               contentList={contentList}
-              content={content}
+              contentTypeData={contentTypeData}
             />
             <Content.List
               contentList={contentList}
-              content={content}
+              contentTypeData={contentTypeData}
               initialSortColumn={contentList.data.length > 0 ? "created" : ""}
               initialSortDirection={
                 contentList.data.length > 0 ? "DESC" : undefined
@@ -98,9 +98,12 @@ function ContentListPage() {
         )
       }
       rightPanel={{
-        enabled: contentPreviewId !== "",
+        enabled: contentId !== "",
         component: (
-          <Content.Preview content={content} contentList={contentList} />
+          <Content.Preview
+            contentTypeData={contentTypeData}
+            contentList={contentList}
+          />
         ),
         defaultSize: 50,
         minSize: 50,

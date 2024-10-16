@@ -1,11 +1,17 @@
-import { contentDb, contentTypeDb } from "./content.db";
+import { contentDb, contentTypeDataDb, contentTypeDb } from "./content.db";
 import { defaultContentTypes } from "./content.defaults";
-import { CreateContentDto, UpdateContentDto } from "./content.dto";
+import {
+  CreateContentDto,
+  CreateContentTypeDataDto,
+  GetContentTypeDataResponseDto,
+  UpdateContentDto,
+  UpdateContentTypeDataDto,
+} from "./content.dto";
 import {
   ContentEntity,
   ContentEntityKeys,
   ContentType,
-  ContentTypeEntity,
+  ContentTypeDataEntity,
   ContentTypeEnums,
 } from "./content.entity";
 import { contentRepository } from "./content.repository";
@@ -13,25 +19,48 @@ import { contentRepository } from "./content.repository";
 export class ContentService {
   contentDb = contentDb;
   contentTypeDb = contentTypeDb;
+  contentTypeDataDb = contentTypeDataDb;
 
   constructor() {}
 
   public async createContent(entity: CreateContentDto): Promise<ContentEntity> {
-    // try {
-    console.log("entity", entity);
-    const existingRecords = await contentRepository.findContentMatchByName(
-      entity.name
-    );
-    console.log("existingRecords", existingRecords);
-    if (existingRecords.docs.length > 0) {
-      const num = existingRecords.docs.length;
-      entity.name = `${entity.name} ${num}`;
+    try {
+      const existingRecords = await contentRepository.findContentMatchByName(
+        entity.name
+      );
+      if (existingRecords.docs.length > 0) {
+        const num = existingRecords.docs.length;
+        entity.name = `${entity.name} ${num}`;
+      }
+      const res = await this.contentDb.createRecord<CreateContentDto>(entity);
+
+      const defaultDbContentTypes = await this.getContentTypes();
+
+      const contentTypeDataDto = {
+        content_id: res.id,
+        content: defaultDbContentTypes[res.content_type],
+      };
+
+      await this.createContentTypeData(contentTypeDataDto);
+      return res;
+    } catch (error) {
+      console.error(`Error creating content - ${error}`);
+      throw new Error(`Error creating content - ${error}`);
     }
-    const res = await this.contentDb.createRecord<CreateContentDto>(entity);
-    return res;
-    // } catch (error) {
-    //   throw new Error(`Error creating content - ${error}`);
-    // }
+  }
+
+  private async createContentTypeData(
+    entity: CreateContentTypeDataDto
+  ): Promise<ContentTypeDataEntity> {
+    try {
+      const res =
+        await this.contentTypeDataDb.createRecord<CreateContentTypeDataDto>(
+          entity
+        );
+      return res;
+    } catch (error) {
+      throw new Error(`Error creating content type data - ${error}`);
+    }
   }
 
   public async updateContent(entity: UpdateContentDto): Promise<boolean> {
@@ -43,12 +72,35 @@ export class ContentService {
     }
   }
 
+  public async updateContentTypeData(
+    entity: UpdateContentTypeDataDto
+  ): Promise<boolean> {
+    try {
+      await this.contentTypeDataDb.updateRecord<UpdateContentTypeDataDto>(
+        entity
+      );
+      return true;
+    } catch (error) {
+      throw new Error(`Error updating content type - ${error}`);
+    }
+  }
+
   public async deleteContent(ids: string[]): Promise<boolean> {
     try {
       const ok = await this.contentDb.deleteRecords(ids);
+      await this.deleteContentTypeData(ids);
       return ok;
     } catch (error) {
       throw new Error(`Error deleting content - ${error}`);
+    }
+  }
+
+  private async deleteContentTypeData(ids: string[]): Promise<boolean> {
+    try {
+      const ok = await this.contentTypeDb.deleteRecords(ids);
+      return ok;
+    } catch (error) {
+      throw new Error(`Error deleting content type - ${error}`);
     }
   }
 
@@ -62,10 +114,36 @@ export class ContentService {
       }
       const content = await this.contentDb.getRecord<ContentEntity>(contentId);
 
-      console.log("Get Content", content);
       return content;
     } catch (error) {
       throw new Error(`Content not found - ${error}`);
+    }
+  }
+
+  public async getContentTypeData(
+    contentId: string
+  ): Promise<GetContentTypeDataResponseDto | null> {
+    try {
+      const contentTypeDataId =
+        await contentRepository.findContentTypeDataIdByContentId(contentId);
+
+      if (!contentTypeDataId) {
+        return null;
+      }
+      const content = await this.contentDb.getRecord<ContentEntity>(contentId);
+
+      const contentTypeData =
+        await this.contentTypeDataDb.getRecord<ContentTypeDataEntity>(
+          contentTypeDataId
+        );
+
+      return {
+        parent_content: content,
+        ...contentTypeData,
+      };
+    } catch (error) {
+      console.error(`Error getting content type data - ${error}`);
+      return null;
     }
   }
 
@@ -110,9 +188,9 @@ export class ContentService {
 
   public async createDefaultContentTypes(): Promise<boolean> {
     const existingContentTypes =
-      await this.contentTypeDb.getAllRecords<ContentTypeEntity>({
-        startkey: `${ContentEntityKeys.CONTENT_TYPES}_`,
-        endkey: `${ContentEntityKeys.CONTENT_TYPES}_\uffff`,
+      await this.contentTypeDb.getAllRecords<ContentType>({
+        startkey: `${ContentEntityKeys.CONTENT_TYPE_DEFAULTs}_`,
+        endkey: `${ContentEntityKeys.CONTENT_TYPE_DEFAULTs}_\uffff`,
       });
     if (existingContentTypes.length > 0) {
       return true;
@@ -128,8 +206,8 @@ export class ContentService {
   public async getContentTypes(): Promise<ContentType> {
     try {
       const contentTypes = await this.contentTypeDb.getAllRecords<ContentType>({
-        startkey: `${ContentEntityKeys.CONTENT_TYPES}_`,
-        endkey: `${ContentEntityKeys.CONTENT_TYPES}_\uffff`,
+        startkey: `${ContentEntityKeys.CONTENT_TYPE_DEFAULTs}_`,
+        endkey: `${ContentEntityKeys.CONTENT_TYPE_DEFAULTs}_\uffff`,
       });
 
       const contentTypeKeys = Object.values(ContentTypeEnums);

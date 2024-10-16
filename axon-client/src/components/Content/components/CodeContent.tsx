@@ -1,34 +1,35 @@
 import { BaseContentProps } from "../index.types";
 import { CodeData } from "src/domain/content/content.entity";
-import { UpdateContentDto } from "src/domain/content/content.dto";
+import { UpdateContentTypeDataDto } from "src/domain/content/content.dto";
 import { useContent } from "src/context/content/hooks/useContent";
 import { Code } from "src/components/Code";
 
-function CodeContent({ content }: BaseContentProps) {
-  const { updateContent } = useContent();
-  const code = content.data?.content as CodeData;
+function CodeContent({ contentTypeData }: BaseContentProps) {
+  const { updateContentTypeData } = useContent();
+  const code = contentTypeData.data?.content as CodeData;
 
   function updateCode(value: CodeData) {
-    const dto: UpdateContentDto = {
-      ...content.data!!,
+    const dto: UpdateContentTypeDataDto = {
+      ...contentTypeData.data!!,
       content: {
-        ...content.data?.content,
+        ...contentTypeData.data?.content,
         ...value,
       },
     };
-    updateContent.mutate(dto);
+    updateContentTypeData.mutate(dto);
   }
 
   function refetchCode() {
-    content.refetch();
+    contentTypeData.refetch();
   }
 
   return (
     <Code
+      key={contentTypeData.data?.id}
       code={code}
       updateCode={updateCode}
       refetchCode={refetchCode}
-      updated={content.data?.updated!!}
+      updated={contentTypeData.data?.parent_content.updated!!}
       showHeader
     />
   );

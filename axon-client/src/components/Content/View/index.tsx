@@ -1,7 +1,8 @@
 import { Box } from "@primer/react";
 import { BaseContentProps } from "../index.types";
-import { ContentRouterComponent } from "../ContentRouter";
+import { ContentRouter } from "../ContentRouter";
 import { useEffect, useState } from "react";
+import { ContentTypeKeys } from "src/domain/content/content.entity";
 
 function ContentView(props: BaseContentProps) {
   // useEffect(() => {
@@ -12,6 +13,14 @@ function ContentView(props: BaseContentProps) {
   //   console.log("New Content View", props.contentState.content.data?.name);
   //   setRouterProps(props);
   // }, [props.contentState.content]);
+  if (props.contentTypeData.isLoading) {
+    return <h1>Loading...</h1>;
+  }
+  console.log("contentView", props);
+  const Content =
+    ContentRouter[
+      props.contentTypeData.data?.content.content_type as ContentTypeKeys
+    ];
 
   return (
     <Box
@@ -22,7 +31,7 @@ function ContentView(props: BaseContentProps) {
         marginTop: "16px",
       }}
     >
-      <ContentRouterComponent {...props} />
+      <Content {...props} />
     </Box>
   );
 }

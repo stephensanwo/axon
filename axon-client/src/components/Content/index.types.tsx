@@ -8,10 +8,14 @@ import JsonContent from "./components/JsonContent";
 import BlockContent from "./components/BlockContent";
 import TableContent from "./components/TableContent";
 import { UseQueryResult } from "@tanstack/react-query";
+import { GetContentTypeDataResponseDto } from "src/domain/content/content.dto";
 
 export type BaseContentProps = {
   contentList: UseQueryResult<ContentEntity[], unknown>;
-  content: UseQueryResult<ContentEntity | null, unknown>;
+  contentTypeData: UseQueryResult<
+    GetContentTypeDataResponseDto | null,
+    unknown
+  >;
 };
 
 export const ContentRouter: Record<ContentTypeKeys, React.ElementType> = {

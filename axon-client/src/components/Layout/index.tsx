@@ -16,7 +16,6 @@ export default function ResizableLayout({
   middleTopPanel,
   middleBottomPanel,
   rightPanel,
-  pageNavContent,
   pageHeader,
 }: LayoutProps) {
   const { theme } = useTheme();
@@ -146,7 +145,7 @@ export default function ResizableLayout({
                 onExpand={rightPanel.onExpand}
               >
                 <Box
-                  className="h-full overflow-auto p-4"
+                  className="h-full overflow-auto flex flex-col p-4"
                   style={{
                     borderLeft: `1px solid ${theme?.colors.border.default}`,
                   }}

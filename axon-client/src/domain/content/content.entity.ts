@@ -63,16 +63,17 @@ export type ContentTypeData =
 
 export type ContentTypeKeys = ContentTypeData["content_type"];
 
-export type ContentEntity = BaseEntity &
-  ContentData & {
-    content: ContentTypeData;
-  };
+export type ContentEntity = BaseEntity & ContentData;
+
+export type ContentTypeDataEntity = BaseEntity & {
+  content_id: string;
+  content: ContentTypeData;
+};
 
 export type ContentType = Record<ContentTypeKeys, ContentTypeData>;
 
-export type ContentTypeEntity = BaseEntity & ContentType;
-
 export const ContentEntityKeys = {
   CONTENT: "content",
-  CONTENT_TYPES: "content-types",
+  CONTENT_TYPE_DEFAULTs: "content-type-defaults",
+  CONTENT_TYPE_DATA: "content-type-data",
 };

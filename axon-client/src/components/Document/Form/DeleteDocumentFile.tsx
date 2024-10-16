@@ -8,13 +8,15 @@ import { useDocument } from "src/context/document/hooks/useDocument";
 import { useDocumentStore } from "src/context/document/document.store";
 
 function DeleteDocumentFile() {
-  const { selectedDocumentFiles } = useDocumentStore();
+  const { selectedDocumentFiles, setSelectedDocumentFiles } =
+    useDocumentStore();
   const { deleteDocumentFile } = useDocument();
   const isMultipleFilesSelected = selectedDocumentFiles?.length!! > 1;
 
   const Form = useForm({
     onSubmit: async ({ value }) => {
       deleteDocumentFile.mutate(selectedDocumentFiles);
+      setSelectedDocumentFiles([]);
     },
   });
 

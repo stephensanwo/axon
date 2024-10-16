@@ -85,7 +85,7 @@ const Router = () => {
         />
         <Route path="/content" element={<ContentListPage />} />
         <Route
-          path={`/content/:${ContentRouteParams.CONTENT_NAME}`}
+          path={`/content/:${ContentRouteParams.CONTENT_ID_FROM_PATH}`}
           element={<ContentPage />}
         />
       </Route>
