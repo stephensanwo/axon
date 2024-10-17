@@ -1,23 +1,26 @@
 import { ReactNode } from "react";
 
 export type PanelProps = {
-  defaultSize: number;
+  defaultSize?: number;
   minSize?: number;
   maxSize?: number;
   collapsible?: boolean;
   onCollapse?: () => void;
   onExpand?: () => void;
   component?: ReactNode;
-  enabled: boolean;
+  enabled?: boolean;
+  className?: string;
 };
 
 export type LayoutProps = {
   leftPanel?: PanelProps;
-  middleTopPanel?: ReactNode;
-  middleBottomPanel?: ReactNode;
+  middleTopPanel?: PanelProps;
+  middleBottomPanel?: PanelProps;
   rightPanel?: PanelProps;
-  pageHeader?: {
-    breadcrumb: ReactNode;
-    menus: ReactNode[];
-  };
+  pageHeader?: PageHeaderProps;
+};
+
+export type PageHeaderProps = {
+  breadcrumb?: ReactNode;
+  menus?: ReactNode[];
 };
