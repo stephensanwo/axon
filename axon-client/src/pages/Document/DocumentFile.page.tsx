@@ -19,7 +19,7 @@ function DocumentFilePage() {
     return <AxonLoader />;
   }
 
-  if (documentFiles.isFetchedAfterMount && documentFiles.data === null) {
+  if (!documentFiles.data) {
     return (
       <Layout
         pageHeader={{
@@ -36,23 +36,26 @@ function DocumentFilePage() {
             <User.Button type={"icon"} />,
           ],
         }}
-        middleTopPanel={
-          <Document.Main>
-            <Blank
-              heading="Folder not found"
-              description={`The folder you are looking for does not exist\n or has been deleted.`}
-              type="error"
-              containerStyles={{
-                height: "calc(100vh - 48px)",
-                overflow: "none",
-              }}
-              action={{
-                label: "Go to Folders",
-                href: "/documents",
-              }}
-            />
-          </Document.Main>
-        }
+        middleTopPanel={{
+          enabled: true,
+          component: (
+            <Document.Main>
+              <Blank
+                heading="Folder not found"
+                description={`The folder you are looking for does not exist\n or has been deleted.`}
+                type="error"
+                containerStyles={{
+                  height: "calc(100vh - 48px)",
+                  overflow: "none",
+                }}
+                action={{
+                  label: "Go to Folders",
+                  href: "/documents",
+                }}
+              />
+            </Document.Main>
+          ),
+        }}
       />
     );
   }
@@ -73,8 +76,9 @@ function DocumentFilePage() {
           <User.Button type={"icon"} />,
         ],
       }}
-      middleTopPanel={
-        documentFiles.data?.files && (
+      middleTopPanel={{
+        enabled: true,
+        component: (
           <Document.Main>
             <DocumentFile.Header
               title={`Documents / ${documentFiles.isLoading ? "..." : documentFiles.data?.folder?.name}`}
@@ -97,8 +101,8 @@ function DocumentFilePage() {
               }
             />
           </Document.Main>
-        )
-      }
+        ),
+      }}
       rightPanel={{
         enabled: documentPreviewFileId !== "",
         component: <Document.Preview documentFile={documentFile} />,

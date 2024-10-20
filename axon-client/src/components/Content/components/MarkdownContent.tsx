@@ -3,6 +3,7 @@ import { MarkdownData } from "src/domain/content/content.entity";
 import { UpdateContentTypeDataDto } from "src/domain/content/content.dto";
 import { Markdown } from "src/components/Markdown";
 import { useContent } from "src/context/content/hooks/useContent";
+import ContentSkeleton from "../ContentSkeleton";
 
 function MarkdownContent({ contentTypeData }: BaseContentProps) {
   const markdown = contentTypeData.data?.content as MarkdownData;
@@ -32,6 +33,7 @@ function MarkdownContent({ contentTypeData }: BaseContentProps) {
       updated={contentTypeData.data?.parent_content.updated!!}
       refetchMarkdown={refetchMarkdown}
       showHeader
+      loadingComponent={<ContentSkeleton />}
     />
   );
 }

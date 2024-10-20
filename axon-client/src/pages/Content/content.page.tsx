@@ -17,7 +17,7 @@ function ContentPage() {
     return <AxonLoader />;
   }
 
-  if (contentTypeData.isFetchedAfterMount && contentTypeData.data === null) {
+  if (!contentTypeData.data) {
     return (
       <Layout
         pageHeader={{
@@ -34,19 +34,22 @@ function ContentPage() {
             <User.Button type={"icon"} />,
           ],
         }}
-        middleTopPanel={
-          <Content.Main>
-            <Blank
-              heading="Content not found"
-              description={`The content you are looking for does not exist\n or has been deleted.`}
-              type="error"
-              action={{
-                label: "Go to Contents",
-                href: "/content",
-              }}
-            />
-          </Content.Main>
-        }
+        middleTopPanel={{
+          enabled: true,
+          component: (
+            <Content.Main>
+              <Blank
+                heading="Content not found"
+                description={`The content you are looking for does not exist\n or has been deleted.`}
+                type="error"
+                action={{
+                  label: "Go to Contents",
+                  href: "/content",
+                }}
+              />
+            </Content.Main>
+          ),
+        }}
       />
     );
   }
@@ -67,8 +70,9 @@ function ContentPage() {
           <User.Button type={"icon"} />,
         ],
       }}
-      middleTopPanel={
-        contentTypeData.data && (
+      middleTopPanel={{
+        enabled: true,
+        component: (
           <Page.Main>
             {
               <Content.Main>
@@ -79,8 +83,8 @@ function ContentPage() {
               </Content.Main>
             }
           </Page.Main>
-        )
-      }
+        ),
+      }}
     />
   );
 }

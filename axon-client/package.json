@@ -61,6 +61,7 @@
     "@uiw/react-monacoeditor": "^3.5.9",
     "@uiw/react-textarea-code-editor": "^2.0.1",
     "@vscode/codicons": "^0.0.33",
+    "@xyflow/react": "^12.3.2",
     "aws-amplify": "^6.0.18",
     "axios": "^0.27.2",
     "carbon-icons": "^7.0.7",

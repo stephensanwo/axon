@@ -12,7 +12,7 @@ import { NodeProvider } from "./context/node";
 import { EdgeProvider } from "./context/edge";
 import Billing from "./pages/Auth/Billing";
 import SignUp from "./pages/Auth/SignUp";
-import { ReactFlowProvider } from "reactflow";
+import { ReactFlowProvider } from "@xyflow/react";
 import DocumentFolderPage from "./pages/Document/DocumentFolder.page";
 import DocumentFilePage from "./pages/Document/DocumentFile.page";
 import { DocumentFolderRouteParams } from "./context/document/document.types";

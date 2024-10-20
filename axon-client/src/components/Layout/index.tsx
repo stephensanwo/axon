@@ -95,9 +95,7 @@ export default function ResizableLayout({
                 onExpand={rightPanel.onExpand}
               >
                 <Box
-                  className={`h-full overflow-auto flex flex-col p-4 ${
-                    rightPanel.className
-                  }`}
+                  className={`h-full overflow-auto p-4 ${rightPanel.className}`}
                   style={{
                     borderLeft: `1px solid ${theme?.colors.border.default}`,
                   }}

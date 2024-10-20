@@ -14,9 +14,6 @@ export function useContentRoute(): {
 
   const contentId = contentIdFromPath ?? contentIdFromSearchParams;
 
-  console.log("contentIdFromPath", contentIdFromPath);
-  console.log("contentIdFromSearchParams", contentIdFromSearchParams);
-
   function updateContentRouteSearchParams(key: string, value: string) {
     const updatedParams = new URLSearchParams(searchParams);
     updatedParams.set(key, value);

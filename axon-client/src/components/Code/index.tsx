@@ -16,9 +16,11 @@ import { InlineSpinner } from "../Common/Spinner";
 export function CodeInput({
   Form,
   setIsTyping,
+  loadingComponent = "Loading Code...",
 }: {
   Form: FormApi<CodeData, undefined>;
   setIsTyping: React.Dispatch<React.SetStateAction<EditStateProps>>;
+  loadingComponent?: React.ReactNode;
 }) {
   const typingTimeout = useRef<number | undefined>(undefined); // Timeout reference to track typing
 
@@ -77,7 +79,7 @@ export function CodeInput({
             defaultValue="Add Code here..."
             language={"javascript"}
             value={state.value}
-            loading={"Loading Markdown..."}
+            loading={loadingComponent}
             onChange={(e: string | undefined) =>
               handleEditorChange(e, handleChange)
             }
@@ -105,6 +107,7 @@ export function Code({
   updated,
   showHeader = true,
   refetchCode,
+  loadingComponent,
 }: BaseCodeProps) {
   const [isTyping, setIsTyping] = useState<EditStateProps>({
     typing: false,
@@ -152,7 +155,11 @@ export function Code({
       }}
     >
       {showHeader && <CodeHeader Form={Form} code={code} isTyping={isTyping} />}
-      <CodeInput Form={Form} setIsTyping={setIsTyping} />
+      <CodeInput
+        Form={Form}
+        setIsTyping={setIsTyping}
+        loadingComponent={loadingComponent}
+      />
     </Box>
   );
 }

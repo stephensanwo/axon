@@ -14,7 +14,7 @@ function ProjectFilesPage() {
     return <AxonLoader />;
   }
 
-  if (projectFiles.isFetchedAfterMount && projectFiles.data === null) {
+  if (!projectFiles.data) {
     return (
       <Layout
         pageHeader={{
@@ -31,19 +31,22 @@ function ProjectFilesPage() {
             <User.Button type={"icon"} />,
           ],
         }}
-        middleTopPanel={
-          <Project.Main>
-            <Blank
-              heading="Project not found"
-              description={`The project you are looking for does not exist\n or has been deleted.`}
-              type="error"
-              action={{
-                label: "Go to Projects",
-                href: "/projects",
-              }}
-            />
-          </Project.Main>
-        }
+        middleTopPanel={{
+          enabled: true,
+          component: (
+            <Project.Main>
+              <Blank
+                heading="Project not found"
+                description={`The project you are looking for does not exist\n or has been deleted.`}
+                type="error"
+                action={{
+                  label: "Go to Projects",
+                  href: "/projects",
+                }}
+              />
+            </Project.Main>
+          ),
+        }}
       />
     );
   }
@@ -64,8 +67,9 @@ function ProjectFilesPage() {
           <User.Button type={"icon"} />,
         ],
       }}
-      middleTopPanel={
-        projectFiles.data && (
+      middleTopPanel={{
+        enabled: true,
+        component: (
           <Project.Main>
             <ProjectFiles.Header
               title={`Projects / ${projectFiles.isLoading ? "..." : projectFiles.data.project?.name}`}
@@ -78,8 +82,8 @@ function ProjectFilesPage() {
               projectFiles={projectFiles}
             />
           </Project.Main>
-        )
-      }
+        ),
+      }}
     />
   );
 }

@@ -1,6 +1,6 @@
-import { BoardAction, BoardState } from "src/context/board/board.types";
+import { UseQueryResult } from "@tanstack/react-query";
+import { GetBoardResponseDto } from "src/domain/board/board.dto";
 
 export type BaseBoardProps = {
-  boardState: BoardState;
-  boardStateDispatch: React.Dispatch<BoardAction>;
+  board: UseQueryResult<GetBoardResponseDto | null, unknown>;
 };

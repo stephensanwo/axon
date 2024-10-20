@@ -12,7 +12,7 @@ function Header({ breadcrumb, menus }: PageHeaderProps) {
   const navigate = useNavigate();
   return (
     <header
-      className="flex items-center justify-between px-4 h-12 bg-background shrink-0"
+      className="flex items-center justify-between pr-4 pl-2.5 h-12 bg-background shrink-0"
       style={{
         borderBottom: `1px solid ${theme?.colors.border.default}`,
       }}

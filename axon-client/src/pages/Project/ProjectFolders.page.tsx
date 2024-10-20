@@ -15,7 +15,7 @@ function ProjectFoldersPage() {
     return <AxonLoader />;
   }
 
-  if (projectFolders.isFetchedAfterMount && projectFolders.data === null) {
+  if (!projectFolders.data) {
     return (
       <Layout
         pageHeader={{
@@ -32,19 +32,22 @@ function ProjectFoldersPage() {
             <User.Button type={"icon"} />,
           ],
         }}
-        middleTopPanel={
-          <Project.Main>
-            <Blank
-              heading="Unable to load projects"
-              description={`An error occurred while loading projects\n Please try again later.`}
-              type="error"
-              action={{
-                label: "Try again",
-                href: "/projects",
-              }}
-            />
-          </Project.Main>
-        }
+        middleTopPanel={{
+          enabled: true,
+          component: (
+            <Project.Main>
+              <Blank
+                heading="Unable to load projects"
+                description={`An error occurred while loading projects\n Please try again later.`}
+                type="error"
+                action={{
+                  label: "Try again",
+                  href: "/projects",
+                }}
+              />
+            </Project.Main>
+          ),
+        }}
       />
     );
   }
@@ -65,8 +68,9 @@ function ProjectFoldersPage() {
           <User.Button type={"icon"} />,
         ],
       }}
-      middleTopPanel={
-        projectFolders.data?.projects && (
+      middleTopPanel={{
+        enabled: true,
+        component: (
           <Project.Main>
             <ProjectFolders.Header
               title="Projects"
@@ -93,8 +97,8 @@ function ProjectFoldersPage() {
               }
             />
           </Project.Main>
-        )
-      }
+        ),
+      }}
     />
   );
 }

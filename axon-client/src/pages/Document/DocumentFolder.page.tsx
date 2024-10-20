@@ -15,7 +15,7 @@ function DocumentFolderPage() {
     return <AxonLoader />;
   }
 
-  if (documentFolders.isFetchedAfterMount && documentFolders.data === null) {
+  if (!documentFolders.data) {
     return (
       <Layout
         pageHeader={{
@@ -32,23 +32,26 @@ function DocumentFolderPage() {
             <User.Button type={"icon"} />,
           ],
         }}
-        middleTopPanel={
-          <Document.Main>
-            <Blank
-              heading="Unable to load documents"
-              description={`An error occurred while loading documents\n Please try again later.`}
-              type="error"
-              containerStyles={{
-                height: "calc(100vh - 48px)",
-                overflow: "none",
-              }}
-              action={{
-                label: "Try again",
-                href: "/documents",
-              }}
-            />
-          </Document.Main>
-        }
+        middleTopPanel={{
+          enabled: true,
+          component: (
+            <Document.Main>
+              <Blank
+                heading="Unable to load documents"
+                description={`An error occurred while loading documents\n Please try again later.`}
+                type="error"
+                containerStyles={{
+                  height: "calc(100vh - 48px)",
+                  overflow: "none",
+                }}
+                action={{
+                  label: "Try again",
+                  href: "/documents",
+                }}
+              />
+            </Document.Main>
+          ),
+        }}
       />
     );
   }
@@ -69,8 +72,9 @@ function DocumentFolderPage() {
           <User.Button type={"icon"} />,
         ],
       }}
-      middleTopPanel={
-        documentFolders.data?.folders && (
+      middleTopPanel={{
+        enabled: true,
+        component: (
           <Document.Main>
             <DocumentFolder.Header
               title="Documents"
@@ -95,8 +99,8 @@ function DocumentFolderPage() {
               }
             />
           </Document.Main>
-        )
-      }
+        ),
+      }}
     />
   );
 }

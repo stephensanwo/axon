@@ -25,9 +25,11 @@ import { BsFillMarkdownFill } from "react-icons/bs";
 export function MarkdownInput({
   Form,
   setIsTyping,
+  loadingComponent = "Loading Markdown...",
 }: {
   Form: FormApi<MarkdownData, undefined>;
   setIsTyping: React.Dispatch<React.SetStateAction<EditStateProps>>;
+  loadingComponent?: React.ReactNode;
 }) {
   const typingTimeout = useRef<number | undefined>(undefined); // Timeout reference to track typing
 
@@ -86,7 +88,7 @@ export function MarkdownInput({
             defaultValue="Add Markdown here..."
             language={"markdown"}
             value={state.value}
-            loading={"Loading Markdown..."}
+            loading={loadingComponent}
             onChange={(e: string | undefined) =>
               handleEditorChange(e, handleChange)
             }
@@ -141,6 +143,7 @@ export function Markdown({
   updated,
   showHeader = true,
   refetchMarkdown,
+  loadingComponent,
 }: BaseMarkdownProps) {
   const [isTyping, setIsTyping] = useState<EditStateProps>({
     typing: false,
@@ -191,7 +194,11 @@ export function Markdown({
         <MarkdownHeader Form={Form} markdown={markdown} isTyping={isTyping} />
       )}
       {markdown.view === "input" ? (
-        <MarkdownInput Form={Form} setIsTyping={setIsTyping} />
+        <MarkdownInput
+          Form={Form}
+          setIsTyping={setIsTyping}
+          loadingComponent={loadingComponent}
+        />
       ) : (
         <MarkdownPreview markdown={markdown} />
       )}

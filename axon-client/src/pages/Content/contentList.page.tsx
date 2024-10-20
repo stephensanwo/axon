@@ -19,7 +19,7 @@ function ContentListPage() {
     return <AxonLoader />;
   }
 
-  if (contentList.isFetchedAfterMount && contentList.data === null) {
+  if (!contentList.data) {
     return (
       <Layout
         pageHeader={{
@@ -36,19 +36,22 @@ function ContentListPage() {
             <User.Button type={"icon"} />,
           ],
         }}
-        middleTopPanel={
-          <Content.Main>
-            <Blank
-              heading="Content not found"
-              description={`The content you are looking for does not exist\n or has been deleted.`}
-              type="error"
-              action={{
-                label: "Go to Contents",
-                href: "/content",
-              }}
-            />
-          </Content.Main>
-        }
+        middleTopPanel={{
+          enabled: true,
+          component: (
+            <Content.Main>
+              <Blank
+                heading="Content not found"
+                description={`The content you are looking for does not exist\n or has been deleted.`}
+                type="error"
+                action={{
+                  label: "Go to Contents",
+                  href: "/content",
+                }}
+              />
+            </Content.Main>
+          ),
+        }}
       />
     );
   }
@@ -69,8 +72,9 @@ function ContentListPage() {
           <User.Button type={"icon"} />,
         ],
       }}
-      middleTopPanel={
-        contentList.data && (
+      middleTopPanel={{
+        enabled: true,
+        component: (
           <Content.Main>
             <Content.ContentListHeader
               title="Content"
@@ -95,8 +99,8 @@ function ContentListPage() {
               }
             />
           </Content.Main>
-        )
-      }
+        ),
+      }}
       rightPanel={{
         enabled: contentId !== "",
         component: (
@@ -107,7 +111,7 @@ function ContentListPage() {
         ),
         defaultSize: 50,
         minSize: 50,
-        maxSize: 50,
+        maxSize: 75,
         collapsible: true,
         onCollapse: () => {
           clearContentRouteSearchParams(ContentRouteParams.CONTENT_PREVIEW);

@@ -6,6 +6,7 @@ export type BaseJsonProps = {
   updateJson: (value: JsonData) => void;
   refetchJson: () => void;
   showHeader?: boolean;
+  loadingComponent?: React.ReactNode;
 };
 
 export type EditStateProps = {

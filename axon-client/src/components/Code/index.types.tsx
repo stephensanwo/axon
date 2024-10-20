@@ -6,6 +6,7 @@ export type BaseCodeProps = {
   updateCode: (value: CodeData) => void;
   refetchCode: () => void;
   showHeader?: boolean;
+  loadingComponent?: React.ReactNode;
 };
 
 export type EditStateProps = {

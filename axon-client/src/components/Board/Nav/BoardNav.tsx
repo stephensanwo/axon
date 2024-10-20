@@ -2,14 +2,9 @@ import { Truncate, useTheme } from "@primer/react";
 import Select, { SelectMenuItem } from "src/components/Common/Select";
 import { BaseBoardProps } from "../index.types";
 
-function BoardNav({
-  isLoading,
-  boardState,
-}: {
-  isLoading: boolean;
-} & BaseBoardProps) {
+function BoardNav({ board }: {} & BaseBoardProps) {
   const { theme } = useTheme();
-  const boardNavTitle = `${isLoading ? "..." : boardState.board?.name}`;
+  const boardNavTitle = `${board.isLoading ? "..." : board.data?.board.name}`;
 
   const options: SelectMenuItem[] = [
     {

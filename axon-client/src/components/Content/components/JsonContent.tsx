@@ -3,6 +3,7 @@ import { JsonData } from "src/domain/content/content.entity";
 import { UpdateContentTypeDataDto } from "src/domain/content/content.dto";
 import { useContent } from "src/context/content/hooks/useContent";
 import { Json } from "src/components/Json";
+import ContentSkeleton from "../ContentSkeleton";
 
 function JsonContent({ contentTypeData }: BaseContentProps) {
   const { updateContentTypeData } = useContent();
@@ -31,6 +32,7 @@ function JsonContent({ contentTypeData }: BaseContentProps) {
       refetchJson={refetchJson}
       updated={contentTypeData.data?.parent_content.updated!!}
       showHeader
+      loadingComponent={<ContentSkeleton />}
     />
   );
 }

@@ -7,6 +7,7 @@ export type BaseMarkdownProps = {
   updateMarkdown: (value: MarkdownData) => void;
   refetchMarkdown: () => void;
   showHeader?: boolean;
+  loadingComponent?: React.ReactNode;
 };
 
 export type EditStateProps = {

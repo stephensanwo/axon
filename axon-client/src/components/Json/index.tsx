@@ -16,9 +16,11 @@ import { InlineSpinner } from "../Common/Spinner";
 export function JsonInput({
   Form,
   setIsTyping,
+  loadingComponent = "Loading Json...",
 }: {
   Form: FormApi<JsonData, undefined>;
   setIsTyping: React.Dispatch<React.SetStateAction<EditStateProps>>;
+  loadingComponent?: React.ReactNode;
 }) {
   const typingTimeout = useRef<number | undefined>(undefined); // Timeout reference to track typing
 
@@ -77,7 +79,7 @@ export function JsonInput({
             defaultValue="Add Code here..."
             language={"javascript"}
             value={state.value}
-            loading={"Loading Markdown..."}
+            loading={loadingComponent}
             onChange={(e: string | undefined) =>
               handleEditorChange(e, handleChange)
             }
@@ -105,6 +107,7 @@ export function Json({
   updated,
   showHeader = true,
   refetchJson,
+  loadingComponent,
 }: BaseJsonProps) {
   const [isTyping, setIsTyping] = useState<EditStateProps>({
     typing: false,
@@ -151,7 +154,11 @@ export function Json({
       }}
     >
       {showHeader && <JsonHeader Form={Form} json={json} isTyping={isTyping} />}
-      <JsonInput Form={Form} setIsTyping={setIsTyping} />
+      <JsonInput
+        Form={Form}
+        setIsTyping={setIsTyping}
+        loadingComponent={loadingComponent}
+      />
     </Box>
   );
 }
