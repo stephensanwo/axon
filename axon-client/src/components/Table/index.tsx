@@ -7,11 +7,10 @@ import {
 import { UniqueRow } from "@primer/react/lib/DataTable/row";
 import React from "react";
 import "./style.css";
-import { TableSortDirection, TableState } from "./index.types";
+import { TableSortDirection } from "./index.types";
 
 function Table<T extends UniqueRow>({
   id,
-  state,
   data,
   cellPadding,
   columns,
@@ -22,7 +21,6 @@ function Table<T extends UniqueRow>({
   initialSortDirection = "DESC",
 }: DataTableProps<T> & {
   id: string;
-  state: TableState;
   title?: string;
   subtitle?: string;
   emptyStateMessage?: React.ReactNode;
@@ -43,27 +41,7 @@ function Table<T extends UniqueRow>({
             {subtitle}
           </PrimerTable.Subtitle>
         )}
-        {state === "loading" && (
-          <PrimerTable.Skeleton
-            aria-labelledby={title}
-            aria-describedby={subtitle || title}
-            columns={columns}
-            rows={10}
-            cellPadding={cellPadding}
-          />
-        )}
-        {state === "empty" && (
-          <PrimerDataTable
-            aria-labelledby={title}
-            aria-describedby={subtitle || title}
-            data={[]}
-            columns={columns}
-            initialSortColumn={initialSortColumn}
-            initialSortDirection={initialSortDirection}
-            cellPadding={cellPadding}
-          />
-        )}
-        {state === "data" && data.length > 0 && (
+        {
           <PrimerDataTable
             aria-labelledby={title}
             aria-describedby={subtitle || title}
@@ -73,21 +51,10 @@ function Table<T extends UniqueRow>({
             initialSortDirection={initialSortDirection}
             cellPadding={cellPadding}
           />
-        )}
+        }
       </PrimerTable.Container>
-      {state === "empty" && (
-        <Box
-          sx={{
-            minHeight: `calc(41px * 10)`,
-            borderLeft: `1px solid ${theme?.colors.border.default}`,
-            borderRight: `1px solid ${theme?.colors.border.default}`,
-            borderBottom: `1px solid ${theme?.colors.border.default}`,
-            borderRadius: "0 0 6px 6px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+      {data.length === 0 && (
+        <Box className="h-1/2 w-full flex items-center justify-center">
           {emptyStateMessage}
         </Box>
       )}

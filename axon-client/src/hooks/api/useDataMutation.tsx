@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 interface DataMutationProps<D, R> {
   mutationFn: (dto: D) => Promise<R>;
   optionalQueryKeysToInvalidate?: string[][];
-  onSuccessCallback?: () => void;
+  onSuccessCallback?: (data?: R, variables?: D) => void;
 }
 
 export function useDataMutation<D, R>({
@@ -27,7 +27,7 @@ export function useDataMutation<D, R>({
     },
     onSuccess: (data, variables, context) => {
       if (onSuccessCallback) {
-        onSuccessCallback();
+        onSuccessCallback(data, variables);
       }
       console.log("onSuccess", data, variables, context);
       // Invalidate any additional queries

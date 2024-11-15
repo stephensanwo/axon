@@ -22,10 +22,14 @@ thead.TableHead {
 
 .TableHeader {
     border-radius: 0 !important;
+    border-left: none !important;
+        border-right: none !important;
 }
 
 .TableCell {
     border-radius: 0 !important;
+    border-left: none !important;
+        border-right: none !important;
     color: var(--white-70) !important;
 }
 .TableOverflowWrapper {

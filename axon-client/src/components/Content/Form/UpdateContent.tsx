@@ -1,4 +1,4 @@
-import { Box, Button, IconButton } from "@primer/react";
+import { Box } from "@primer/react";
 import { LuFolderEdit } from "react-icons/lu";
 import OverlayMenu from "../../Common/OverlayMenu";
 import { Text } from "../../Common/Text";
@@ -11,7 +11,8 @@ import Icon from "src/components/Common/Icon";
 import { ContentData } from "src/domain/content/content.entity";
 import { UpdateContentDto } from "src/domain/content/content.dto";
 import { useContent } from "src/context/content/hooks/useContent";
-import { useContentStore } from "src/context/content/content.store";
+import { useContentStore } from "src/context/content/hooks/useContentStore";
+import { Button } from "src/components/Common/Button";
 
 function UpdateContent() {
   const { updateContent } = useContent();
@@ -25,6 +26,7 @@ function UpdateContent() {
       name: contentData?.name || "",
       pinned: contentData?.pinned,
       content_type: contentData?.content_type,
+      content_folder_id: contentData?.content_folder_id,
     },
   });
 
@@ -43,22 +45,21 @@ function UpdateContent() {
     <OverlayMenu
       width={300}
       minHeight={150}
-      side="outside-top"
+      side="outside-bottom"
       anchorOffset={10}
       alignmentOffset={0}
       align="center"
       anchorComponent={
-        <IconButton
-          variant="default"
-          icon={LuFolderEdit}
+        <Button
+          variant="outline"
           disabled={false}
           aria-label="Update Content"
-          sx={{
-            flexShrink: 0,
-          }}
-        />
+          size="icon"
+        >
+          <LuFolderEdit />
+        </Button>
       }
-      heading={<Text.Heading5>Update Content</Text.Heading5>}
+      heading={<Text.Heading5Secondary>Update Content</Text.Heading5Secondary>}
     >
       <Box
         sx={{
@@ -68,6 +69,10 @@ function UpdateContent() {
           gap: 3,
         }}
         as="form"
+        onSubmit={(e: any) => {
+          e.preventDefault();
+          Form.handleSubmit();
+        }}
       >
         <Form.Field
           name="name"
@@ -89,7 +94,6 @@ function UpdateContent() {
                 leadingVisual={<Icon.BoardAlt />}
                 required={true}
                 htmlFor="update-board-name"
-                type="text"
                 caption="Max 50 characters"
               />
             );
@@ -99,13 +103,19 @@ function UpdateContent() {
           selector={({ isSubmitting }) => [isSubmitting]}
           children={([isSubmitting]) => (
             <Button
-              variant="primary"
-              leadingVisual={isSubmitting ? InlineSpinner : Icon.BoardAlt}
+              type="submit"
+              variant="outline"
               disabled={isSubmitting}
-              onClick={Form.handleSubmit}
-              size="medium"
+              size="default"
             >
-              {isSubmitting ? "Updating Content..." : "Update Content"}
+              {isSubmitting ? (
+                <>
+                  <InlineSpinner />
+                  Updating Content...
+                </>
+              ) : (
+                "Update Content"
+              )}
             </Button>
           )}
         />

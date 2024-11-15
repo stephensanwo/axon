@@ -98,6 +98,27 @@ function Heading6Secondary(props: TextProps) {
   );
 }
 
+function Heading1Secondary(props: TextProps) {
+  const { theme } = useTheme();
+  return (
+    <PrimerText
+      {...props}
+      sx={{
+        fontSize: 3,
+        color: theme?.colors.text.gray,
+        fontWeight: 600,
+        ...props.sx,
+      }}
+    />
+  );
+}
+
+function Heading1(props: TextProps) {
+  return (
+    <PrimerText {...props} sx={{ fontSize: 3, fontWeight: 600, ...props.sx }} />
+  );
+}
+
 export const Text = {
   Small,
   SmallSecondary,
@@ -109,4 +130,6 @@ export const Text = {
   Heading6Secondary,
   Paragraph,
   ParagraphSecondary,
+  Heading1Secondary,
+  Heading1,
 };

@@ -1,11 +1,15 @@
 import { TableData } from "src/domain/content/content.entity";
 import { useContent } from "../../../context/content/hooks/useContent";
-import { BaseContentProps } from "../index.types";
 import { UpdateContentTypeDataDto } from "src/domain/content/content.dto";
 import DataSheet from "src/components/DataSheet";
 import { TableCellTypes } from "src/components/DataSheet/index.types";
+import { ContentTypeDataQuery } from "src/context/content/index.types";
 
-function TableContent({ contentTypeData }: BaseContentProps) {
+function TableContent({
+  contentTypeData,
+}: {
+  contentTypeData: ContentTypeDataQuery;
+}) {
   const { updateContentTypeData } = useContent();
   const table = contentTypeData.data?.content as TableData;
   console.log("table", table);

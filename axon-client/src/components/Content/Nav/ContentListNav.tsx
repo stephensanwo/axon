@@ -1,21 +1,25 @@
 import { useNavigate } from "react-router-dom";
 import { Truncate, useTheme } from "@primer/react";
 import Select, { SelectMenuItem } from "src/components/Common/Select";
-import { BaseContentProps } from "../index.types";
+import { useContentStore } from "src/context/content/hooks/useContentStore";
 
-function ContentListNav({
-  navTitle,
-}: {
-  navTitle: string;
-} & BaseContentProps) {
+function ContentListNav({ navTitle }: { navTitle: string }) {
   const { theme } = useTheme();
   const navigate = useNavigate();
+  const { leftPanel, setLeftPanel } = useContentStore();
   const options: SelectMenuItem[] = [
     {
       id: "content",
       name: "Go to Content",
       onClick: () => {
         navigate("/content");
+      },
+    },
+    {
+      id: "content-folders",
+      name: `${leftPanel ? "Close" : "Open"} Content Folders`,
+      onClick: () => {
+        setLeftPanel(!leftPanel);
       },
     },
     {

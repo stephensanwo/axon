@@ -1,51 +1,50 @@
 import { Box, useTheme } from "@primer/react";
-import { formatDateToRelativeTime } from "src/common/date";
 import Card from "src/components/Common/Card";
 import { useContent } from "src/context/content/hooks/useContent";
 import { UpdateContentDto } from "src/domain/content/content.dto";
 import { BsFillFileEarmarkTextFill } from "react-icons/bs";
 import { ContentEntity } from "src/domain/content/content.entity";
+import { useNavigate } from "react-router-dom";
 
 function ContentRecents({
   contentRecents,
 }: {
   contentRecents: ContentEntity[];
 }) {
+  const navigate = useNavigate();
   const { theme } = useTheme();
   const { updateContent } = useContent();
   return (
     <Box
       sx={{
-        height: "150px",
+        height: "140px",
         display: "flex",
         alignItems: "center",
         gap: 4,
         overflowX: "scroll",
         scrollbarWidth: "none",
-        mb: 4,
       }}
+      className="mb-3 pt-2 pl-3 pr-3"
     >
       {contentRecents?.map((content, index) => (
         <Card.Button
           key={index}
           icon={
             <BsFillFileEarmarkTextFill
-              size={64}
+              size={48}
               color={theme?.colors.primary.default}
             />
           }
           title={content.name}
-          subtitle={formatDateToRelativeTime(content.updated)}
           border
           trailingAction={() => {
-            // Unpin content
             const dto: UpdateContentDto = {
               ...content,
               pinned: false,
             };
             updateContent.mutate(dto);
           }}
-          onClick={() => console.log("click")}
+          onClick={() => navigate(`/content/${content.id}`)}
         ></Card.Button>
       ))}
     </Box>

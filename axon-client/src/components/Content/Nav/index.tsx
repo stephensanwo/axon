@@ -1,32 +1,26 @@
-import { BaseContentProps } from "../index.types";
 import ContentListNav from "./ContentListNav";
 import { Text } from "src/components/Common/Text";
 import ContentViewNav from "./ContentViewNav";
+import { ContentTypeDataQuery } from "src/context/content/index.types";
 
-function ContentNav({
-  level,
-  contentList,
-  contentTypeData,
-}: {
-  level: "list" | "content";
-} & BaseContentProps) {
-  const contentNavTitle = `${contentTypeData.isLoading ? "..." : contentTypeData.data?.parent_content.name}`;
+type ContentNavProps =
+  | {
+      level: "list";
+      contentTypeData?: ContentTypeDataQuery;
+    }
+  | {
+      level: "content";
+      contentTypeData: ContentTypeDataQuery;
+    };
+
+function ContentNav({ level, contentTypeData }: ContentNavProps) {
+  const contentNavTitle = `${contentTypeData?.isLoading ? "..." : contentTypeData?.data?.parent_content.name}`;
 
   return (
     <>
-      <ContentListNav
-        navTitle={"Content"}
-        contentList={contentList}
-        contentTypeData={contentTypeData}
-      />
+      <ContentListNav navTitle={"Content"} />
       <Text.SmallSecondary>/</Text.SmallSecondary>
-      {level === "content" && (
-        <ContentViewNav
-          navTitle={contentNavTitle}
-          contentList={contentList}
-          contentTypeData={contentTypeData}
-        />
-      )}
+      {level === "content" && <ContentViewNav navTitle={contentNavTitle} />}
     </>
   );
 }

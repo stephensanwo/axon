@@ -1,12 +1,7 @@
 import { Truncate, useTheme } from "@primer/react";
 import Select, { SelectMenuItem } from "src/components/Common/Select";
-import { BaseContentProps } from "../index.types";
 
-function ContentViewNav({
-  navTitle,
-}: {
-  navTitle: string;
-} & BaseContentProps) {
+function ContentViewNav({ navTitle }: { navTitle: string }) {
   const { theme } = useTheme();
 
   const options: SelectMenuItem[] = [];

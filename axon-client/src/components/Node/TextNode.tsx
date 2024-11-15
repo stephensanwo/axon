@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ResizeParams } from "reactflow";
+import { ResizeParams } from "@xyflow/react";
 import { CustomNodeProps, NodeDataProps } from "src/types/node";
 import { useNodeEvents } from "src/hooks/node/useNodeEvents";
 import { TextArea } from "src/components/Input/TextArea";
@@ -14,15 +14,15 @@ const TextNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
   const [resizing, setResizing] = useState<boolean>(false);
   const { selectedNode } = useNoteContext();
   const contentRef = React.createRef<any>();
-  const {
-    deleteNode,
-    duplicateNode,
-    onResizeStart,
-    onResizeEnd,
-    handleNodeClick,
-    handleNodeInteraction,
-    handleNodeContentChange,
-  } = useNodeEvents();
+  // const {
+  //   deleteNode,
+  //   duplicateNode,
+  //   onResizeStart,
+  //   onResizeEnd,
+  //   handleNodeClick,
+  //   handleNodeInteraction,
+  //   handleNodeContentChange,
+  // } = useNodeEvents();
 
   return (
     <>
@@ -30,35 +30,35 @@ const TextNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
         nodeId={id}
         isVisible={selectedNode?.id === id}
         keepAspectRatio={false}
-        onResizeStart={(e: any, params: ResizeParams) => {
-          setResizing(() => true);
-          onResizeStart(id, params);
-        }}
-        onResizeEnd={(e: any, params: ResizeParams) => {
-          onResizeEnd(id, params);
-          setResizing(() => false);
-        }}
+        // onResizeStart={(e: any, params: ResizeParams) => {
+        //   setResizing(() => true);
+        //   onResizeStart(id, params);
+        // }}
+        // onResizeEnd={(e: any, params: ResizeParams) => {
+        //   onResizeEnd(id, params);
+        //   setResizing(() => false);
+        // }}
         shouldResize={() => true}
       />
       <TextArea
         id={`text-node-${id}`}
         ref={contentRef}
         disabled={false}
-        onChange={(e: any) => handleNodeContentChange(e)}
-        onClick={() => handleNodeClick(id)}
-        onFocus={() => handleNodeClick(id)}
+        // onChange={(e: any) => handleNodeContentChange(e)}
+        // onClick={() => handleNodeClick(id)}
+        // onFocus={() => handleNodeClick(id)}
         onBlur={() => {}}
-        onMouseEnter={() => {
-          handleNodeInteraction(data.node_id);
-        }}
+        // onMouseEnter={() => {
+        //   handleNodeInteraction(data.node_id);
+        // }}
         selected={selectedNode?.id === id}
         fontSize={data.node_styles.font_size}
         fontWeight={data.node_styles.font_weight}
         color={data.node_styles.font_color}
         textalign={data.node_styles.font_alignment}
         padding={8}
-        width={data?.width - NODE_RESIZER_GUTTER}
-        height={data?.height - NODE_RESIZER_GUTTER}
+        width={data?.width}
+        height={data?.height}
         margin={NODE_RESIZER_GUTTER / 2}
         borderradius={`${data?.node_styles.border_radius}px`}
         borderstyle={data.node_styles.border_style}
@@ -67,14 +67,14 @@ const TextNode: React.FC<CustomNodeProps<NodeDataProps>> = (props) => {
       >
         {data?.description}
       </TextArea>
-      {selectedNode?.id === id && !resizing && (
+      {/* {selectedNode?.id === id && !resizing && (
         <NodeMenu
           node_props={props}
           deleteNode={deleteNode}
           duplicateNode={duplicateNode}
         />
       )}
-      <NodeHandles node_id={id} handleNodeInteraction={handleNodeInteraction} />
+      <NodeHandles node_id={id} handleNodeInteraction={handleNodeInteraction} /> */}
     </>
   );
 };

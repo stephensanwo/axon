@@ -1,10 +1,18 @@
 import { TableCellTypes } from "src/components/DataSheet/index.types";
 import { BaseEntity } from "src/db/db.types";
 
+export type ContentFolderData = {
+  name: string;
+  pinned: boolean;
+};
+
+export type ContentFolderEntity = BaseEntity & ContentFolderData;
+
 export type ContentData = {
   name: string;
   content_type: ContentTypeKeys;
   pinned: boolean;
+  content_folder_id: string;
 };
 
 export enum ContentTypeEnums {
@@ -76,4 +84,9 @@ export const ContentEntityKeys = {
   CONTENT: "content",
   CONTENT_TYPE_DEFAULTs: "content-type-defaults",
   CONTENT_TYPE_DATA: "content-type-data",
+  CONTENT_FOLDER: "content-folder",
+};
+
+export type ContentTree = {
+  [key: string]: (ContentEntity | ContentFolderEntity)[];
 };

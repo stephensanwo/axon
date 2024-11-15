@@ -94,6 +94,7 @@ export function CodeInput({
               },
             }}
             width={"100%"}
+            className="h-full w-full bg-red-500"
           />
         );
       }}
@@ -146,13 +147,15 @@ export function Code({
 
   return (
     <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 4,
-        width: "100%",
-        height: "100%",
-      }}
+      className="h-full w-full"
+      // sx={{
+      //   display: "flex",
+      //   flexDirection: "column",
+      //   gap: 4,
+      //   // width: "100%",
+      //   // height: "100%",
+      //   backgroundColor: "red",
+      // }}
     >
       {showHeader && <CodeHeader Form={Form} code={code} isTyping={isTyping} />}
       <CodeInput

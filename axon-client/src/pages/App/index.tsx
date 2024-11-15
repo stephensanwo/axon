@@ -4,7 +4,7 @@ import FolderContext from "src/context/folder";
 import styled from "styled-components";
 import FlowTree from "src/components/FlowTree";
 // import Folders from "../Folders";
-import NodePanel from "src/components/Note/NodePanel";
+import NodePanel from "src/components/NodePanel";
 import { NoteRenderState } from "./NoteRenderState";
 import NoteContext from "src/context/notes";
 import EdgeMenu from "src/components/Edge/EdgeMenu";

@@ -1,14 +1,13 @@
-import { uid } from "src/common/uid";
-import { boardRepository } from "../board/board.repository";
 import { defaultNodeStyles } from "../node/node.defaults";
 import {
   NodeEntity,
+  NodeEntityKeys,
   NodeStyle,
   NodeStyleEntity,
   NodeTypes,
 } from "../node/node.entity";
 import { nodeStylesDb } from "./node.db";
-import { GetNodesResponseDto, UpdateNodeStyleDto } from "./node.dto";
+import { UpdateNodeStyleDto } from "./node.dto";
 import { nodeRepository } from "./node.repository";
 import { NodeContentTypes } from "src/types/node";
 import { XYPosition } from "reactflow";
@@ -21,8 +20,8 @@ export class NodeService {
   public async createDefaultNodeStyles(): Promise<boolean> {
     const existingStyles =
       await this.nodeStylesDb.getAllRecords<NodeStyleEntity>({
-        startkey: "node-styles_",
-        endkey: "node-styles_\uffff",
+        startkey: `${NodeEntityKeys.NODE_STYLES}_`,
+        endkey: `${NodeEntityKeys.NODE_STYLES}_\uffff`,
       });
     if (existingStyles.length > 0) {
       return true;
@@ -39,8 +38,8 @@ export class NodeService {
     try {
       const nodeStyles = await this.nodeStylesDb.getAllRecords<NodeStyleEntity>(
         {
-          startkey: "node-styles_",
-          endkey: "node-styles_\uffff",
+          startkey: `${NodeEntityKeys.NODE_STYLES}_`,
+          endkey: `${NodeEntityKeys.NODE_STYLES}_\uffff`,
         }
       );
       return nodeStyles[0];
@@ -59,24 +58,13 @@ export class NodeService {
     }
   }
 
-  public async getNodes(boardName: string): Promise<GetNodesResponseDto> {
+  public async getNodes(boardId: string): Promise<NodeEntity[]> {
     try {
-      const board_id = await boardRepository.findBoardIdByName(boardName);
-
-      if (!board_id) {
-        return {
-          board_id: null,
-          nodes: [],
-        };
-      }
-      const nodes = await nodeRepository.findNodesByBoardId(board_id);
-      return {
-        board_id,
-        nodes,
-      };
+      const nodes = await nodeRepository.findNodesByBoardId(boardId);
+      return nodes;
     } catch (err) {
       console.error(err);
-      throw new Error("Error fetching nodes");
+      return [];
     }
   }
 

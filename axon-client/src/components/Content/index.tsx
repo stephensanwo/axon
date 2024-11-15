@@ -1,25 +1,34 @@
 import ContentEmpty from "./ContentEmpty";
-import ContentFooter from "./ContentFooter";
 import { ContentMain } from "./ContentMain";
 import ContentPreview from "./Preview";
 import ContentListHeader from "./Header/ContentListHeader";
+import ContentFolderListHeader from "./Header/ContentFolderListHeader";
 import ContentList from "./List/ContentList";
 import ContentNav from "./Nav";
 import ContentPreviewButton from "./Preview/ContentPreviewButton";
 import ContentPreviewOptions from "./Preview/ContentPreviewOptions";
 import ContentView from "./View";
-
+import ContentFolderList from "./List/ContentFolderList";
+import { ContentFolderMain } from "./Main/ContentFolderMain";
+import ContentFolderLeft from "./Left/ContentFolderLeft";
+import ContentIndexMain from "./Main/ContentIndexMain";
+import ContentListRight from "./Right/ContentListRight";
 const Content = {
   Main: ContentMain,
   List: ContentList,
+  FolderList: ContentFolderList,
+  FolderMain: ContentFolderMain,
+  IndexMain: ContentIndexMain,
   Empty: ContentEmpty,
   Nav: ContentNav,
-  Footer: ContentFooter,
   ContentListHeader: ContentListHeader,
+  ContentFolderListHeader: ContentFolderListHeader,
   Preview: ContentPreview,
   View: ContentView,
   PreviewButton: ContentPreviewButton,
   PreviewOptions: ContentPreviewOptions,
+  FolderLeft: ContentFolderLeft,
+  ListRight: ContentListRight,
 };
 
 export default Content;

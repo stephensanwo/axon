@@ -58,7 +58,7 @@ function OverlayMenu({
         sx: {
           border: `1px solid ${theme?.colors.border.default}`,
           backgroundColor: theme?.colors.bg.overlay,
-          borderRadius: 6,
+          borderRadius: 0,
           width: `${width}px`,
           minHeight: `${minHeight}px`,
           maxHeight: maxHeight ? `${maxHeight}px` : "auto",

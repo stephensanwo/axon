@@ -1,13 +1,23 @@
-import { contentDb, contentTypeDataDb } from "./content.db";
-import { ContentEntityKeys, ContentTypeDataEntity } from "./content.entity";
+import { contentDb, contentFolderDb, contentTypeDataDb } from "./content.db";
+import {
+  ContentEntity,
+  ContentEntityKeys,
+  ContentTypeDataEntity,
+} from "./content.entity";
 
 interface IContentRepository {}
 
 export class ContentRepository implements IContentRepository {
   contentDb = contentDb;
   contentTypeDataDb = contentTypeDataDb;
+  contentFolderDb = contentFolderDb;
+
   constructor() {
     this.contentDb.client.createIndex({
+      index: { fields: ["doc_key", "name"] },
+    });
+
+    this.contentFolderDb.client.createIndex({
       index: { fields: ["doc_key", "name"] },
     });
 
@@ -16,6 +26,28 @@ export class ContentRepository implements IContentRepository {
     });
 
     this.setupChangeListener();
+  }
+
+  async findContentFolderMatchByName(
+    name: string
+  ): Promise<PouchDB.Find.FindResponse<{}>> {
+    const doc = await this.contentFolderDb.client.find({
+      selector: {
+        doc_key: { $eq: ContentEntityKeys.CONTENT_FOLDER },
+        name: { $regex: `^${name}` },
+      },
+    });
+    return doc;
+  }
+
+  async findContentFolderIdByName(name: string): Promise<string> {
+    const doc = await this.contentFolderDb.client.find({
+      selector: {
+        doc_key: { $eq: ContentEntityKeys.CONTENT_FOLDER },
+        name: { $eq: name },
+      },
+    });
+    return doc.docs[0]?._id || "";
   }
 
   async findContentMatchByName(
@@ -52,7 +84,17 @@ export class ContentRepository implements IContentRepository {
     });
     return doc.docs[0]?._id || "";
   }
-
+  async findContentByFolderId(
+    folderId: string
+  ): Promise<PouchDB.Core.ExistingDocument<ContentEntity>[]> {
+    const doc = await this.contentDb.client.find({
+      selector: {
+        doc_key: { $eq: ContentEntityKeys.CONTENT },
+        content_folder_id: { $eq: folderId },
+      },
+    });
+    return doc.docs as PouchDB.Core.ExistingDocument<ContentEntity>[];
+  }
   // Method to setup changes listener
   public setupChangeListener() {}
 }

@@ -10,8 +10,8 @@ import React from "react";
 import { PiX } from "react-icons/pi";
 
 function CardButton({
-  width = "150px",
-  height = "150px",
+  width = "125px",
+  height = "120px",
   icon,
   title,
   subtitle,
@@ -19,6 +19,7 @@ function CardButton({
   trailingAction,
   trailingActionComponent,
   onClick,
+  containerStyle,
 }: {
   width?: string;
   height?: string;
@@ -29,6 +30,7 @@ function CardButton({
   trailingAction?: () => void;
   trailingActionComponent?: React.ReactNode;
   onClick?: () => void;
+  containerStyle?: React.CSSProperties;
 }) {
   const { theme } = useTheme();
   return (
@@ -46,6 +48,7 @@ function CardButton({
           border: `1px solid ${theme?.colors.primary.default}`,
         },
         position: "relative",
+        ...containerStyle,
       }}
       onClick={onClick}
     >
@@ -65,9 +68,11 @@ function CardButton({
               variant="invisible"
               size="small"
               aria-label="Remove"
-              icon={() => <PiX size={16} color={theme?.colors.text.gray} />}
+              icon={() => <PiX size={14} color={theme?.colors.text.gray} />}
               sx={{
                 borderRadius: "50%",
+                width: "20px",
+                height: "20px",
               }}
               onClick={(event) => {
                 event.stopPropagation();
@@ -94,7 +99,7 @@ function CardButton({
           }}
         >
           {title && (
-            <Truncate maxWidth={120} expandable={false} title={title}>
+            <Truncate maxWidth={95} expandable={false} title={title}>
               <Text
                 sx={{
                   fontSize: 0,
@@ -107,7 +112,7 @@ function CardButton({
             </Truncate>
           )}
           {subtitle && (
-            <Truncate maxWidth={150} expandable={false} title={subtitle}>
+            <Truncate maxWidth={120} expandable={false} title={subtitle}>
               <Text
                 sx={{
                   fontSize: "10px",

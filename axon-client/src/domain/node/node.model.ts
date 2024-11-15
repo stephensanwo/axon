@@ -1,5 +1,10 @@
 import { XYPosition } from "reactflow";
-import { NodeContentTypes, NodeEntity, NodeTypes } from "./node.entity";
+import {
+  NodeContentTypes,
+  NodeEntity,
+  NodeStyleEntity,
+  NodeTypes,
+} from "./node.entity";
 import { uid } from "src/common/uid";
 import nodeService from "./node.service";
 import nodeMetadata from "./node.meta";
@@ -11,12 +16,14 @@ interface NodeModelParams {
   isSubFlow?: boolean;
   parentNode?: string;
   node_content_type?: NodeContentTypes | null;
+  node_content_type_id?: string | null;
   previousNode: NodeEntity | null;
   position?: XYPosition;
 }
 
 export class NodeModel {
-  node = {} as NodeEntity;
+  node: NodeEntity;
+
   constructor({
     board_id,
     node_id,
@@ -24,41 +31,37 @@ export class NodeModel {
     isSubFlow,
     parentNode,
     node_content_type,
+    node_content_type_id,
     previousNode,
     position,
   }: NodeModelParams) {
     let id = node_id ?? uid("node");
-    this.node.id = id;
-    this.node.data.node_id = id;
-    this.node.data.board_id = board_id;
-    this.node.type = node_type;
+    const nodeContentData = nodeMetadata.getNodeContentData(node_type);
+    this.node = {
+      id: id,
+      type: node_type,
+      data: {
+        node_id: id,
+        board_id: board_id,
+        content_type: node_content_type ?? null,
+        content_type_id: node_content_type_id ?? "",
+        content_data: nodeContentData,
+        node_styles: {} as NodeStyleEntity,
+      },
+      position: { x: 0, y: 0 },
+      width: 0,
+      height: 0,
+    };
     this.node.extent = isSubFlow ? "parent" : undefined;
     this.node.parentId = isSubFlow && parentNode ? parentNode : undefined;
+
     this.buildNodeDimensions(node_type);
     this.buildNodePosition(previousNode, position);
+    this.buildNodeStyles();
   }
 
   async init() {
     await this.buildNodeStyles();
-  }
-
-  private buildContentType() {
-    switch (this.node.type) {
-      case "box":
-        this.node.data.content_type = "markdown";
-        break;
-      case "block":
-        this.node.data.content_type = "block_editor";
-        break;
-      case "icon":
-        this.node.data.content_type = "json_editor";
-        break;
-      case "text":
-        this.node.data.content_type = "markdown";
-        break;
-      default:
-        this.node.data.content_type = null;
-    }
   }
 
   private async buildNodeStyles() {
@@ -93,5 +96,9 @@ export class NodeModel {
       x: position?.x ?? newXPosition,
       y: position?.y ?? newYPosition,
     };
+  }
+
+  get(): NodeEntity {
+    return this.node;
   }
 }

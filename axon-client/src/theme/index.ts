@@ -54,6 +54,9 @@ export const AXON_THEME = deepmerge(theme, {
         primary: {
           default: AXON_TOKENS.primary100,
           variant1: AXON_TOKENS.primary100a,
+          variant3: AXON_TOKENS.primary100b,
+          variant4: AXON_TOKENS.primary100c,
+          variant5: AXON_TOKENS.primary100d,
         },
         success: {
           default: AXON_TOKENS.green100,

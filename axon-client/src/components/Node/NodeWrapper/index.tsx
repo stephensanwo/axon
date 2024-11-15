@@ -1,6 +1,6 @@
 import { useTheme } from "@primer/react";
 import React, { CSSProperties } from "react";
-import { NodeResizer, NodeResizerProps } from "reactflow";
+import { NodeResizer, NodeResizerProps } from "@xyflow/react";
 
 export interface INodeWrapperProps extends NodeResizerProps {}
 

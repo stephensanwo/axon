@@ -1,44 +1,71 @@
 import { useDataMutation } from "src/hooks/api/useDataMutation";
-import { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
-import { ContentEntity } from "src/domain/content/content.entity";
+import {
+  ContentEntity,
+  ContentFolderEntity,
+} from "src/domain/content/content.entity";
 import {
   CreateContentDto,
+  CreateContentFolderDto,
+  GetContentListResponseDto,
   GetContentTypeDataResponseDto,
   UpdateContentDto,
+  UpdateContentFolderDto,
   UpdateContentTypeDataDto,
 } from "src/domain/content/content.dto";
 import { useContentRoute } from "./useContentRoute";
 import contentService from "src/domain/content/content.service";
 import { useDataQuery } from "src/hooks/api/useDataQuery";
-import { ContentQueryKeys } from "../index.types";
+import {
+  ContentQueryKeys,
+  CreateContentMutation,
+  UpdateContentMutation,
+  DeleteContentMutation,
+  ContentListQuery,
+  ContentTypeDataQuery,
+  UpdateContentTypeDataMutation,
+  ContentFoldersQuery,
+  CreateContentFolderMutation,
+  DeleteContentFolderMutation,
+  UpdateContentFolderMutation,
+} from "../index.types";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "src/components/Common/Toast/use-toast";
 
 export function useContent(): {
-  createContent: UseMutationResult<
-    ContentEntity,
-    unknown,
-    CreateContentDto,
-    unknown
-  >;
-  updateContent: UseMutationResult<boolean, unknown, UpdateContentDto, unknown>;
-  deleteContent: UseMutationResult<boolean, unknown, string[], unknown>;
-  contentList: UseQueryResult<ContentEntity[], unknown>;
-  contentTypeData: UseQueryResult<
-    GetContentTypeDataResponseDto | null,
-    unknown
-  >;
-  updateContentTypeData: UseMutationResult<
-    boolean,
-    unknown,
-    UpdateContentTypeDataDto,
-    unknown
-  >;
+  createContent: CreateContentMutation;
+  updateContent: UpdateContentMutation;
+  deleteContent: DeleteContentMutation;
+  contentList: ContentListQuery;
+  contentTypeData: ContentTypeDataQuery;
+  updateContentTypeData: UpdateContentTypeDataMutation;
+  contentFolders: ContentFoldersQuery;
+  createContentFolder: CreateContentFolderMutation;
+  deleteContentFolder: DeleteContentFolderMutation;
+  updateContentFolder: UpdateContentFolderMutation;
 } {
-  const { contentId } = useContentRoute();
+  const { contentId, contentFolderName } = useContentRoute();
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const createContent = useDataMutation<CreateContentDto, ContentEntity>({
     mutationFn: async (dto: CreateContentDto) =>
       contentService.createContent(dto),
     optionalQueryKeysToInvalidate: [[...ContentQueryKeys.CONTENT]],
+  });
+
+  const createContentFolder = useDataMutation<
+    CreateContentFolderDto,
+    ContentFolderEntity
+  >({
+    mutationFn: async (dto: CreateContentFolderDto) =>
+      contentService.createContentFolder(dto),
+    optionalQueryKeysToInvalidate: [[...ContentQueryKeys.CONTENT]],
+    onSuccessCallback: () => {
+      toast({
+        title: "Success",
+        description: "Content Folder Created",
+      });
+    },
   });
 
   const deleteContent = useDataMutation<string[], boolean>({
@@ -47,15 +74,52 @@ export function useContent(): {
     onSuccessCallback: () => {},
   });
 
+  const deleteContentFolder = useDataMutation<string[], boolean>({
+    mutationFn: async (dto: string[]) =>
+      contentService.deleteContentFolder(dto),
+    optionalQueryKeysToInvalidate: [[...ContentQueryKeys.CONTENT]],
+    onSuccessCallback: () => {
+      toast({
+        title: "Success",
+        description: "Content Folder Deleted",
+        variant: "destructive",
+      });
+    },
+  });
+
   const updateContent = useDataMutation<UpdateContentDto, boolean>({
     mutationFn: async (dto: UpdateContentDto) =>
       contentService.updateContent(dto),
     optionalQueryKeysToInvalidate: [[...ContentQueryKeys.CONTENT]],
   });
 
-  const contentList = useDataQuery<ContentEntity[]>({
-    queryKey: [...ContentQueryKeys.CONTENT],
-    queryFn: async () => contentService.getAllContent(),
+  const updateContentFolder = useDataMutation<UpdateContentFolderDto, boolean>({
+    mutationFn: async (dto: UpdateContentFolderDto) =>
+      contentService.updateContentFolder(dto),
+    optionalQueryKeysToInvalidate: [[...ContentQueryKeys.CONTENT]],
+    onSuccessCallback: (_, variables) => {
+      navigate(`/content/${variables?.name}`);
+      toast({
+        title: "Success",
+        description: "Content Folder Updated",
+      });
+    },
+  });
+
+  const contentFolders = useDataQuery<ContentFolderEntity[]>({
+    queryKey: [...ContentQueryKeys.CONTENT_FOLDERS],
+    queryFn: async () => contentService.getAllContentFolders(),
+    refetchOnMount: true,
+    refetchOnReconnect: true,
+    refetchOnWindowFocus: true,
+  });
+
+  const contentList = useDataQuery<GetContentListResponseDto | null>({
+    queryKey: [...ContentQueryKeys.CONTENT, contentFolderName],
+    queryFn: async () =>
+      contentFolderName
+        ? contentService.getContentListByFolderName(contentFolderName)
+        : null,
     refetchOnMount: true,
     refetchOnReconnect: true,
     refetchOnWindowFocus: true,
@@ -86,5 +150,9 @@ export function useContent(): {
     contentList,
     contentTypeData,
     updateContentTypeData,
+    contentFolders,
+    createContentFolder,
+    deleteContentFolder,
+    updateContentFolder,
   };
 }

@@ -17,7 +17,7 @@ export function useBoard(): {
   createBoard: UseMutationResult<BoardEntity, unknown, CreateBoardDto, unknown>;
   updateBoard: UseMutationResult<boolean, unknown, UpdateBoardDto, unknown>;
   deleteBoard: UseMutationResult<boolean, unknown, string[], unknown>;
-  boardQuery: UseQueryResult<GetBoardResponseDto | null, unknown>;
+  board: UseQueryResult<GetBoardResponseDto | null, unknown>;
 } {
   const { projectName } = useProjectRoute();
   const { boardName } = useBoardRoute();
@@ -38,34 +38,18 @@ export function useBoard(): {
     optionalQueryKeysToInvalidate: [[...ProjectFilesQueryKeys, projectName!!]],
   });
 
-  const boardQuery = useDataQuery<GetBoardResponseDto | null>({
+  const board = useDataQuery<GetBoardResponseDto | null>({
     queryKey: [...BoardQueryKeys, boardName],
-    queryFn: async () => boardService.getBoard(boardName || ""),
+    queryFn: async () => (boardName ? boardService.getBoard(boardName) : null),
     refetchOnMount: true,
     refetchOnReconnect: true,
     refetchOnWindowFocus: true,
   });
 
-  // const nodeQuery = useDataQuery<GetNodesResponseDto | null>({
-  //   queryKey: [...BoardQueryKeys.BOARD, boardName || "notfound", "nodes"],
-  //   queryFn: async () => nodeService.getNodes(boardName || ""),
-  //   refetchOnMount: true,
-  //   refetchOnReconnect: true,
-  //   refetchOnWindowFocus: true,
-  // });
-
-  // const edgeQuery = useDataQuery<GetEdgesResponseDto>({
-  //   queryKey: [...BoardQueryKeys.BOARD, boardName || "notfound", "edges"],
-  //   queryFn: async () => edgeService.getEdges(boardName || ""),
-  //   refetchOnMount: true,
-  //   refetchOnReconnect: true,
-  //   refetchOnWindowFocus: true,
-  // });
-
   return {
     createBoard,
     updateBoard,
     deleteBoard,
-    boardQuery,
+    board,
   };
 }

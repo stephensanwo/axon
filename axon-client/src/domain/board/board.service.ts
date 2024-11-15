@@ -1,3 +1,5 @@
+import edgeService from "../edge/edge.service";
+import nodeService from "../node/node.service";
 import projectService from "../project/project.service";
 import { boardDefaultsDb, boardsDb } from "./board.db";
 import { defaultBoardSettings } from "./board.defaults";
@@ -65,8 +67,9 @@ export class BoardService {
       }
 
       const board = await this.boardsDb.getRecord<BoardEntity>(boardId);
-
       const project = await projectService.getProject(board.projectId);
+      const nodes = await nodeService.getNodes(boardId);
+      const edges = await edgeService.getEdges(boardId);
 
       if (!project) {
         return null;
@@ -75,6 +78,8 @@ export class BoardService {
       return {
         board,
         project,
+        nodes,
+        edges,
       };
     } catch (error) {
       console.error(error);

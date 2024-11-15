@@ -1,15 +1,24 @@
-import { contentDb, contentTypeDataDb, contentTypeDb } from "./content.db";
+import {
+  contentDb,
+  contentFolderDb,
+  contentTypeDataDb,
+  contentTypeDb,
+} from "./content.db";
 import { defaultContentTypes } from "./content.defaults";
 import {
   CreateContentDto,
+  CreateContentFolderDto,
   CreateContentTypeDataDto,
+  GetContentListResponseDto,
   GetContentTypeDataResponseDto,
   UpdateContentDto,
+  UpdateContentFolderDto,
   UpdateContentTypeDataDto,
 } from "./content.dto";
 import {
   ContentEntity,
   ContentEntityKeys,
+  ContentFolderEntity,
   ContentType,
   ContentTypeDataEntity,
   ContentTypeEnums,
@@ -20,8 +29,29 @@ export class ContentService {
   contentDb = contentDb;
   contentTypeDb = contentTypeDb;
   contentTypeDataDb = contentTypeDataDb;
-
+  contentFolderDb = contentFolderDb;
   constructor() {}
+
+  public async createContentFolder(
+    entity: CreateContentFolderDto
+  ): Promise<ContentFolderEntity> {
+    try {
+      const existingRecords =
+        await contentRepository.findContentFolderMatchByName(entity.name);
+      if (existingRecords.docs.length > 0) {
+        const num = existingRecords.docs.length;
+        entity.name = `${entity.name} ${num}`;
+      }
+
+      const res =
+        await this.contentFolderDb.createRecord<CreateContentFolderDto>(entity);
+
+      return res;
+    } catch (error) {
+      console.error(`Error creating content folder - ${error}`);
+      throw new Error(`Error creating content folder - ${error}`);
+    }
+  }
 
   public async createContent(entity: CreateContentDto): Promise<ContentEntity> {
     try {
@@ -63,6 +93,17 @@ export class ContentService {
     }
   }
 
+  public async updateContentFolder(
+    entity: UpdateContentFolderDto
+  ): Promise<boolean> {
+    try {
+      await this.contentFolderDb.updateRecord<UpdateContentFolderDto>(entity);
+      return true;
+    } catch (error) {
+      throw new Error(`Error updating content folder - ${error}`);
+    }
+  }
+
   public async updateContent(entity: UpdateContentDto): Promise<boolean> {
     try {
       await this.contentDb.updateRecord<UpdateContentDto>(entity);
@@ -85,6 +126,15 @@ export class ContentService {
     }
   }
 
+  public async deleteContentFolder(ids: string[]): Promise<boolean> {
+    try {
+      const ok = await this.contentFolderDb.deleteRecords(ids);
+      return ok;
+    } catch (error) {
+      throw new Error(`Error deleting content folder - ${error}`);
+    }
+  }
+
   public async deleteContent(ids: string[]): Promise<boolean> {
     try {
       const ok = await this.contentDb.deleteRecords(ids);
@@ -101,6 +151,22 @@ export class ContentService {
       return ok;
     } catch (error) {
       throw new Error(`Error deleting content type - ${error}`);
+    }
+  }
+
+  public async getContentFolder(
+    contentFolderName: string
+  ): Promise<ContentFolderEntity | null> {
+    try {
+      const contentFolderId =
+        await contentRepository.findContentFolderIdByName(contentFolderName);
+      const contentFolder =
+        await this.contentFolderDb.getRecord<ContentFolderEntity>(
+          contentFolderId
+        );
+      return contentFolder;
+    } catch (error) {
+      throw new Error(`Error getting content folder - ${error}`);
     }
   }
 
@@ -158,6 +224,20 @@ export class ContentService {
     }
   }
 
+  public async getAllContentFolders(): Promise<ContentFolderEntity[]> {
+    try {
+      const contentFolders =
+        await this.contentFolderDb.getAllRecords<ContentFolderEntity>({
+          descending: true,
+          endkey: `${ContentEntityKeys.CONTENT_FOLDER}_`,
+          startkey: `${ContentEntityKeys.CONTENT_FOLDER}_\ufff0`,
+        });
+      return contentFolders;
+    } catch (error) {
+      throw new Error(`Error getting all content folders - ${error}`);
+    }
+  }
+
   public async getAllContent(): Promise<ContentEntity[]> {
     try {
       const content = await this.contentDb.getAllRecords<ContentEntity>({
@@ -169,6 +249,35 @@ export class ContentService {
     } catch (err) {
       console.error(err);
       return [];
+    }
+  }
+
+  public async getContentListByFolderName(
+    folderName: string
+  ): Promise<GetContentListResponseDto | null> {
+    try {
+      const contentFolderId =
+        await contentRepository.findContentFolderIdByName(folderName);
+
+      if (!contentFolderId) {
+        return null;
+      }
+
+      const contentFolder =
+        await this.contentFolderDb.getRecord<ContentFolderEntity>(
+          contentFolderId
+        );
+
+      const content =
+        await contentRepository.findContentByFolderId(contentFolderId);
+
+      return {
+        folder: contentFolder,
+        content: content,
+      };
+    } catch (err) {
+      console.error(err);
+      return null;
     }
   }
 

@@ -1,41 +1,29 @@
-import { Node, Position, XYPosition } from "reactflow";
+import { Node, Position, XYPosition } from "@xyflow/react";
 import { BaseEntity } from "src/db/db.types";
 import { ColorData, SettingsComponentTypes } from "../settings/settings.entity";
 
-export type CustomNodeEntity<T = any> = {
-  id: string;
-  data: T;
-  dragHandle?: boolean;
-  type?: NodeTypes;
-  selected?: boolean;
-  isConnectable?: boolean;
-  zIndex?: number;
-  xPos: number;
-  yPos: number;
-  dragging: boolean;
-  targetPosition?: Position;
-  sourcePosition?: Position;
-};
-
-export type NodeEntity = Node<NodeDataProps, NodeTypes | undefined> &
-  BaseEntity;
-export interface NodeDataProps {
-  name: string;
+export type NodeEntity = Node<NodeDataProps, NodeTypes>;
+export interface NodeDataProps extends Record<string, unknown> {
   node_id: string;
   board_id: string;
   node_styles: NodeStyleEntity;
   content_type: NodeContentTypes | null;
   content_type_id: string;
+  content_data: NodeTextEntity;
 }
 
 // Default Node Types
-export type NodeTypes = "box" | "text" | "block" | "icon" | "custom"; 
+export type NodeTypes = "box" | "text" | "block" | "icon" | "custom";
 
 export type NodeContentTypes =
   | "markdown"
   | "json_editor"
   | "code"
   | "block_editor";
+
+export interface NodeTextEntity {
+  text: string;
+}
 
 export interface NodeCodeEntity {
   code: string;
@@ -82,22 +70,17 @@ export interface NodeIconEntity {
 
 export type NodeIconSizes = 16 | 24 | 32 | 40 | 48 | 56 | 64;
 
-export interface NodeOptions {
+export interface NodeTypeOptions {
   id: string;
   name: string;
   description: string;
   longDescription?: string;
   nodeType: NodeTypes;
   nodeContentType: NodeContentTypes | null;
-  icon: React.ReactNode;
+  icon: React.ElementType;
   disabled?: boolean;
   configOptions?: {};
 }
-
-
-
-
-
 
 export interface NodeThemeEntity {
   style: "background-fill" | "border-outline" | "none";
@@ -130,3 +113,8 @@ export type NodeStyle = {
 };
 
 export type NodeStyleEntity = BaseEntity & NodeStyle;
+
+export enum NodeEntityKeys {
+  NODE_STYLES = "node-styles",
+  NODES = "nodes",
+}

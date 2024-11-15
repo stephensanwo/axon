@@ -1,4 +1,16 @@
-import { NodeStyle } from "./node.entity";
+import {
+  PiArticleLight,
+  PiSmileyLight,
+  PiStackLight,
+  PiTextTLight,
+} from "react-icons/pi";
+import { NodeStyle, NodeTypeOptions } from "./node.entity";
+import {
+  CornersIcon,
+  GroupIcon,
+  LayersIcon,
+  TextIcon,
+} from "@radix-ui/react-icons";
 
 export const defaultNodeStyles: NodeStyle = {
   font_weight: {
@@ -96,3 +108,38 @@ export const defaultNodeStyles: NodeStyle = {
     component: "select",
   },
 };
+
+export const defaultNodeTypes: NodeTypeOptions[] = [
+  {
+    id: "add-text-node",
+    name: "Text",
+    description: "Add text content to your flow",
+    nodeType: "text",
+    nodeContentType: "block_editor",
+    icon: TextIcon,
+  },
+  {
+    id: "add-block-node",
+    name: "Block",
+    description: "Add text block to your flow",
+    nodeType: "block",
+    nodeContentType: "block_editor",
+    icon: LayersIcon,
+  },
+  {
+    id: "add-box",
+    name: "Box",
+    description: "Add a paragraph to your flow",
+    nodeType: "box",
+    nodeContentType: null,
+    icon: CornersIcon,
+  },
+  {
+    id: "add-icon-node",
+    name: "Icon",
+    description: "Add an icon to your flow",
+    nodeType: "icon",
+    nodeContentType: "block_editor",
+    icon: PiSmileyLight,
+  },
+];

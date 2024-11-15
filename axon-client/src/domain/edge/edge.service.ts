@@ -1,8 +1,7 @@
-import { boardRepository } from "../board/board.repository";
 import { edgeDefaultsDb } from "./edge.db";
 import { defaultEdgeStyles } from "./edge.defaults";
-import { GetEdgesResponseDto, UpdateEdgeStyleDto } from "./edge.dto";
-import { EdgeStyle, EdgeStyleEntity } from "./edge.entity";
+import { UpdateEdgeStyleDto } from "./edge.dto";
+import { EdgeEntity, EdgeStyle, EdgeStyleEntity } from "./edge.entity";
 import { edgeRepository } from "./edge.repository";
 
 export class EdgeService {
@@ -50,24 +49,13 @@ export class EdgeService {
     }
   }
 
-  public async getEdges(boardName: string): Promise<GetEdgesResponseDto> {
+  public async getEdges(boardId: string): Promise<EdgeEntity[]> {
     try {
-      const board_id = await boardRepository.findBoardIdByName(boardName);
-
-      if (!board_id) {
-        return {
-          board_id: null,
-          edges: [],
-        };
-      }
-
-      const edges = await edgeRepository.findEdgesByBoardId(board_id);
-      return {
-        board_id: board_id,
-        edges: edges,
-      };
+      const edges = await edgeRepository.findEdgesByBoardId(boardId);
+      return edges;
     } catch (error) {
-      throw new Error(`Error fetching edges - ${error}`);
+      console.error(error);
+      return [];
     }
   }
 }

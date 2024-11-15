@@ -28,7 +28,7 @@ root.render(
           </BrowserRouter>
         </BaseStyles>
       </ThemeProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   </React.StrictMode>
 );

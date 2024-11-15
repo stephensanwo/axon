@@ -4,7 +4,7 @@ import { INote, NoteMenuTypes } from "src/types/notes";
 import { useNoteContext } from "src/hooks/notes/useNoteContext";
 import FlowTree from "src/components/FlowTree";
 import { NoteMenuModalKeys } from "./NoteMenu/index.types";
-import NodePanel from "./NodePanel";
+import NodePanel from "../NodeOptions";
 import { NoteModals } from "./NoteMenu/NoteModals";
 
 function Note(props: INote) {

@@ -6,3 +6,14 @@ export enum BoardRouteParams {
 }
 
 export const BoardQueryKeys = [...ProjectFilesQueryKeys, BoardEntityKeys.BOARD];
+
+export type NodeOptionsProps = {
+  state: "open" | "closed";
+  component: NodeOptionsComponents;
+};
+
+export type NodeOptionsComponents = "formatting";
+
+export type NodeContentProps = {
+  state: "open" | "closed";
+};

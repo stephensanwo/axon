@@ -48,6 +48,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
         );
         beforeMount && beforeMount(monaco);
       }}
+      className="h-full w-full bg-red-500"
     />
   );
 };

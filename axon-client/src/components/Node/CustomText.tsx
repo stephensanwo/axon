@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ResizeParams } from "reactflow";
+import { ResizeParams } from "@xyflow/react";
 import { useTheme } from "@primer/react";
 import { CustomNodeProps, NodeDataProps } from "src/types/node";
 import { useNodeEvents } from "src/hooks/node/useNodeEvents";

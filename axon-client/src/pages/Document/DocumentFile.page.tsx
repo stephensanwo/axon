@@ -1,7 +1,6 @@
 import Blank from "src/components/Blank";
 import { Document, DocumentFile } from "src/components/Document";
 import AxonLoader from "src/components/Loader/Loader";
-import Search from "src/components/Search";
 import Settings from "src/components/Settings";
 import User from "src/components/User";
 import Icon from "src/components/Common/Icon";
@@ -9,6 +8,7 @@ import { useDocument } from "src/context/document/hooks/useDocument";
 import Layout from "src/components/Layout";
 import { useDocumentFileRoute } from "src/context/document/hooks/useDocumentRoute";
 import { DocumentFolderRouteParams } from "src/context/document/document.types";
+import SearchDialog from "src/components/Search/SearchDialog";
 
 function DocumentFilePage() {
   const { documentFolders, documentFiles, documentFile } = useDocument();
@@ -31,7 +31,7 @@ function DocumentFilePage() {
             />
           ),
           menus: [
-            <Search.Button type={"icon"} />,
+            <SearchDialog />,
             <Settings.Button type="icon" />,
             <User.Button type={"icon"} />,
           ],
@@ -71,7 +71,7 @@ function DocumentFilePage() {
           />
         ),
         menus: [
-          <Search.Button type={"icon"} />,
+          <SearchDialog />,
           <Settings.Button type="icon" />,
           <User.Button type={"icon"} />,
         ],

@@ -14,6 +14,15 @@ class NodeMetadata {
         return { nodeWidth: 280, nodeHeight: 42 };
     }
   }
+
+  public getNodeContentData(type: NodeTypes): any {
+    switch (type) {
+      case "text":
+        return { description: "" };
+      default:
+        return {};
+    }
+  }
 }
 
 const nodeMetadata = new NodeMetadata();

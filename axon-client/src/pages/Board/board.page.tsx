@@ -1,140 +1,135 @@
 import Blank from "src/components/Blank";
-import { ComponentState } from "src/components/Common/ComponentState";
 import AxonLoader from "src/components/Loader/Loader";
-import Page from "src/components/Page";
-import { usePage } from "src/context/page/hooks/usePage";
-import { useRef } from "react";
-import Search from "src/components/Search";
+import SearchDialog from "src/components/Search/SearchDialog";
 import Settings from "src/components/Settings";
 import User from "src/components/User";
 import { Project } from "src/components/Project";
 import Board from "src/components/Board";
 import { Text } from "src/components/Common/Text";
-import NodePanel from "src/components/Note/NodePanel";
-import Nav from "src/components/Nav";
-import FlowTree from "src/components/FlowTree";
+// import FlowTree from "src/components/FlowTree";
+import { useBoard } from "src/context/board/hooks/useBoard";
+import Layout from "src/components/Layout";
+import { useProject } from "src/context/project/hooks/useProject";
+import { useBoardStore } from "src/context/board/board.store";
+import { useInitFlow } from "src/context/board/hooks/useInitFlow";
+import Flow from "src/components/Flow";
+import NodeContent from "src/components/NodeContent";
+import { useTheme } from "@primer/react";
+import NodeOptions from "src/components/NodeOptions";
 
 function BoardPage() {
-  // const { projectState, projectStateDispatch } = useProjectContext();
-  // const { boardState, boardStateDispatch } = useBoardContext();
-  // const { panel, togglePanel } = usePage();
-  // const initialFocusRef = useRef<HTMLButtonElement>(null);
-  // const returnFocusRef = useRef<HTMLButtonElement>(null);
+  const { board } = useBoard();
+  const { nodeOptions, toggleNodeOptions, nodeContent, toggleNodeContent } =
+    useBoardStore();
+  const { projectFolders, projectFiles } = useProject();
+  const { theme } = useTheme();
 
-  const page: ComponentState = {
-    // error and loading states are rendered within the DocumentFileList component
-    empty: <></>,
-    loading: <AxonLoader />,
-    error: (
-      <Page
-        panel={panel}
-        togglePanel={togglePanel}
-        initialFocusRef={initialFocusRef}
-        returnFocusRef={returnFocusRef}
-        ignoreClickRefs={[]}
-        header={{
-          breadcrumb: (
-            <>
-              <Project.Nav
-                level="project"
-                isLoading={projectState.projectFiles.query.isLoading}
-                projectState={projectState}
-                projectStateDispatch={projectStateDispatch}
-              />
-              <Text.SmallSecondary>/</Text.SmallSecondary>
-              <Board.Nav
-                isLoading={boardState.boardQuery.isLoading}
-                boardState={boardState}
-                boardStateDispatch={boardStateDispatch}
-              />
-            </>
-          ),
-          menus: [
-            <Search.Button type={"icon"} />,
-            <Settings.Button type="icon" />,
-            <User.Button type={"icon"} />,
-          ],
-        }}
-        leftPanel={<Page.Left>{<Nav />}</Page.Left>}
-        rightPanel={<Page.Right></Page.Right>}
-        main={
-          <Page.Main>
-            {
-              <Project.Main>
-                <Blank
-                  heading="Project not found"
-                  description={`The project you are looking for does not exist\n or has been deleted.`}
-                  type="error"
-                  action={{
-                    label: "Go to Projects",
-                    href: "/projects",
-                  }}
-                />
-              </Project.Main>
-            }
-          </Page.Main>
-        }
-        footer={
-          <Page.Footer>{<Project.Footer {...projectState} />}</Page.Footer>
-        }
-      />
-    ),
-    success: (
-      <Page
-        panel={panel}
-        togglePanel={togglePanel}
-        initialFocusRef={initialFocusRef}
-        returnFocusRef={returnFocusRef}
-        ignoreClickRefs={[]}
-        header={{
-          breadcrumb: (
-            <>
-              <Project.Nav
-                level="project"
-                isLoading={projectState.projectFiles.query.isLoading}
-                projectState={projectState}
-                projectStateDispatch={projectStateDispatch}
-              />
-              <Text.SmallSecondary>/</Text.SmallSecondary>
-              <Board.Nav
-                isLoading={boardState.boardQuery.isLoading}
-                boardState={boardState}
-                boardStateDispatch={boardStateDispatch}
-              />
-            </>
-          ),
-          menus: [
-            <Search.Button type={"icon"} />,
-            <Settings.Button type="icon" />,
-            <User.Button type={"icon"} />,
-          ],
-        }}
-        leftPanel={<Page.Left>{<Nav />}</Page.Left>}
-        rightPanel={<></>}
-        main={
-          <Page.Main>
-            {
-              <Project.Main>
-                <NodePanel />
-                <FlowTree />
-              </Project.Main>
-            }
-          </Page.Main>
-        }
-        footer={
-          <Page.Footer>{<Project.Footer {...projectState} />}</Page.Footer>
-        }
-      />
-    ),
-  };
+  if (board.isLoading) {
+    return <AxonLoader />;
+  }
 
-  if (!boardState.boardQuery.isFetchedAfterMount && boardState.board === null) {
-    return page["loading"];
+  if (!board.data) {
+    <Layout
+      pageHeader={{
+        breadcrumb: (
+          <>
+            <Project.Nav
+              level="project"
+              projectFolders={projectFolders}
+              projectFiles={projectFiles}
+            />
+            <Text.SmallSecondary>/</Text.SmallSecondary>
+            <Board.Nav board={board} />
+          </>
+        ),
+        menus: [
+          <SearchDialog />,
+          <Settings.Button type="icon" />,
+          <User.Button type={"icon"} />,
+        ],
+      }}
+      middleTopPanel={{
+        enabled: true,
+        component: (
+          <Board.Main>
+            <Blank
+              heading="Board not found"
+              description={`The board you are looking for does not exist\n or has been deleted.`}
+              type="error"
+              action={{
+                label: "Go to Projects",
+                href: "/projects",
+              }}
+            />
+          </Board.Main>
+        ),
+      }}
+    />;
   }
-  if (boardState.boardQuery.isFetchedAfterMount && boardState.board === null) {
-    return page["error"];
-  }
-  return page["success"];
+
+  console.log("board", board.data);
+  return (
+    <Layout
+      pageHeader={{
+        breadcrumb: (
+          <>
+            <Project.Nav
+              level="project"
+              projectFolders={projectFolders}
+              projectFiles={projectFiles}
+            />
+            <Text.SmallSecondary>/</Text.SmallSecondary>
+            <Board.Nav board={board} />
+          </>
+        ),
+        menus: [
+          <SearchDialog />,
+          <Settings.Button type="icon" />,
+          <User.Button type={"icon"} />,
+        ],
+      }}
+      middleTopPanel={{
+        enabled: nodeOptions.state === "open",
+        defaultSize: 15,
+        minSize: 15,
+        maxSize: 15,
+        collapsible: false,
+        component: <NodeOptions.Panel nodeOptions={nodeOptions} />,
+      }}
+      leftPanel={{
+        enabled: true,
+        component: (
+          <Board.Main>
+            <Flow
+              initialNodes={board.data?.nodes ?? []}
+              initialEdges={board.data?.edges ?? []}
+            />
+            {/* <FlowTree /> */}
+          </Board.Main>
+        ),
+        styles: {
+          padding: "0px",
+          borderRight:
+            nodeOptions.state === "closed"
+              ? "none"
+              : `1px solid ${theme?.colors.border.default}`,
+        },
+      }}
+      rightPanel={{
+        enabled: nodeContent.state === "open",
+        defaultSize: 50,
+        minSize: 50,
+        maxSize: 50,
+        collapsible: false,
+        component: (
+          <NodeContent
+            nodeContent={nodeContent}
+            toggleNodeContent={toggleNodeContent}
+          />
+        ),
+      }}
+    />
+  );
 }
 
 export default BoardPage;

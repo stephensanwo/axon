@@ -1,7 +1,7 @@
 import Blank from "src/components/Blank";
 import AxonLoader from "src/components/Loader/Loader";
 import Page from "src/components/Page";
-import Search from "src/components/Search";
+import SearchDialog from "src/components/Search/SearchDialog";
 import Settings from "src/components/Settings";
 import User from "src/components/User";
 import Content from "src/components/Content";
@@ -29,7 +29,7 @@ function ContentPage() {
             />
           ),
           menus: [
-            <Search.Button type={"icon"} />,
+            <SearchDialog />,
             <Settings.Button type="icon" />,
             <User.Button type={"icon"} />,
           ],
@@ -65,7 +65,7 @@ function ContentPage() {
           />
         ),
         menus: [
-          <Search.Button type={"icon"} />,
+          <SearchDialog />,
           <Settings.Button type="icon" />,
           <User.Button type={"icon"} />,
         ],

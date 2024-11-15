@@ -1,4 +1,4 @@
-import { Box, Button } from "@primer/react";
+import { Box } from "@primer/react";
 import { PiTrashBold } from "react-icons/pi";
 import OverlayMenu from "../../Common/OverlayMenu";
 import { Text } from "../../Common/Text";
@@ -7,7 +7,8 @@ import { InlineSpinner } from "../../Common/Spinner";
 import map from "lodash/map";
 import { useMemo } from "react";
 import { useContent } from "src/context/content/hooks/useContent";
-import { useContentStore } from "src/context/content/content.store";
+import { useContentStore } from "src/context/content/hooks/useContentStore";
+import { Button } from "src/components/Common/Button";
 
 function DeleteContent() {
   const { deleteContent } = useContent();
@@ -20,7 +21,7 @@ function DeleteContent() {
   }, [selectedContent]);
 
   const Form = useForm({
-    onSubmit: async ({ value }) => {
+    onSubmit: async () => {
       deleteContent.mutate(selectedContentIds);
       setSelectedContent([]);
     },
@@ -36,21 +37,19 @@ function DeleteContent() {
       align="center"
       anchorComponent={
         <Button
-          variant="danger"
-          leadingVisual={PiTrashBold}
-          trailingVisual={() => (
-            <Text.Heading6>{selectedContent.length}</Text.Heading6>
-          )}
+          variant="outline-destructive"
           disabled={false}
           aria-label="Delete Selected Content"
-          sx={{
-            flexShrink: 0,
-          }}
+          size="icon"
         >
-          Delete Content
+          <PiTrashBold />
         </Button>
       }
-      heading={<Text.Heading5>Delete Selected Content(s)</Text.Heading5>}
+      heading={
+        <Text.Heading5Secondary>
+          Delete Selected Content(s)
+        </Text.Heading5Secondary>
+      }
       onCloseCallback={() => {}}
     >
       <Box
@@ -61,6 +60,10 @@ function DeleteContent() {
           gap: 3,
         }}
         as="form"
+        onSubmit={(e: any) => {
+          e.preventDefault();
+          Form.handleSubmit();
+        }}
       >
         <Text.ParagraphSecondary
           sx={{
@@ -74,15 +77,19 @@ function DeleteContent() {
           selector={({ isSubmitting }) => [isSubmitting]}
           children={([isSubmitting]) => (
             <Button
-              variant="danger"
-              leadingVisual={isSubmitting ? InlineSpinner : PiTrashBold}
+              type="submit"
+              variant="outline-destructive"
               disabled={isSubmitting}
-              onClick={Form.handleSubmit}
-              size="medium"
+              size="default"
             >
-              {isSubmitting
-                ? `Deleting ${isMultipleContentSelected ? "Content" : "Content"}...`
-                : `Delete ${isMultipleContentSelected ? "Content" : "Content"}`}
+              {isSubmitting ? (
+                <>
+                  <InlineSpinner />
+                  {`Deleting ${isMultipleContentSelected ? "Content" : "Content"}...`}
+                </>
+              ) : (
+                `Delete ${isMultipleContentSelected ? "Content" : "Content"}`
+              )}
             </Button>
           )}
         />

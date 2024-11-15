@@ -32,7 +32,7 @@ const CustomDialog = forwardRef(
         buttonRef={ref}
         isOpen={openModal}
         onDismiss={() => {
-          closeModalFn(false);
+          closeModalFn();
         }}
         aria-labelledby={header}
         narrow={size === "narrow"}

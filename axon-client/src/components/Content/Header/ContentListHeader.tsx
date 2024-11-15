@@ -1,48 +1,48 @@
 import { Box } from "@primer/react";
 import { Text } from "../../Common/Text";
-import { BaseContentProps } from "../index.types";
 import CreateContent from "../Form/CreateContent";
 import SelectContentOptions from "../Form/SelectContentOptions";
+import SearchContent from "../Form/SearchContent";
+import {
+  ContentEntity,
+  ContentFolderEntity,
+} from "src/domain/content/content.entity";
+import PinFolder from "../Form/PinFolder";
+import ContentFolderOptions from "../Form/ContentFolderOptions";
+import { Hidden } from "@primer/react/drafts";
 
 function ContentListHeader({
   title,
-  subtitle,
+  contentList,
+  contentListFolder,
 }: {
   title: string;
-  subtitle: string;
-} & BaseContentProps) {
+  contentList: ContentEntity[];
+  contentListFolder: ContentFolderEntity;
+}) {
   return (
     <>
-      <Box
-        sx={{
-          marginTop: 4,
-          marginBottom: 4,
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            height: "100%",
-            justifyContent: "center",
-          }}
-        >
-          <Text.Heading4>{title}</Text.Heading4>
-          <Text.Small>{subtitle}</Text.Small>
+      <Box className="px-3 mt-2">
+        <Box className="mb-2">
+          <Text.Heading5>{title}</Text.Heading5>
+          <Text.SmallSecondary
+            sx={{
+              fontSize: "10px",
+            }}
+          >
+            {contentList.length > 0
+              ? `${contentList.length} Files`
+              : "No Files"}
+          </Text.SmallSecondary>
         </Box>
-        <Box
-          sx={{
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            gap: 2,
-          }}
-        >
+        <Box className="flex items-center gap-1">
+          <Box className="flex-grow">
+            <SearchContent />
+          </Box>
+          <ContentFolderOptions contentFolder={contentListFolder} />
+          <PinFolder contentFolder={contentListFolder} />
+          <CreateContent contentListFolder={contentListFolder} />
           <SelectContentOptions />
-          <CreateContent />
         </Box>
       </Box>
     </>

@@ -111,7 +111,7 @@ function Select<T>(props: SelectProps<T>) {
                       id={item.id}
                       sx={{
                         borderRadius: 4,
-                        fontSize: 0,
+                        fontSize: 1,
                       }}
                     >
                       {item.name}
@@ -151,7 +151,7 @@ function Select<T>(props: SelectProps<T>) {
                           id={subItem.id}
                           sx={{
                             borderRadius: 4,
-                            fontSize: 0,
+                            fontSize: 1,
                           }}
                         >
                           {subItem.name}
@@ -187,7 +187,7 @@ function Select<T>(props: SelectProps<T>) {
                   id={item.id}
                   sx={{
                     borderRadius: 4,
-                    fontSize: 0,
+                    fontSize: 1,
                     color: theme?.colors.text.gray,
                   }}
                 >

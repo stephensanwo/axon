@@ -26,6 +26,7 @@ import ContentListPage from "./pages/Content/contentList.page";
 import ContentPage from "./pages/Content/content.page";
 import { ContentRouteParams } from "./context/content/index.types";
 import { WorkerProvider } from "./context/worker";
+import ContentIndexPage from "./pages/Content";
 
 const Router = () => {
   return (
@@ -83,7 +84,11 @@ const Router = () => {
           path={`/documents/:${DocumentFolderRouteParams.DOCUMENT_FOLDER_NAME}`}
           element={<DocumentFilePage />}
         />
-        <Route path="/content" element={<ContentListPage />} />
+        <Route path={`/content`} element={<ContentIndexPage />} />
+        <Route
+          path={`/content/:${ContentRouteParams.CONTENT_FOLDER_NAME}`}
+          element={<ContentListPage />}
+        />
         <Route
           path={`/content/:${ContentRouteParams.CONTENT_ID_FROM_PATH}`}
           element={<ContentPage />}

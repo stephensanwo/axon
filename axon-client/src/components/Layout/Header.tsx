@@ -6,6 +6,7 @@ import Nav from "../Nav";
 import { PiArrowLeft, PiArrowRight } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
 import { PageHeaderProps } from "./index.types";
+import { SidebarTrigger } from "./SideBar";
 
 function Header({ breadcrumb, menus }: PageHeaderProps) {
   const { theme } = useTheme();
@@ -17,7 +18,7 @@ function Header({ breadcrumb, menus }: PageHeaderProps) {
         borderBottom: `1px solid ${theme?.colors.border.default}`,
       }}
     >
-      <Box
+      {/* <Box
         sx={{
           display: "flex",
           alignItems: "center",
@@ -26,7 +27,8 @@ function Header({ breadcrumb, menus }: PageHeaderProps) {
         }}
       >
         <Drawer trigger={<AppIcon />} content={<Nav />} />
-      </Box>
+      </Box> */}
+      <SidebarTrigger className="-ml-1" />
       <Box
         sx={{
           display: "flex",

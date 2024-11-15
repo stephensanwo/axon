@@ -34,6 +34,7 @@ export class SearchService {
     const { projects } = await projectService.getProjects();
     const boards = await boardService.getAllBoards();
     const content = await contentService.getAllContent();
+    const contentFolders = await contentService.getAllContentFolders();
     const folderIndexRecords = map(
       folders,
       (folder) =>
@@ -99,12 +100,24 @@ export class SearchService {
       } satisfies BaseSearchSchema;
     });
 
+    const contentFolderRecords = map(contentFolders, (contentFolder) => {
+      return {
+        identifier: contentFolder.id,
+        type: SearchIndexTypes.CONTENT,
+        name: contentFolder.name,
+        description: "",
+        content: "",
+        path: ["content", `${contentFolder.name}`],
+      } satisfies BaseSearchSchema;
+    });
+
     const allIndexRecords = concat(
       folderIndexRecords,
       fileIndexRecords,
       projectRecords,
       boardRecords,
-      contentRecords
+      contentRecords,
+      contentFolderRecords
     );
     search.insertMultipleIndexes(allIndexRecords);
   }
@@ -132,12 +145,19 @@ export class SearchService {
     } satisfies BaseSearchSchema);
   }
 
-  public async search(query: string): Promise<SearchResults> {
+  public async search(
+    query: string,
+    type: SearchIndexTypes[] | null
+  ): Promise<SearchResults> {
     console.log("Searching for:", query);
+    const types = type ? type : Object.values(SearchIndexTypes);
     const res = await search.searchIndex<BaseSearchSchema>({
       term: query,
       limit: 20,
       distinctOn: "identifier",
+      where: {
+        type: types,
+      },
     });
     return res;
   }

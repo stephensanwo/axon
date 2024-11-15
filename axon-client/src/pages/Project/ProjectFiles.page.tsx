@@ -1,6 +1,6 @@
 import Blank from "src/components/Blank";
 import AxonLoader from "src/components/Loader/Loader";
-import Search from "src/components/Search";
+import SearchDialog from "src/components/Search/SearchDialog";
 import Settings from "src/components/Settings";
 import User from "src/components/User";
 import { Project, ProjectFiles } from "src/components/Project";
@@ -26,7 +26,7 @@ function ProjectFilesPage() {
             />
           ),
           menus: [
-            <Search.Button type={"icon"} />,
+            <SearchDialog />,
             <Settings.Button type="icon" />,
             <User.Button type={"icon"} />,
           ],
@@ -62,7 +62,7 @@ function ProjectFilesPage() {
           />
         ),
         menus: [
-          <Search.Button type={"icon"} />,
+          <SearchDialog />,
           <Settings.Button type="icon" />,
           <User.Button type={"icon"} />,
         ],

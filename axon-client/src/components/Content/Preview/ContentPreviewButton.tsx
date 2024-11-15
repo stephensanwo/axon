@@ -63,7 +63,6 @@ function ContentPreviewButton({
         </ActionList.Item>
       ) : disableTooltip ? (
         <ContentPreviewButtonIcon
-          variant={variant}
           onClick={() => {
             flushSync(() => {
               onClick && onClick();

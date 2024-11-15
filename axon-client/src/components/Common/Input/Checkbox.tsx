@@ -22,6 +22,7 @@ function Checkbox({
   type,
   visuallyHiddenLabel = false,
   checked,
+  sx,
 }: {
   label: string;
   error: string | null;
@@ -43,6 +44,7 @@ function Checkbox({
   type: React.HTMLInputTypeAttribute | undefined;
   visuallyHiddenLabel?: boolean;
   checked: boolean;
+  sx?: React.CSSProperties;
 }) {
   const { theme } = useTheme();
   return (
@@ -68,6 +70,8 @@ function Checkbox({
         onChange={onChange}
         sx={{
           borderColor: theme?.colors.border.default,
+          borderRadius: 0,
+          ...sx,
         }}
       />
       {error && (

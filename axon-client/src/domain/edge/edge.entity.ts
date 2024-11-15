@@ -1,8 +1,8 @@
-import { Edge } from "reactflow";
+import { Edge } from "@xyflow/react";
 import { ColorData, SettingsComponentTypes } from "../settings/settings.entity";
 import { BaseEntity } from "src/db/db.types";
 
-export interface EdgeEntity {
+export interface EdgeDataProps extends Record<string, unknown> {
   user_id: string;
   board_id: string;
   note_id: string;
@@ -11,7 +11,7 @@ export interface EdgeEntity {
   semantic_number?: number;
 }
 
-export type IEdge = Edge<EdgeEntity>;
+export type EdgeEntity = Edge<EdgeDataProps>;
 
 export type EdgeTypes = "curveEdge" | "stepEdge" | "straightEdge";
 
@@ -37,3 +37,8 @@ export type EdgeStyle = {
 };
 
 export type EdgeStyleEntity = BaseEntity & EdgeStyle;
+
+export enum EdgeEntityKeys {
+  EDGES = "edges",
+  EDGE_DEFAULTS = "edge-defaults",
+}

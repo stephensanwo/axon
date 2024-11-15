@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Box } from "@primer/react";
-import { ResizeParams } from "reactflow";
+import { ResizeParams } from "@xyflow/react";
 import {
   BLOCK_EDITOR_INITIAL_STATE,
   CustomNodeProps,

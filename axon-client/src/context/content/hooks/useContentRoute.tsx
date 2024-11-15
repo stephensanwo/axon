@@ -3,10 +3,11 @@ import { ContentRouteParams } from "../index.types";
 
 export function useContentRoute(): {
   contentId: string;
+  contentFolderName: string;
   updateContentRouteSearchParams: (key: string, value: string) => void;
   clearContentRouteSearchParams: (key: string) => void;
 } {
-  const { contentIdFromPath } = useParams();
+  const { contentIdFromPath, contentFolderName } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const contentIdFromSearchParams =
@@ -28,6 +29,7 @@ export function useContentRoute(): {
 
   return {
     contentId: contentId ?? "",
+    contentFolderName: contentFolderName ?? "",
     updateContentRouteSearchParams,
     clearContentRouteSearchParams,
   };

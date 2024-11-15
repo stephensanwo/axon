@@ -1,5 +1,4 @@
 import Select, { SelectMenuItem } from "src/components/Common/Select";
-import { BaseContentProps } from "../index.types";
 import { Box, ButtonGroup, Truncate, useTheme } from "@primer/react";
 import { ContentEntity } from "src/domain/content/content.entity";
 import Close from "src/components/Common/Close";

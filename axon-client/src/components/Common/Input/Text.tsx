@@ -1,4 +1,4 @@
-import { Box, FormControl, TextInput } from "@primer/react";
+import { Box, FormControl, TextInput, useTheme } from "@primer/react";
 import { TextInputSizes } from "@primer/react/lib/internal/components/TextInputWrapper";
 import { Updater } from "@tanstack/react-form";
 
@@ -14,8 +14,9 @@ function Text({
   trailingVisual,
   trailingAction,
   required = false,
+  requiredIndicator = false,
+  requiredText,
   htmlFor,
-  type,
   visuallyHiddenLabel = false,
   inputSize = "medium",
   disabled = false,
@@ -25,6 +26,8 @@ function Text({
   label: string;
   error: string | null;
   required?: boolean;
+  requiredIndicator?: boolean;
+  requiredText?: string;
   caption?: string;
   placeholder?: string;
   value: string;
@@ -39,27 +42,32 @@ function Text({
       >
     | undefined;
   htmlFor: string;
-  type: React.HTMLInputTypeAttribute | undefined;
   visuallyHiddenLabel?: boolean;
   inputSize?: TextInputSizes;
   disabled?: boolean;
   inputStyle?: React.CSSProperties;
   inputClassName?: string;
 }) {
+  const { theme } = useTheme();
   return (
     <FormControl
       sx={{
         width: "100%",
+        flexShrink: 0,
       }}
       required={required}
+      id={htmlFor}
     >
       <FormControl.Label
         sx={{
           fontWeight: 400,
           fontSize: 0,
+          color: theme?.colors.text.gray,
         }}
         htmlFor={htmlFor}
         visuallyHidden={visuallyHiddenLabel}
+        requiredIndicator={requiredIndicator}
+        requiredText={requiredText}
       >
         {label}
       </FormControl.Label>
@@ -71,30 +79,44 @@ function Text({
         className={inputClassName}
         sx={{
           fontSize: 1,
+          borderRadius: 0,
           ...inputStyle,
         }}
         onBlur={onBlur}
         leadingVisual={
-          <Box
-            sx={{
-              display: "flex",
-            }}
-          >
-            {leadingVisual}
-          </Box>
+          leadingVisual && (
+            <Box
+              sx={{
+                display: "flex",
+              }}
+            >
+              {leadingVisual}
+            </Box>
+          )
         }
         trailingVisual={
-          <Box
-            sx={{
-              display: "flex",
-            }}
-          >
-            {trailingVisual}
-          </Box>
+          trailingVisual && (
+            <Box
+              sx={{
+                display: "flex",
+              }}
+            >
+              {trailingVisual}
+            </Box>
+          )
         }
-        trailingAction={trailingAction}
+        trailingAction={
+          trailingAction && (
+            <Box
+              sx={{
+                display: "flex",
+              }}
+            >
+              {trailingAction}
+            </Box>
+          )
+        }
         size={inputSize}
-        type={type}
         disabled={disabled}
       />
       {error && (

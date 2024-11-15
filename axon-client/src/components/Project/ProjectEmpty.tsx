@@ -1,5 +1,4 @@
-import { Box, Button, useTheme } from "@primer/react";
-import { Text } from "../Common/Text";
+import { Box, Button, Text, useTheme } from "@primer/react";
 import { createElement } from "react";
 
 function ProjectEmpty({
@@ -17,8 +16,8 @@ function ProjectEmpty({
   const { theme } = useTheme();
   const Icon = () =>
     createElement(icon, {
-      size: 48,
-      fill: theme?.colors.text.gray,
+      size: 64,
+      fill: theme?.colors.bg.variant1,
     });
   return (
     <Box
@@ -37,7 +36,16 @@ function ProjectEmpty({
         <Icon />
       </Box>
       {message.split("\n").map((item, index) => (
-        <Text.ParagraphSecondary key={index}>{item}</Text.ParagraphSecondary>
+        <Text
+          key={index}
+          sx={{
+            fontSize: "13px",
+            fontWeight: 400,
+            color: theme?.colors.bg.variant3,
+          }}
+        >
+          {item}
+        </Text>
       ))}
       <Box
         sx={{
