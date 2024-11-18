@@ -1,32 +1,28 @@
-import { ActionList, Button, IconButton, Tooltip } from "@primer/react";
-import { VariantType } from "@primer/react/lib/Button/types";
+import { ActionList } from "@primer/react";
 import { flushSync } from "react-dom";
 import { PiSidebarSimple } from "react-icons/pi";
+import { Button, ButtonVariant } from "src/components/Common/Button";
 import Close from "src/components/Common/Close";
 import { Text } from "src/components/Common/Text";
 
 function ContentPreviewButton({
   type,
-  disableTooltip,
   onClick,
-  variant = "invisible",
+  variant,
 }: {
   type: "icon" | "button" | "action-list" | "close-icon";
-  variant?: VariantType;
-  disableTooltip?: boolean;
+  variant: ButtonVariant;
   onClick?: () => void;
 }) {
   return (
     <>
       {type === "button" ? (
         <Button
-          variant={variant}
-          leadingVisual={() => <PiSidebarSimple size={18} />}
+          variant={variant as ButtonVariant}
           disabled={false}
           aria-label="Preview"
-          sx={{
-            flexShrink: 0,
-          }}
+          title="Preview"
+          className="flex-shrink-0"
           onClick={() => {
             flushSync(() => {
               onClick && onClick();
@@ -61,24 +57,15 @@ function ContentPreviewButton({
           </ActionList.LeadingVisual>
           <Text.Heading6Secondary>Preview</Text.Heading6Secondary>
         </ActionList.Item>
-      ) : disableTooltip ? (
+      ) : (
         <ContentPreviewButtonIcon
+          variant={variant}
           onClick={() => {
             flushSync(() => {
               onClick && onClick();
             });
           }}
         />
-      ) : (
-        <Tooltip aria-label={"Preview"} direction="s" type="label">
-          <ContentPreviewButtonIcon
-            onClick={() => {
-              flushSync(() => {
-                onClick && onClick();
-              });
-            }}
-          />
-        </Tooltip>
       )}
     </>
   );
@@ -86,23 +73,23 @@ function ContentPreviewButton({
 
 function ContentPreviewButtonIcon({
   onClick,
-  variant = "invisible",
+  variant,
 }: {
   onClick?: () => void;
-  variant?: VariantType;
+  variant: ButtonVariant;
 }) {
   return (
-    <IconButton
-      variant={variant}
-      size="medium"
-      icon={() => <PiSidebarSimple size={18} />}
+    <Button
+      variant={variant as ButtonVariant}
+      size="icon"
       disabled={false}
       aria-label="Preview"
-      sx={{
-        flexShrink: 0,
-      }}
+      title="Preview"
+      className="flex-shrink-0"
       onClick={onClick}
-    />
+    >
+      <PiSidebarSimple size={18} />
+    </Button>
   );
 }
 export default ContentPreviewButton;

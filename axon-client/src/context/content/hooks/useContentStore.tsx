@@ -11,13 +11,20 @@ import {
   STORAGE_KEYS,
 } from "../index.types";
 
-// Helper function to parse boolean string
+/**
+ * Helper function to parse boolean string
+ * @param value - The value to parse
+ * @returns The parsed boolean value
+ */
 const parseBooleanString = (value: string | null): boolean => {
   if (value === null) return false;
   return value.toLowerCase() === "true";
 };
 
-// Get initial leftPanel value from URL
+/**
+ * Get initial leftPanel value from URL
+ * @returns The initial leftPanel value
+ */
 const getInitialLeftPanel = (): boolean => {
   const searchParams = new URLSearchParams(window.location.search);
   const showFoldersParam = searchParams.get(
@@ -26,7 +33,10 @@ const getInitialLeftPanel = (): boolean => {
   return parseBooleanString(showFoldersParam);
 };
 
-// Create the base store with persistence
+/**
+ * Create the base store with persistence
+ * @returns The content store
+ */
 export const useContentStore = create<ContentStore>()(
   subscribeWithSelector(
     persist(

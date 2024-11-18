@@ -13,7 +13,6 @@ function ContentListPage() {
   const { leftPanel, setLeftPanel } = useContentStore();
   const { contentId, contentFolderName, clearContentRouteSearchParams } =
     useContentRoute();
-  console.log("leftPanel", leftPanel);
   return (
     <Layout
       pageHeader={{
@@ -32,6 +31,12 @@ function ContentListPage() {
             contentList={contentList}
           />
         ),
+        className: "p-0",
+      }}
+      middleBottomPanel={{
+        enabled: true,
+        maxHeight: 28,
+        component: <Content.ListFooter contentList={contentList} />,
         className: "p-0",
       }}
       leftPanel={{

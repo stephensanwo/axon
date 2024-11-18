@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode } from "react";
+import { ReactNode } from "react";
 
 export type PanelProps = {
   defaultSize?: number;
@@ -10,6 +10,7 @@ export type PanelProps = {
   component?: ReactNode;
   enabled?: boolean;
   className?: string;
+  maxHeight?: number;
 };
 
 export type LayoutProps = {

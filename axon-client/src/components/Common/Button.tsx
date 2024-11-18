@@ -57,4 +57,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 Button.displayName = "Button";
 
+export type ButtonVariants = typeof buttonVariants;
+export type ButtonVariant =
+  | "default"
+  | "destructive"
+  | "outline"
+  | "outline-destructive"
+  | "secondary"
+  | "ghost"
+  | "link"
+  | null
+  | undefined;
 export { Button, buttonVariants };

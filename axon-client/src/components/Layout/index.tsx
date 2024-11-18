@@ -71,6 +71,9 @@ export default function ResizableLayout({
                       defaultSize={middleBottomPanel.defaultSize}
                       minSize={middleBottomPanel.minSize}
                       maxSize={middleBottomPanel.maxSize}
+                      style={{
+                        maxHeight: middleBottomPanel.maxHeight,
+                      }}
                     >
                       <Box
                         className={cn(

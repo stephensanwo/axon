@@ -13,6 +13,8 @@ import { ContentFolderMain } from "./Main/ContentFolderMain";
 import ContentFolderLeft from "./Left/ContentFolderLeft";
 import ContentIndexMain from "./Main/ContentIndexMain";
 import ContentListRight from "./Right/ContentListRight";
+import ContentListFooter from "./Footer";
+
 const Content = {
   Main: ContentMain,
   List: ContentList,
@@ -29,6 +31,7 @@ const Content = {
   PreviewOptions: ContentPreviewOptions,
   FolderLeft: ContentFolderLeft,
   ListRight: ContentListRight,
+  ListFooter: ContentListFooter,
 };
 
 export default Content;

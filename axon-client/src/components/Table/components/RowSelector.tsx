@@ -1,15 +1,15 @@
 import { Box } from "@primer/react";
 import { Input } from "../../Common/Input";
-import { useState } from "react";
 
 function RowSelector({
   rowId,
   onChangeCallback,
+  checked,
 }: {
   rowId: string;
   onChangeCallback: (isChecked: boolean) => void;
+  checked: boolean;
 }) {
-  const [isChecked, setIsChecked] = useState(false);
   return (
     <Box
       sx={{
@@ -22,11 +22,10 @@ function RowSelector({
     >
       <Input.Checkbox
         label=""
-        checked={isChecked}
+        checked={checked}
         error={""}
         onChange={() => {
-          setIsChecked(!isChecked);
-          onChangeCallback(!isChecked);
+          onChangeCallback(!checked);
         }}
         htmlFor={`row-selector-${rowId}`}
         type="checkbox"

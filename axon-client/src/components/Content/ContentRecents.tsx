@@ -3,12 +3,17 @@ import Card from "src/components/Common/Card";
 import { useContent } from "src/context/content/hooks/useContent";
 import { UpdateContentDto } from "src/domain/content/content.dto";
 import { BsFillFileEarmarkTextFill } from "react-icons/bs";
-import { ContentEntity } from "src/domain/content/content.entity";
+import {
+  ContentEntity,
+  ContentFolderEntity,
+} from "src/domain/content/content.entity";
 import { useNavigate } from "react-router-dom";
 
 function ContentRecents({
   contentRecents,
+  contentFolder,
 }: {
+  contentFolder: ContentFolderEntity;
   contentRecents: ContentEntity[];
 }) {
   const navigate = useNavigate();
@@ -16,15 +21,8 @@ function ContentRecents({
   const { updateContent } = useContent();
   return (
     <Box
-      sx={{
-        height: "140px",
-        display: "flex",
-        alignItems: "center",
-        gap: 4,
-        overflowX: "scroll",
-        scrollbarWidth: "none",
-      }}
-      className="mb-3 pt-2 pl-3 pr-3"
+      className="h-[140px] flex items-center gap-3 overflow-x-scroll mb-3 pt-2 pl-3 pr-3"
+      sx={{ scrollbarWidth: "none" }}
     >
       {contentRecents?.map((content, index) => (
         <Card.Button
@@ -44,7 +42,9 @@ function ContentRecents({
             };
             updateContent.mutate(dto);
           }}
-          onClick={() => navigate(`/content/${content.id}`)}
+          onClick={() =>
+            navigate(`/content/${contentFolder.name}/${content.id}`)
+          }
         ></Card.Button>
       ))}
     </Box>

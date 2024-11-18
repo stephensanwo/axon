@@ -59,7 +59,7 @@ function ContentList({
       id: "open",
       name: "Open",
       onClick: (data: ContentEntity) => {
-        navigate(`/content/${data.id}`);
+        navigate(`/content/${contentList.data?.folder.name}/${data.id}`);
       },
     },
     {
@@ -102,6 +102,7 @@ function ContentList({
         return (
           <RowSelector
             rowId={row.id}
+            checked={selectedContent.includes(row)}
             onChangeCallback={(selected: boolean) => {
               if (selected) {
                 setSelectedContent([...selectedContent, row]);
@@ -122,9 +123,8 @@ function ContentList({
       renderCell: (row) => {
         return (
           <ContentPreviewButton
-            variant={contentId === row.id ? "default" : "invisible"}
+            variant={contentId === row.id ? "outline" : "ghost"}
             type="icon"
-            disableTooltip
             onClick={() =>
               contentId === row.id
                 ? clearContentRouteSearchParams(
@@ -149,7 +149,11 @@ function ContentList({
       sortBy: "alphanumeric",
       renderCell: (row) => {
         return (
-          <Link to={`/content/${row.id}`} text={row.name} truncateText={800} />
+          <Link
+            to={`/content/${contentList.data?.folder.name}/${row.id}`}
+            text={row.name}
+            truncateText={800}
+          />
         );
       },
     },
@@ -210,7 +214,10 @@ function ContentList({
   return (
     <>
       {contentRecents.length > 0 && (
-        <ContentRecents contentRecents={contentRecents} />
+        <ContentRecents
+          contentRecents={contentRecents}
+          contentFolder={contentList.data?.folder!}
+        />
       )}
       <Table
         id="content"
