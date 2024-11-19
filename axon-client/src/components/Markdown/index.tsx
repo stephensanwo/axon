@@ -193,7 +193,7 @@ export function Markdown({
       {showHeader && (
         <MarkdownHeader Form={Form} markdown={markdown} isTyping={isTyping} />
       )}
-      {markdown.view === "input" ? (
+      {/* {markdown.view === "input" ? (
         <MarkdownInput
           Form={Form}
           setIsTyping={setIsTyping}
@@ -201,7 +201,7 @@ export function Markdown({
         />
       ) : (
         <MarkdownPreview markdown={markdown} />
-      )}
+      )} */}
     </Box>
   );
 }
@@ -234,22 +234,8 @@ export function MarkdownHeader({
   }, [isTyping.lastTyped]); // Re-run effect when `lastTyped` changes
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        pl: "26px",
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: 2,
-        }}
-      >
+    <Box className="flex flex-row items-center justify-between bg-red-500">
+      <Box className="flex items-center gap-2">
         <BsFillMarkdownFill size={14} fill={theme?.colors.text.gray} />
         <Text.SmallSecondary>
           {startCase(markdown.content_type)}

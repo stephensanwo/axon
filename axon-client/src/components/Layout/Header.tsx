@@ -80,7 +80,7 @@ function Header({ breadcrumb, menus }: PageHeaderProps) {
             {breadcrumb}
           </Box>
         </Box>
-        <Box>{menus}</Box>
+        <Box className="flex items-center gap-1">{menus}</Box>
       </Box>
     </header>
   );

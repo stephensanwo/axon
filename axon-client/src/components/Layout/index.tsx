@@ -32,6 +32,7 @@ export default function ResizableLayout({
                   collapsible={leftPanel.collapsible}
                   onCollapse={leftPanel.onCollapse}
                   onExpand={leftPanel.onExpand}
+                  className={leftPanel.outerClassName}
                 >
                   <Box
                     className={cn(
@@ -57,6 +58,7 @@ export default function ResizableLayout({
                       defaultSize={middleTopPanel.defaultSize}
                       minSize={middleTopPanel.minSize}
                       maxSize={middleTopPanel.maxSize}
+                      className={middleTopPanel.outerClassName}
                     >
                       <Box
                         className={cn(`h-full p-4`, middleTopPanel.className)}
@@ -71,6 +73,7 @@ export default function ResizableLayout({
                       defaultSize={middleBottomPanel.defaultSize}
                       minSize={middleBottomPanel.minSize}
                       maxSize={middleBottomPanel.maxSize}
+                      className={middleBottomPanel.outerClassName}
                       style={{
                         maxHeight: middleBottomPanel.maxHeight,
                       }}
@@ -98,6 +101,7 @@ export default function ResizableLayout({
                   collapsible={rightPanel.collapsible}
                   onCollapse={rightPanel.onCollapse}
                   onExpand={rightPanel.onExpand}
+                  className={rightPanel.outerClassName}
                 >
                   <Box
                     className={cn(

@@ -26,14 +26,7 @@ function ContentFolderListHeader({
               : "No Folders"}
           </Text.SmallSecondary>
         </Box>
-        <Box
-          sx={{
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            gap: 2,
-          }}
-        >
+        <Box className="h-full flex items-center gap-1">
           <ContentFolderListOptions />
           <CreateContentFolder />
         </Box>

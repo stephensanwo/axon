@@ -14,7 +14,7 @@ import { CheckCircleIcon, TrashIcon } from "@primer/octicons-react";
 import ContentPreviewButton from "../Preview/ContentPreviewButton";
 import { useMemo } from "react";
 import { useContentStore } from "src/context/content/hooks/useContentStore";
-import { useContentRoute } from "src/context/content/hooks/useContentRoute";
+// import { useContentRoute } from "src/context/content/hooks/useContentRoute";
 import {
   ContentListQuery,
   ContentRouteParams,
@@ -41,7 +41,7 @@ function ContentList({
     updateContentRouteSearchParams,
     clearContentRouteSearchParams,
     contentId,
-  } = useContentRoute();
+  } = useContentStore();
   const navigate = useNavigate();
 
   const options: SelectMenuItem[] = [

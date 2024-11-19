@@ -91,7 +91,7 @@ export type ContentFoldersQuery = UseQueryResult<
 
 export type ContentQuery = UseQueryResult<ContentEntity | null, unknown>;
 
-export type ContentStore = {
+export interface ContentStore {
   selectedContent: ContentEntity[];
   setSelectedContent: (selectedContent: ContentEntity[]) => void;
   contentTableFilter: string;
@@ -102,7 +102,12 @@ export type ContentStore = {
   setSortContentFoldersBy: (sortContentFoldersBy: ContentSortVariants) => void;
   leftPanel: boolean;
   setLeftPanel: (leftPanel: boolean) => void;
-};
+  contentId: string;
+  contentFolderName: string;
+  setContentRoute: (contentId: string, contentFolderName: string) => void;
+  updateContentRouteSearchParams: (key: string, value: string) => void;
+  clearContentRouteSearchParams: (key: string) => void;
+}
 
 export const STORAGE_KEYS = {
   SHOW_FAVORITES: "content_show_favorites",

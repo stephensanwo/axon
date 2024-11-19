@@ -13,8 +13,35 @@ module.exports = {
       center: "true",
       padding: "2rem",
       screens: {
-        "2xl": "1400px",
+        sm: "640px", // Small mobile devices
+        md: "768px", // Large mobile devices
+        ipad: "820px", // iPad and similar tablets
+        "ipad-pro": "1024px", // iPad Pro and larger tablets
+        lg: "1024px", // Small laptops
+        xl: "1280px", // Desktop screens
+        "2xl": "1400px", // Large desktop screens
+        "3xl": "1600px", // Extra large screens
       },
+    },
+    screens: {
+      xs: "375px", // iPhone SE
+      sm: "640px", // Small mobile devices
+      md: "768px", // Large mobile devices
+
+      // Tablets
+      "ipad-mini": "744px", // iPad Mini
+      ipad: "820px", // iPad
+      "ipad-pro": "1024px", // iPad Pro
+
+      // Desktops and Laptops
+      lg: "1024px", // Small laptops
+      xl: "1280px", // Desktop screens
+      "2xl": "1400px", // Large desktop screens
+      "3xl": "1600px", // Extra large screens
+
+      // Special cases for orientation
+      portrait: { raw: "(orientation: portrait)" },
+      landscape: { raw: "(orientation: landscape)" },
     },
     extend: {
       colors: {
@@ -95,6 +122,17 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      maxWidth: {
+        "screen-xs": "375px",
+        "screen-sm": "640px",
+        "screen-md": "768px",
+        "screen-ipad": "820px",
+        "screen-ipad-pro": "1024px",
+        "screen-lg": "1024px",
+        "screen-xl": "1280px",
+        "screen-2xl": "1400px",
+        "screen-3xl": "1600px",
       },
     },
   },

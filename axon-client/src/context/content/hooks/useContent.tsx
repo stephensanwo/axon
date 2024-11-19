@@ -12,7 +12,6 @@ import {
   UpdateContentFolderDto,
   UpdateContentTypeDataDto,
 } from "src/domain/content/content.dto";
-import { useContentRoute } from "./useContentRoute";
 import contentService from "src/domain/content/content.service";
 import { useDataQuery } from "src/hooks/api/useDataQuery";
 import {
@@ -30,6 +29,7 @@ import {
 } from "../index.types";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "src/components/Common/Toast/use-toast";
+import { useContentStore } from "./useContentStore";
 
 export function useContent(): {
   createContent: CreateContentMutation;
@@ -43,7 +43,7 @@ export function useContent(): {
   deleteContentFolder: DeleteContentFolderMutation;
   updateContentFolder: UpdateContentFolderMutation;
 } {
-  const { contentId, contentFolderName } = useContentRoute();
+  const { contentId, contentFolderName } = useContentStore();
   const navigate = useNavigate();
   const { toast } = useToast();
 

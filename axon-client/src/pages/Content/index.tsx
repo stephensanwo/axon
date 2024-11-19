@@ -3,14 +3,15 @@ import User from "src/components/User";
 import Content from "src/components/Content";
 import Layout from "src/components/Layout";
 import { useContent } from "src/context/content/hooks/useContent";
-import { useContentRoute } from "src/context/content/hooks/useContentRoute";
+// import { useContentRoute } from "src/context/content/hooks/useContentRoute";
 import { ContentRouteParams } from "src/context/content/index.types";
 import SearchDialog from "src/components/Search/SearchDialog";
+import { useContentStore } from "src/context/content/hooks/useContentStore";
 
 function ContentIndexPage() {
   const { contentList, contentTypeData, contentFolders } = useContent();
   const { contentId, contentFolderName, clearContentRouteSearchParams } =
-    useContentRoute();
+    useContentStore();
 
   return (
     <Layout

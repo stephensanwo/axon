@@ -8,13 +8,17 @@ import Content from "src/components/Content";
 import { useContent } from "src/context/content/hooks/useContent";
 import Layout from "src/components/Layout";
 import { useContentStore } from "src/context/content/hooks/useContentStore";
-import { useContentRoute } from "src/context/content/hooks/useContentRoute";
+// import { useContentRoute } from "src/context/content/hooks/useContentRoute";
 
 function ContentPage() {
   const { contentList, contentTypeData, contentFolders } = useContent();
-  const { leftPanel, setLeftPanel } = useContentStore();
-  const { contentId, contentFolderName, clearContentRouteSearchParams } =
-    useContentRoute();
+  const {
+    leftPanel,
+    setLeftPanel,
+    contentId,
+    contentFolderName,
+    clearContentRouteSearchParams,
+  } = useContentStore();
 
   return (
     <Layout

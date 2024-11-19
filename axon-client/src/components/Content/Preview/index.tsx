@@ -1,4 +1,3 @@
-import { Box } from "@primer/react";
 import { ContentRouter } from "../ContentRouter";
 import { ContentTypeKeys } from "src/domain/content/content.entity";
 import { ContentTypeDataQuery } from "src/context/content/index.types";
@@ -14,9 +13,9 @@ function ContentPreview({
     ];
 
   return (
-    <Box className="h-full w-full">
+    <div className="h-full w-full bg-green-500">
       <Content contentTypeData={contentTypeData} />
-    </Box>
+    </div>
   );
 }
 

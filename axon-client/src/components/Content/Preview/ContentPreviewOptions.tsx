@@ -4,12 +4,13 @@ import { ContentEntity } from "src/domain/content/content.entity";
 import Close from "src/components/Common/Close";
 import { PagePanelDirections } from "src/components/Page/index.types";
 import { useContent } from "src/context/content/hooks/useContent";
-import { useContentRoute } from "src/context/content/hooks/useContentRoute";
+// import { useContentRoute } from "src/context/content/hooks/useContentRoute";
 import { ContentRouteParams } from "src/context/content/index.types";
+import { useContentStore } from "src/context/content/hooks/useContentStore";
 
 function ContentPreviewOptions() {
   const { contentTypeData } = useContent();
-  const { clearContentRouteSearchParams } = useContentRoute();
+  const { clearContentRouteSearchParams } = useContentStore();
 
   const { theme } = useTheme();
   const options: SelectMenuItem[] = [

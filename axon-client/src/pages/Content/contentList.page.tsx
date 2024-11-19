@@ -3,24 +3,32 @@ import User from "src/components/User";
 import Content from "src/components/Content";
 import Layout from "src/components/Layout";
 import { useContent } from "src/context/content/hooks/useContent";
-import { useContentRoute } from "src/context/content/hooks/useContentRoute";
-import { ContentRouteParams } from "src/context/content/index.types";
-import SearchDialog from "src/components/Search/SearchDialog";
 import { useContentStore } from "src/context/content/hooks/useContentStore";
+import SearchDialog from "src/components/Search/SearchDialog";
+import { ContentRouteParams } from "src/context/content/index.types";
 
 function ContentListPage() {
   const { contentList, contentTypeData, contentFolders } = useContent();
-  const { leftPanel, setLeftPanel } = useContentStore();
-  const { contentId, contentFolderName, clearContentRouteSearchParams } =
-    useContentRoute();
+  const {
+    leftPanel,
+    setLeftPanel,
+    contentId,
+    contentFolderName,
+    clearContentRouteSearchParams,
+  } = useContentStore();
+
+  console.log("contentId", contentId);
+  const showRightPanel = contentId !== "";
+  const showLeftPanel = leftPanel;
+
   return (
     <Layout
       pageHeader={{
         breadcrumb: <Content.Nav level="list" />,
         menus: [
           <SearchDialog />,
-          // <Settings.Button type="icon" />,
-          // <User.Button type={"icon"} />,
+          <Settings.Button type="icon" />,
+          <User.Button type={"icon"} />,
         ],
       }}
       middleTopPanel={{
@@ -32,6 +40,9 @@ function ContentListPage() {
           />
         ),
         className: "p-0",
+        defaultSize: 25,
+        minSize: 25,
+        maxSize: 100,
       }}
       middleBottomPanel={{
         enabled: true,
@@ -40,7 +51,7 @@ function ContentListPage() {
         className: "p-0",
       }}
       leftPanel={{
-        enabled: leftPanel,
+        enabled: showLeftPanel,
         component: (
           <Content.FolderLeft
             contentFolders={contentFolders}
@@ -48,28 +59,34 @@ function ContentListPage() {
           />
         ),
         defaultSize: 25,
-        minSize: 25,
+        minSize: 0,
         maxSize: 25,
         collapsible: true,
-        onCollapse: () => {
-          setLeftPanel(false);
-        },
-        onExpand: () => {
-          setLeftPanel(true);
-        },
+        // onCollapse: () => {
+        //   setLeftPanel(false);
+        // },
+        // onExpand: () => {
+        //   setLeftPanel(true);
+        //   clearContentRouteSearchParams(ContentRouteParams.CONTENT_PREVIEW);
+        // },
         className: "p-0",
+        outerClassName: "xl:block hidden",
       }}
       rightPanel={{
-        enabled: contentId !== "",
+        enabled: showRightPanel,
         component: <Content.ListRight contentTypeData={contentTypeData} />,
-        defaultSize: 50,
-        minSize: 50,
-        maxSize: 75,
+        defaultSize: 65,
+        minSize: 0,
+        maxSize: 65,
         collapsible: true,
         className: "p-0",
-        onCollapse: () => {
-          clearContentRouteSearchParams(ContentRouteParams.CONTENT_PREVIEW);
-        },
+        outerClassName: "xl:block hidden",
+        // onCollapse: () => {
+        //   clearContentRouteSearchParams(ContentRouteParams.CONTENT_PREVIEW);
+        // },
+        // onExpand: () => {
+        //   setLeftPanel(false);
+        // },
       }}
     />
   );

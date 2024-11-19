@@ -9,6 +9,7 @@ export type PanelProps = {
   onExpand?: () => void;
   component?: ReactNode;
   enabled?: boolean;
+  outerClassName?: string;
   className?: string;
   maxHeight?: number;
 };

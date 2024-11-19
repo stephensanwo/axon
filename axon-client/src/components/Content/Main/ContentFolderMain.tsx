@@ -62,7 +62,6 @@ export function ContentFolderMain({
     <Box className="h-full w-full">
       <ContentListHeader
         title={contentFolderName}
-        contentList={contentList.data?.content}
         contentListFolder={contentList.data?.folder}
       />
       <ContentList

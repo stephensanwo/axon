@@ -10,34 +10,11 @@ import {
   ContentStore,
   STORAGE_KEYS,
 } from "../index.types";
+import { useParams, useSearchParams } from "react-router-dom";
+import { ContentRouteParams } from "../index.types";
+import { useEffect } from "react";
 
-/**
- * Helper function to parse boolean string
- * @param value - The value to parse
- * @returns The parsed boolean value
- */
-const parseBooleanString = (value: string | null): boolean => {
-  if (value === null) return false;
-  return value.toLowerCase() === "true";
-};
-
-/**
- * Get initial leftPanel value from URL
- * @returns The initial leftPanel value
- */
-const getInitialLeftPanel = (): boolean => {
-  const searchParams = new URLSearchParams(window.location.search);
-  const showFoldersParam = searchParams.get(
-    STORAGE_KEYS.LEFT_PANEL_CONTENT_FOLDERS
-  );
-  return parseBooleanString(showFoldersParam);
-};
-
-/**
- * Create the base store with persistence
- * @returns The content store
- */
-export const useContentStore = create<ContentStore>()(
+const baseContentStore = create<ContentStore>()(
   subscribeWithSelector(
     persist(
       (set) => ({
@@ -47,20 +24,7 @@ export const useContentStore = create<ContentStore>()(
 
         contentTableFilter: "",
         setContentTableFilter: (contentTableFilter: string) =>
-          set((state) => {
-            const searchParams = new URLSearchParams(window.location.search);
-            if (contentTableFilter) {
-              searchParams.set(
-                STORAGE_KEYS.CONTENT_TABLE_FILTER,
-                contentTableFilter
-              );
-            } else {
-              searchParams.delete(STORAGE_KEYS.CONTENT_TABLE_FILTER);
-            }
-            const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
-            window.history.pushState({}, "", newUrl);
-            return { ...state, contentTableFilter };
-          }),
+          set({ contentTableFilter }),
 
         showFavoriteFolders: true,
         setShowFavoriteFolders: (showFavoriteFolders: boolean) =>
@@ -70,17 +34,28 @@ export const useContentStore = create<ContentStore>()(
         setSortContentFoldersBy: (sortContentFoldersBy: ContentSortVariants) =>
           set({ sortContentFoldersBy }),
 
-        leftPanel: getInitialLeftPanel(),
-        setLeftPanel: (leftPanel: boolean) =>
+        leftPanel: false,
+        setLeftPanel: (leftPanel: boolean) => set({ leftPanel }),
+
+        contentId: "",
+        contentFolderName: "",
+        setContentRoute: (contentId: string, contentFolderName: string) =>
+          set({ contentId, contentFolderName }),
+
+        updateContentRouteSearchParams: (key: string, value: string) =>
           set((state) => {
-            const searchParams = new URLSearchParams(window.location.search);
-            searchParams.set(
-              STORAGE_KEYS.LEFT_PANEL_CONTENT_FOLDERS,
-              leftPanel.toString()
-            );
-            const newUrl = `${window.location.pathname}?${searchParams.toString()}`;
-            window.history.pushState({}, "", newUrl);
-            return { ...state, leftPanel };
+            if (key === ContentRouteParams.CONTENT_PREVIEW) {
+              return { ...state, contentId: value };
+            }
+            return state;
+          }),
+
+        clearContentRouteSearchParams: (key: string) =>
+          set((state) => {
+            if (key === ContentRouteParams.CONTENT_PREVIEW) {
+              return { ...state, contentId: "" };
+            }
+            return state;
           }),
       }),
       {
@@ -91,14 +66,90 @@ export const useContentStore = create<ContentStore>()(
           sortContentFoldersBy: state.sortContentFoldersBy,
           leftPanel: state.leftPanel,
         }),
-        onRehydrateStorage: () => (state) => {
-          // After rehydration, check URL params
-          const urlLeftPanel = getInitialLeftPanel();
-          if (state && urlLeftPanel !== state.leftPanel) {
-            state.setLeftPanel(urlLeftPanel);
-          }
-        },
       }
     )
   )
 );
+
+// Custom hook to sync route params with store
+export function useContentStore() {
+  const store = baseContentStore();
+  const { contentIdFromPath, contentFolderName } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const contentIdFromSearchParams =
+    searchParams.get(ContentRouteParams.CONTENT_PREVIEW) ?? "";
+
+  // Sync route params with store
+  useEffect(() => {
+    const newContentId = contentIdFromPath ?? contentIdFromSearchParams ?? "";
+    const newContentFolderName = contentFolderName ?? "";
+
+    if (
+      newContentId !== store.contentId ||
+      newContentFolderName !== store.contentFolderName
+    ) {
+      store.setContentRoute(newContentId, newContentFolderName);
+    }
+  }, [contentIdFromPath, contentIdFromSearchParams, contentFolderName]);
+
+  // Sync URL params with store for leftPanel
+  useEffect(() => {
+    const showFoldersParam = searchParams.get(
+      STORAGE_KEYS.LEFT_PANEL_CONTENT_FOLDERS
+    );
+    if (showFoldersParam !== null) {
+      const leftPanelValue = showFoldersParam === "true";
+      if (leftPanelValue !== store.leftPanel) {
+        store.setLeftPanel(leftPanelValue);
+      }
+    }
+  }, [searchParams]);
+
+  // Enhanced setLeftPanel that updates both store and URL
+  const setLeftPanel = (leftPanel: boolean) => {
+    const updatedParams = new URLSearchParams(searchParams);
+    updatedParams.set(
+      STORAGE_KEYS.LEFT_PANEL_CONTENT_FOLDERS,
+      String(leftPanel)
+    );
+    setSearchParams(updatedParams);
+    store.setLeftPanel(leftPanel);
+  };
+
+  // Enhanced setContentTableFilter that updates both store and URL
+  const setContentTableFilter = (filter: string) => {
+    const updatedParams = new URLSearchParams(searchParams);
+    if (filter) {
+      updatedParams.set(STORAGE_KEYS.CONTENT_TABLE_FILTER, filter);
+    } else {
+      updatedParams.delete(STORAGE_KEYS.CONTENT_TABLE_FILTER);
+    }
+    setSearchParams(updatedParams);
+    store.setContentTableFilter(filter);
+  };
+
+  // Wrap the store's updateContentRouteSearchParams to also update URL
+  const updateContentRouteSearchParams = (key: string, value: string) => {
+    const updatedParams = new URLSearchParams(searchParams);
+    updatedParams.set(key, value);
+    setSearchParams(updatedParams);
+    store.updateContentRouteSearchParams(key, value);
+  };
+
+  // Wrap the store's clearContentRouteSearchParams to also update URL
+  const clearContentRouteSearchParams = (key: string) => {
+    const updatedParams = new URLSearchParams(searchParams);
+    updatedParams.delete(key);
+    setSearchParams(updatedParams);
+    store.clearContentRouteSearchParams(key);
+  };
+
+  return {
+    ...store,
+    setLeftPanel,
+    setContentTableFilter,
+    updateContentRouteSearchParams,
+    clearContentRouteSearchParams,
+  };
+}
