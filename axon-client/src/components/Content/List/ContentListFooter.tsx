@@ -4,7 +4,6 @@ import { PiSidebarSimple, PiX } from "react-icons/pi";
 import { TbFolderUp, TbFolderX } from "react-icons/tb";
 import { Button } from "src/components/Common/Button";
 import { useContent } from "src/context/content/hooks/useContent";
-// import { useContentRoute } from "src/context/content/hooks/useContentRoute";
 import { useContentStore } from "src/context/content/hooks/useContentStore";
 import {
   ContentListQuery,

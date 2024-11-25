@@ -96,14 +96,15 @@ export function MarkdownInput({
               lineNumbers: "off",
               renderLineHighlight: "none",
               autoIndent: "full",
-              wrappingIndent: "none",
+              wrappingStrategy: "advanced",
+              // wrappingIndent: "none",
               tabSize: 2,
               padding: {
                 top: 0,
                 bottom: 0,
               },
             }}
-            width={"100%"}
+            // width={"100%"}
           />
         );
       }}
@@ -181,19 +182,11 @@ export function Markdown({
   usePageVisibility(handlePageLeave, handlePageReturn);
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 4,
-        width: "100%",
-        height: "100%",
-      }}
-    >
+    <Box className="flex flex-col gap-4 w-full h-full">
       {showHeader && (
         <MarkdownHeader Form={Form} markdown={markdown} isTyping={isTyping} />
       )}
-      {/* {markdown.view === "input" ? (
+      {markdown.view === "input" ? (
         <MarkdownInput
           Form={Form}
           setIsTyping={setIsTyping}
@@ -201,7 +194,7 @@ export function Markdown({
         />
       ) : (
         <MarkdownPreview markdown={markdown} />
-      )} */}
+      )}
     </Box>
   );
 }
@@ -234,7 +227,7 @@ export function MarkdownHeader({
   }, [isTyping.lastTyped]); // Re-run effect when `lastTyped` changes
 
   return (
-    <Box className="flex flex-row items-center justify-between bg-red-500">
+    <Box className="flex flex-row items-center justify-between">
       <Box className="flex items-center gap-2">
         <BsFillMarkdownFill size={14} fill={theme?.colors.text.gray} />
         <Text.SmallSecondary>

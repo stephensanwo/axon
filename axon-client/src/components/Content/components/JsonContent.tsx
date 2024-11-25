@@ -2,8 +2,8 @@ import { JsonData } from "src/domain/content/content.entity";
 import { UpdateContentTypeDataDto } from "src/domain/content/content.dto";
 import { useContent } from "src/context/content/hooks/useContent";
 import { Json } from "src/components/Json";
-import ContentSkeleton from "../ContentSkeleton";
 import { ContentTypeDataQuery } from "src/context/content/index.types";
+import ComponentSkeleton from "./ComponentSkeleton";
 
 function JsonContent({
   contentTypeData,
@@ -36,7 +36,7 @@ function JsonContent({
       refetchJson={refetchJson}
       updated={contentTypeData.data?.parent_content.updated!!}
       showHeader
-      loadingComponent={<ContentSkeleton />}
+      loadingComponent={<ComponentSkeleton />}
     />
   );
 }

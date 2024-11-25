@@ -69,6 +69,7 @@ function Select<T>(props: SelectProps<T>) {
               sx={{
                 ...props.iconProps?.style,
                 flexShrink: 0,
+                borderRadius: 0,
               }}
             />
           </ActionMenu.Anchor>
@@ -81,6 +82,7 @@ function Select<T>(props: SelectProps<T>) {
             size="small"
             sx={{
               width: "100%",
+              borderRadius: 0,
             }}
           >
             {typeof title === "string" ? (
@@ -96,7 +98,7 @@ function Select<T>(props: SelectProps<T>) {
           sx={{
             border: `1px solid ${theme?.colors.border.default}`,
             zIndex: 10050,
-            borderRadius: 6,
+            borderRadius: 0,
           }}
           portalContainerName={portalContainerName}
         >
@@ -110,7 +112,7 @@ function Select<T>(props: SelectProps<T>) {
                       aria-label={item.name}
                       id={item.id}
                       sx={{
-                        borderRadius: 4,
+                        borderRadius: 0,
                         fontSize: 1,
                       }}
                     >
@@ -150,7 +152,7 @@ function Select<T>(props: SelectProps<T>) {
                           aria-label={subItem.name}
                           id={subItem.id}
                           sx={{
-                            borderRadius: 4,
+                            borderRadius: 0,
                             fontSize: 1,
                           }}
                         >
@@ -186,7 +188,7 @@ function Select<T>(props: SelectProps<T>) {
                   aria-label={item.name}
                   id={item.id}
                   sx={{
-                    borderRadius: 4,
+                    borderRadius: 0,
                     fontSize: 1,
                     color: theme?.colors.text.gray,
                   }}

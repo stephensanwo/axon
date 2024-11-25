@@ -5,26 +5,17 @@ import Layout from "src/components/Layout";
 import { useContent } from "src/context/content/hooks/useContent";
 import { useContentStore } from "src/context/content/hooks/useContentStore";
 import SearchDialog from "src/components/Search/SearchDialog";
-import { ContentRouteParams } from "src/context/content/index.types";
 
 function ContentListPage() {
   const { contentList, contentTypeData, contentFolders } = useContent();
-  const {
-    leftPanel,
-    setLeftPanel,
-    contentId,
-    contentFolderName,
-    clearContentRouteSearchParams,
-  } = useContentStore();
-
-  console.log("contentId", contentId);
+  const { leftPanel, contentId, contentFolderName } = useContentStore();
   const showRightPanel = contentId !== "";
   const showLeftPanel = leftPanel;
 
   return (
     <Layout
       pageHeader={{
-        breadcrumb: <Content.Nav level="list" />,
+        breadcrumb: <Content.Nav level="list" contentList={contentList} />,
         menus: [
           <SearchDialog />,
           <Settings.Button type="icon" />,
@@ -34,7 +25,7 @@ function ContentListPage() {
       middleTopPanel={{
         enabled: true,
         component: (
-          <Content.FolderMain
+          <Content.List.Main
             contentFolderName={contentFolderName}
             contentList={contentList}
           />
@@ -47,13 +38,13 @@ function ContentListPage() {
       middleBottomPanel={{
         enabled: true,
         maxHeight: 28,
-        component: <Content.ListFooter contentList={contentList} />,
+        component: <Content.List.Footer contentList={contentList} />,
         className: "p-0",
       }}
       leftPanel={{
         enabled: showLeftPanel,
         component: (
-          <Content.FolderLeft
+          <Content.Folder.Main
             contentFolders={contentFolders}
             contentList={contentList}
           />
@@ -62,31 +53,18 @@ function ContentListPage() {
         minSize: 0,
         maxSize: 25,
         collapsible: true,
-        // onCollapse: () => {
-        //   setLeftPanel(false);
-        // },
-        // onExpand: () => {
-        //   setLeftPanel(true);
-        //   clearContentRouteSearchParams(ContentRouteParams.CONTENT_PREVIEW);
-        // },
         className: "p-0",
-        outerClassName: "xl:block hidden",
+        outerClassName: "lg:block hidden",
       }}
       rightPanel={{
         enabled: showRightPanel,
-        component: <Content.ListRight contentTypeData={contentTypeData} />,
-        defaultSize: 65,
-        minSize: 0,
-        maxSize: 65,
+        component: <Content.View.Main contentTypeData={contentTypeData} />,
+        defaultSize: 50,
+        minSize: 50,
+        maxSize: 50,
         collapsible: true,
         className: "p-0",
         outerClassName: "xl:block hidden",
-        // onCollapse: () => {
-        //   clearContentRouteSearchParams(ContentRouteParams.CONTENT_PREVIEW);
-        // },
-        // onExpand: () => {
-        //   setLeftPanel(false);
-        // },
       }}
     />
   );

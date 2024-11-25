@@ -2,7 +2,7 @@ import { MarkdownData } from "src/domain/content/content.entity";
 import { UpdateContentTypeDataDto } from "src/domain/content/content.dto";
 import { Markdown } from "src/components/Markdown";
 import { useContent } from "src/context/content/hooks/useContent";
-import ContentSkeleton from "../ContentSkeleton";
+import ComponentSkeleton from "./ComponentSkeleton";
 import { ContentTypeDataQuery } from "src/context/content/index.types";
 
 function MarkdownContent({
@@ -37,7 +37,7 @@ function MarkdownContent({
       updated={contentTypeData.data?.parent_content.updated!!}
       refetchMarkdown={refetchMarkdown}
       showHeader
-      loadingComponent={<ContentSkeleton />}
+      loadingComponent={<ComponentSkeleton />}
     />
   );
 }

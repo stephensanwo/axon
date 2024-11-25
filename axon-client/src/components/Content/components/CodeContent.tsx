@@ -2,7 +2,7 @@ import { CodeData } from "src/domain/content/content.entity";
 import { UpdateContentTypeDataDto } from "src/domain/content/content.dto";
 import { useContent } from "src/context/content/hooks/useContent";
 import { Code } from "src/components/Code";
-import ContentSkeleton from "../ContentSkeleton";
+import ComponentSkeleton from "./ComponentSkeleton";
 import { ContentTypeDataQuery } from "src/context/content/index.types";
 
 function CodeContent({
@@ -35,7 +35,7 @@ function CodeContent({
       updateCode={updateCode}
       refetchCode={refetchCode}
       updated={contentTypeData.data?.parent_content.updated!!}
-      loadingComponent={<ContentSkeleton />}
+      loadingComponent={<ComponentSkeleton />}
       showHeader
     />
   );

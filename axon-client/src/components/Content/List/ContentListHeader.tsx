@@ -16,7 +16,7 @@ function ContentListHeader({
 }) {
   return (
     <>
-      <Box className="pl-3 pr-2 mt-2">
+      <Box className="pl-3 pr-2 mt-2 mb-3">
         <Box className="mb-2">
           <Text.Heading5>{title}</Text.Heading5>
         </Box>

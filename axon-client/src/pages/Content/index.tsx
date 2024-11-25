@@ -3,35 +3,33 @@ import User from "src/components/User";
 import Content from "src/components/Content";
 import Layout from "src/components/Layout";
 import { useContent } from "src/context/content/hooks/useContent";
-// import { useContentRoute } from "src/context/content/hooks/useContentRoute";
-import { ContentRouteParams } from "src/context/content/index.types";
 import SearchDialog from "src/components/Search/SearchDialog";
-import { useContentStore } from "src/context/content/hooks/useContentStore";
 
 function ContentIndexPage() {
-  const { contentList, contentTypeData, contentFolders } = useContent();
-  const { contentId, contentFolderName, clearContentRouteSearchParams } =
-    useContentStore();
+  const { contentList, contentFolders } = useContent();
 
   return (
     <Layout
       pageHeader={{
-        breadcrumb: <Content.Nav level="list" />,
+        breadcrumb: <Content.Nav level="index" />,
         menus: [
           <SearchDialog />,
-          //   <Settings.Button type="icon" />,
-          //   <User.Button type={"icon"} />,
+          <Settings.Button type="icon" />,
+          <User.Button type={"icon"} />,
         ],
       }}
       middleTopPanel={{
         enabled: true,
-        component: <Content.IndexMain />,
+        component: <Content.List.Search />,
         className: "p-0",
+        defaultSize: 25,
+        minSize: 25,
+        maxSize: 100,
       }}
       leftPanel={{
         enabled: true,
         component: (
-          <Content.FolderLeft
+          <Content.Folder.Main
             contentFolders={contentFolders}
             contentList={contentList}
           />
@@ -41,6 +39,7 @@ function ContentIndexPage() {
         maxSize: 25,
         collapsible: true,
         className: "p-0",
+        outerClassName: "lg:block hidden",
       }}
     />
   );

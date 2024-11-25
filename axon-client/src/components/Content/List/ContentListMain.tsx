@@ -1,15 +1,11 @@
 import { Box } from "@primer/react";
-import ContentListHeader from "../Header/ContentListHeader";
-import ContentList from "../List/ContentList";
+import ContentListHeader from "./ContentListHeader";
+import ContentList from "./ContentList";
 import { ContentListQuery } from "src/context/content/index.types";
-import ContentEmpty from "../ContentEmpty";
-import { FolderIcon } from "lucide-react";
 import Blank from "src/components/Blank";
 import { Skeleton } from "../../Common/Skeleton";
-import { FileIcon, FileTextIcon } from "@radix-ui/react-icons";
-import { PiFile } from "react-icons/pi";
 
-export function ContentFolderMain({
+export function ContentListMain({
   contentList,
   contentFolderName,
 }: {
@@ -19,7 +15,7 @@ export function ContentFolderMain({
   if (contentList.isLoading) {
     return (
       <Box className="h-full w-full p-2 flex flex-col">
-        <Skeleton className="h-[48px] mb-2" />
+        <Skeleton className="h-[76px] mb-2" />
         <Skeleton className="h-[32px] mb-2" />
         <Skeleton className="flex-grow" />
       </Box>

@@ -1,6 +1,6 @@
 import { Box } from "@primer/react";
-import ContentFolderListHeader from "../Header/ContentFolderListHeader";
-import ContentFolderList from "../List/ContentFolderList";
+import ContentFolderListHeader from "./ContentFolderListHeader";
+import ContentFolderList from "./ContentFolderList";
 import {
   ContentFoldersQuery,
   ContentListQuery,
@@ -8,7 +8,7 @@ import {
 import { Skeleton } from "src/components/Common/Skeleton";
 import Blank from "src/components/Blank";
 
-function ContentFolderLeft({
+function ContentFolderMain({
   contentFolders,
   contentList,
 }: {
@@ -70,4 +70,4 @@ function ContentFolderLeft({
   );
 }
 
-export default ContentFolderLeft;
+export default ContentFolderMain;

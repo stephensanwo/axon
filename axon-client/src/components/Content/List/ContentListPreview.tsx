@@ -4,7 +4,7 @@ import { Box } from "@primer/react";
 import { Skeleton } from "src/components/Common/Skeleton";
 import Blank from "src/components/Blank";
 
-function ContentListRight({
+function ContentListPreview({
   contentTypeData,
 }: {
   contentTypeData: ContentTypeDataQuery;
@@ -36,4 +36,4 @@ function ContentListRight({
   return <ContentPreview contentTypeData={contentTypeData} />;
 }
 
-export default ContentListRight;
+export default ContentListPreview;

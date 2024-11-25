@@ -9,7 +9,7 @@ import {
 } from "src/domain/content/content.entity";
 import { useNavigate } from "react-router-dom";
 
-function ContentRecents({
+function ContentListRecents({
   contentRecents,
   contentFolder,
 }: {
@@ -21,7 +21,7 @@ function ContentRecents({
   const { updateContent } = useContent();
   return (
     <Box
-      className="h-[140px] flex items-center gap-3 overflow-x-scroll mb-3 pt-2 pl-3 pr-3"
+      className="flex items-center gap-3 overflow-x-scroll mb-4 pl-3 pr-3"
       sx={{ scrollbarWidth: "none" }}
     >
       {contentRecents?.map((content, index) => (
@@ -51,4 +51,4 @@ function ContentRecents({
   );
 }
 
-export default ContentRecents;
+export default ContentListRecents;

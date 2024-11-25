@@ -17,7 +17,6 @@ function ContentFolderList({
   const { showFavoriteFolders, sortContentFoldersBy } = useContentStore();
 
   const sortedContentFolders = useMemo(() => {
-    console.log("sortContentFoldersBy", sortContentFoldersBy);
     if (sortContentFoldersBy === "name") {
       return contentFolders.sort((a, b) => a.name.localeCompare(b.name));
     }

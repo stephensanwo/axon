@@ -9,17 +9,16 @@ import { useContent } from "src/context/content/hooks/useContent";
 import { ContentEntity } from "src/domain/content/content.entity";
 import startCase from "lodash/startCase";
 import { UpdateContentDto } from "src/domain/content/content.dto";
-import ContentRecents from "../ContentRecents";
 import { CheckCircleIcon, TrashIcon } from "@primer/octicons-react";
 import ContentPreviewButton from "../Preview/ContentPreviewButton";
 import { useMemo } from "react";
 import { useContentStore } from "src/context/content/hooks/useContentStore";
-// import { useContentRoute } from "src/context/content/hooks/useContentRoute";
 import {
   ContentListQuery,
   ContentRouteParams,
 } from "src/context/content/index.types";
 import { Badge } from "src/components/Layout/Badge";
+import ContentListRecents from "./ContentListRecents";
 
 type ContentListProps = {
   initialSortColumn: string | undefined;
@@ -214,7 +213,7 @@ function ContentList({
   return (
     <>
       {contentRecents.length > 0 && (
-        <ContentRecents
+        <ContentListRecents
           contentRecents={contentRecents}
           contentFolder={contentList.data?.folder!}
         />
