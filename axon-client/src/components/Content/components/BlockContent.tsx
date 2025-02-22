@@ -7,7 +7,7 @@ import { BlockNoteEditor } from "src/components/BlockNoteEditor";
 import NoteContext from "src/context/notes";
 import { useBlock } from "src/hooks/content/useBlock";
 import TipTap from "src/components/TipTapEditor";
-
+import Page from "src/components/Block/app/editor/page";
 const BlockContent = () => {
   const { selectedNode } = useContext(NoteContext);
   const { block, handleBlockEditorStateUpdate } = useBlock();
@@ -61,10 +61,11 @@ const BlockContent = () => {
     // {/* <BlockNoteEditor {...editorProps} /> */}
 
     // {/* <TipTap content="<p>Hello World 2</p>" /> */}
-    <TipTap
-      content="<p>Hello World 2</p>"
-      updateEvent={handleBlockEditorStateUpdate}
-    />
+    // <TipTap
+    //   content="<p>Hello World 2</p>"
+    //   updateEvent={handleBlockEditorStateUpdate}
+    // />
+    <Page />
   );
 };
 

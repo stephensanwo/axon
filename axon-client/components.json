@@ -1,20 +1,30 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "new-york",
+  "aliases": {
+    "components": "src/components",
+    "hooks": "src/hooks",
+    "lib": "src/lib",
+    "ui": "src/components/plate-ui",
+    "utils": "src/lib/utils"
+  },
+  "iconLibrary": "radix",
   "rsc": false,
-  "tsx": true,
+  "style": "new-york",
   "tailwind": {
+    "baseColor": "neutral",
     "config": "tailwind.config.js",
     "css": "src/index.css",
-    "baseColor": "neutral",
     "cssVariables": true,
     "prefix": ""
   },
-  "aliases": {
-    "components": "s/components",
-    "utils": "s/lib/utils",
-    "ui": "s/components/ui",
-    "lib": "s/lib",
-    "hooks": "s/hooks"
+  "tsx": true,
+  "registries": {
+    "plate": {
+      "style": "default",
+      "aliases": {
+        "ui": "src/components/plate-ui"
+      },
+      "url": "https://platejs.org/r"
+    }
   }
 }
